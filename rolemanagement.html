@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>MeroLogix — User Management</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6C2BD9",
+                        "primary-light": "#8B5CF6",
+                        "primary-dark": "#4C1D95",
+                        "primary-glow": "rgba(108, 43, 217, 0.25)",
+                        "primary-subtle": "#F3EEFF",
+
+                        surface: "#FFFFFF",
+                        "surface-glass": "rgba(255,255,255,0.72)",
+                        "surface-muted": "#F8F7FA",
+                        "surface-elevated": "#FFFFFF",
+
+                        onSurface: "#0E0B14",
+                        onSurfaceMuted: "#6B6478",
+
+                        outline: "#E4E0EC",
+                        outlineLight: "#F0EDF5",
+
+                        accent: "#F97316",
+                        accentLight: "#FDE8D8",
+
+                        success: "#10B981",
+                        successLight: "#D1FAE5",
+                        warning: "#F59E0B",
+                        warningLight: "#FEF3C7",
+                        error: "#EF4444",
+                        errorLight: "#FEE2E2",
+
+                        glass: "rgba(255,255,255,0.5)",
+                        glassBorder: "rgba(255,255,255,0.18)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    fontSize: {
+                        "2xs": ["10px", { lineHeight: "14px", letterSpacing: "0.04em" }],
+                        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.02em" }],
+                        sm: ["14px", { lineHeight: "20px" }],
+                        base: ["16px", { lineHeight: "24px" }],
+                        lg: ["20px", { lineHeight: "28px" }],
+                        xl: ["24px", { lineHeight: "32px", letterSpacing: "-0.01em" }],
+                        "2xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+                    },
+                    fontWeight: {
+                        normal: "400",
+                        medium: "500",
+                        semibold: "600",
+                        bold: "700",
+                        extrabold: "800",
+                        black: "900",
+                    },
+                    spacing: {
+                        container: "1.25rem",
+                        card: "1.5rem",
+                        section: "2rem",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "0.75rem",
+                        xl: "1rem",
+                        "2xl": "1.25rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        card: "0 1px 3px rgba(0,0,0,0.03), 0 8px 32px rgba(108,43,217,0.06)",
+                        cardHover: "0 4px 16px rgba(108,43,217,0.10), 0 12px 48px rgba(108,43,217,0.06)",
+                        glass: "0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+                        glow: "0 0 40px rgba(108,43,217,0.15)",
+                        "glow-strong": "0 0 60px rgba(108,43,217,0.25)",
+                        modal: "0 20px 80px rgba(0,0,0,0.15)",
+                        "nav-sm": "0 -1px 0 rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)",
+                    },
+                    backdropBlur: {
+                        glass: "12px",
+                    },
+                    animation: {
+                        "fade-up": "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "fade-in": "fadeIn 0.4s ease-out forwards",
+                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+                        "float": "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            "0%": { opacity: "0", transform: "translateY(12px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" },
+                        },
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" },
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(30px) scale(0.96)" },
+                            "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        pulseGlow: {
+                            "0%, 100%": { boxShadow: "0 0 20px rgba(108,43,217,0.10)" },
+                            "50%": { boxShadow: "0 0 40px rgba(108,43,217,0.25)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0px)" },
+                            "50%": { transform: "translateY(-8px)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- Reset & Base --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F7FA;
+            color: #0E0B14;
+            min-height: 100dvh;
+            min-height: max(884px, 100dvh);
+            overflow-x: hidden;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CDE0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8AFC8;
+        }
+
+        /* --- Material Icons --- */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* --- Hide Scrollbar --- */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* --- Bottom nav safe area --- */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* --- Gradient text --- */
+        .gradient-text {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 50%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- Buttons --- */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 12px rgba(108, 43, 217, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(108, 43, 217, 0.35);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #6C2BD9;
+            border: 1.5px solid #D4CDE0;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:hover {
+            background: #F3EEFF;
+            border-color: #6C2BD9;
+        }
+        .btn-outline:active {
+            transform: scale(0.96);
+        }
+
+        /* --- Card Interactions --- */
+        .card-interact {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-interact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 24px rgba(108, 43, 217, 0.08), 0 12px 48px rgba(108, 43, 217, 0.05);
+        }
+        .card-interact:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Chip --- */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        /* --- Modal overlay --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(14, 11, 20, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        @media (min-width: 768px) {
+            .modal-overlay {
+                align-items: center;
+            }
+        }
+        .modal-overlay.active .modal-sheet {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOP APP BAR – Glass -->
+    <!-- ============================================================ -->
+    <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+        <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-glow shrink-0">
+                    <span class="material-symbols-outlined text-white text-[20px] fill">bolt</span>
+                </div>
+                <span class="text-lg font-extrabold tracking-tight text-primary">MeroLogix</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+                <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm border-2 border-primary/10">
+                    AL
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <main class="pt-20 pb-28 container-padding max-w-7xl mx-auto w-full">
+
+        <!-- ========== HEADER & SEARCH ========== -->
+        <div class="mb-6">
+            <div class="flex items-center gap-3 mb-4">
+                <button class="p-2 hover:bg-primary-subtle rounded-full transition-colors">
+                    <span class="material-symbols-outlined text-primary">arrow_back</span>
+                </button>
+                <h1 class="text-xl font-extrabold tracking-tight text-primary">User Management</h1>
+            </div>
+            <div class="relative">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Find users by name, email, or mobile..." type="text" />
+            </div>
+            <div class="flex gap-2 mt-3.5 overflow-x-auto no-scrollbar">
+                <span class="chip bg-primary-subtle text-primary whitespace-nowrap">All Users (142)</span>
+                <span class="chip bg-surface-muted text-onSurfaceMuted whitespace-nowrap">Admins</span>
+                <span class="chip bg-surface-muted text-onSurfaceMuted whitespace-nowrap">Moderators</span>
+                <span class="chip bg-surface-muted text-onSurfaceMuted whitespace-nowrap">Blocked</span>
+            </div>
+        </div>
+
+        <!-- ========== USER CARDS ========== -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <!-- User Card 1: Admin -->
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/10 flex-shrink-0">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz_Lx3qTzB5FRr90h9xH7U6QSVjsXy43Zyb07q4hSlWU9sej6-0CHxsdKfDypDo7vFwhdogSqi5wcoVYRPc8QgUxkK8pf4LQukA2oocHNrREVr-MgbL6PO1Gk46CblMG2fmARZw6ZE1ZZXRzVKYgwzOMDwKCIxYZhaEg22M_43j0HG8SWD9kyjkDPn4xIux3MPLEObwNg5t0O8DSt_uoINt5P0XeWE_yrUBUg4wLn0At93NHijcLkvmg" alt="User avatar" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-onSurface">Marcus Sterling</h3>
+                            <p class="text-xs text-onSurfaceMuted">@msterling_admin</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5">
+                        <span class="chip bg-successLight/60 text-success">Active</span>
+                        <button class="p-1 hover:bg-primary-subtle rounded-full" onclick="showModal()">
+                            <span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-sm mb-4">
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>m.sterling@merologix.com</span></div>
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-mono">+1 (555) 902-3481</span></div>
+                </div>
+                <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                    <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px] fill">shield</span><span class="text-2xs font-bold text-primary uppercase">Admin</span></div>
+                    <div class="flex gap-2"><button class="text-primary text-sm font-bold px-3 py-1.5 hover:bg-primary-subtle rounded-xl transition-colors">EDIT</button></div>
+                </div>
+            </div>
+
+            <!-- User Card 2: Moderator -->
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-lg border-2 border-primary/10">SK</div>
+                        <div>
+                            <h3 class="text-base font-bold text-onSurface">Sarah Kendrick</h3>
+                            <p class="text-xs text-onSurfaceMuted">@sarah_ops</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5">
+                        <span class="chip bg-successLight/60 text-success">Active</span>
+                        <button class="p-1 hover:bg-primary-subtle rounded-full" onclick="showModal()">
+                            <span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-sm mb-4">
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>s.kendrick@merologix.com</span></div>
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-mono">+1 (555) 124-8890</span></div>
+                </div>
+                <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                    <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary-light text-[16px]">verified_user</span><span class="text-2xs font-bold text-primary-light uppercase">Moderator</span></div>
+                    <div class="flex gap-2"><button class="text-primary text-sm font-bold px-3 py-1.5 hover:bg-primary-subtle rounded-xl transition-colors">EDIT</button></div>
+                </div>
+            </div>
+
+            <!-- User Card 3: Blocked -->
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact opacity-80 grayscale-[0.2]">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-error/10 flex-shrink-0">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnN7xfEDmBdlKPIEURWYLZ3GWX_Lp_8eOCTIa-sYsy2nlaIr3h87NxBG2lxtavFFdyf6Acs5C2W-MG71-E1xLDBle4S7VNSKWVwCNeffBmE8IDdIXBXtmlkcsUktxDMEdIrKBToyeg6bXfzsSFlpM1K4MvHAfr2wdRkiJ9cWYT9mh0NRwrih1ail_1GVGXsdeN3b0mJJ0pE9jzKtun01gsgUwgXF6_9fi6A2gQNvGRufXqm2krjuQL6Q" alt="User avatar" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-onSurface">Jackson Thorne</h3>
+                            <p class="text-xs text-onSurfaceMuted">@j_thorne99</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5">
+                        <span class="chip bg-errorLight/60 text-error">Blocked</span>
+                        <button class="p-1 hover:bg-primary-subtle rounded-full" onclick="showModal()">
+                            <span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-sm mb-4">
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>thorne.j@gmail.com</span></div>
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-mono">+1 (555) 777-2211</span></div>
+                </div>
+                <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                    <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[16px]">person</span><span class="text-2xs font-bold text-onSurfaceMuted uppercase">Customer</span></div>
+                    <div class="flex gap-2"><button class="text-success text-sm font-bold px-3 py-1.5 hover:bg-successLight/40 rounded-xl transition-colors">UNBLOCK</button></div>
+                </div>
+            </div>
+
+            <!-- User Card 4: Customer -->
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center text-success font-extrabold text-lg border-2 border-success/10">MP</div>
+                        <div>
+                            <h3 class="text-base font-bold text-onSurface">Maria Portillo</h3>
+                            <p class="text-xs text-onSurfaceMuted">@m_portillo</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end gap-1.5">
+                        <span class="chip bg-successLight/60 text-success">Active</span>
+                        <button class="p-1 hover:bg-primary-subtle rounded-full" onclick="showModal()">
+                            <span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="space-y-1.5 text-sm mb-4">
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>maria.p@logistics.net</span></div>
+                    <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-mono">+1 (555) 333-0988</span></div>
+                </div>
+                <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                    <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[16px]">person</span><span class="text-2xs font-bold text-onSurfaceMuted uppercase">Customer</span></div>
+                    <div class="flex gap-2"><button class="text-primary text-sm font-bold px-3 py-1.5 hover:bg-primary-subtle rounded-xl transition-colors">EDIT</button></div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- FLOATING ACTION BUTTON (Add User) -->
+    <!-- ============================================================ -->
+    <button class="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-gradient-to-br from-primary to-primary-light text-white rounded-2xl shadow-glow-strong hover:shadow-2xl hover:-translate-y-1 transition-all flex items-center justify-center z-40">
+        <span class="material-symbols-outlined fill">add</span>
+    </button>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM NAV (Mobile) – Consistent -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 shadow-nav-sm px-2 py-1.5 pb-safe z-50 flex justify-around items-center">
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">dashboard</span>
+            <span class="text-[9px] font-semibold mt-0.5">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">package_2</span>
+            <span class="text-[9px] font-semibold mt-0.5">Orders</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">group</span>
+            <span class="text-[9px] font-semibold mt-0.5">Customers</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all bg-primary-subtle text-primary" href="#">
+            <span class="material-symbols-outlined text-[22px] fill">settings_applications</span>
+            <span class="text-[9px] font-semibold mt-0.5">Admin</span>
+        </a>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- QUICK ACTION MODAL -->
+    <!-- ============================================================ -->
+    <div id="quick-action-overlay" class="modal-overlay" onclick="if(event.target===this) hideModal()">
+        <div class="modal-sheet bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-modal">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-lg font-extrabold text-primary">User Actions</h2>
+                <button class="p-2 hover:bg-primary-subtle rounded-full" onclick="hideModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="space-y-1.5">
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-primary-subtle/50 rounded-2xl transition-colors" onclick="hideModal()">
+                    <span class="material-symbols-outlined text-primary">edit</span><span class="text-sm font-semibold">Edit User Profile</span>
+                </button>
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-errorLight/40 rounded-2xl transition-colors" onclick="hideModal()">
+                    <span class="material-symbols-outlined text-error">block</span><span class="text-sm font-semibold text-error">Block User</span>
+                </button>
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-errorLight/40 rounded-2xl transition-colors" onclick="hideModal()">
+                    <span class="material-symbols-outlined text-error">policy</span><span class="text-sm font-semibold text-error">Block IP Address</span>
+                </button>
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-errorLight/40 rounded-2xl transition-colors" onclick="hideModal()">
+                    <span class="material-symbols-outlined text-error">delete</span><span class="text-sm font-semibold text-error">Delete Account</span>
+                </button>
+            </div>
+            <div class="mt-5 pt-4 border-t border-outline/40">
+                <button class="w-full py-2.5 text-sm font-bold text-onSurfaceMuted hover:bg-surface-muted rounded-xl transition-colors" onclick="hideModal()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        function showModal() {
+            document.getElementById('quick-action-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideModal() {
+            document.getElementById('quick-action-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on backdrop click
+        document.getElementById('quick-action-overlay').addEventListener('click', function(e) {
+            if (e.target === this) hideModal();
+        });
+
+        // Search bar focus shadow
+        const searchInput = document.querySelector('input[type="text"]');
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('shadow-md');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('shadow-md');
+            });
+        }
+    </script>
+
+</body>
+</html>

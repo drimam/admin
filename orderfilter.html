@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>MeroLogix — Filter Orders</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6C2BD9",
+                        "primary-light": "#8B5CF6",
+                        "primary-dark": "#4C1D95",
+                        "primary-glow": "rgba(108, 43, 217, 0.25)",
+                        "primary-subtle": "#F3EEFF",
+
+                        surface: "#FFFFFF",
+                        "surface-glass": "rgba(255,255,255,0.72)",
+                        "surface-muted": "#F8F7FA",
+                        "surface-elevated": "#FFFFFF",
+
+                        onSurface: "#0E0B14",
+                        onSurfaceMuted: "#6B6478",
+
+                        outline: "#E4E0EC",
+                        outlineLight: "#F0EDF5",
+
+                        accent: "#F97316",
+                        accentLight: "#FDE8D8",
+
+                        success: "#10B981",
+                        successLight: "#D1FAE5",
+                        warning: "#F59E0B",
+                        warningLight: "#FEF3C7",
+                        error: "#EF4444",
+                        errorLight: "#FEE2E2",
+
+                        glass: "rgba(255,255,255,0.5)",
+                        glassBorder: "rgba(255,255,255,0.18)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    fontSize: {
+                        "2xs": ["10px", { lineHeight: "14px", letterSpacing: "0.04em" }],
+                        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.02em" }],
+                        sm: ["14px", { lineHeight: "20px" }],
+                        base: ["16px", { lineHeight: "24px" }],
+                        lg: ["20px", { lineHeight: "28px" }],
+                        xl: ["24px", { lineHeight: "32px", letterSpacing: "-0.01em" }],
+                        "2xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+                    },
+                    fontWeight: {
+                        normal: "400",
+                        medium: "500",
+                        semibold: "600",
+                        bold: "700",
+                        extrabold: "800",
+                        black: "900",
+                    },
+                    spacing: {
+                        container: "1.25rem",
+                        card: "1.5rem",
+                        section: "2rem",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "0.75rem",
+                        xl: "1rem",
+                        "2xl": "1.25rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        card: "0 1px 3px rgba(0,0,0,0.03), 0 8px 32px rgba(108,43,217,0.06)",
+                        cardHover: "0 4px 16px rgba(108,43,217,0.10), 0 12px 48px rgba(108,43,217,0.06)",
+                        glass: "0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+                        glow: "0 0 40px rgba(108,43,217,0.15)",
+                        "glow-strong": "0 0 60px rgba(108,43,217,0.25)",
+                        modal: "0 20px 80px rgba(0,0,0,0.15)",
+                        "nav-sm": "0 -1px 0 rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)",
+                    },
+                    backdropBlur: {
+                        glass: "12px",
+                    },
+                    animation: {
+                        "fade-up": "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "fade-in": "fadeIn 0.4s ease-out forwards",
+                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+                        "float": "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            "0%": { opacity: "0", transform: "translateY(12px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" },
+                        },
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" },
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(30px) scale(0.96)" },
+                            "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        pulseGlow: {
+                            "0%, 100%": { boxShadow: "0 0 20px rgba(108,43,217,0.10)" },
+                            "50%": { boxShadow: "0 0 40px rgba(108,43,217,0.25)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0px)" },
+                            "50%": { transform: "translateY(-8px)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- Reset & Base --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F7FA;
+            color: #0E0B14;
+            min-height: 100dvh;
+            min-height: max(884px, 100dvh);
+            overflow-x: hidden;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CDE0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8AFC8;
+        }
+
+        /* --- Material Icons --- */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* --- Custom checkboxes (keep functionality) --- */
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D4CDE0;
+            border-radius: 6px;
+            background: white;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .custom-checkbox:checked {
+            border-color: #6C2BD9;
+            background: #6C2BD9;
+        }
+        .custom-checkbox:checked::after {
+            content: "✓";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .custom-checkbox:focus-visible {
+            outline: 2px solid #6C2BD9;
+            outline-offset: 2px;
+        }
+
+        /* --- Custom radio (for gateway, as pill selection) --- */
+        .gateway-pill {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .gateway-pill input:checked+.pill-content {
+            background: #6C2BD9;
+            color: white;
+            border-color: #6C2BD9;
+            box-shadow: 0 2px 8px rgba(108, 43, 217, 0.25);
+        }
+        .pill-content {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            border: 1.5px solid #E4E0EC;
+            background: white;
+            color: #6B6478;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .pill-content:hover {
+            border-color: #6C2BD9;
+            background: #F3EEFF;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOP APP BAR – Glass -->
+    <!-- ============================================================ -->
+    <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+        <div class="flex items-center justify-between container-padding h-16 w-full max-w-2xl mx-auto">
+            <button class="p-2 -ml-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <h1 class="text-lg font-extrabold tracking-tight text-primary flex-1 text-center">Filter Orders</h1>
+            <button class="text-sm font-bold text-primary hover:bg-primary-subtle px-3 py-2 rounded-full transition-colors uppercase tracking-wider">
+                Reset
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT – Scrollable -->
+    <!-- ============================================================ -->
+    <main class="flex-1 overflow-y-auto pt-20 pb-28 container-padding max-w-2xl mx-auto w-full space-y-6">
+
+        <!-- ===== DATE RANGE ===== -->
+        <section>
+            <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Date Range</h2>
+            <div class="grid grid-cols-2 gap-3 mb-3.5">
+                <div class="relative">
+                    <label class="absolute -top-2 left-3 bg-white px-1 text-[9px] font-bold text-primary z-10">From</label>
+                    <div class="flex items-center border-2 border-primary rounded-xl bg-white shadow-sm focus-within:ring-2 ring-primary-glow transition-all">
+                        <span class="material-symbols-outlined text-primary pl-3 pr-1 py-2.5 text-[18px]">calendar_today</span>
+                        <input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-onSurface py-2.5 pr-3" type="date" value="2024-05-01" />
+                    </div>
+                </div>
+                <div class="relative">
+                    <label class="absolute -top-2 left-3 bg-white px-1 text-[9px] font-bold text-onSurfaceMuted z-10">To</label>
+                    <div class="flex items-center border border-outline/60 rounded-xl bg-white focus-within:border-primary focus-within:ring-2 ring-primary-glow transition-all shadow-sm">
+                        <span class="material-symbols-outlined text-onSurfaceMuted pl-3 pr-1 py-2.5 text-[18px]">calendar_today</span>
+                        <input class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium text-onSurface py-2.5 pr-3" type="date" />
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button class="px-4 py-1.5 rounded-full border border-outline/60 text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all bg-white shadow-sm">Today</button>
+                <button class="px-4 py-1.5 rounded-full border border-outline/60 text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all bg-white shadow-sm">Yesterday</button>
+                <button class="px-4 py-1.5 rounded-full bg-primary-subtle text-primary text-sm font-semibold border border-primary shadow-sm">Last 7 Days</button>
+                <button class="px-4 py-1.5 rounded-full border border-outline/60 text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all bg-white shadow-sm">This Month</button>
+            </div>
+        </section>
+
+        <hr class="border-t border-outline/40" />
+
+        <!-- ===== ORDER TYPE ===== -->
+        <section>
+            <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Order Type</h2>
+            <div class="bg-white border border-outline/60 rounded-2xl overflow-hidden shadow-card divide-y divide-outline/40">
+                <label class="flex items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">bolt</span>
+                        <span class="text-sm font-medium text-onSurface">Quick Order</span>
+                    </div>
+                    <input type="checkbox" class="custom-checkbox" />
+                </label>
+                <label class="flex items-center justify-between p-4 bg-primary-subtle/20 hover:bg-primary-subtle/40 transition-colors cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">shopping_cart</span>
+                        <span class="text-sm font-semibold text-onSurface">Buy For Me</span>
+                    </div>
+                    <input type="checkbox" class="custom-checkbox" checked />
+                </label>
+                <label class="flex items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors cursor-pointer">
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                        <span class="text-sm font-medium text-onSurface">Self Order</span>
+                    </div>
+                    <input type="checkbox" class="custom-checkbox" />
+                </label>
+            </div>
+        </section>
+
+        <hr class="border-t border-outline/40" />
+
+        <!-- ===== SHIPMENT STATUS ===== -->
+        <section>
+            <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Shipment Status</h2>
+            <div class="grid grid-cols-1 gap-2">
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-outline/60 bg-white hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" />
+                    <span class="text-sm font-medium text-onSurface flex-1">Pending</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted">12</span>
+                </label>
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-primary bg-primary-subtle/30 hover:bg-primary-subtle/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" checked />
+                    <span class="text-sm font-semibold text-onSurface flex-1">Arrived at Warehouse India</span>
+                    <span class="chip bg-primary-subtle text-primary">45</span>
+                </label>
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-outline/60 bg-white hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" />
+                    <span class="text-sm font-medium text-onSurface flex-1">Arrived at Warehouse Nepal</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted">8</span>
+                </label>
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-outline/60 bg-white hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" />
+                    <span class="text-sm font-medium text-onSurface flex-1">Shipped</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted">23</span>
+                </label>
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-outline/60 bg-white hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" />
+                    <span class="text-sm font-medium text-onSurface flex-1">Delivered</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted">105</span>
+                </label>
+                <label class="flex items-center gap-3 p-3.5 rounded-xl border border-outline/60 bg-white hover:border-error/50 transition-all cursor-pointer shadow-sm">
+                    <input type="checkbox" class="custom-checkbox" />
+                    <span class="text-sm font-medium text-onSurface flex-1">Delivery Failed</span>
+                    <span class="chip bg-errorLight/60 text-error">2</span>
+                </label>
+            </div>
+        </section>
+
+        <hr class="border-t border-outline/40" />
+
+        <!-- ===== PAYMENT GATEWAY ===== -->
+        <section class="pb-4">
+            <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Payment Gateway</h2>
+            <div class="flex flex-wrap gap-2">
+                <label class="gateway-pill">
+                    <input type="checkbox" class="sr-only" checked />
+                    <span class="pill-content">
+                        <span>Khalti</span>
+                        <span class="material-symbols-outlined text-[16px] fill">check_circle</span>
+                    </span>
+                </label>
+                <label class="gateway-pill">
+                    <input type="checkbox" class="sr-only" />
+                    <span class="pill-content">eSewa</span>
+                </label>
+                <label class="gateway-pill">
+                    <input type="checkbox" class="sr-only" />
+                    <span class="pill-content">Bank Transfer</span>
+                </label>
+                <label class="gateway-pill">
+                    <input type="checkbox" class="sr-only" />
+                    <span class="pill-content">COD</span>
+                </label>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- FIXED BOTTOM ACTION -->
+    <!-- ============================================================ -->
+    <div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 p-container-padding z-50 shadow-nav-sm">
+        <div class="max-w-2xl mx-auto">
+            <button class="w-full btn-primary py-3.5 rounded-2xl text-base font-bold flex items-center justify-center gap-2 shadow-glow-strong">
+                <span class="material-symbols-outlined">filter_list</span>
+                Apply Filters
+            </button>
+        </div>
+    </div>
+
+</body>
+</html>

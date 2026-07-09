@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>Customer Profile — MeroLogix</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6C2BD9",
+                        "primary-light": "#8B5CF6",
+                        "primary-dark": "#4C1D95",
+                        "primary-glow": "rgba(108, 43, 217, 0.25)",
+                        "primary-subtle": "#F3EEFF",
+
+                        surface: "#FFFFFF",
+                        "surface-glass": "rgba(255,255,255,0.72)",
+                        "surface-muted": "#F8F7FA",
+                        "surface-elevated": "#FFFFFF",
+
+                        onSurface: "#0E0B14",
+                        onSurfaceMuted: "#6B6478",
+
+                        outline: "#E4E0EC",
+                        outlineLight: "#F0EDF5",
+
+                        accent: "#F97316",
+                        accentLight: "#FDE8D8",
+
+                        success: "#10B981",
+                        successLight: "#D1FAE5",
+                        warning: "#F59E0B",
+                        warningLight: "#FEF3C7",
+                        error: "#EF4444",
+                        errorLight: "#FEE2E2",
+
+                        glass: "rgba(255,255,255,0.5)",
+                        glassBorder: "rgba(255,255,255,0.18)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    fontSize: {
+                        "2xs": ["10px", { lineHeight: "14px", letterSpacing: "0.04em" }],
+                        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.02em" }],
+                        sm: ["14px", { lineHeight: "20px" }],
+                        base: ["16px", { lineHeight: "24px" }],
+                        lg: ["20px", { lineHeight: "28px" }],
+                        xl: ["24px", { lineHeight: "32px", letterSpacing: "-0.01em" }],
+                        "2xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+                    },
+                    fontWeight: {
+                        normal: "400",
+                        medium: "500",
+                        semibold: "600",
+                        bold: "700",
+                        extrabold: "800",
+                        black: "900",
+                    },
+                    spacing: {
+                        container: "1.25rem",
+                        card: "1.5rem",
+                        section: "2rem",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "0.75rem",
+                        xl: "1rem",
+                        "2xl": "1.25rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        card: "0 1px 3px rgba(0,0,0,0.03), 0 8px 32px rgba(108,43,217,0.06)",
+                        cardHover: "0 4px 16px rgba(108,43,217,0.10), 0 12px 48px rgba(108,43,217,0.06)",
+                        glass: "0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+                        glow: "0 0 40px rgba(108,43,217,0.15)",
+                        "glow-strong": "0 0 60px rgba(108,43,217,0.25)",
+                        modal: "0 20px 80px rgba(0,0,0,0.15)",
+                        "nav-sm": "0 -1px 0 rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)",
+                    },
+                    backdropBlur: {
+                        glass: "12px",
+                    },
+                    animation: {
+                        "fade-up": "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "fade-in": "fadeIn 0.4s ease-out forwards",
+                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+                        "float": "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            "0%": { opacity: "0", transform: "translateY(12px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" },
+                        },
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" },
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(30px) scale(0.96)" },
+                            "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        pulseGlow: {
+                            "0%, 100%": { boxShadow: "0 0 20px rgba(108,43,217,0.10)" },
+                            "50%": { boxShadow: "0 0 40px rgba(108,43,217,0.25)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0px)" },
+                            "50%": { transform: "translateY(-8px)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- Reset & Base --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F7FA;
+            color: #0E0B14;
+            min-height: 100dvh;
+            min-height: max(884px, 100dvh);
+            overflow-x: hidden;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CDE0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8AFC8;
+        }
+
+        /* --- Material Icons --- */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* --- Hide Scrollbar --- */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* --- Bottom nav safe area --- */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* --- Gradient text --- */
+        .gradient-text {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 50%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- Buttons --- */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 12px rgba(108, 43, 217, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(108, 43, 217, 0.35);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #6C2BD9;
+            border: 1.5px solid #D4CDE0;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:hover {
+            background: #F3EEFF;
+            border-color: #6C2BD9;
+        }
+        .btn-outline:active {
+            transform: scale(0.96);
+        }
+
+        /* --- Card Interactions --- */
+        .card-interact {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-interact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 24px rgba(108, 43, 217, 0.08), 0 12px 48px rgba(108, 43, 217, 0.05);
+        }
+        .card-interact:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Status dots --- */
+        .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .status-dot.green {
+            background: #10B981;
+        }
+        .status-dot.amber {
+            background: #F59E0B;
+        }
+        .status-dot.red {
+            background: #EF4444;
+        }
+        .status-dot.purple {
+            background: #6C2BD9;
+        }
+        .status-dot.blue {
+            background: #3B82F6;
+        }
+
+        /* --- Chip --- */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOP APP BAR – Glass -->
+    <!-- ============================================================ -->
+    <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+        <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-glow shrink-0">
+                    <span class="material-symbols-outlined text-white text-[20px] fill">bolt</span>
+                </div>
+                <span class="text-lg font-extrabold tracking-tight text-primary">MeroLogix</span>
+            </div>
+            <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                <span class="material-symbols-outlined">dark_mode</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8 space-y-6">
+
+        <!-- ========== PROFILE HEADER ========== -->
+        <section class="bg-white border border-outline/60 rounded-2xl p-6 shadow-card flex flex-col md:flex-row items-center md:items-start gap-6">
+            <div class="flex-shrink-0">
+                <img class="w-24 h-24 rounded-full object-cover border-2 border-primary/20 shadow-glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCegirs2d5cl1HlWijUGyWzohvbuKJOmVL4Sdj3nvg6GbTFs0LUzo025WaGJKFgRiXodOayERF4-ahXJhiF4HApJfftr4OCicrRkeeXEeZH2xUsJhd1AVB4SOULf5qOS7Ex-EOK58bXu3Ql1htQ2v8J2YR-pS0ZwoclNwjdDKCMmPzXmOydk5FQ50hq_xHXwL1qT9WmqTaPdFulRiVjLEsSK_dsNXEWnp2a2aIeccWQyTaseVBuawYEDg" alt="Customer avatar" />
+            </div>
+            <div class="flex-1 text-center md:text-left flex flex-col justify-center">
+                <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Aryan Sharma</h1>
+                <div class="flex items-center justify-center md:justify-start gap-2.5 mt-1 flex-wrap">
+                    <span class="chip bg-primary-subtle text-primary">Premium Customer</span>
+                    <span class="text-sm text-onSurfaceMuted flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Kathmandu, NP</span>
+                </div>
+            </div>
+            <div class="flex-shrink-0 flex flex-col gap-2.5 w-full md:w-auto">
+                <button class="bg-[#25D366] hover:bg-[#1ebe5a] text-white rounded-xl px-4 py-2.5 flex items-center justify-center gap-2 transition-colors w-full md:w-auto text-sm font-semibold shadow-sm">
+                    <span class="material-symbols-outlined text-[20px]">chat</span> Direct WhatsApp Chat
+                </button>
+                <div class="flex gap-2.5 w-full">
+                    <button class="flex-1 md:flex-none border border-primary/40 text-primary hover:bg-primary-subtle rounded-xl px-3.5 py-2 flex items-center justify-center gap-1.5 transition-colors text-sm font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">edit</span> Edit
+                    </button>
+                    <button class="flex-1 md:flex-none border border-error/40 text-error hover:bg-errorLight/40 rounded-xl px-3.5 py-2 flex items-center justify-center gap-1.5 transition-colors text-sm font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">block</span> Block
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== KEY METRICS ========== -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card flex flex-col justify-between">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Total Orders</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface mt-0.5">1,248</h2>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-primary-subtle flex items-center justify-center"><span class="material-symbols-outlined text-primary">package_2</span></div>
+                </div>
+                <div class="mt-3 flex items-center gap-1.5 text-success text-xs font-semibold">
+                    <span class="material-symbols-outlined text-[16px]">trending_up</span> +12% this month
+                </div>
+            </div>
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card flex flex-col justify-between">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Total Spent (NPR)</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface mt-0.5">4,50,000</h2>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-successLight/60 flex items-center justify-center"><span class="material-symbols-outlined text-success">payments</span></div>
+                </div>
+                <div class="mt-3 text-xs font-medium text-onSurfaceMuted">Avg. 3,500/order</div>
+            </div>
+            <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card flex flex-col justify-between">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Active Shipments</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface mt-0.5">7</h2>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-primary-subtle flex items-center justify-center"><span class="material-symbols-outlined text-primary">local_shipping</span></div>
+                </div>
+                <div class="mt-3 flex items-center gap-1 text-primary text-sm font-semibold cursor-pointer hover:underline">
+                    View active routes <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== RECENT ACTIVITY + SECURITY ========== -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left: Recent Activity -->
+            <div class="lg:col-span-2 space-y-4">
+                <h3 class="text-lg font-bold tracking-tight text-onSurface">Recent Activity</h3>
+                <div class="bg-white border border-outline/60 rounded-2xl shadow-card overflow-hidden divide-y divide-outline/40">
+                    <!-- Item 1 -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors">
+                        <div class="flex items-center gap-3.5 mb-2 sm:mb-0">
+                            <div class="w-10 h-10 rounded-xl bg-primary-subtle flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary">inventory_2</span></div>
+                            <div>
+                                <p class="text-sm font-semibold text-onSurface">Order #ML-8832 Dispatched</p>
+                                <p class="text-xs font-mono text-onSurfaceMuted mt-0.5">Route: KTM → PKR</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start sm:items-end w-full sm:w-auto">
+                            <span class="chip bg-blue-50 text-blue-700">In Transit</span>
+                            <span class="text-xs text-onSurfaceMuted mt-1">2 hrs ago</span>
+                        </div>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors">
+                        <div class="flex items-center gap-3.5 mb-2 sm:mb-0">
+                            <div class="w-10 h-10 rounded-xl bg-successLight/60 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-success">check_circle</span></div>
+                            <div>
+                                <p class="text-sm font-semibold text-onSurface">Order #ML-8829 Delivered</p>
+                                <p class="text-xs font-mono text-onSurfaceMuted mt-0.5">Signed by: A. Sharma</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start sm:items-end w-full sm:w-auto">
+                            <span class="chip bg-successLight/60 text-success">Delivered</span>
+                            <span class="text-xs text-onSurfaceMuted mt-1">Yesterday, 14:30</span>
+                        </div>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors">
+                        <div class="flex items-center gap-3.5 mb-2 sm:mb-0">
+                            <div class="w-10 h-10 rounded-xl bg-warningLight/60 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-warning">receipt_long</span></div>
+                            <div>
+                                <p class="text-sm font-semibold text-onSurface">Invoice #INV-2023-11 Paid</p>
+                                <p class="text-xs font-mono text-onSurfaceMuted mt-0.5">Amount: NPR 12,500</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-start sm:items-end w-full sm:w-auto">
+                            <span class="chip bg-primary-subtle text-primary">Payment</span>
+                            <span class="text-xs text-onSurfaceMuted mt-1">Nov 12, 09:15</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-full py-2.5 text-sm font-semibold text-primary hover:bg-primary-subtle rounded-xl transition-colors">View Full History →</button>
+            </div>
+
+            <!-- Right: Security & Admin -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-bold tracking-tight text-onSurface">Security &amp; Admin</h3>
+                <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card space-y-4">
+                    <div>
+                        <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Last Login IP</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <span class="text-sm font-mono font-semibold text-onSurface">103.111.45.92</span>
+                            <button class="text-error text-sm font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">gavel</span> Block IP</button>
+                        </div>
+                    </div>
+                    <div class="pt-3.5 border-t border-outline/40">
+                        <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Account Created</p>
+                        <p class="text-sm font-medium text-onSurface mt-0.5">March 15, 2022</p>
+                    </div>
+                    <div class="pt-3.5 border-t border-outline/40">
+                        <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Preferred Language</p>
+                        <p class="text-sm font-medium text-onSurface mt-0.5">English / Nepali</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM NAV (Mobile) – Consistent with other redesigned pages -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 shadow-nav-sm px-2 py-1.5 pb-safe z-50 flex justify-around items-center">
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">dashboard</span>
+            <span class="text-[9px] font-semibold mt-0.5">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">package_2</span>
+            <span class="text-[9px] font-semibold mt-0.5">Orders</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all bg-primary-subtle text-primary" href="#">
+            <span class="material-symbols-outlined text-[22px] fill">group</span>
+            <span class="text-[9px] font-semibold mt-0.5">Customers</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">settings_applications</span>
+            <span class="text-[9px] font-semibold mt-0.5">Admin</span>
+        </a>
+    </nav>
+
+</body>
+</html>

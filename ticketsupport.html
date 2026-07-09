@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>MeroLogix — Support Tickets</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6C2BD9",
+                        "primary-light": "#8B5CF6",
+                        "primary-dark": "#4C1D95",
+                        "primary-glow": "rgba(108, 43, 217, 0.25)",
+                        "primary-subtle": "#F3EEFF",
+
+                        surface: "#FFFFFF",
+                        "surface-glass": "rgba(255,255,255,0.72)",
+                        "surface-muted": "#F8F7FA",
+                        "surface-elevated": "#FFFFFF",
+
+                        onSurface: "#0E0B14",
+                        onSurfaceMuted: "#6B6478",
+
+                        outline: "#E4E0EC",
+                        outlineLight: "#F0EDF5",
+
+                        accent: "#F97316",
+                        accentLight: "#FDE8D8",
+
+                        success: "#10B981",
+                        successLight: "#D1FAE5",
+                        warning: "#F59E0B",
+                        warningLight: "#FEF3C7",
+                        error: "#EF4444",
+                        errorLight: "#FEE2E2",
+
+                        glass: "rgba(255,255,255,0.5)",
+                        glassBorder: "rgba(255,255,255,0.18)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    fontSize: {
+                        "2xs": ["10px", { lineHeight: "14px", letterSpacing: "0.04em" }],
+                        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.02em" }],
+                        sm: ["14px", { lineHeight: "20px" }],
+                        base: ["16px", { lineHeight: "24px" }],
+                        lg: ["20px", { lineHeight: "28px" }],
+                        xl: ["24px", { lineHeight: "32px", letterSpacing: "-0.01em" }],
+                        "2xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+                    },
+                    fontWeight: {
+                        normal: "400",
+                        medium: "500",
+                        semibold: "600",
+                        bold: "700",
+                        extrabold: "800",
+                        black: "900",
+                    },
+                    spacing: {
+                        container: "1.25rem",
+                        card: "1.5rem",
+                        section: "2rem",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "0.75rem",
+                        xl: "1rem",
+                        "2xl": "1.25rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        card: "0 1px 3px rgba(0,0,0,0.03), 0 8px 32px rgba(108,43,217,0.06)",
+                        cardHover: "0 4px 16px rgba(108,43,217,0.10), 0 12px 48px rgba(108,43,217,0.06)",
+                        glass: "0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+                        glow: "0 0 40px rgba(108,43,217,0.15)",
+                        "glow-strong": "0 0 60px rgba(108,43,217,0.25)",
+                        modal: "0 20px 80px rgba(0,0,0,0.15)",
+                        "nav-sm": "0 -1px 0 rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)",
+                        "input-focus": "0 0 0 4px rgba(108,43,217,0.10)",
+                    },
+                    backdropBlur: {
+                        glass: "12px",
+                    },
+                    animation: {
+                        "fade-up": "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "fade-in": "fadeIn 0.4s ease-out forwards",
+                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+                        "float": "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            "0%": { opacity: "0", transform: "translateY(12px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" },
+                        },
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" },
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(30px) scale(0.96)" },
+                            "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        pulseGlow: {
+                            "0%, 100%": { boxShadow: "0 0 20px rgba(108,43,217,0.10)" },
+                            "50%": { boxShadow: "0 0 40px rgba(108,43,217,0.25)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0px)" },
+                            "50%": { transform: "translateY(-8px)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- Reset & Base --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F7FA;
+            color: #0E0B14;
+            min-height: 100dvh;
+            min-height: max(884px, 100dvh);
+            overflow-x: hidden;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CDE0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8AFC8;
+        }
+
+        /* --- Material Icons --- */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* --- Hide Scrollbar --- */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* --- Bottom nav safe area --- */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        /* --- Gradient text --- */
+        .gradient-text {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 50%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- Buttons --- */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 12px rgba(108, 43, 217, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(108, 43, 217, 0.35);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #6C2BD9;
+            border: 1.5px solid #D4CDE0;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:hover {
+            background: #F3EEFF;
+            border-color: #6C2BD9;
+        }
+        .btn-outline:active {
+            transform: scale(0.96);
+        }
+
+        /* --- Card Interactions --- */
+        .card-interact {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-interact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 24px rgba(108, 43, 217, 0.08), 0 12px 48px rgba(108, 43, 217, 0.05);
+        }
+        .card-interact:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Chip --- */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        /* --- Input --- */
+        .input-modern {
+            background: #FFFFFF;
+            border: 1.5px solid #E4E0EC;
+            border-radius: 0.75rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            width: 100%;
+            outline: none;
+            color: #0E0B14;
+        }
+        .input-modern:focus {
+            border-color: #6C2BD9;
+            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
+        }
+        .input-modern::placeholder {
+            color: #9A92A8;
+        }
+        .input-modern-with-icon {
+            padding-left: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- TOP APP BAR – Glass -->
+    <!-- ============================================================ -->
+    <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+        <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-glow shrink-0">
+                    <span class="material-symbols-outlined text-white text-[20px] fill">bolt</span>
+                </div>
+                <span class="text-lg font-extrabold tracking-tight text-primary">MeroLogix</span>
+            </div>
+
+            <!-- Center Nav (Desktop) -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="#">
+                    <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
+                </a>
+                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="#">
+                    <span class="material-symbols-outlined text-[18px]">package_2</span> Orders
+                </a>
+                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="#">
+                    <span class="material-symbols-outlined text-[18px]">group</span> Customers
+                </a>
+                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl bg-primary-subtle text-primary shadow-sm flex items-center gap-1.5" href="#">
+                    <span class="material-symbols-outlined text-[18px] fill">support_agent</span> Support
+                </a>
+                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="#">
+                    <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> Admin
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-1.5">
+                <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/10 flex-shrink-0">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJtrfiP1ScDIjRJujF9pp4DCxoDn6utNXLfPBjoGQTR7CurO6u66v9p3YsixLNltPDQQrPed4XxWPORKh0a4AfHwPHSH_Cv8KnseVJGr9Jkka16ZSi0ke9CJagmB7lZECySaotNmxSWL6zSM_uxdOWTFCyhPKFndID_nFIrHIDNDdKI2HD5dieYQ4jY3JhlxVOyB0lT3xWHsPCo3x31o08SBQLx1z4Dy5DhBw1cdDlo7573PGedIM-kA" alt="Profile" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================ -->
+    <!-- MAIN CONTENT -->
+    <!-- ============================================================ -->
+    <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+
+        <!-- ===== HEADER ===== -->
+        <header class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Support Tickets</h1>
+                <p class="text-sm text-onSurfaceMuted">Manage and resolve customer inquiries.</p>
+            </div>
+            <button class="btn-primary px-6 py-2.5 rounded-2xl text-sm font-semibold flex items-center justify-center gap-2 shadow-glow-strong">
+                <span class="material-symbols-outlined fill">add</span> New Ticket
+            </button>
+        </header>
+
+        <!-- ===== TABS ===== -->
+        <div class="mb-5 border-b border-outline/40 overflow-x-auto no-scrollbar">
+            <div class="flex gap-6 min-w-max px-1">
+                <button class="pb-2.5 border-b-2 border-primary text-primary text-sm font-semibold transition-colors">Open (12)</button>
+                <button class="pb-2.5 border-b-2 border-transparent text-onSurfaceMuted hover:text-onSurface text-sm font-semibold transition-colors">Pending (5)</button>
+                <button class="pb-2.5 border-b-2 border-transparent text-onSurfaceMuted hover:text-onSurface text-sm font-semibold transition-colors">Resolved (84)</button>
+                <button class="pb-2.5 border-b-2 border-transparent text-onSurfaceMuted hover:text-onSurface text-sm font-semibold transition-colors">All Tickets</button>
+            </div>
+        </div>
+
+        <!-- ===== SEARCH & FILTER ===== -->
+        <div class="mb-5 flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                <input class="w-full pl-10 pr-4 py-2.5 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Search ticket ID, subject, or customer..." type="text" />
+            </div>
+            <button class="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-outline/60 rounded-2xl text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all shadow-card">
+                <span class="material-symbols-outlined text-[18px]">filter_list</span> Filter
+            </button>
+        </div>
+
+        <!-- ===== TICKET GRID ===== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+            <!-- Ticket Card 1 (High Priority) -->
+            <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col gap-4 cursor-pointer">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8902</span>
+                        <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Shipment delayed at customs hub</h2>
+                    </div>
+                    <span class="chip bg-errorLight/60 text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">priority_high</span> High</span>
+                </div>
+                <p class="text-sm text-onSurfaceMuted line-clamp-2">Customer reported that tracking hasn't updated in 4 days. Need to contact the port authority to check status of container #4492.</p>
+                <div class="mt-auto pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm">JD</div>
+                        <div>
+                            <span class="block text-sm font-semibold text-onSurface">John Doe</span>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Logistics Corp</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xs font-medium text-onSurfaceMuted">Updated</span>
+                        <span class="block text-sm font-semibold text-onSurface">2 hrs ago</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Ticket Card 2 (Medium Priority) -->
+            <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col gap-4 cursor-pointer">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8901</span>
+                        <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Invoice discrepancy for Route B</h2>
+                    </div>
+                    <span class="chip bg-primary-subtle text-primary">Medium</span>
+                </div>
+                <p class="text-sm text-onSurfaceMuted line-clamp-2">The fuel surcharge on last week's invoice seems incorrect based on the agreed rate card. Please review the attached breakdown.</p>
+                <div class="mt-auto pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center text-success font-extrabold text-sm">AS</div>
+                        <div>
+                            <span class="block text-sm font-semibold text-onSurface">Alice Smith</span>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Global Traders</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xs font-medium text-onSurfaceMuted">Updated</span>
+                        <span class="block text-sm font-semibold text-onSurface">5 hrs ago</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Ticket Card 3 (Low Priority) -->
+            <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col gap-4 cursor-pointer">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8895</span>
+                        <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Requesting updated API documentation</h2>
+                    </div>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted">Low</span>
+                </div>
+                <p class="text-sm text-onSurfaceMuted line-clamp-2">We are integrating the new tracking endpoints and need the latest Swagger documentation to proceed with development.</p>
+                <div class="mt-auto pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full overflow-hidden border border-outline/40 flex-shrink-0">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBslXcxyU3c-_QJ4vG6j6hpoYgGtXJmMll7PvoACJDCVWgtQD9xRSrQQx6vDU57yV3gyScVc0vjDUyQ2XmQT2WE5RhISeUzWEEcNB8F9KS76E3OHIXkwwutnl0DU7W4KJ7Oy7gvCPGwegEfEHPylvbsOlYKQZs2xpokwB7EICeY-jdPMcEpYqh35c5e4NdQYNMNB4TlE4IFDg1IMU4qlgOp5aSYd7kgCTfb0gvdobG_y5ExYLI0wUmFQ" alt="David Chen" />
+                        </div>
+                        <div>
+                            <span class="block text-sm font-semibold text-onSurface">David Chen</span>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Tech Solutions</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xs font-medium text-onSurfaceMuted">Updated</span>
+                        <span class="block text-sm font-semibold text-onSurface">1 day ago</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Ticket Card 4 (High Priority) -->
+            <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col gap-4 cursor-pointer">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8890</span>
+                        <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Damaged goods reported on arrival</h2>
+                    </div>
+                    <span class="chip bg-errorLight/60 text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">priority_high</span> High</span>
+                </div>
+                <p class="text-sm text-onSurfaceMuted line-clamp-2">Consignment #9921 arrived with water damage. Initiating claims process. Need inspection report ASAP.</p>
+                <div class="mt-auto pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-error/20 to-error/5 flex items-center justify-center text-error font-extrabold text-sm">MJ</div>
+                        <div>
+                            <span class="block text-sm font-semibold text-onSurface">Mary Jones</span>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Retail Plus</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xs font-medium text-onSurfaceMuted">Updated</span>
+                        <span class="block text-sm font-semibold text-onSurface">2 days ago</span>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- ===== PAGINATION ===== -->
+        <div class="mt-6 flex justify-center items-center gap-4">
+            <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors disabled:opacity-40" disabled>
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <span class="text-sm font-semibold text-onSurfaceMuted">Page 1 of 3</span>
+            <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM NAV (Mobile) -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 shadow-nav-sm px-2 py-1.5 pb-safe z-50 flex justify-around items-center">
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">dashboard</span>
+            <span class="text-[9px] font-semibold mt-0.5">Dashboard</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">package_2</span>
+            <span class="text-[9px] font-semibold mt-0.5">Orders</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">group</span>
+            <span class="text-[9px] font-semibold mt-0.5">Customers</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all bg-primary-subtle text-primary" href="#">
+            <span class="material-symbols-outlined text-[22px] fill">support_agent</span>
+            <span class="text-[9px] font-semibold mt-0.5">Support</span>
+        </a>
+        <a class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all text-onSurfaceMuted" href="#">
+            <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
+            <span class="text-[9px] font-semibold mt-0.5">Admin</span>
+        </a>
+    </nav>
+
+</body>
+</html>

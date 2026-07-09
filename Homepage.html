@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
+    <title>MeroLogix — Unified Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Primary: deep violet → modern gradient
+                        primary: "#6C2BD9",
+                        "primary-light": "#8B5CF6",
+                        "primary-dark": "#4C1D95",
+                        "primary-glow": "rgba(108, 43, 217, 0.25)",
+                        "primary-subtle": "#F3EEFF",
+
+                        surface: "#FFFFFF",
+                        "surface-glass": "rgba(255,255,255,0.72)",
+                        "surface-muted": "#F8F7FA",
+                        "surface-elevated": "#FFFFFF",
+
+                        onSurface: "#0E0B14",
+                        onSurfaceMuted: "#6B6478",
+
+                        outline: "#E4E0EC",
+                        outlineLight: "#F0EDF5",
+
+                        accent: "#F97316",
+                        accentLight: "#FDE8D8",
+
+                        success: "#10B981",
+                        successLight: "#D1FAE5",
+                        warning: "#F59E0B",
+                        warningLight: "#FEF3C7",
+                        error: "#EF4444",
+                        errorLight: "#FEE2E2",
+
+                        glass: "rgba(255,255,255,0.5)",
+                        glassBorder: "rgba(255,255,255,0.18)",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "system-ui", "sans-serif"],
+                    },
+                    fontSize: {
+                        "2xs": ["10px", { lineHeight: "14px", letterSpacing: "0.04em" }],
+                        xs: ["12px", { lineHeight: "16px", letterSpacing: "0.02em" }],
+                        sm: ["14px", { lineHeight: "20px" }],
+                        base: ["16px", { lineHeight: "24px" }],
+                        lg: ["20px", { lineHeight: "28px" }],
+                        xl: ["24px", { lineHeight: "32px", letterSpacing: "-0.01em" }],
+                        "2xl": ["32px", { lineHeight: "40px", letterSpacing: "-0.02em" }],
+                        "3xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.03em" }],
+                    },
+                    fontWeight: {
+                        normal: "400",
+                        medium: "500",
+                        semibold: "600",
+                        bold: "700",
+                        extrabold: "800",
+                        black: "900",
+                    },
+                    spacing: {
+                        container: "1.25rem",
+                        card: "1.5rem",
+                        section: "2rem",
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                        lg: "0.75rem",
+                        xl: "1rem",
+                        "2xl": "1.25rem",
+                        "3xl": "1.5rem",
+                        full: "9999px",
+                    },
+                    boxShadow: {
+                        card: "0 1px 3px rgba(0,0,0,0.03), 0 8px 32px rgba(108,43,217,0.06)",
+                        cardHover: "0 4px 16px rgba(108,43,217,0.10), 0 12px 48px rgba(108,43,217,0.06)",
+                        glass: "0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)",
+                        glow: "0 0 40px rgba(108,43,217,0.15)",
+                        "glow-strong": "0 0 60px rgba(108,43,217,0.25)",
+                        modal: "0 20px 80px rgba(0,0,0,0.15)",
+                        "nav-sm": "0 -1px 0 rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)",
+                    },
+                    backdropBlur: {
+                        glass: "12px",
+                    },
+                    animation: {
+                        "fade-up": "fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "fade-in": "fadeIn 0.4s ease-out forwards",
+                        "slide-up": "slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+                        "pulse-glow": "pulseGlow 2.5s ease-in-out infinite",
+                        "float": "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            "0%": { opacity: "0", transform: "translateY(12px)" },
+                            "100%": { opacity: "1", transform: "translateY(0)" },
+                        },
+                        fadeIn: {
+                            "0%": { opacity: "0" },
+                            "100%": { opacity: "1" },
+                        },
+                        slideUp: {
+                            "0%": { opacity: "0", transform: "translateY(30px) scale(0.96)" },
+                            "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+                        },
+                        pulseGlow: {
+                            "0%, 100%": { boxShadow: "0 0 20px rgba(108,43,217,0.10)" },
+                            "50%": { boxShadow: "0 0 40px rgba(108,43,217,0.25)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0px)" },
+                            "50%": { transform: "translateY(-8px)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* --- Reset & Base --- */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F8F7FA;
+            color: #0E0B14;
+            min-height: 100dvh;
+            min-height: max(884px, 100dvh);
+            overflow-x: hidden;
+        }
+
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4CDE0;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #B8AFC8;
+        }
+
+        /* --- Material Icons --- */
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .material-symbols-outlined.fill,
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        /* --- App Pages --- */
+        .app-page {
+            display: none;
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+        .app-page.active {
+            display: block;
+        }
+
+        /* --- Hide Scrollbar --- */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* --- Bottom nav safe area --- */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(14, 11, 20, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        @media (min-width: 768px) {
+            .modal-overlay {
+                align-items: center;
+            }
+        }
+        .modal-overlay.active .modal-sheet {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* --- Card Interactions --- */
+        .card-interact {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .card-interact:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(108, 43, 217, 0.08), 0 12px 48px rgba(108, 43, 217, 0.05);
+        }
+        .card-interact:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Glassmorphism --- */
+        .glass {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .glass-dark {
+            background: rgba(14, 11, 20, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* --- Gradient text --- */
+        .gradient-text {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 50%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* --- Buttons --- */
+        .btn-primary {
+            background: linear-gradient(135deg, #6C2BD9 0%, #8B5CF6 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 12px rgba(108, 43, 217, 0.25);
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(108, 43, 217, 0.35);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+            box-shadow: 0 2px 8px rgba(108, 43, 217, 0.20);
+        }
+        .btn-outline {
+            background: transparent;
+            color: #6C2BD9;
+            border: 1.5px solid #D4CDE0;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .btn-outline:hover {
+            background: #F3EEFF;
+            border-color: #6C2BD9;
+        }
+        .btn-outline:active {
+            transform: scale(0.96);
+        }
+
+        /* --- Inputs --- */
+        .input-modern {
+            background: #FFFFFF;
+            border: 1.5px solid #E4E0EC;
+            border-radius: 0.75rem;
+            padding: 0.625rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            width: 100%;
+            outline: none;
+            color: #0E0B14;
+        }
+        .input-modern:focus {
+            border-color: #6C2BD9;
+            box-shadow: 0 0 0 4px rgba(108, 43, 217, 0.08);
+        }
+        .input-modern::placeholder {
+            color: #9A92A8;
+        }
+
+        /* --- Misc --- */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        /* Status dots */
+        .status-dot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .status-dot.green {
+            background: #10B981;
+        }
+        .status-dot.amber {
+            background: #F59E0B;
+        }
+        .status-dot.red {
+            background: #EF4444;
+        }
+        .status-dot.purple {
+            background: #6C2BD9;
+        }
+        .status-dot.blue {
+            background: #3B82F6;
+        }
+
+        /* Composer toggle */
+        .composer-mode-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 0.375rem 0.875rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: transparent;
+            color: #6B6478;
+            border: none;
+        }
+        .composer-mode-btn.active {
+            background: #FFFFFF;
+            color: #6C2BD9;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(108, 43, 217, 0.06);
+        }
+        .composer-mode-btn:hover:not(.active) {
+            color: #0E0B14;
+        }
+
+        /* --- Responsive tweaks --- */
+        @media (max-width: 768px) {
+            .container-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        @media (min-width: 769px) {
+            .container-padding {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: DASHBOARD -->
+    <!-- ============================================================ -->
+    <div id="page-dashboard" class="app-page active">
+        <!-- Top App Bar - Glass -->
+        <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+            <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-glow shrink-0">
+                        <span class="material-symbols-outlined text-white text-[20px] fill">bolt</span>
+                    </div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-primary">MeroLogix</h1>
+                </div>
+                <div class="flex-1 max-w-md mx-4 hidden md:block">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                        <input class="w-full pl-10 pr-4 py-2.5 bg-white/70 backdrop-blur-sm border border-outline rounded-full text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all placeholder:text-[#9A92A8]" placeholder="Search tracking ID..." type="text" />
+                    </div>
+                </div>
+                <button aria-label="Toggle Dark Mode" class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors">
+                    <span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto container-padding pt-20 pb-28 space-y-8">
+            <!-- Mobile Search -->
+            <div class="md:hidden">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                    <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-sm placeholder:text-[#9A92A8]" placeholder="Search tracking ID..." type="text" />
+                </div>
+            </div>
+
+            <!-- Pending Actions -->
+            <section>
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-lg font-bold tracking-tight text-onSurface">Pending Actions</h2>
+                    <button class="text-sm font-semibold text-primary hover:text-primary-dark transition-colors view-all-btn">View All →</button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <!-- Card 1 -->
+                    <div class="bg-white border border-outline/60 rounded-2xl p-4 shadow-card card-interact cursor-pointer group">
+                        <div class="flex flex-col h-full justify-between gap-3">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-errorLight/60 text-error flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px]">error</span></div>
+                                <span class="text-2xl font-extrabold text-onSurface group-hover:text-primary transition-colors">12</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Price Correction</h3>
+                        </div>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="bg-white border border-outline/60 rounded-2xl p-4 shadow-card card-interact cursor-pointer group">
+                        <div class="flex flex-col h-full justify-between gap-3">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-primary-subtle text-primary flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px]">qr_code_scanner</span></div>
+                                <span class="text-2xl font-extrabold text-onSurface group-hover:text-primary transition-colors">45</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Assign Tracking</h3>
+                        </div>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="bg-white border border-outline/60 rounded-2xl p-4 shadow-card card-interact cursor-pointer group">
+                        <div class="flex flex-col h-full justify-between gap-3">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-successLight/60 text-success flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px]">payments</span></div>
+                                <span class="text-2xl font-extrabold text-onSurface group-hover:text-primary transition-colors">8</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Payment Received</h3>
+                        </div>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="bg-white border border-outline/60 rounded-2xl p-4 shadow-card card-interact cursor-pointer group">
+                        <div class="flex flex-col h-full justify-between gap-3">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-warningLight/60 text-warning flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px]">description</span></div>
+                                <span class="text-2xl font-extrabold text-onSurface group-hover:text-primary transition-colors">21</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Quotation Pending</h3>
+                        </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="bg-white border border-outline/60 rounded-2xl p-4 shadow-card card-interact cursor-pointer group">
+                        <div class="flex flex-col h-full justify-between gap-3">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-[#F3EEFF] text-primary-light flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px]">pending_actions</span></div>
+                                <span class="text-2xl font-extrabold text-onSurface group-hover:text-primary transition-colors">15</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Approval Pending</h3>
+                        </div>
+                    </div>
+                    <!-- Card 6 - Featured -->
+                    <div class="relative overflow-hidden rounded-2xl col-span-2 md:col-span-1 bg-gradient-to-br from-primary to-primary-light p-4 shadow-glow-strong card-interact cursor-pointer group">
+                        <div class="absolute -right-6 -bottom-6 opacity-15"><span class="material-symbols-outlined text-[100px] text-white">local_shipping</span></div>
+                        <div class="flex flex-col h-full justify-between gap-3 relative z-10">
+                            <div class="flex justify-between items-start">
+                                <div class="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center"><span class="material-symbols-outlined fill text-[20px] text-white">today</span></div>
+                                <span class="text-2xl font-extrabold text-white">120</span>
+                            </div>
+                            <h3 class="text-2xs font-semibold text-white/80 uppercase tracking-wider">Today's Orders</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logistics Status -->
+            <section class="overflow-hidden">
+                <h2 class="text-lg font-bold tracking-tight text-onSurface mb-3">Logistics Status</h2>
+                <div class="flex overflow-x-auto no-scrollbar gap-3 pb-1 -mx-4 px-4 md:mx-0 md:px-0">
+                    <div class="flex-none w-[200px] bg-white border border-outline/60 rounded-2xl p-4 shadow-card">
+                        <div class="flex items-center gap-2 mb-3"><span class="status-dot purple"></span><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">India Hub</span></div>
+                        <div class="flex justify-between items-end"><span class="text-sm text-onSurfaceMuted">Arrived</span><span class="text-xl font-extrabold text-onSurface">32</span></div>
+                    </div>
+                    <div class="flex-none w-[200px] bg-white border border-outline/60 rounded-2xl p-4 shadow-card">
+                        <div class="flex items-center gap-2 mb-3"><span class="status-dot green"></span><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Nepal Hub</span></div>
+                        <div class="flex justify-between items-end"><span class="text-sm text-onSurfaceMuted">Arrived</span><span class="text-xl font-extrabold text-onSurface">18</span></div>
+                    </div>
+                    <div class="flex-none w-[200px] bg-white border border-outline/60 rounded-2xl p-4 shadow-card">
+                        <div class="flex items-center gap-2 mb-3"><span class="status-dot blue"></span><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">In Transit</span></div>
+                        <div class="flex justify-between items-end"><span class="text-sm text-onSurfaceMuted">Shipped</span><span class="text-xl font-extrabold text-onSurface">54</span></div>
+                    </div>
+                    <div class="flex-none w-[200px] bg-white border border-outline/60 rounded-2xl p-4 shadow-card">
+                        <div class="flex items-center gap-2 mb-3"><span class="status-dot amber"></span><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">End Point</span></div>
+                        <div class="flex justify-between items-end"><span class="text-sm text-onSurfaceMuted">Done/Failed</span><span class="text-xl font-extrabold text-onSurface">210</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financials + Customers -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <section class="md:col-span-2 space-y-2">
+                    <h2 class="text-lg font-bold tracking-tight text-onSurface">Financial Metrics</h2>
+                    <div class="bg-white border border-outline/60 rounded-2xl shadow-card overflow-hidden">
+                        <div class="p-5 border-b border-outline/40 bg-surface-muted/40">
+                            <div class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-0.5">Total Revenue (Month)</div>
+                            <div class="text-2xl font-extrabold gradient-text">NPR 1,250,000</div>
+                        </div>
+                        <div class="divide-y divide-outline/40">
+                            <div class="flex justify-between items-center p-4 hover:bg-primary-subtle/40 transition-colors">
+                                <div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[20px]">account_balance</span><span class="text-sm text-onSurface">Import Duty Collected</span></div>
+                                <span class="text-sm font-mono font-semibold text-onSurface">NPR 45,000</span>
+                            </div>
+                            <div class="flex justify-between items-center p-4 hover:bg-primary-subtle/40 transition-colors">
+                                <div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[20px]">receipt_long</span><span class="text-sm text-onSurface">VAT 13% Collected</span></div>
+                                <span class="text-sm font-mono font-semibold text-onSurface">NPR 12,300</span>
+                            </div>
+                            <div class="flex justify-between items-center p-4 hover:bg-primary-subtle/40 transition-colors">
+                                <div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[20px]">local_shipping</span><span class="text-sm text-onSurface">Shipping Fees</span></div>
+                                <span class="text-sm font-mono font-semibold text-onSurface">NPR 85,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="space-y-2">
+                    <h2 class="text-lg font-bold tracking-tight text-onSurface">Top Customers</h2>
+                    <div class="bg-white border border-outline/60 rounded-2xl shadow-card divide-y divide-outline/40">
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-base font-extrabold">S</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-semibold text-onSurface truncate">Sharma Electronics</div>
+                                <div class="text-2xs font-medium text-onSurfaceMuted truncate">34 Active Shipments</div>
+                            </div>
+                            <span class="material-symbols-outlined text-onSurfaceMuted text-[18px]">chevron_right</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-success to-emerald-400 text-white flex items-center justify-center text-base font-extrabold">G</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-semibold text-onSurface truncate">Gurkha Traders</div>
+                                <div class="text-2xs font-medium text-onSurfaceMuted truncate">28 Active Shipments</div>
+                            </div>
+                            <span class="material-symbols-outlined text-onSurfaceMuted text-[18px]">chevron_right</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: ORDERS -->
+    <!-- ============================================================ -->
+    <div id="page-orders" class="app-page">
+        <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+            <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center shadow-glow shrink-0">
+                        <span class="material-symbols-outlined text-white text-[20px] fill">bolt</span>
+                    </div>
+                    <span class="text-lg font-extrabold tracking-tight text-primary">MeroLogix</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-1">
+                    <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('dashboard')"><span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard</a>
+                    <a class="text-sm font-semibold px-3.5 py-2 rounded-xl bg-primary-subtle text-primary shadow-sm flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('orders')"><span class="material-symbols-outlined text-[18px]">package_2</span> Orders</a>
+                    <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('customers')"><span class="material-symbols-outlined text-[18px]">group</span> Customers</a>
+                    <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('admin')"><span class="material-symbols-outlined text-[18px]">settings_applications</span> Admin</a>
+                </nav>
+                <div class="flex items-center gap-1.5">
+                    <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined">search</span></button>
+                </div>
+            </div>
+        </header>
+
+        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+            <div class="py-5 md:py-7 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-outline/40 mb-5">
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Orders Management</h1>
+                    <p class="text-sm text-onSurfaceMuted mt-0.5">Manage and track all incoming logistical requests.</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button class="flex items-center gap-1.5 px-4 py-2 bg-white border border-outline/60 rounded-2xl text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all shadow-card" onclick="showModal('modal-order-filters')">
+                        <span class="material-symbols-outlined text-[18px]">filter_list</span> Filter Orders
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Order Card 1 -->
+                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-mono font-bold text-primary">#ML-8829</span>
+                                <span class="chip bg-primary-subtle text-primary">Buy For Me</span>
+                            </div>
+                            <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 24, 10:30 AM</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm">A</div>
+                        <div>
+                            <a class="text-sm font-semibold text-primary hover:underline flex items-center gap-1" href="javascript:void(0)" onclick="navTo('customer-profile')">Aryan_99 <span class="material-symbols-outlined text-[14px]">history</span></a>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Premium Customer</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3.5 mb-4">
+                        <div class="w-16 h-16 rounded-xl bg-surface-muted overflow-hidden flex-shrink-0 border border-outline/40">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXepqtR9hOb0R1Pgy_pINqZW5H6NUC2OI8aOFsuUbKQzFr2bPfXq2J0VZkcnJxvQGPFcCtFGfCQh7Lf-byXlqkTlCjYhWD1nt-2iin7jtQr1sFrlSGnlgJsDFxJ3Ket5vZL1qm6--j9ZSNvCz9quo-IbrMHNNrprQvMPShi8EC-GC0IwTRXhf81V7Vp10kHWBfngcB_fETYf4ykjUpstdGyuKDjq7hbe340icQn1433eVPozKlEn9r9Q" />
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <a class="text-sm font-semibold text-onSurface hover:text-primary transition-colors line-clamp-2" href="#">Nike Air Max - US 10 / Black & White / Authentic</a>
+                        </div>
+                    </div>
+                    <div class="bg-surface-muted/60 rounded-xl p-3.5 mb-4 flex-grow border border-outline/30">
+                        <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Total</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 12,500</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Advance</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 5,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-bold text-error">NPR 7,500</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Gateway</span><span class="block text-sm font-medium flex items-center gap-1.5"><span class="status-dot purple"></span> Khalti</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-auto flex items-center gap-2">
+                        <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket_details_modern')">Assign Tracking</button>
+                        <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
+                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Order Card 2 -->
+                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-mono font-bold text-primary">#ML-8830</span>
+                                <span class="chip bg-surface-muted text-onSurfaceMuted">Self</span>
+                            </div>
+                            <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 24, 11:15 AM</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center text-success font-extrabold text-sm">S</div>
+                        <div>
+                            <a class="text-sm font-semibold text-primary hover:underline flex items-center gap-1" href="javascript:void(0)" onclick="navTo('customer-profile')">Sita_K <span class="material-symbols-outlined text-[14px]">history</span></a>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Standard Customer</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3.5 mb-4">
+                        <div class="w-16 h-16 rounded-xl bg-surface-muted overflow-hidden flex-shrink-0 border border-outline/40">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDA88Dt1Lrhq36ArukhZnyBcSmeRb6z85wWxWfWzmnm7NgMHSZQTJ05L25yDRHXxdqHqSqns4O1iT1vYWYyry11bvGLEaD-JWhDWfsKUA4n0I0pHCmUcky3-c5-lHB7WmJXe8UX49fXWASR-a3lqMhtcj97YlJ9rbpbU4FSFEO6MiEy5yRvctttRkr3uHSWepIb1P17_-RZYiMOYJed5UNOhSy0VClUfLlVdngQ2IGD-xz3e7mV50jS5w" />
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <a class="text-sm font-semibold text-onSurface hover:text-primary transition-colors line-clamp-2" href="#">Keychron K2 Wireless Mechanical Keyboard</a>
+                        </div>
+                    </div>
+                    <div class="bg-surface-muted/60 rounded-xl p-3.5 mb-4 flex-grow border border-outline/30">
+                        <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Total</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 18,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-bold text-success">NPR 0</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-auto flex items-center gap-2">
+                        <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket_details_modern')">Assign Tracking</button>
+                        <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
+                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: CUSTOMER PROFILE -->
+    <!-- ============================================================ -->
+    <div id="page-customer-profile" class="app-page">
+        <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+            <div class="flex items-center gap-2 container-padding h-16 w-full max-w-7xl mx-auto">
+                <button onclick="goBack()" class="p-2 hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined text-primary">arrow_back</span></button>
+                <span class="text-lg font-extrabold text-primary">Customer Profile</span>
+            </div>
+        </header>
+        <main class="max-w-7xl mx-auto container-padding pt-20 pb-28 space-y-6">
+            <!-- Profile Header -->
+            <section class="bg-white rounded-2xl border border-outline/60 p-6 shadow-card flex flex-col md:flex-row items-center md:items-start gap-5">
+                <div class="flex-shrink-0">
+                    <img class="w-24 h-24 rounded-full object-cover border-2 border-primary/20 shadow-glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCegirs2d5cl1HlWijUGyWzohvbuKJOmVL4Sdj3nvg6GbTFs0LUzo025WaGJKFgRiXodOayERF4-ahXJhiF4HApJfftr4OCicrRkeeXEeZH2xUsJhd1AVB4SOULf5qOS7Ex-EOK58bXu3Ql1htQ2v8J2YR-pS0ZwoclNwjdDKCMmPzXmOydk5FQ50hq_xHXwL1qT9WmqTaPdFulRiVjLEsSK_dsNXEWnp2a2aIeccWQyTaseVBuawYEDg" />
+                </div>
+                <div class="flex-1 text-center md:text-left flex flex-col justify-center">
+                    <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Aryan Sharma</h1>
+                    <div class="flex items-center justify-center md:justify-start gap-2.5 mt-1">
+                        <span class="chip bg-primary-subtle text-primary">Premium Customer</span>
+                        <span class="text-sm text-onSurfaceMuted flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">location_on</span> Kathmandu, NP</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-2xl border border-outline/60 p-5 shadow-card flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Total Orders</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface">1,248</h2>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-primary-subtle flex items-center justify-center"><span class="material-symbols-outlined text-primary">package_2</span></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-outline/60 p-5 shadow-card flex justify-between items-center">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Total Spent (NPR)</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface">4,50,000</h2>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-successLight/60 flex items-center justify-center"><span class="material-symbols-outlined text-success">payments</span></div>
+                </div>
+                <div class="bg-white rounded-2xl border border-outline/60 p-5 shadow-card flex justify-between items-center cursor-pointer" onclick="navTo('order_history')">
+                    <div>
+                        <p class="text-xs font-medium text-onSurfaceMuted">Active Shipments</p>
+                        <h2 class="text-2xl font-extrabold text-onSurface">7</h2>
+                    </div>
+                    <div class="flex items-center gap-1 text-primary font-semibold text-sm"><span>View</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></div>
+                </div>
+            </section>
+
+            <!-- Recent Activity + Admin -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-4">
+                    <h3 class="text-lg font-bold tracking-tight text-onSurface">Recent Activity</h3>
+                    <div class="bg-white rounded-2xl border border-outline/60 shadow-card overflow-hidden divide-y divide-outline/40">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors">
+                            <div class="flex items-center gap-3.5 mb-2 sm:mb-0">
+                                <div class="w-10 h-10 rounded-xl bg-primary-subtle flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-primary">inventory_2</span></div>
+                                <div>
+                                    <p class="text-sm font-semibold text-onSurface">Order #ML-8832 Dispatched</p>
+                                    <p class="text-xs font-mono text-onSurfaceMuted mt-0.5">Route: KTM → PKR</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-primary-subtle/30 transition-colors">
+                            <div class="flex items-center gap-3.5 mb-2 sm:mb-0">
+                                <div class="w-10 h-10 rounded-xl bg-successLight/60 flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-success">check_circle</span></div>
+                                <div>
+                                    <p class="text-sm font-semibold text-onSurface">Order #ML-8829 Delivered</p>
+                                    <p class="text-xs font-mono text-onSurfaceMuted mt-0.5">Signed by: A. Sharma</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full py-2.5 text-sm font-semibold text-primary hover:bg-primary-subtle rounded-xl transition-colors" onclick="navTo('order_history')">View Full History →</button>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold tracking-tight text-onSurface">Security &amp; Admin</h3>
+                    <div class="bg-white rounded-2xl border border-outline/60 p-5 shadow-card space-y-4">
+                        <div>
+                            <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Last Login IP</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-sm font-mono font-semibold text-onSurface">103.111.45.92</span>
+                                <button class="text-error text-sm font-semibold hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">gavel</span> Block IP</button>
+                            </div>
+                        </div>
+                        <div class="pt-3.5 border-t border-outline/40">
+                            <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Account Created</p>
+                            <p class="text-sm font-medium text-onSurface mt-0.5">March 15, 2022</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: ORDER HISTORY -->
+    <!-- ============================================================ -->
+    <div id="page-order-history" class="app-page">
+        <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+            <div class="flex items-center gap-2 container-padding h-16 w-full max-w-7xl mx-auto">
+                <button onclick="goBack()" class="p-2 hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined text-primary">arrow_back</span></button>
+                <span class="text-lg font-extrabold text-primary">Order History</span>
+            </div>
+        </header>
+        <main class="pt-20 pb-28 container-padding max-w-7xl mx-auto w-full space-y-6">
+            <div class="flex justify-between items-end">
+                <div>
+                    <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Customer Profile</p>
+                    <h2 class="text-2xl font-extrabold tracking-tight text-onSurface mt-0.5">Order History</h2>
+                </div>
+            </div>
+            <div class="flex gap-2.5 w-full">
+                <div class="relative flex-1">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                    <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Search Order ID or Product..." type="text" />
+                </div>
+                <button class="flex items-center gap-1.5 px-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm font-semibold text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all shadow-card" onclick="showModal('modal-order-filters')">
+                    <span class="material-symbols-outlined text-[18px]">filter_list</span>
+                    <span class="hidden sm:inline">Filter</span>
+                </button>
+            </div>
+
+            <div class="space-y-3.5">
+                <!-- History Item 1 -->
+                <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-2xl"></div>
+                    <div class="pl-3.5">
+                        <div class="flex flex-wrap justify-between items-start gap-2">
+                            <div>
+                                <span class="text-sm font-mono font-bold text-primary">#ML-8829</span>
+                                <span class="text-xs text-onSurfaceMuted ml-3">12 Oct 2023, 14:30</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="chip bg-primary-subtle text-primary">Arrived at India Warehouse</span>
+                                <span class="text-2xs font-medium text-onSurfaceMuted">Type: <strong class="text-onSurface">Buy For Me</strong></span>
+                            </div>
+                        </div>
+                        <div class="h-px bg-outline/40 w-full my-3.5"></div>
+                        <div class="flex gap-3.5 items-center">
+                            <div class="w-16 h-16 rounded-xl bg-surface-muted overflow-hidden border border-outline/40 flex-shrink-0">
+                                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDb4W32L73L-8t44cU-MdvbYhkOHVD9E8kOM0-qlrH91wg0XdTJm2IqMujf4aG-XUS9fI06BTFyfE4Hi8ccmDiS1GK77O-7CfepfH6QL8rLE4J7AjPoF4UyUiI0g-K46eU5-ODEsJM_Smbpvc4CosZqBPeRxj5BKIY0CVdNJ6HFjCuf0c7zQVyKMJ1Oa3dcq8icXanYDKt816T8kp2X8GkEg2ytlqHZdNw8woI_5W3KGexa9gqJ3exvcg" />
+                            </div>
+                            <div class="flex-1">
+                                <a class="text-sm font-semibold text-onSurface hover:text-primary transition-colors line-clamp-2" href="#">Keychron K2 Wireless Mechanical Keyboard (Version 2)</a>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 bg-surface-muted/60 rounded-xl p-3.5 mt-3.5 border border-outline/30">
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Total</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 12,500</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Advance</span><span class="block text-sm font-mono text-onSurface">NPR 5,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-bold text-error">NPR 7,500</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Gateway</span><span class="block text-sm font-medium"><span class="chip bg-surface-muted text-onSurfaceMuted border border-outline/40">eSewa</span></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Item 2 -->
+                <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-success rounded-l-2xl"></div>
+                    <div class="pl-3.5">
+                        <div class="flex flex-wrap justify-between items-start gap-2">
+                            <div>
+                                <span class="text-sm font-mono font-bold text-onSurface">#ML-8742</span>
+                                <span class="text-xs text-onSurfaceMuted ml-3">05 Oct 2023, 09:15</span>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="chip bg-successLight/60 text-success">Delivered</span>
+                                <span class="text-2xs font-medium text-onSurfaceMuted">Type: <strong class="text-onSurface">Quick</strong></span>
+                            </div>
+                        </div>
+                        <div class="h-px bg-outline/40 w-full my-3.5"></div>
+                        <div class="flex gap-3.5 items-center">
+                            <div class="w-16 h-16 rounded-xl bg-surface-muted overflow-hidden border border-outline/40 flex-shrink-0">
+                                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCumIYa1xTc01p3WdqCeeem6dgV_V6kuDnzLWYqYvOPZh3aFJZcikg_KexOteDB4QmTfV31mOKQHwL_jGlZvQXMACtFqIqKWO-nXYv6GaqdFIRbZ82Ldeb-onUOn7W4VdLKcnN3FkpkemZJoCXD2S_kfifNcqGbxba-Q6uVqw8VHxskjm3ODpsKXsQ1-LF31Kn6QauBL06SlH_wxckqMqOmhRn3pBCKBGC-6NNR0ChBx5OWPM-L2xbvQA" />
+                            </div>
+                            <div class="flex-1">
+                                <a class="text-sm font-semibold text-onSurface hover:text-primary transition-colors line-clamp-2" href="#">Apple MacBook Air M2 13.6-inch</a>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 bg-surface-muted/60 rounded-xl p-3.5 mt-3.5 border border-outline/30">
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Total</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 145,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-semibold text-success">NPR 0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: ADMIN (User Management) -->
+    <!-- ============================================================ -->
+    <div id="page-admin" class="app-page">
+        <header class="fixed top-0 w-full z-40 glass border-b border-glassBorder shadow-sm">
+            <div class="flex items-center gap-3 container-padding h-16 w-full max-w-7xl mx-auto">
+                <button onclick="goBack()" class="p-2 hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined text-primary">arrow_back</span></button>
+                <h1 class="text-lg font-extrabold text-primary">User Management</h1>
+            </div>
+        </header>
+        <main class="pt-20 pb-28 container-padding max-w-7xl mx-auto w-full">
+            <div class="mb-6">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                    <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Find users by name, email, or mobile..." type="text" />
+                </div>
+                <div class="flex gap-2 mt-3.5 overflow-x-auto no-scrollbar">
+                    <span class="chip bg-primary-subtle text-primary whitespace-nowrap">All Users (142)</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted whitespace-nowrap">Admins</span>
+                    <span class="chip bg-surface-muted text-onSurfaceMuted whitespace-nowrap">Blocked</span>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- User Card 1 -->
+                <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-primary/10 flex-shrink-0">
+                                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDz_Lx3qTzB5FRr90h9xH7U6QSVjsXy43Zyb07q4hSlWU9sej6-0CHxsdKfDypDo7vFwhdogSqi5wcoVYRPc8QgUxkK8pf4LQukA2oocHNrREVr-MgbL6PO1Gk46CblMG2fmARZw6ZE1ZZXRzVKYgwzOMDwKCIxYZhaEg22M_43j0HG8SWD9kyjkDPn4xIux3MPLEObwNg5t0O8DSt_uoINt5P0XeWE_yrUBUg4wLn0At93NHijcLkvmg" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-onSurface">Marcus Sterling</h3>
+                                <p class="text-xs text-onSurfaceMuted">@msterling_admin</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1.5">
+                            <span class="chip bg-successLight/60 text-success">Active</span>
+                            <button class="p-1 hover:bg-primary-subtle rounded-full" onclick="showModal('quick-action-overlay')"><span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span></button>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 text-sm mb-4">
+                        <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>m.sterling@merologix.com</span></div>
+                        <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">call</span><span class="font-mono">+1 (555) 902-3481</span></div>
+                    </div>
+                    <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                        <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[16px] fill">shield</span><span class="text-2xs font-bold text-primary uppercase">Admin</span></div>
+                        <div class="flex gap-2"><button class="text-primary text-sm font-bold px-3 py-1.5 hover:bg-primary-subtle rounded-xl transition-colors">EDIT</button></div>
+                    </div>
+                </div>
+
+                <!-- User Card 2 - Blocked -->
+                <div class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact opacity-80 grayscale-[0.2]">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-error/10 flex-shrink-0">
+                                <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnN7xfEDmBdlKPIEURWYLZ3GWX_Lp_8eOCTIa-sYsy2nlaIr3h87NxBG2lxtavFFdyf6Acs5C2W-MG71-E1xLDBle4S7VNSKWVwCNeffBmE8IDdIXBXtmlkcsUktxDMEdIrKBToyeg6bXfzsSFlpM1K4MvHAfr2wdRkiJ9cWYT9mh0NRwrih1ail_1GVGXsdeN3b0mJJ0pE9jzKtun01gsgUwgXF6_9fi6A2gQNvGRufXqm2krjuQL6Q" />
+                            </div>
+                            <div>
+                                <h3 class="text-base font-bold text-onSurface">Jackson Thorne</h3>
+                                <p class="text-xs text-onSurfaceMuted">@j_thorne99</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1.5">
+                            <span class="chip bg-errorLight/60 text-error">Blocked</span>
+                            <button class="p-1 hover:bg-primary-subtle rounded-full"><span class="material-symbols-outlined text-onSurfaceMuted">more_vert</span></button>
+                        </div>
+                    </div>
+                    <div class="space-y-1.5 text-sm mb-4">
+                        <div class="flex items-center gap-2 text-onSurfaceMuted"><span class="material-symbols-outlined text-[18px]">mail</span><span>thorne.j@gmail.com</span></div>
+                    </div>
+                    <div class="flex items-center justify-between pt-3.5 border-t border-outline/40">
+                        <div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-onSurfaceMuted text-[16px]">person</span><span class="text-2xs font-bold text-onSurfaceMuted uppercase">Customer</span></div>
+                        <div class="flex gap-2"><button class="text-success text-sm font-bold px-3 py-1.5 hover:bg-successLight/40 rounded-xl transition-colors">UNBLOCK</button></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: SUPPORT TICKETS -->
+    <!-- ============================================================ -->
+    <div id="page-tickets" class="app-page">
+        <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-outline/40 shadow-sm flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+            <button onclick="goBack()" class="p-2 hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined text-onSurfaceMuted">arrow_back</span></button>
+            <div class="text-lg font-extrabold text-primary">Support Tickets</div>
+            <button class="p-1 rounded-full hover:bg-primary-subtle transition-colors">
+                <img class="w-9 h-9 rounded-full object-cover border-2 border-primary/10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJtrfiP1ScDIjRJujF9pp4DCxoDn6utNXLfPBjoGQTR7CurO6u66v9p3YsixLNltPDQQrPed4XxWPORKh0a4AfHwPHSH_Cv8KnseVJGr9Jkka16ZSi0ke9CJagmB7lZECySaotNmxSWL6zSM_uxdOWTFCyhPKFndID_nFIrHIDNDdKI2HD5dieYQ4jY3JhlxVOyB0lT3xWHsPCo3x31o08SBQLx1z4Dy5DhBw1cdDlo7573PGedIM-kA" />
+            </button>
+        </header>
+        <main class="flex-1 w-full max-w-7xl mx-auto container-padding py-6 pb-28">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Support Tickets</h1>
+                    <p class="text-sm text-onSurfaceMuted">Manage and resolve customer inquiries.</p>
+                </div>
+                <button class="btn-primary px-6 py-2.5 rounded-2xl text-sm font-semibold flex items-center gap-2 shadow-glow">
+                    <span class="material-symbols-outlined fill">add</span> New Ticket
+                </button>
+            </div>
+            <div class="mb-5 border-b border-outline/40 overflow-x-auto no-scrollbar">
+                <div class="flex gap-6 min-w-max px-1">
+                    <button class="pb-2.5 border-b-2 border-primary text-primary text-sm font-semibold transition-colors">Open (12)</button>
+                    <button class="pb-2.5 border-b-2 border-transparent text-onSurfaceMuted hover:text-onSurface text-sm font-semibold transition-colors">Pending (5)</button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                    <input class="w-full pl-10 pr-4 py-2.5 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Search ticket ID, subject, or customer..." type="text" />
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- Ticket 1 -->
+                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact cursor-pointer" onclick="navTo('ticket_details_modern')">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8902</span>
+                            <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Shipment delayed at customs hub</h2>
+                        </div>
+                        <span class="chip bg-errorLight/60 text-error flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">priority_high</span> High</span>
+                    </div>
+                    <p class="text-sm text-onSurfaceMuted line-clamp-2">Customer reported that tracking hasn't updated in 4 days. Need to contact the port authority to check status of container #4492.</p>
+                    <div class="mt-4 pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm">JD</div>
+                            <span class="text-sm font-semibold text-onSurface">John Doe</span>
+                        </div>
+                        <span class="text-xs text-onSurfaceMuted">2 hrs ago</span>
+                    </div>
+                </article>
+                <!-- Ticket 2 -->
+                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact cursor-pointer" onclick="navTo('ticket_details_modern')">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="text-2xs font-semibold text-onSurfaceMuted">TKT-8901</span>
+                            <h2 class="text-base font-bold text-onSurface mt-0.5 line-clamp-1">Invoice discrepancy for Route B</h2>
+                        </div>
+                        <span class="chip bg-surface-muted text-onSurfaceMuted">Medium</span>
+                    </div>
+                    <p class="text-sm text-onSurfaceMuted line-clamp-2">The fuel surcharge on last week's invoice seems incorrect based on the agreed rate card. Please review the attached breakdown.</p>
+                    <div class="mt-4 pt-3.5 border-t border-outline/40 flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-success/20 to-success/5 flex items-center justify-center text-success font-extrabold text-sm">AS</div>
+                            <span class="text-sm font-semibold text-onSurface">Alice Smith</span>
+                        </div>
+                        <span class="text-xs text-onSurfaceMuted">5 hrs ago</span>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: TICKET DETAILS (MODERN) -->
+    <!-- ============================================================ -->
+    <div id="page-ticket-details_modern" class="app-page h-screen flex flex-col">
+        <header class="bg-white/80 backdrop-blur-lg border-b border-outline/40 shadow-sm z-40 shrink-0">
+            <div class="flex items-center justify-between container-padding h-16 w-full max-w-7xl mx-auto">
+                <div class="flex items-center gap-2">
+                    <button onclick="goBack()" class="p-2 hover:bg-primary-subtle rounded-full transition-colors"><span class="material-symbols-outlined text-onSurfaceMuted">arrow_back</span></button>
+                    <h1 class="text-lg font-extrabold text-primary">Ticket Details</h1>
+                </div>
+            </div>
+        </header>
+        <div class="flex-1 flex flex-col lg:flex-row min-w-0 bg-surface-muted overflow-hidden">
+            <!-- Main Thread -->
+            <section class="flex-1 flex flex-col h-full bg-white border-r border-outline/40 min-w-0">
+                <div class="p-5 border-b border-outline/40 shrink-0 bg-surface-muted/30">
+                    <div class="flex flex-wrap justify-between items-start gap-2 mb-1.5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-xs font-semibold text-onSurfaceMuted">#TCK-8924</span>
+                            <span class="chip bg-errorLight/60 text-error">High Priority</span>
+                        </div>
+                        <span class="text-xs text-onSurfaceMuted">Created 2h ago</span>
+                    </div>
+                    <h2 class="text-lg font-bold text-onSurface">Delayed shipment tracking not updating</h2>
+                    <p class="text-sm text-onSurfaceMuted">Customer is inquiring about order ORD-11920 which shows stuck at transit facility.</p>
+                </div>
+                <div class="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar bg-surface-muted/20">
+                    <!-- Message 1 - Customer -->
+                    <div class="flex gap-3 max-w-[85%]">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm flex-shrink-0">JD</div>
+                        <div>
+                            <div class="flex items-baseline gap-2 mb-1">
+                                <span class="text-sm font-bold text-onSurface">Jane Doe</span>
+                                <span class="text-xs text-onSurfaceMuted">10:23 AM</span>
+                            </div>
+                            <div class="bg-surface-muted/60 border border-outline/40 rounded-2xl rounded-tl-md p-4 shadow-sm">
+                                <p class="text-sm text-onSurface">Hello, my tracking for order ORD-11920 hasn't updated in 3 days. It still says it's at the regional sorting facility. Can someone look into this? It was supposed to be delivered yesterday.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Message 2 - Agent -->
+                    <div class="flex gap-3 max-w-[85%] self-end flex-row-reverse ml-auto">
+                        <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-primary/10 flex-shrink-0">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7WWZm85IIv11VxQ-6aAhiB_LdbaP7sQ4Dub7Oe6kxoa4KjqiRLjlylqljmqudP7wJOeswC9nYHpVXKn_6DWu4IBmyX3YR5OtKZ0HL1ZnGNTfeZuh8QCibIX2vDEN42gIvXRi7Rghzfl1Lu5DLvNOZIPxTw7sY4YIXkv1nhQGuyMWSNhl_hlAvoXzyDHMuJwfRf6iwHl9cgG2PaE9AyWVOLq6kILhk4CbChCZB6Faoiv9PCVYIxnhKrw" />
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-2 mb-1 flex-row-reverse">
+                                <span class="text-sm font-bold text-primary">You</span>
+                                <span class="text-xs text-onSurfaceMuted">10:45 AM</span>
+                            </div>
+                            <div class="bg-primary text-white rounded-2xl rounded-tr-md p-4 shadow-glow">
+                                <p class="text-sm text-white">Hi Jane, I apologize for the delay. I'm looking into the routing for ORD-11920 right now. There was a weather event near that sorting facility which caused a backlog. Let me check the exact dock status.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Composer -->
+                <div class="bg-white/90 backdrop-blur-sm p-4 border-t border-outline/40 shrink-0" id="composer-container">
+                    <div class="flex items-center gap-2 mb-2.5">
+                        <div class="flex bg-surface-muted/60 rounded-xl p-1 border border-outline/40">
+                            <button class="composer-mode-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold" data-mode="reply">Reply to Customer</button>
+                            <button class="composer-mode-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1" data-mode="internal"><span class="material-symbols-outlined text-[14px]">lock</span> Internal Note</button>
+                        </div>
+                    </div>
+                    <textarea class="w-full border border-outline/60 rounded-2xl p-3.5 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all resize-none min-h-[90px] bg-white shadow-card" id="reply-textarea" placeholder="Type a reply to Jane Doe..."></textarea>
+                    <div class="flex items-center justify-end mt-3">
+                        <button class="btn-primary px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-glow">Send <span class="material-symbols-outlined text-[16px]">send</span></button>
+                    </div>
+                </div>
+            </section>
+            <!-- Sidebar -->
+            <aside class="hidden lg:flex flex-col w-80 bg-white border-l border-outline/40 flex-shrink-0 overflow-y-auto">
+                <div class="p-5 border-b border-outline/40">
+                    <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Customer Details</h3>
+                    <div class="flex items-center gap-3.5 mt-3.5">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-base">JD</div>
+                        <div>
+                            <div class="text-sm font-bold text-onSurface">Jane Doe</div>
+                            <div class="text-xs text-onSurfaceMuted">jane.doe@example.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <h3 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Referenced Order</h3>
+                    <div class="border border-outline/40 rounded-2xl p-4 mt-3.5 bg-surface-muted/30 shadow-card">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-bold text-primary">ORD-11920</span>
+                            <span class="chip bg-warningLight/60 text-warning">In Transit</span>
+                        </div>
+                        <div class="text-sm text-onSurfaceMuted mb-3 line-clamp-1">2x Industrial Pallets (Class 70)</div>
+                        <button class="w-full btn-outline py-2 rounded-xl text-sm font-semibold" onclick="navTo('orders')">View Order</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM NAV (Mobile) -->
+    <!-- ============================================================ -->
+    <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 shadow-nav-sm px-2 py-1.5 pb-safe z-50 flex justify-around items-center">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn" data-target="dashboard">
+            <span class="material-symbols-outlined text-[22px]">dashboard</span>
+            <span class="text-[9px] font-semibold mt-0.5">Dashboard</span>
+        </button>
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn" data-target="orders">
+            <span class="material-symbols-outlined text-[22px]">package_2</span>
+            <span class="text-[9px] font-semibold mt-0.5">Orders</span>
+        </button>
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn" data-target="customers">
+            <span class="material-symbols-outlined text-[22px]">group</span>
+            <span class="text-[9px] font-semibold mt-0.5">Customers</span>
+        </button>
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn" data-target="tickets">
+            <span class="material-symbols-outlined text-[22px]">confirmation_number</span>
+            <span class="text-[9px] font-semibold mt-0.5">Tickets</span>
+        </button>
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn" data-target="admin">
+            <span class="material-symbols-outlined text-[22px]">settings_applications</span>
+            <span class="text-[9px] font-semibold mt-0.5">Admin</span>
+        </button>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- MODALS -->
+    <!-- ============================================================ -->
+
+    <!-- 1. Order Filters -->
+    <div id="modal-order-filters" class="modal-overlay">
+        <div class="modal-sheet bg-white w-full max-w-2xl h-full sm:h-auto sm:max-h-[90vh] sm:rounded-3xl flex flex-col shadow-modal overflow-hidden">
+            <header class="flex items-center justify-between container-padding h-16 w-full shrink-0 border-b border-outline/40">
+                <h1 class="text-lg font-extrabold text-onSurface">Filter Orders</h1>
+                <button class="p-2 text-onSurfaceMuted hover:bg-primary-subtle rounded-full" onclick="hideModal('modal-order-filters')"><span class="material-symbols-outlined">close</span></button>
+            </header>
+            <main class="flex-1 overflow-y-auto container-padding py-5 space-y-6 custom-scrollbar">
+                <section>
+                    <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Date Range</h2>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <div class="relative">
+                            <label class="absolute -top-2 left-3 bg-white px-1 text-[9px] font-bold text-primary z-10">From</label>
+                            <div class="flex items-center border border-primary/30 rounded-xl bg-white">
+                                <span class="material-symbols-outlined text-primary pl-3 pr-1 py-2 text-[18px]">calendar_today</span>
+                                <input class="w-full bg-transparent border-none focus:ring-0 py-2 text-sm" type="date" value="2024-05-01" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2 class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider mb-2.5">Order Type</h2>
+                    <div class="bg-surface-muted/60 border border-outline/40 rounded-2xl overflow-hidden">
+                        <label class="flex items-center justify-between p-4 border-b border-outline/40 cursor-pointer hover:bg-primary-subtle/30 transition-colors">
+                            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-primary">shopping_cart</span><span class="text-sm font-medium">Buy For Me</span></div>
+                            <input checked="" class="h-5 w-5 rounded-full text-primary focus:ring-primary focus:ring-2" type="checkbox" />
+                        </label>
+                    </div>
+                </section>
+            </main>
+            <div class="container-padding py-4 border-t border-outline/40 shrink-0">
+                <button class="w-full btn-primary py-3 rounded-2xl text-sm font-bold" onclick="hideModal('modal-order-filters')">Apply Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Cost Calc -->
+    <div id="modal-cost-calc" class="modal-overlay">
+        <div class="modal-sheet bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-modal flex flex-col h-[85vh] sm:h-auto overflow-hidden">
+            <div class="flex items-center justify-between container-padding py-3.5 border-b border-outline/40 shrink-0">
+                <h2 class="text-lg font-extrabold text-onSurface">Cost Calculation</h2>
+                <button class="p-2 rounded-full hover:bg-primary-subtle text-onSurfaceMuted" onclick="hideModal('modal-cost-calc')"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="flex-1 overflow-y-auto container-padding py-5 space-y-5 custom-scrollbar">
+                <div class="bg-surface-muted/60 p-4 rounded-2xl border border-outline/40 flex justify-between">
+                    <div><p class="text-2xs font-semibold text-onSurfaceMuted uppercase">Order ID</p><p class="text-sm font-mono font-bold text-primary">#ML-8829</p></div>
+                </div>
+                <div class="space-y-3.5">
+                    <h3 class="text-2xs font-semibold text-primary uppercase tracking-wider">Base Pricing</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block text-xs font-medium text-onSurfaceMuted">Price (INR)</label><input class="input-modern" type="number" value="15000" /></div>
+                        <div><label class="block text-xs font-medium text-onSurfaceMuted">Rate</label><input class="input-modern" type="number" value="1.60" /></div>
+                    </div>
+                </div>
+                <div class="bg-surface-muted/60 rounded-2xl p-4 space-y-3 border border-outline/40">
+                    <div class="flex justify-between text-sm font-semibold text-onSurface pb-2 border-b border-outline/40"><span>Total Amount</span><span class="font-mono text-[18px]">NPR 32,800.00</span></div>
+                    <div class="flex justify-between text-sm font-bold text-error pt-1"><span>Due COD</span><span class="font-mono text-[18px]">NPR 22,800.00</span></div>
+                </div>
+            </div>
+            <div class="container-padding py-4 border-t border-outline/40 flex gap-3 shrink-0">
+                <button class="flex-1 btn-outline py-2.5 rounded-2xl text-sm font-semibold" onclick="hideModal('modal-cost-calc')">Cancel</button>
+                <button class="flex-1 btn-primary py-2.5 rounded-2xl text-sm font-semibold" onclick="hideModal('modal-cost-calc')">Update</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Quick Action Admin -->
+    <div id="quick-action-overlay" class="modal-overlay">
+        <div class="modal-sheet bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-modal">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-lg font-extrabold text-primary">User Actions</h2>
+                <button class="p-2 hover:bg-primary-subtle rounded-full" onclick="hideModal('quick-action-overlay')"><span class="material-symbols-outlined">close</span></button>
+            </div>
+            <div class="space-y-1.5">
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-primary-subtle/50 rounded-2xl transition-colors" onclick="hideModal('quick-action-overlay')">
+                    <span class="material-symbols-outlined text-primary">edit</span><span class="text-sm font-semibold">Edit User Profile</span>
+                </button>
+                <button class="w-full flex items-center gap-3.5 p-3.5 hover:bg-errorLight/40 rounded-2xl transition-colors" onclick="hideModal('quick-action-overlay')">
+                    <span class="material-symbols-outlined text-error">block</span><span class="text-sm font-semibold text-error">Block User</span>
+                </button>
+            </div>
+            <div class="mt-5 pt-4 border-t border-outline/40">
+                <button class="w-full py-2.5 text-sm font-bold text-onSurfaceMuted hover:bg-surface-muted rounded-xl transition-colors" onclick="hideModal('quick-action-overlay')">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SCRIPTS -->
+    <!-- ============================================================ -->
+    <script>
+        let historyStack = ['dashboard'];
+
+        function navTo(pageId) {
+            document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('page-' + pageId) || document.getElementById('page-dashboard');
+            if (target) target.classList.add('active');
+            window.scrollTo(0, 0);
+            if (historyStack[historyStack.length - 1] !== pageId) {
+                historyStack.push(pageId);
+            }
+            updateBottomNav(pageId);
+        }
+
+        function goBack() {
+            if (historyStack.length > 1) {
+                historyStack.pop();
+                const prevPage = historyStack[historyStack.length - 1];
+                document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
+                const target = document.getElementById('page-' + prevPage);
+                if (target) target.classList.add('active');
+                updateBottomNav(prevPage);
+            }
+        }
+
+        function updateBottomNav(pageId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-primary-subtle', 'text-primary');
+                btn.classList.add('text-onSurfaceMuted');
+                const icon = btn.querySelector('.material-symbols-outlined');
+                if (icon) icon.classList.remove('fill');
+
+                if (btn.dataset.target === pageId) {
+                    btn.classList.remove('text-onSurfaceMuted');
+                    btn.classList.add('bg-primary-subtle', 'text-primary');
+                    if (icon) icon.classList.add('fill');
+                }
+            });
+        }
+
+        function showModal(id) {
+            const m = document.getElementById(id);
+            if (m) {
+                m.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function hideModal(id) {
+            const m = document.getElementById(id);
+            if (m) {
+                m.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modals on backdrop click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Composer toggle
+        const compBtns = document.querySelectorAll('.composer-mode-btn');
+        const textarea = document.getElementById('reply-textarea');
+
+        compBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                compBtns.forEach(b => {
+                    b.classList.remove('active');
+                });
+                const clicked = e.currentTarget;
+                clicked.classList.add('active');
+
+                if (clicked.dataset.mode === 'reply') {
+                    textarea.classList.remove('bg-warningLight/40', 'border-warning/40', 'text-warning');
+                    textarea.classList.add('bg-white', 'border-outline/60', 'text-onSurface');
+                    textarea.placeholder = "Type a reply to Jane Doe...";
+                } else {
+                    textarea.classList.remove('bg-white', 'border-outline/60', 'text-onSurface');
+                    textarea.classList.add('bg-warningLight/40', 'border-warning/40', 'text-warning');
+                    textarea.placeholder = "Type an internal note... (Customer will not see this)";
+                }
+            });
+        });
+
+        // Init
+        updateBottomNav('dashboard');
+
+        // Nav buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                navTo(btn.dataset.target);
+            });
+        });
+
+        // "View All" from dashboard
+        document.querySelectorAll('.view-all-btn').forEach(btn => {
+            btn.addEventListener('click', () => navTo('orders'));
+        });
+
+        // Top customer nav
+        document.querySelectorAll('.top-customer-nav').forEach(btn => {
+            btn.addEventListener('click', () => navTo('customer-profile'));
+        });
+
+        // "Customers" bottom nav target → map to customer-profile
+        document.querySelectorAll('.nav-btn[data-target="customers"]').forEach(btn => {
+            btn.addEventListener('click', () => navTo('customer-profile'));
+        });
+    </script>
+
+</body>
+</html>
