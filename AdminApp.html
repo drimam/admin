@@ -8,7 +8,7 @@
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <script id="tailwind-config">
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -19,28 +19,22 @@
                         "primary-dark": "#4C1D95",
                         "primary-glow": "rgba(108, 43, 217, 0.25)",
                         "primary-subtle": "#F3EEFF",
-
                         surface: "#FFFFFF",
                         "surface-glass": "rgba(255,255,255,0.72)",
                         "surface-muted": "#F8F7FA",
                         "surface-elevated": "#FFFFFF",
-
                         onSurface: "#0E0B14",
                         onSurfaceMuted: "#6B6478",
-
                         outline: "#E4E0EC",
                         outlineLight: "#F0EDF5",
-
                         accent: "#F97316",
                         accentLight: "#FDE8D8",
-
                         success: "#10B981",
                         successLight: "#D1FAE5",
                         warning: "#F59E0B",
                         warningLight: "#FEF3C7",
                         error: "#EF4444",
                         errorLight: "#FEE2E2",
-
                         glass: "rgba(255,255,255,0.5)",
                         glassBorder: "rgba(255,255,255,0.18)",
                     },
@@ -138,7 +132,6 @@
             background: #F8F7FA;
             color: #0E0B14;
             min-height: 100dvh;
-            min-height: max(884px, 100dvh);
             overflow-x: hidden;
         }
 
@@ -314,10 +307,6 @@
             font-size: 14px;
             font-weight: 700;
         }
-        .custom-checkbox:focus-visible {
-            outline: 2px solid #6C2BD9;
-            outline-offset: 2px;
-        }
 
         /* --- Gateway pill (filters) --- */
         .gateway-pill {
@@ -346,27 +335,6 @@
         .pill-content:hover {
             border-color: #6C2BD9;
             background: #F3EEFF;
-        }
-
-        /* --- Composer mode toggle --- */
-        .composer-mode-btn {
-            transition: all 0.2s ease;
-            cursor: pointer;
-            padding: 0.375rem 0.875rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: transparent;
-            color: #6B6478;
-            border: none;
-        }
-        .composer-mode-btn.active {
-            background: #FFFFFF;
-            color: #6C2BD9;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(108, 43, 217, 0.06);
-        }
-        .composer-mode-btn:hover:not(.active) {
-            color: #0E0B14;
         }
 
         /* --- App pages --- */
@@ -446,12 +414,34 @@
             -moz-appearance: textfield;
         }
 
-        /* Filter chip active state */
-        .filter-chip-active {
-            @apply border-primary bg-primary-subtle text-primary;
+        /* Content wrapper for padding */
+        .content-wrapper {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
-        .filter-chip-inactive {
-            @apply border-outline/60 text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary;
+        @media (min-width: 768px) {
+            .content-wrapper {
+                padding-left: 2.5rem;
+                padding-right: 2.5rem;
+            }
+        }
+
+        /* Print label styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-area,
+            .print-area * {
+                visibility: visible;
+            }
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -503,7 +493,7 @@
     <!-- PAGE: DASHBOARD -->
     <!-- ============================================================ -->
     <div id="page-dashboard" class="app-page active">
-        <main class="max-w-7xl mx-auto container-padding pt-20 pb-28 space-y-8">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-28 space-y-8">
             <!-- Mobile Search -->
             <div class="md:hidden">
                 <div class="relative">
@@ -629,7 +619,7 @@
                 <section class="space-y-2">
                     <h2 class="text-lg font-bold tracking-tight text-onSurface">Top Customers</h2>
                     <div class="bg-white border border-outline/60 rounded-2xl shadow-card divide-y divide-outline/40">
-                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav" onclick="navTo('customer-profile')">
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer" onclick="navTo('customer-profile')">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-base font-extrabold">S</div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm font-semibold text-onSurface truncate">Sharma Electronics</div>
@@ -637,7 +627,7 @@
                             </div>
                             <span class="material-symbols-outlined text-onSurfaceMuted text-[18px]">chevron_right</span>
                         </div>
-                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav" onclick="navTo('customer-profile')">
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer" onclick="navTo('customer-profile')">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-success to-emerald-400 text-white flex items-center justify-center text-base font-extrabold">G</div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm font-semibold text-onSurface truncate">Gurkha Traders</div>
@@ -655,7 +645,7 @@
     <!-- PAGE: ORDERS -->
     <!-- ============================================================ -->
     <div id="page-orders" class="app-page">
-        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-32 md:pb-8">
             <div class="py-5 md:py-7 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-outline/40 mb-5">
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Orders Management</h1>
@@ -687,6 +677,14 @@
                             </div>
                             <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 24, 10:30 AM</div>
                         </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="printShippingLabel('ML-8829', 'Aryan Sharma', 'Nike Air Max', 'NPR 12,500', 'Kathmandu, NP')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Print Shipping Label">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                            <button onclick="shareOrder('ML-8829', 'Nike Air Max', 'NPR 12,500', 'Aryan Sharma')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Share Order">
+                                <span class="material-symbols-outlined text-[20px]">share</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
                         <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-sm">A</div>
@@ -713,7 +711,7 @@
                     </div>
                     <div class="mt-auto flex flex-col gap-2">
                         <div class="flex items-center gap-2">
-                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="openTrackingModal('ML-8829')">Assign Tracking</button>
                             <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
                                 <span class="material-symbols-outlined text-[18px]">edit</span>
                             </button>
@@ -734,6 +732,14 @@
                                 <span class="chip bg-surface-muted text-onSurfaceMuted">Self</span>
                             </div>
                             <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 24, 11:15 AM</div>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="printShippingLabel('ML-8830', 'Sita_K', 'Keychron K2', 'NPR 18,000', 'Pokhara, NP')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Print Shipping Label">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                            <button onclick="shareOrder('ML-8830', 'Keychron K2', 'NPR 18,000', 'Sita_K')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Share Order">
+                                <span class="material-symbols-outlined text-[20px]">share</span>
+                            </button>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
@@ -759,7 +765,7 @@
                     </div>
                     <div class="mt-auto flex flex-col gap-2">
                         <div class="flex items-center gap-2">
-                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="openTrackingModal('ML-8830')">Assign Tracking</button>
                             <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
                                 <span class="material-symbols-outlined text-[18px]">edit</span>
                             </button>
@@ -780,6 +786,14 @@
                                 <span class="chip bg-primary-subtle text-primary">Quick Order</span>
                             </div>
                             <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 25, 09:45 AM</div>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="printShippingLabel('ML-8831', 'Raj_K', 'MacBook Air M2', 'NPR 145,000', 'Biratnagar, NP')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Print Shipping Label">
+                                <span class="material-symbols-outlined text-[20px]">print</span>
+                            </button>
+                            <button onclick="shareOrder('ML-8831', 'MacBook Air M2', 'NPR 145,000', 'Raj_K')" class="p-1.5 text-onSurfaceMuted hover:text-primary rounded-full hover:bg-primary-subtle transition-colors" title="Share Order">
+                                <span class="material-symbols-outlined text-[20px]">share</span>
+                            </button>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
@@ -807,7 +821,7 @@
                     </div>
                     <div class="mt-auto flex flex-col gap-2">
                         <div class="flex items-center gap-2">
-                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="openTrackingModal('ML-8831')">Assign Tracking</button>
                             <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
                                 <span class="material-symbols-outlined text-[18px]">edit</span>
                             </button>
@@ -826,7 +840,7 @@
     <!-- PAGE: CUSTOMERS LIST -->
     <!-- ============================================================ -->
     <div id="page-customers" class="app-page">
-        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-32 md:pb-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Customers</h1>
@@ -867,7 +881,7 @@
     <!-- PAGE: CUSTOMER PROFILE -->
     <!-- ============================================================ -->
     <div id="page-customer-profile" class="app-page">
-        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-28 space-y-6">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-28 space-y-6">
             <!-- Profile Header -->
             <section class="bg-white rounded-2xl border border-outline/60 p-6 shadow-card flex flex-col md:flex-row items-center md:items-start gap-5">
                 <div class="flex-shrink-0">
@@ -971,7 +985,7 @@
     <!-- PAGE: ORDER HISTORY -->
     <!-- ============================================================ -->
     <div id="page-order-history" class="app-page">
-        <main class="pt-20 pb-28 container-padding max-w-7xl mx-auto w-full space-y-6">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-28 space-y-6">
             <div class="flex justify-between items-end">
                 <div>
                     <p class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider">Customer Profile</p>
@@ -1059,7 +1073,7 @@
     <!-- PAGE: ADMIN (User Management) -->
     <!-- ============================================================ -->
     <div id="page-admin" class="app-page">
-        <main class="pt-20 pb-28 container-padding max-w-7xl mx-auto w-full">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-28">
             <div class="mb-6">
                 <div class="relative">
                     <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
@@ -1132,7 +1146,7 @@
     <!-- PAGE: SUPPORT TICKETS (List) -->
     <!-- ============================================================ -->
     <div id="page-tickets" class="app-page">
-        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+        <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-32 md:pb-8">
             <header class="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Support Tickets</h1>
@@ -1324,7 +1338,7 @@
                 </div>
 
                 <!-- Composer -->
-                <div class="bg-white p-4 border-t border-outline/40 shrink-0" id="composer-container">
+                <div class="bg-white p-4 border-t border-outline/40 shrink-0">
                     <div class="flex items-center gap-2 mb-2.5">
                         <div class="flex bg-surface-muted/60 rounded-xl p-1 border border-outline/40">
                             <button class="composer-mode-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold" data-mode="reply">Reply to Customer</button>
@@ -1630,6 +1644,29 @@
         </div>
     </div>
 
+    <!-- Tracking Modal -->
+    <div id="modal-tracking" class="modal-overlay">
+        <div class="modal-sheet bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl shadow-modal flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-3.5 border-b border-outline/40 shrink-0">
+                <h2 class="text-lg font-extrabold text-onSurface">Assign Tracking</h2>
+                <button class="p-2 rounded-full hover:bg-primary-subtle transition-colors text-onSurfaceMuted" onclick="hideModal('modal-tracking')">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-onSurfaceMuted mb-1.5">Order ID</label>
+                    <input class="input-modern bg-surface-muted/30" id="tracking-order-id" type="text" readonly />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-onSurfaceMuted mb-1.5">Tracking ID</label>
+                    <input class="input-modern" id="tracking-id-input" type="text" placeholder="Enter tracking number..." />
+                </div>
+                <button class="w-full btn-primary py-3 rounded-2xl text-sm font-bold shadow-glow" onclick="saveTracking()">Save Tracking</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Quick Action Modal (Admin) -->
     <div id="quick-action-overlay" class="modal-overlay" onclick="if(event.target===this) hideModal('quick-action-overlay')">
         <div class="modal-sheet bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-modal">
@@ -1699,7 +1736,6 @@
                 historyStack.push(pageId);
             }
             updateBottomNav(pageId);
-            // Update desktop nav active state
             document.querySelectorAll('.top-nav-link').forEach(link => {
                 link.classList.remove('bg-primary-subtle', 'text-primary');
                 link.classList.add('text-onSurfaceMuted');
@@ -1716,7 +1752,6 @@
                 btn.classList.add('text-onSurfaceMuted');
                 const icon = btn.querySelector('.material-symbols-outlined');
                 if (icon) icon.classList.remove('fill');
-                // Check if the button's data-target matches the pageId
                 if (btn.dataset.target === pageId) {
                     btn.classList.remove('text-onSurfaceMuted');
                     btn.classList.add('bg-primary-subtle', 'text-primary');
@@ -1744,28 +1779,106 @@
 
         // Close modals on backdrop click
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) {
-                    overlay.classList.remove('active');
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
                     document.body.style.overflow = '';
                 }
             });
         });
 
-        // --- Composer toggle (ticket details) ---
+        // --- Tracking Modal ---
+        let currentOrderId = '';
+
+        function openTrackingModal(orderId) {
+            currentOrderId = orderId;
+            document.getElementById('tracking-order-id').value = orderId;
+            document.getElementById('tracking-id-input').value = '';
+            showModal('modal-tracking');
+        }
+
+        function saveTracking() {
+            const trackingId = document.getElementById('tracking-id-input').value.trim();
+            if (!trackingId) {
+                alert('Please enter a tracking ID.');
+                return;
+            }
+            alert('Tracking ID "' + trackingId + '" assigned to order ' + currentOrderId);
+            hideModal('modal-tracking');
+        }
+
+        // --- Print Shipping Label ---
+        function printShippingLabel(orderId, customer, product, amount, address) {
+            var printWindow = window.open('', '_blank', 'width=600,height=600');
+            var labelHTML = `
+                <html>
+                    <head><title>Shipping Label - ${orderId}</title>
+                    <style>
+                        body { font-family: 'Inter', sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+                        .label { max-width: 400px; margin: 0 auto; background: white; border: 2px solid #6C2BD9; border-radius: 12px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+                        .header { text-align: center; border-bottom: 2px solid #6C2BD9; padding-bottom: 12px; margin-bottom: 16px; }
+                        .header h1 { margin: 0; color: #6C2BD9; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+                        .header p { margin: 4px 0 0; color: #6B6478; font-size: 12px; }
+                        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+                        .row:last-child { border-bottom: none; }
+                        .label-sm { font-size: 12px; color: #6B6478; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+                        .value { font-weight: 600; color: #0E0B14; }
+                        .barcode { text-align: center; margin: 16px 0 8px; font-family: 'Courier New', monospace; font-size: 18px; letter-spacing: 2px; color: #0E0B14; background: #f4f4f4; padding: 8px; border-radius: 4px; }
+                        .footer { text-align: center; margin-top: 16px; font-size: 11px; color: #9A92A8; border-top: 1px solid #eee; padding-top: 12px; }
+                    </style>
+                    </head>
+                    <body>
+                        <div class="label">
+                            <div class="header">
+                                <h1>📦 MeroLogix</h1>
+                                <p>Shipping Label</p>
+                            </div>
+                            <div class="row"><span class="label-sm">Order</span><span class="value">${orderId}</span></div>
+                            <div class="row"><span class="label-sm">Customer</span><span class="value">${customer}</span></div>
+                            <div class="row"><span class="label-sm">Product</span><span class="value">${product}</span></div>
+                            <div class="row"><span class="label-sm">Amount</span><span class="value">${amount}</span></div>
+                            <div class="row"><span class="label-sm">Delivery Address</span><span class="value">${address}</span></div>
+                            <div class="barcode">||| ${orderId} |||</div>
+                            <div class="footer">Generated on ${new Date().toLocaleString()} • Thank you for choosing MeroLogix</div>
+                        </div>
+                        <script>
+                            window.onload = function() { window.print(); }
+                        <\/script>
+                    </body>
+                </html>
+            `;
+            printWindow.document.write(labelHTML);
+            printWindow.document.close();
+        }
+
+        // --- Share Order ---
+        function shareOrder(orderId, product, amount, customer) {
+            var text = 'Order ' + orderId + ' - ' + product + ' - ' + amount + ' - Customer: ' + customer;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Order ' + orderId,
+                    text: text,
+                }).catch(function() {});
+            } else {
+                var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+                window.open(waUrl, '_blank');
+            }
+        }
+
+        // --- DOM Ready ---
         document.addEventListener('DOMContentLoaded', function() {
-            const btns = document.querySelectorAll('.composer-mode-btn');
-            const textarea = document.getElementById('reply-textarea');
-            const container = document.getElementById('composer-container');
+            // --- Composer toggle ---
+            var btns = document.querySelectorAll('.composer-mode-btn');
+            var textarea = document.getElementById('reply-textarea');
 
             if (btns.length && textarea) {
-                btns.forEach(btn => {
+                btns.forEach(function(btn) {
                     btn.addEventListener('click', function(e) {
-                        btns.forEach(b => {
+                        btns.forEach(function(b) {
                             b.classList.remove('active');
                             b.classList.remove('text-[#B45309]');
                         });
-                        const clicked = e.currentTarget;
+                        var clicked = e.currentTarget;
                         clicked.classList.add('active');
 
                         if (clicked.dataset.mode === 'reply') {
@@ -1773,44 +1886,33 @@
                                 'text-warning');
                             textarea.classList.add('bg-white', 'border-outline/60', 'text-onSurface');
                             textarea.placeholder = "Type a reply to Jane Doe...";
-                            if (container) {
-                                container.classList.remove('bg-warningLight/10');
-                                container.classList.add('bg-white');
-                            }
                         } else {
                             clicked.classList.add('text-[#B45309]');
                             textarea.classList.remove('bg-white', 'border-outline/60', 'text-onSurface');
                             textarea.classList.add('bg-warningLight/40', 'border-warning/40', 'text-warning');
                             textarea.placeholder = "Type an internal note... (Customer will not see this)";
-                            if (container) {
-                                container.classList.remove('bg-white');
-                                container.classList.add('bg-warningLight/10');
-                            }
                         }
                     });
                 });
             }
 
             // --- Order Filter Chips ---
-            const filterChips = document.querySelectorAll('.order-filter-chip');
-            const orderCards = document.querySelectorAll('.order-card');
+            var filterChips = document.querySelectorAll('.order-filter-chip');
+            var orderCards = document.querySelectorAll('.order-card');
 
-            filterChips.forEach(chip => {
+            filterChips.forEach(function(chip) {
                 chip.addEventListener('click', function() {
-                    const type = this.dataset.type;
+                    var type = this.dataset.type;
 
-                    // Reset all chips
-                    filterChips.forEach(c => {
+                    filterChips.forEach(function(c) {
                         c.classList.remove('border-primary', 'bg-primary-subtle', 'text-primary');
                         c.classList.add('border-outline/60', 'text-onSurfaceMuted');
                     });
 
-                    // Activate clicked chip
                     this.classList.remove('border-outline/60', 'text-onSurfaceMuted');
                     this.classList.add('border-primary', 'bg-primary-subtle', 'text-primary');
 
-                    // Filter cards
-                    orderCards.forEach(card => {
+                    orderCards.forEach(function(card) {
                         if (type === 'all' || card.dataset.orderType === type) {
                             card.style.display = 'flex';
                         } else {
@@ -1821,7 +1923,7 @@
             });
 
             // --- Customers Table Data ---
-            const customers = [
+            var customers = [
                 { name: "Aryan Sharma", address: "Kathmandu, Nepal", email: "aryan@email.com",
                     phone: "+977 9841234567" },
                 { name: "Sita Koirala", address: "Pokhara, Nepal", email: "sita@email.com",
@@ -1844,45 +1946,37 @@
                     phone: "+977 9841234576" },
             ];
 
-            const tbody = document.getElementById('customers-table-body');
+            var tbody = document.getElementById('customers-table-body');
             if (tbody) {
-                customers.forEach(c => {
-                    const tr = document.createElement('tr');
+                customers.forEach(function(c) {
+                    var tr = document.createElement('tr');
                     tr.className = 'hover:bg-primary-subtle/30 transition-colors cursor-pointer';
-                    tr.setAttribute('onclick', `navTo('customer-profile')`);
-                    tr.innerHTML = `
-                            <td class="px-4 py-3 font-semibold text-onSurface">${c.name}</td>
-                            <td class="px-4 py-3 text-onSurfaceMuted">${c.address}</td>
-                            <td class="px-4 py-3 text-onSurfaceMuted">${c.email}</td>
-                            <td class="px-4 py-3 font-mono text-onSurfaceMuted">${c.phone}</td>
-                            <td class="px-4 py-3 text-center">
-                                <a href="https://wa.me/${c.phone.replace(/\s/g, '')}" target="_blank" class="text-[#25D366] hover:text-[#1ebe5a] transition-colors" onclick="event.stopPropagation();">
-                                    <span class="material-symbols-outlined">chat</span>
-                                </a>
-                            </td>
-                        `;
+                    tr.setAttribute('onclick', "navTo('customer-profile')");
+                    tr.innerHTML =
+                        '<td class="px-4 py-3 font-semibold text-onSurface">' + c.name +
+                        '</td><td class="px-4 py-3 text-onSurfaceMuted">' + c.address +
+                        '</td><td class="px-4 py-3 text-onSurfaceMuted">' + c.email +
+                        '</td><td class="px-4 py-3 font-mono text-onSurfaceMuted">' + c.phone +
+                        '</td><td class="px-4 py-3 text-center"><a href="https://wa.me/' + c.phone.replace(
+                            /\s/g, '') +
+                        '" target="_blank" class="text-[#25D366] hover:text-[#1ebe5a] transition-colors" onclick="event.stopPropagation();"><span class="material-symbols-outlined">chat</span></a></td>';
                     tbody.appendChild(tr);
                 });
             }
 
-            // --- Global Event Listeners for Nav ---
-            document.querySelectorAll('.view-all-btn').forEach(btn => {
-                btn.addEventListener('click', () => navTo('orders'));
+            // --- View All ---
+            document.querySelectorAll('.view-all-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() { navTo('orders'); });
             });
 
-            document.querySelectorAll('.top-customer-nav').forEach(btn => {
-                btn.addEventListener('click', () => navTo('customer-profile'));
-            });
-
-            // Ensure bottom nav buttons work correctly
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const target = this.dataset.target;
+            // --- Bottom Nav ---
+            document.querySelectorAll('.nav-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var target = this.dataset.target;
                     if (target) navTo(target);
                 });
             });
 
-            // Set initial active state for bottom nav
             updateBottomNav('dashboard');
         });
     </script>
