@@ -445,6 +445,14 @@
         input[type="number"] {
             -moz-appearance: textfield;
         }
+
+        /* Filter chip active state */
+        .filter-chip-active {
+            @apply border-primary bg-primary-subtle text-primary;
+        }
+        .filter-chip-inactive {
+            @apply border-outline/60 text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary;
+        }
     </style>
 </head>
 <body>
@@ -463,19 +471,19 @@
 
             <!-- Center Nav (Desktop) -->
             <nav class="hidden md:flex items-center gap-1">
-                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('dashboard')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="dashboard" onclick="navTo('dashboard')">
                     <span class="material-symbols-outlined text-[18px]">dashboard</span> Dashboard
                 </a>
-                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('orders')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="orders" onclick="navTo('orders')">
                     <span class="material-symbols-outlined text-[18px]">package_2</span> Orders
                 </a>
-                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('customer-profile')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="customers" onclick="navTo('customers')">
                     <span class="material-symbols-outlined text-[18px]">group</span> Customers
                 </a>
-                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('tickets')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="tickets" onclick="navTo('tickets')">
                     <span class="material-symbols-outlined text-[18px]">support_agent</span> Support
                 </a>
-                <a class="text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" onclick="navTo('admin')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="admin" onclick="navTo('admin')">
                     <span class="material-symbols-outlined text-[18px]">admin_panel_settings</span> Admin
                 </a>
             </nav>
@@ -621,7 +629,7 @@
                 <section class="space-y-2">
                     <h2 class="text-lg font-bold tracking-tight text-onSurface">Top Customers</h2>
                     <div class="bg-white border border-outline/60 rounded-2xl shadow-card divide-y divide-outline/40">
-                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav">
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav" onclick="navTo('customer-profile')">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-light text-white flex items-center justify-center text-base font-extrabold">S</div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm font-semibold text-onSurface truncate">Sharma Electronics</div>
@@ -629,7 +637,7 @@
                             </div>
                             <span class="material-symbols-outlined text-onSurfaceMuted text-[18px]">chevron_right</span>
                         </div>
-                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav">
+                        <div class="flex items-center gap-3 p-4 hover:bg-primary-subtle/40 transition-colors cursor-pointer top-customer-nav" onclick="navTo('customer-profile')">
                             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-success to-emerald-400 text-white flex items-center justify-center text-base font-extrabold">G</div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm font-semibold text-onSurface truncate">Gurkha Traders</div>
@@ -660,9 +668,17 @@
                 </div>
             </div>
 
+            <!-- Quick Filter Bubbles -->
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button class="order-filter-chip px-4 py-1.5 rounded-full border border-primary bg-primary-subtle text-primary text-sm font-semibold" data-type="all">All Orders</button>
+                <button class="order-filter-chip px-4 py-1.5 rounded-full border border-outline/60 text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all text-sm font-semibold" data-type="quick">Quick Order</button>
+                <button class="order-filter-chip px-4 py-1.5 rounded-full border border-outline/60 text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all text-sm font-semibold" data-type="buy">Buy For Me</button>
+                <button class="order-filter-chip px-4 py-1.5 rounded-full border border-outline/60 text-onSurfaceMuted hover:bg-primary-subtle hover:border-primary transition-all text-sm font-semibold" data-type="self">Self Order</button>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Order Card 1 -->
-                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col">
+                <!-- Order Card 1 (Buy For Me) -->
+                <article class="order-card bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col" data-order-type="buy">
                     <div class="flex justify-between items-start mb-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -695,16 +711,22 @@
                             <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Gateway</span><span class="block text-sm font-medium flex items-center gap-1.5"><span class="status-dot purple"></span> Khalti</span></div>
                         </div>
                     </div>
-                    <div class="mt-auto flex items-center gap-2">
-                        <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
-                        <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
-                            <span class="material-symbols-outlined text-[18px]">edit</span>
-                        </button>
+                    <div class="mt-auto flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button class="flex-1 bg-success text-white py-1.5 rounded-xl text-xs font-semibold hover:bg-success/80 transition-all">Approve</button>
+                            <button class="flex-1 border border-error text-error py-1.5 rounded-xl text-xs font-semibold hover:bg-error/10 transition-all">Cancel</button>
+                        </div>
                     </div>
                 </article>
 
-                <!-- Order Card 2 -->
-                <article class="bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col">
+                <!-- Order Card 2 (Self) -->
+                <article class="order-card bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col" data-order-type="self">
                     <div class="flex justify-between items-start mb-3">
                         <div>
                             <div class="flex items-center gap-2">
@@ -735,13 +757,108 @@
                             <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-bold text-success">NPR 0</span></div>
                         </div>
                     </div>
-                    <div class="mt-auto flex items-center gap-2">
-                        <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
-                        <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
-                            <span class="material-symbols-outlined text-[18px]">edit</span>
-                        </button>
+                    <div class="mt-auto flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button class="flex-1 bg-success text-white py-1.5 rounded-xl text-xs font-semibold hover:bg-success/80 transition-all">Approve</button>
+                            <button class="flex-1 border border-error text-error py-1.5 rounded-xl text-xs font-semibold hover:bg-error/10 transition-all">Cancel</button>
+                        </div>
                     </div>
                 </article>
+
+                <!-- Order Card 3 (Quick) -->
+                <article class="order-card bg-white border border-outline/60 rounded-2xl p-5 shadow-card card-interact flex flex-col" data-order-type="quick">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-mono font-bold text-primary">#ML-8831</span>
+                                <span class="chip bg-primary-subtle text-primary">Quick Order</span>
+                            </div>
+                            <div class="text-xs text-onSurfaceMuted mt-1 flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> Oct 25, 09:45 AM</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 pb-3.5 border-b border-outline/40">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400/20 to-amber-400/5 flex items-center justify-center text-amber-500 font-extrabold text-sm">R</div>
+                        <div>
+                            <a class="text-sm font-semibold text-primary hover:underline flex items-center gap-1" href="javascript:void(0)" onclick="navTo('customer-profile')">Raj_K <span class="material-symbols-outlined text-[14px]">history</span></a>
+                            <span class="text-2xs font-medium text-onSurfaceMuted">Standard Customer</span>
+                        </div>
+                    </div>
+                    <div class="flex gap-3.5 mb-4">
+                        <div class="w-16 h-16 rounded-xl bg-surface-muted overflow-hidden flex-shrink-0 border border-outline/40">
+                            <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCumIYa1xTc01p3WdqCeeem6dgV_V6kuDnzLWYqYvOPZh3aFJZcikg_KexOteDB4QmTfV31mOKQHwL_jGlZvQXMACtFqIqKWO-nXYv6GaqdFIRbZ82Ldeb-onUOn7W4VdLKcnN3FkpkemZJoCXD2S_kfifNcqGbxba-Q6uVqw8VHxskjm3ODpsKXsQ1-LF31Kn6QauBL06SlH_wxckqMqOmhRn3pBCKBGC-6NNR0ChBx5OWPM-L2xbvQA" />
+                        </div>
+                        <div class="flex flex-col justify-center">
+                            <a class="text-sm font-semibold text-onSurface hover:text-primary transition-colors line-clamp-2" href="#">Apple MacBook Air M2 13.6-inch</a>
+                        </div>
+                    </div>
+                    <div class="bg-surface-muted/60 rounded-xl p-3.5 mb-4 flex-grow border border-outline/30">
+                        <div class="grid grid-cols-2 gap-y-2 gap-x-4">
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Total</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 145,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Advance</span><span class="block text-sm font-mono font-semibold text-onSurface">NPR 50,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Due COD</span><span class="block text-sm font-mono font-bold text-error">NPR 95,000</span></div>
+                            <div><span class="text-2xs font-semibold text-onSurfaceMuted uppercase">Gateway</span><span class="block text-sm font-medium flex items-center gap-1.5"><span class="status-dot blue"></span> Bank Transfer</span></div>
+                        </div>
+                    </div>
+                    <div class="mt-auto flex flex-col gap-2">
+                        <div class="flex items-center gap-2">
+                            <button class="flex-1 btn-primary py-2.5 rounded-xl text-sm font-semibold text-center" onclick="navTo('ticket-details')">Assign Tracking</button>
+                            <button class="px-3.5 py-2.5 border border-outline/60 text-onSurfaceMuted rounded-xl hover:bg-primary-subtle hover:border-primary transition-all flex items-center justify-center" onclick="showModal('modal-cost-calc')">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2 pt-1">
+                            <button class="flex-1 bg-success text-white py-1.5 rounded-xl text-xs font-semibold hover:bg-success/80 transition-all">Approve</button>
+                            <button class="flex-1 border border-error text-error py-1.5 rounded-xl text-xs font-semibold hover:bg-error/10 transition-all">Cancel</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE: CUSTOMERS LIST -->
+    <!-- ============================================================ -->
+    <div id="page-customers" class="app-page">
+        <main class="pt-20 container-padding max-w-7xl mx-auto w-full pb-32 md:pb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-onSurface">Customers</h1>
+                    <p class="text-sm text-onSurfaceMuted">Manage your customer relationships.</p>
+                </div>
+                <button class="btn-primary px-6 py-2.5 rounded-2xl text-sm font-semibold flex items-center gap-2 shadow-glow-strong">
+                    <span class="material-symbols-outlined fill">add</span> Add Customer
+                </button>
+            </div>
+
+            <div class="relative mb-6">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[#9A92A8] text-[18px]">search</span>
+                <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Search customers..." type="text" />
+            </div>
+
+            <div class="bg-white rounded-2xl border border-outline/60 shadow-card overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider bg-surface-muted/40 border-b border-outline/40">
+                            <tr>
+                                <th class="px-4 py-3">Name</th>
+                                <th class="px-4 py-3">Default Address</th>
+                                <th class="px-4 py-3">Email</th>
+                                <th class="px-4 py-3">Mobile</th>
+                                <th class="px-4 py-3 text-center">WhatsApp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-table-body" class="divide-y divide-outline/40">
+                            <!-- Dynamic rows inserted by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
@@ -1120,6 +1237,9 @@
                 <div class="p-5 border-b border-outline/40 shrink-0 bg-surface-muted/30">
                     <div class="flex flex-wrap justify-between items-start gap-2 mb-1.5">
                         <div class="flex items-center gap-2.5">
+                            <button class="p-2 -ml-2 hover:bg-primary-subtle rounded-full transition-colors text-onSurfaceMuted" onclick="navTo('tickets')">
+                                <span class="material-symbols-outlined">arrow_back</span>
+                            </button>
                             <span class="text-xs font-semibold text-onSurfaceMuted">#TCK-8924</span>
                             <span class="chip bg-errorLight/60 text-error">High Priority</span>
                             <span class="chip bg-primary-subtle text-primary">Open</span>
@@ -1541,23 +1661,23 @@
     <!-- BOTTOM NAV (Mobile) -->
     <!-- ============================================================ -->
     <nav class="md:hidden fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-lg border-t border-outline/40 shadow-nav-sm px-2 py-1.5 pb-safe z-50 flex justify-around items-center">
-        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="dashboard">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="dashboard" onclick="navTo('dashboard')">
             <span class="material-symbols-outlined text-[22px]">dashboard</span>
             <span class="text-[9px] font-semibold mt-0.5">Dashboard</span>
         </button>
-        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="orders">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="orders" onclick="navTo('orders')">
             <span class="material-symbols-outlined text-[22px]">package_2</span>
             <span class="text-[9px] font-semibold mt-0.5">Orders</span>
         </button>
-        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="customer-profile">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="customers" onclick="navTo('customers')">
             <span class="material-symbols-outlined text-[22px]">group</span>
             <span class="text-[9px] font-semibold mt-0.5">Customers</span>
         </button>
-        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="tickets">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="tickets" onclick="navTo('tickets')">
             <span class="material-symbols-outlined text-[22px]">support_agent</span>
             <span class="text-[9px] font-semibold mt-0.5">Support</span>
         </button>
-        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="admin">
+        <button class="flex flex-col items-center justify-center px-3 py-1 rounded-2xl transition-all nav-btn text-onSurfaceMuted" data-target="admin" onclick="navTo('admin')">
             <span class="material-symbols-outlined text-[22px]">admin_panel_settings</span>
             <span class="text-[9px] font-semibold mt-0.5">Admin</span>
         </button>
@@ -1567,6 +1687,7 @@
     <!-- SCRIPTS -->
     <!-- ============================================================ -->
     <script>
+        // --- Navigation ---
         let historyStack = ['dashboard'];
 
         function navTo(pageId) {
@@ -1589,23 +1710,13 @@
             });
         }
 
-        function goBack() {
-            if (historyStack.length > 1) {
-                historyStack.pop();
-                const prevPage = historyStack[historyStack.length - 1];
-                document.querySelectorAll('.app-page').forEach(p => p.classList.remove('active'));
-                const target = document.getElementById('page-' + prevPage);
-                if (target) target.classList.add('active');
-                updateBottomNav(prevPage);
-            }
-        }
-
         function updateBottomNav(pageId) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('bg-primary-subtle', 'text-primary');
                 btn.classList.add('text-onSurfaceMuted');
                 const icon = btn.querySelector('.material-symbols-outlined');
                 if (icon) icon.classList.remove('fill');
+                // Check if the button's data-target matches the pageId
                 if (btn.dataset.target === pageId) {
                     btn.classList.remove('text-onSurfaceMuted');
                     btn.classList.add('bg-primary-subtle', 'text-primary');
@@ -1614,6 +1725,7 @@
             });
         }
 
+        // --- Modals ---
         function showModal(id) {
             const m = document.getElementById(id);
             if (m) {
@@ -1640,7 +1752,7 @@
             });
         });
 
-        // Composer toggle (ticket details)
+        // --- Composer toggle (ticket details) ---
         document.addEventListener('DOMContentLoaded', function() {
             const btns = document.querySelectorAll('.composer-mode-btn');
             const textarea = document.getElementById('reply-textarea');
@@ -1679,101 +1791,100 @@
                 });
             }
 
-            // View All buttons → orders
+            // --- Order Filter Chips ---
+            const filterChips = document.querySelectorAll('.order-filter-chip');
+            const orderCards = document.querySelectorAll('.order-card');
+
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    const type = this.dataset.type;
+
+                    // Reset all chips
+                    filterChips.forEach(c => {
+                        c.classList.remove('border-primary', 'bg-primary-subtle', 'text-primary');
+                        c.classList.add('border-outline/60', 'text-onSurfaceMuted');
+                    });
+
+                    // Activate clicked chip
+                    this.classList.remove('border-outline/60', 'text-onSurfaceMuted');
+                    this.classList.add('border-primary', 'bg-primary-subtle', 'text-primary');
+
+                    // Filter cards
+                    orderCards.forEach(card => {
+                        if (type === 'all' || card.dataset.orderType === type) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // --- Customers Table Data ---
+            const customers = [
+                { name: "Aryan Sharma", address: "Kathmandu, Nepal", email: "aryan@email.com",
+                    phone: "+977 9841234567" },
+                { name: "Sita Koirala", address: "Pokhara, Nepal", email: "sita@email.com",
+                    phone: "+977 9841234568" },
+                { name: "Raj Thapa", address: "Biratnagar, Nepal", email: "raj@email.com",
+                    phone: "+977 9841234569" },
+                { name: "Maria Portillo", address: "Lalitpur, Nepal", email: "maria@email.com",
+                    phone: "+977 9841234570" },
+                { name: "John Doe", address: "Bhaktapur, Nepal", email: "john@email.com",
+                    phone: "+977 9841234571" },
+                { name: "Alice Smith", address: "Butwal, Nepal", email: "alice@email.com",
+                    phone: "+977 9841234572" },
+                { name: "David Chen", address: "Dharan, Nepal", email: "david@email.com",
+                    phone: "+977 9841234573" },
+                { name: "Mary Jones", address: "Nepalgunj, Nepal", email: "mary@email.com",
+                    phone: "+977 9841234574" },
+                { name: "Sarah Kendrick", address: "Janakpur, Nepal", email: "sarah@email.com",
+                    phone: "+977 9841234575" },
+                { name: "Jackson Thorne", address: "Hetauda, Nepal", email: "jackson@email.com",
+                    phone: "+977 9841234576" },
+            ];
+
+            const tbody = document.getElementById('customers-table-body');
+            if (tbody) {
+                customers.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-primary-subtle/30 transition-colors cursor-pointer';
+                    tr.setAttribute('onclick', `navTo('customer-profile')`);
+                    tr.innerHTML = `
+                            <td class="px-4 py-3 font-semibold text-onSurface">${c.name}</td>
+                            <td class="px-4 py-3 text-onSurfaceMuted">${c.address}</td>
+                            <td class="px-4 py-3 text-onSurfaceMuted">${c.email}</td>
+                            <td class="px-4 py-3 font-mono text-onSurfaceMuted">${c.phone}</td>
+                            <td class="px-4 py-3 text-center">
+                                <a href="https://wa.me/${c.phone.replace(/\s/g, '')}" target="_blank" class="text-[#25D366] hover:text-[#1ebe5a] transition-colors" onclick="event.stopPropagation();">
+                                    <span class="material-symbols-outlined">chat</span>
+                                </a>
+                            </td>
+                        `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // --- Global Event Listeners for Nav ---
             document.querySelectorAll('.view-all-btn').forEach(btn => {
                 btn.addEventListener('click', () => navTo('orders'));
             });
 
-            // Top customer nav → customer profile
             document.querySelectorAll('.top-customer-nav').forEach(btn => {
                 btn.addEventListener('click', () => navTo('customer-profile'));
             });
 
-            // Bottom nav buttons
+            // Ensure bottom nav buttons work correctly
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    navTo(btn.dataset.target);
+                btn.addEventListener('click', function(e) {
+                    const target = this.dataset.target;
+                    if (target) navTo(target);
                 });
             });
 
-            // Desktop nav links
-            document.querySelectorAll('.top-nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    navTo(link.dataset.page);
-                });
-            });
-
-            // Initial active state for bottom nav
+            // Set initial active state for bottom nav
             updateBottomNav('dashboard');
         });
-
-        // Also ensure that the back button (in top bar) works for sub-pages
-        // We don't have a back button in top bar, but we have a goBack function we could use if needed.
-        // We'll wire up the arrow_back in ticket details (currently it's a static link) to go back.
-        // Actually we have a back button in the top bar of ticket details (the arrow_back) but we're using a unified top bar.
-        // In unified top bar, we can add a back button conditionally? For simplicity, we'll rely on bottom nav and top nav.
-        // However, the ticket details page has its own back button in the header (inside the main, not top bar). We'll keep it as a static back to tickets.
-        // We'll add a click handler for that back button if it exists.
-        // In ticket details page, the header is inside the main, not the global top bar. So we need to add a back button there.
-        // We'll add one in the ticket-details page: inside the header, we have a back arrow that we can use.
-        // Actually, in the ticket-details page, we don't have a separate header; the main starts with pt-16 and we have the conversation header.
-        // We'll add a back button inside the conversation header's top section.
-        // But we already have a back arrow in the global top bar? No, we don't. Let's add a back button in the global top bar that appears only on certain pages.
-        // For simplicity, we'll rely on the bottom nav and the "Assign Tracking" button to go to ticket details, and the back button in the ticket details page can be a simple link to go back to tickets.
-        // We'll add a back button inside the ticket-details page header (the first div in that page).
-
-        // Let's add a back button to the ticket details page header:
-        const ticketDetailsHeader = document.querySelector('#page-ticket-details .p-5.border-b');
-        if (ticketDetailsHeader) {
-            const backBtn = document.createElement('button');
-            backBtn.className = 'p-2 -ml-2 hover:bg-primary-subtle rounded-full transition-colors text-onSurfaceMuted mr-2';
-            backBtn.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
-            backBtn.onclick = function() { navTo('tickets'); };
-            ticketDetailsHeader.prepend(backBtn);
-        }
-
-        // Also add back button to order history and customer profile etc. They are already using the global top bar, no back button there.
-        // We'll add a back button in the top bar for those pages? We can conditionally show it, but for simplicity, we'll rely on bottom nav.
-        // The user can always go back via bottom nav.
-
-        // For order history and customer profile, we have back buttons inside their headers (in the main content), they work with goBack().
-        // We'll wire those: In customer-profile, there is a back button inside the header (the fixed header) but we replaced that with global top bar.
-        // So we need to add a back button in the content area of those pages.
-        // For customer-profile, we can add a back button near the profile name.
-        // For order-history, we can add a back button near the title.
-        // Let's add a back button in customer-profile:
-        const profileHeader = document.querySelector('#page-customer-profile .p-6.border');
-        if (profileHeader) {
-            const backBtn = document.createElement('button');
-            backBtn.className = 'p-2 -ml-2 hover:bg-primary-subtle rounded-full transition-colors text-onSurfaceMuted mb-2 md:mb-0';
-            backBtn.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
-            backBtn.onclick = function() { goBack(); };
-            profileHeader.prepend(backBtn);
-        }
-
-        // For order-history, add back button near the title:
-        const orderHistoryHeader = document.querySelector('#page-order-history .flex.justify-between.items-end');
-        if (orderHistoryHeader) {
-            const backBtn = document.createElement('button');
-            backBtn.className = 'p-2 -ml-2 hover:bg-primary-subtle rounded-full transition-colors text-onSurfaceMuted mr-2';
-            backBtn.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
-            backBtn.onclick = function() { goBack(); };
-            orderHistoryHeader.prepend(backBtn);
-        }
-
-        // For admin, add back button:
-        const adminHeader = document.querySelector('#page-admin .mb-6');
-        if (adminHeader) {
-            const backBtn = document.createElement('button');
-            backBtn.className = 'p-2 -ml-2 hover:bg-primary-subtle rounded-full transition-colors text-onSurfaceMuted mr-2';
-            backBtn.innerHTML = '<span class="material-symbols-outlined">arrow_back</span>';
-            backBtn.onclick = function() { goBack(); };
-            adminHeader.prepend(backBtn);
-        }
-
-        // For tickets list, add back button? Not needed as it's a main page.
-        // For dashboard, no back button needed.
     </script>
 
 </body>
