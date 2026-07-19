@@ -443,6 +443,42 @@
                 padding: 20px;
             }
         }
+
+        /* Customer card styles */
+        .customer-card {
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .customer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 24px rgba(108, 43, 217, 0.08), 0 12px 48px rgba(108, 43, 217, 0.05);
+        }
+        .customer-card:active {
+            transform: scale(0.98);
+        }
+        .customer-detail-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0;
+            border-bottom: 1px solid #F0EDF5;
+        }
+        .customer-detail-row:last-child {
+            border-bottom: none;
+        }
+        .customer-detail-row .label {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            color: #6B6478;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            min-width: 75px;
+        }
+        .customer-detail-row .value {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #0E0B14;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
@@ -467,7 +503,7 @@
                 <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="orders" onclick="navTo('orders')">
                     <span class="material-symbols-outlined text-[18px]">package_2</span> Orders
                 </a>
-                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="customers" onclick="navTo('customers')">
+                <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl bg-primary-subtle text-primary shadow-sm flex items-center gap-1.5" href="javascript:void(0)" data-page="customers" onclick="navTo('customers')">
                     <span class="material-symbols-outlined text-[18px]">group</span> Customers
                 </a>
                 <a class="top-nav-link text-sm font-semibold px-3.5 py-2 rounded-xl text-onSurfaceMuted hover:bg-primary-subtle/60 hover:text-onSurface transition-all flex items-center gap-1.5" href="javascript:void(0)" data-page="tickets" onclick="navTo('tickets')">
@@ -837,7 +873,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- PAGE: CUSTOMERS LIST -->
+    <!-- PAGE: CUSTOMERS (Card View - Mobile Friendly) -->
     <!-- ============================================================ -->
     <div id="page-customers" class="app-page">
         <main class="max-w-7xl mx-auto content-wrapper pt-20 pb-32 md:pb-8">
@@ -856,23 +892,9 @@
                 <input class="w-full pl-10 pr-4 py-3 bg-white border border-outline/60 rounded-2xl text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary-glow transition-all shadow-card placeholder:text-[#9A92A8]" placeholder="Search customers..." type="text" />
             </div>
 
-            <div class="bg-white rounded-2xl border border-outline/60 shadow-card overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm text-left">
-                        <thead class="text-2xs font-semibold text-onSurfaceMuted uppercase tracking-wider bg-surface-muted/40 border-b border-outline/40">
-                            <tr>
-                                <th class="px-4 py-3">Name</th>
-                                <th class="px-4 py-3">Default Address</th>
-                                <th class="px-4 py-3">Email</th>
-                                <th class="px-4 py-3">Mobile</th>
-                                <th class="px-4 py-3 text-center">WhatsApp</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customers-table-body" class="divide-y divide-outline/40">
-                            <!-- Dynamic rows inserted by JS -->
-                        </tbody>
-                    </table>
-                </div>
+            <!-- Customer Cards Grid -->
+            <div id="customers-card-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Dynamic cards inserted by JS -->
             </div>
         </main>
     </div>
@@ -1922,7 +1944,7 @@
                 });
             });
 
-            // --- Customers Table Data ---
+            // --- Customers Data (Card View) ---
             var customers = [
                 { name: "Aryan Sharma", address: "Kathmandu, Nepal", email: "aryan@email.com",
                     phone: "+977 9841234567" },
@@ -1946,21 +1968,48 @@
                     phone: "+977 9841234576" },
             ];
 
-            var tbody = document.getElementById('customers-table-body');
-            if (tbody) {
+            var container = document.getElementById('customers-card-container');
+            if (container) {
                 customers.forEach(function(c) {
-                    var tr = document.createElement('tr');
-                    tr.className = 'hover:bg-primary-subtle/30 transition-colors cursor-pointer';
-                    tr.setAttribute('onclick', "navTo('customer-profile')");
-                    tr.innerHTML =
-                        '<td class="px-4 py-3 font-semibold text-onSurface">' + c.name +
-                        '</td><td class="px-4 py-3 text-onSurfaceMuted">' + c.address +
-                        '</td><td class="px-4 py-3 text-onSurfaceMuted">' + c.email +
-                        '</td><td class="px-4 py-3 font-mono text-onSurfaceMuted">' + c.phone +
-                        '</td><td class="px-4 py-3 text-center"><a href="https://wa.me/' + c.phone.replace(
-                            /\s/g, '') +
-                        '" target="_blank" class="text-[#25D366] hover:text-[#1ebe5a] transition-colors" onclick="event.stopPropagation();"><span class="material-symbols-outlined">chat</span></a></td>';
-                    tbody.appendChild(tr);
+                    // Create initials for avatar
+                    var initials = c.name.split(' ').map(function(n) { return n[0]; }).join('').toUpperCase()
+                        .substring(0, 2);
+
+                    var card = document.createElement('div');
+                    card.className =
+                        'customer-card bg-white border border-outline/60 rounded-2xl p-5 shadow-card cursor-pointer';
+                    card.setAttribute('onclick', "navTo('customer-profile')");
+
+                    card.innerHTML = `
+                            <div class="flex items-center gap-3.5 mb-4">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-extrabold text-lg flex-shrink-0">${initials}</div>
+                                <div>
+                                    <h3 class="text-base font-bold text-onSurface">${c.name}</h3>
+                                    <span class="text-2xs font-medium text-onSurfaceMuted">Customer</span>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="customer-detail-row">
+                                    <span class="label">Address</span>
+                                    <span class="value">${c.address}</span>
+                                </div>
+                                <div class="customer-detail-row">
+                                    <span class="label">Email</span>
+                                    <span class="value">${c.email}</span>
+                                </div>
+                                <div class="customer-detail-row">
+                                    <span class="label">Mobile</span>
+                                    <span class="value font-mono">${c.phone}</span>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3.5 border-t border-outline/40 flex justify-end">
+                                <a href="https://wa.me/${c.phone.replace(/\s/g, '')}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#25D366] text-white rounded-xl text-sm font-semibold hover:bg-[#1ebe5a] transition-colors shadow-sm" onclick="event.stopPropagation();">
+                                    <span class="material-symbols-outlined text-[18px]">chat</span> WhatsApp
+                                </a>
+                            </div>
+                        `;
+
+                    container.appendChild(card);
                 });
             }
 
