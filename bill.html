@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merowish Invoice Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/nepali-date-converter@1.0.0/dist/nepali-date-converter.min.js">
+  </script>
+  <style>
+    /* ─── RESET & BASE ─── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #e6e9ef;
+      color: #000;
+      font-size: 13px;
+      line-height: 1.4;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── DASHBOARD LAYOUT ─── */
+    .dashboard {
+      display: flex;
+      gap: 24px;
+      padding: 20px 24px;
+      flex: 1;
+      background: #e6e9ef;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+      min-height: 100vh;
+    }
+    .panel-left {
+      width: 380px;
+      min-width: 350px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px 22px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+      height: fit-content;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      position: sticky;
+      top: 20px;
+    }
+    .panel-left h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #0b2b4a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-left h2 small {
+      font-weight: 400;
+      font-size: 12px;
+      color: #6b7a8f;
+    }
+    .panel-right {
+      flex: 1;
+      background: #f5f7fa;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: auto;
+      min-height: 800px;
+    }
+    .panel-right .invoice-container {
+      margin: 0;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.10);
+      transform: scale(0.72);
+      transform-origin: top center;
+      flex-shrink: 0;
+    }
+    @media (max-width: 1200px) {
+      .dashboard {
+        flex-direction: column;
+        padding: 16px;
+      }
+      .panel-left {
+        width: 100%;
+        min-width: unset;
+        max-height: none;
+        position: relative;
+        top: 0;
+      }
+      .panel-right .invoice-container {
+        transform: scale(0.55);
+      }
+    }
+
+    /* ─── FORM ELEMENTS ─── */
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 3px;
+      color: #1d2b3e;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1.5px solid #d0d7e2;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #fafbfc;
+      transition: 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #1a6fb5;
+      outline: none;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26, 111, 181, 0.12);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 44px;
+    }
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    /* ─── ITEMS EDITOR (dashboard) ─── */
+    .items-editor {
+      margin: 16px 0 12px;
+      border: 1px solid #dce2ec;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .items-editor table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .items-editor th {
+      background: #f0f3f8;
+      text-align: left;
+      padding: 6px 8px;
+      font-weight: 600;
+      border-bottom: 1px solid #dce2ec;
+      font-size: 11px;
+      color: #1d2b3e;
+    }
+    .items-editor td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #eef1f5;
+      vertical-align: middle;
+    }
+    .items-editor input {
+      width: 100%;
+      padding: 4px 6px;
+      border: 1px solid #d0d7e2;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: inherit;
+      background: #fff;
+    }
+    .items-editor input:focus {
+      border-color: #1a6fb5;
+      outline: none;
+    }
+    .items-editor .qty-input {
+      width: 60px;
+    }
+    .items-editor .total-input {
+      width: 90px;
+    }
+    .items-editor .computed-net {
+      font-weight: 600;
+      color: #1a6fb5;
+      text-align: right;
+      padding-right: 8px;
+    }
+    .items-editor .computed-vat {
+      font-weight: 600;
+      color: #b33c34;
+      text-align: right;
+      padding-right: 8px;
+    }
+    .btn-remove-item {
+      background: #f44336;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      width: 22px;
+      height: 22px;
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .btn-remove-item:hover {
+      background: #d32f2f;
+    }
+    .btn-add-item {
+      background: #e8edf4;
+      border: 1px dashed #8a9aa8;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      width: 100%;
+      font-weight: 600;
+      color: #1d2b3e;
+      margin-top: 4px;
+    }
+    .btn-add-item:hover {
+      background: #dce4ee;
+    }
+
+    /* ─── ACTION BUTTONS ─── */
+    .actions-dash {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-primary {
+      background: #1a6fb5;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: #145a94;
+    }
+    .btn-success {
+      background: #1e7e34;
+      color: #fff;
+    }
+    .btn-success:hover {
+      background: #16662a;
+    }
+    .btn-outline {
+      background: #fff;
+      border: 1.5px solid #8a9aa8;
+      color: #1d2b3e;
+    }
+    .btn-outline:hover {
+      background: #f0f3f8;
+    }
+    .btn-danger {
+      background: #b33c34;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #942f28;
+    }
+
+    /* ─── INVOICE STYLES ─── */
+    .invoice-container {
+      width: 210mm;
+      height: 297mm;
+      background: #fff;
+      padding: 15mm;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      line-height: 1.4;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+    .invoice-container .header {
+      text-align: center;
+      position: relative;
+      margin-bottom: 15px;
+    }
+    .invoice-container .logo-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 140px;
+      height: 140px;
+      text-align: center;
+    }
+    .invoice-container .logo-container img {
+      width: 100%;
+      height: auto;
+      max-height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .invoice-container .company-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .invoice-container .branch-badge {
+      display: inline-block;
+      border: 1px solid #000;
+      padding: 2px 10px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .invoice-container .company-details {
+      font-size: 12px;
+    }
+    .invoice-container .invoice-title-section {
+      text-align: center;
+      margin: 15px 0 20px 0;
+    }
+    .invoice-container .invoice-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .invoice-container .meta-section {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+    .invoice-container .meta-col {
+      width: 48%;
+    }
+    .invoice-container .meta-col h4 {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .invoice-container .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .invoice-container .meta-table td {
+      padding: 2px 0;
+      vertical-align: top;
+      font-size: 12px;
+    }
+    .invoice-container .meta-table td:first-child {
+      width: 120px;
+    }
+    .invoice-container .shipping-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 30px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .invoice-container .shipping-row .shipping-item {
+      display: flex;
+      align-items: baseline;
+    }
+    .invoice-container .shipping-row .shipping-item .label {
+      width: 100px;
+      font-weight: 500;
+      display: inline-block;
+    }
+    .invoice-container .shipping-row .shipping-item .value {
+      font-weight: 400;
+    }
+    .invoice-container .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+      border: 1px solid #000;
+    }
+    .invoice-container .items-table th,
+    .invoice-container .items-table td {
+      border: 1px solid #000;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+    .invoice-container .items-table th {
+      font-weight: 700;
+      text-align: left;
+    }
+    .invoice-container .items-table .text-center {
+      text-align: center;
+    }
+    .invoice-container .items-table .text-right {
+      text-align: right;
+    }
+    .invoice-container .items-table td.desc-col {
+      width: 40%;
+    }
+    .invoice-container .item-desc {
+      font-style: italic;
+      color: #555;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+    .invoice-container .notes-cell {
+      vertical-align: top;
+      padding: 10px !important;
+    }
+    .invoice-container .signature-line {
+      margin-top: 95px;
+      border-top: 1px solid #000;
+      width: 200px;
+      padding-top: 15px;
+    }
+    .invoice-container .summary-label {
+      text-align: left;
+    }
+    .invoice-container .total-row {
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .invoice-container .amount-words-cell {
+      text-align: right;
+      padding-top: 10px !important;
+      padding-bottom: 10px !important;
+    }
+    .invoice-container .terms-section {
+      margin-top: 10px;
+    }
+    .invoice-container .terms-section h4 {
+      margin-bottom: 5px;
+      font-size: 13px;
+    }
+    .invoice-container .terms-section ul {
+      list-style: none;
+      font-size: 12px;
+    }
+    .invoice-container .terms-section li {
+      margin-bottom: 4px;
+    }
+    .invoice-container .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      position: absolute;
+      bottom: 15mm;
+      left: 15mm;
+      right: 15mm;
+      font-size: 11px;
+    }
+    .invoice-container .footer-center {
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    /* ─── PRINT OVERRIDES ─── */
+    @media print {
+      .dashboard {
+        display: block !important;
+        padding: 0 !important;
+        background: #fff !important;
+      }
+      .panel-left {
+        display: none !important;
+      }
+      .panel-right {
+        background: #fff !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        min-height: auto !important;
+        overflow: visible !important;
+      }
+      .panel-right .invoice-container {
+        transform: scale(1) !important;
+        margin: 0 auto !important;
+        box-shadow: none !important;
+        border: none !important;
+      }
+      body {
+        background: #fff !important;
+        margin: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+    }
+
+    .panel-left::-webkit-scrollbar {
+      width: 4px;
+    }
+    .panel-left::-webkit-scrollbar-track {
+      background: #eef1f5;
+    }
+    .panel-left::-webkit-scrollbar-thumb {
+      background: #b0bccd;
+      border-radius: 4px;
+    }
+    @media (max-width: 700px) {
+      .panel-left {
+        padding: 14px;
+      }
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+      .items-editor table {
+        font-size: 11px;
+      }
+      .items-editor input {
+        font-size: 11px;
+        padding: 3px 4px;
+      }
+      .items-editor .qty-input,
+      .items-editor .total-input {
+        width: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <!-- ===== LEFT PANEL ===== -->
+    <div class="panel-left no-print">
+      <h2>🧾 Invoice Editor <small>live preview</small></h2>
+
+      <!-- Bill To – all empty -->
+      <div class="form-group">
+        <label>Bill To (Company)</label>
+        <input id="billCompany" value="" placeholder="" />
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input id="billAddress" value="" placeholder="" />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input id="billPhone" value="" placeholder="" />
+      </div>
+
+      <hr style="border:0;border-top:1px solid #e2e7ef;margin:14px 0;" />
+
+      <!-- Invoice Meta -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Invoice # (auto)</label>
+          <input id="invNumber" value="INV000010" readonly style="background:#f0f3f8;font-weight:600;" />
+        </div>
+        <div class="form-group">
+          <label>Date (auto)</label>
+          <input id="invDateDisplay" readonly style="background:#f0f3f8;font-weight:600;" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Miti (Nepali)</label>
+        <input id="invMitiDisplay" readonly style="background:#f0f3f8;font-weight:600;" />
+      </div>
+
+      <hr style="border:0;border-top:1px solid #e2e7ef;margin:14px 0;" />
+
+      <!-- Shipping / Extra Fields – all empty -->
+      <div class="form-group">
+        <label>Tracking No.</label>
+        <input id="trackingNo" value="" placeholder="" />
+      </div>
+      <div class="form-group">
+        <label>Actual Weight</label>
+        <input id="actualWeight" value="" placeholder="" />
+      </div>
+      <div class="form-group">
+        <label>Order No.</label>
+        <input id="orderNo" value="" placeholder="" />
+      </div>
+      <div class="form-group">
+        <label>Country</label>
+        <input id="country" value="" placeholder="" />
+      </div>
+
+      <hr style="border:0;border-top:1px solid #e2e7ef;margin:14px 0;" />
+
+      <!-- Items Editor -->
+      <label style="font-weight:600;font-size:13px;display:block;margin-bottom:6px;">Items</label>
+      <div class="items-editor" id="itemsEditor">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:30px;">#</th>
+              <th style="width:60px;">HS Code</th>
+              <th>Item</th>
+              <th style="width:50px;">Qty</th>
+              <th style="width:90px;">Total (incl. VAT)</th>
+              <th style="width:70px;">Net Amount</th>
+              <th style="width:60px;">VAT</th>
+              <th style="width:30px;"></th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody">
+            <!-- injected by JS -->
+          </tbody>
+        </table>
+      </div>
+      <button class="btn-add-item" id="addItemBtn">+ Add Item</button>
+
+      <hr style="border:0;border-top:1px solid #e2e7ef;margin:14px 0;" />
+
+      <!-- Actions -->
+      <div class="actions-dash">
+        <button class="btn btn-primary" onclick="refreshPreview()">🔄 Refresh</button>
+        <button class="btn btn-success" onclick="handlePrint()">🖨️ Print</button>
+        <button class="btn btn-success" onclick="handlePDF()">📄 PDF</button>
+        <button class="btn btn-outline" onclick="resetInvoice()">↺ Reset</button>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#6b7a8f;text-align:center;">
+        ⚡ Live preview · Enter total incl. VAT – net rate &amp; VAT auto‑computed
+      </div>
+    </div>
+
+    <!-- ===== RIGHT PANEL (Invoice Preview) ===== -->
+    <div class="panel-right" id="previewPanel">
+      <div class="invoice-container" id="invoice">
+
+        <!-- HEADER -->
+        <header class="header">
+          <div class="company-name">MEROWISH DOT COM</div>
+          <div class="branch-badge">Kathmandu Branch</div>
+          <div class="company-details">
+            Buddhanagar New Baneshwor, Kathmandu 44600, Contact: 9845925880<br />
+            https://merowish.com | support@merowish.com<br />
+            PAN: 605125412
+          </div>
+          <div class="logo-container">
+            <img src="https://merowish.com.np/merowish-light.png" alt="Merowish Logo" />
+          </div>
+        </header>
+
+        <!-- TITLE -->
+        <div class="invoice-title-section">
+          <div class="invoice-title">TAX INVOICE</div>
+          <div>( Original Copy )</div>
+        </div>
+
+        <!-- META -->
+        <div class="meta-section">
+          <div class="meta-col">
+            <h4>Bill to:</h4>
+            <p id="previewBillName" style="font-size:12px;"></p>
+            <p id="previewBillAddr" style="font-size:12px;"></p>
+            <table class="meta-table" style="margin-top:5px;">
+              <tr><td>Phone :</td><td id="previewBillPhone"></td></tr>
+            </table>
+          </div>
+          <div class="meta-col">
+            <table class="meta-table">
+              <tr><td>Invoice No.</td><td id="previewInvNo">INV000010</td></tr>
+              <tr><td>Invoice Date:</td><td id="previewInvDate"></td></tr>
+            </table>
+          </div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid #ddd;margin-bottom:10px;" />
+
+        <!-- SHIPPING / EXTRA FIELDS (conditional) -->
+        <div id="shippingExtraContainer" style="margin-bottom:10px;">
+          <!-- dynamically filled -->
+        </div>
+
+        <!-- ITEMS TABLE -->
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th class="text-center">Sn</th>
+              <th>HS Code</th>
+              <th class="desc-col">Item</th>
+              <th class="text-center">Qty. (kg/unit)</th>
+              <th class="text-right">Rate (net)</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody id="previewItemsBody">
+            <!-- injected by JS -->
+          </tbody>
+          <tfoot>
+            <!-- Summary rows -->
+            <tr>
+              <td colspan="4" rowspan="5" class="notes-cell">
+                <strong>Notes/Remarks</strong><br />
+                <div class="signature-line">For Merowish Dot Com</div>
+              </td>
+              <td class="summary-label">Sub total (net)</td>
+              <td class="text-right" id="previewSubtotal">0.00</td>
+            </tr>
+            <tr>
+              <td class="summary-label">Non Taxable Amount</td>
+              <td class="text-right">0.00</td>
+            </tr>
+            <tr>
+              <td class="summary-label">Taxable Amount</td>
+              <td class="text-right" id="previewTaxable">0.00</td>
+            </tr>
+            <tr>
+              <td class="summary-label">VAT 13%</td>
+              <td class="text-right" id="previewVat">0.00</td>
+            </tr>
+            <tr class="total-row">
+              <td class="summary-label">Total (incl. VAT):</td>
+              <td class="text-right" id="previewTotal">0.00</td>
+            </tr>
+            <tr>
+              <td colspan="4" style="border-right:none;"></td>
+              <td colspan="2" class="amount-words-cell">
+                <strong>Amount In Words</strong><br />
+                <span id="previewWords">Zero Rupees only</span>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- TERMS -->
+        <div class="terms-section">
+          <h4>Terms &amp; Condition</h4>
+          <ul>
+            <li>- Payments can be made via bank transfer, and Online QR payment.</li>
+            <li>- Import Duty &amp; Tax paid are Non-refundable incase of Return.</li>
+            <li>- Re-shipping charges will be paid by customer incase of delivery return.</li>
+            <li>- Returns must be made within 24 hours of delivery in original packaging and condition.</li>
+          </ul>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+          <div style="width:50px;"></div>
+          <div class="footer-center">
+            Merowish | <span id="previewFooterDate"></span> | <span id="previewFooterTime"></span><br />
+            Merowish.com | support@merowish.com | You wish it, We deliver it.
+            <br />*This is a computer generated Tax Invoice
+          </div>
+          <div>Page 1 of 1</div>
+        </div>
+
+      </div><!-- /invoice -->
+    </div><!-- /panel-right -->
+  </div><!-- /dashboard -->
+
+  <script>
+    // ============================================================
+    // 1. NEPALI DATE CONVERTER (using the library)
+    // ============================================================
+    function getNepaliDate(adDate) {
+      const year = adDate.getFullYear();
+      const month = adDate.getMonth() + 1;
+      const day = adDate.getDate();
+      try {
+        const nepali = window.NepaliDate.fromAd(year, month, day);
+        return { year: nepali.getYear(), month: nepali.getMonth(), day: nepali.getDay() };
+      } catch (e) {
+        console.warn('NepaliDate library failed, using fallback', e);
+        return { year: 2083, month: 4, day: 12 };
+      }
+    }
+
+    function formatBsShort(bs) {
+      const m = String(bs.month).padStart(2, '0');
+      const d = String(bs.day).padStart(2, '0');
+      return `${bs.year}-${m}-${d}`;
+    }
+
+    function formatBsDisplay(bs) {
+      const months = ['Baishakh', 'Jestha', 'Ashad', 'Shrawan', 'Bhadra', 'Ashwin',
+        'Kartik', 'Mangsir', 'Poush', 'Magh', 'Falgun', 'Chaitra'];
+      return `${bs.year} ${months[bs.month-1]} ${bs.day}`;
+    }
+
+    // ============================================================
+    // 2. NUMBER FORMATTING WITH INDIAN COMMA SEPARATION
+    // ============================================================
+    function formatIndianNumber(num) {
+      if (num === 0 || isNaN(num) || !isFinite(num)) return '0.00';
+      
+      // Round to 2 decimal places
+      num = Math.round(num * 100) / 100;
+      
+      // Split into whole and decimal parts
+      const parts = num.toFixed(2).split('.');
+      let whole = parts[0];
+      const decimals = parts[1];
+      
+      // For negative numbers
+      let negative = false;
+      if (whole.startsWith('-')) {
+        negative = true;
+        whole = whole.substring(1);
+      }
+      
+      // Add commas using Indian numbering (first comma after 3 digits, then every 2)
+      const lastThree = whole.slice(-3);
+      const otherNumbers = whole.slice(0, -3);
+      
+      let formatted = '';
+      if (otherNumbers !== '') {
+        // Add commas every 2 digits from the right for the rest
+        const reversed = otherNumbers.split('').reverse().join('');
+        let withCommas = '';
+        for (let i = 0; i < reversed.length; i++) {
+          if (i > 0 && i % 2 === 0) {
+            withCommas += ',';
+          }
+          withCommas += reversed[i];
+        }
+        formatted = withCommas.split('').reverse().join('') + ',' + lastThree;
+      } else {
+        formatted = lastThree;
+      }
+      
+      if (negative) {
+        formatted = '-' + formatted;
+      }
+      
+      return formatted + '.' + decimals;
+    }
+
+    // ============================================================
+    // 3. NUMBER TO WORDS - FIXED (rupees and paisa)
+    // ============================================================
+    function numberToWords(n) {
+      if (n === 0 || isNaN(n) || !isFinite(n)) return 'Zero Rupees only';
+      
+      // Round to 2 decimal places
+      n = Math.round(n * 100) / 100;
+      
+      // Extract whole number and decimal parts
+      const num = Math.floor(n);
+      const paisa = Math.round((n - num) * 100);
+      
+      if (num === 0 && paisa === 0) return 'Zero Rupees only';
+      
+      const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen',
+        'Eighteen', 'Nineteen'];
+      const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+      
+      function convertToWords(val) {
+        if (val === 0) return '';
+        if (val < 20) return ones[val];
+        if (val < 100) return tens[Math.floor(val / 10)] + (val % 10 !== 0 ? ' ' + ones[val % 10] : '');
+        if (val < 1000) {
+          return ones[Math.floor(val / 100)] + ' Hundred' + (val % 100 !== 0 ? ' ' + convertToWords(val % 100) : '');
+        }
+        if (val < 100000) {
+          return convertToWords(Math.floor(val / 1000)) + ' Thousand' + (val % 1000 !== 0 ? ' ' + convertToWords(val % 1000) : '');
+        }
+        if (val < 10000000) {
+          return convertToWords(Math.floor(val / 100000)) + ' Lakh' + (val % 100000 !== 0 ? ' ' + convertToWords(val % 100000) : '');
+        }
+        return convertToWords(Math.floor(val / 10000000)) + ' Crore' + (val % 10000000 !== 0 ? ' ' + convertToWords(val % 10000000) : '');
+      }
+      
+      let result = '';
+      
+      // Convert whole number part
+      if (num > 0) {
+        result = convertToWords(num) + ' Rupees';
+      }
+      
+      // Add paisa part
+      if (paisa > 0) {
+        if (result) result += ' and ';
+        const paisaWords = convertToWords(paisa);
+        result += paisaWords + ' paisa';
+      }
+      
+      if (!result) return 'Zero Rupees only';
+      return result + ' only';
+    }
+
+    // ============================================================
+    // 4. STATE & RENDER
+    // ============================================================
+    let itemCounter = 0;
+
+    function getDefaultItems() {
+      return [
+        { id: ++itemCounter, hs: '102047', name: 'Sample Product 1 [P00657]', qty: 1, totalIncVat: 100.00 },
+        { id: ++itemCounter, hs: '630986', name: 'Sample Product 2 [P00657]', qty: 1, totalIncVat: 100.00 },
+      ];
+    }
+
+    let items = getDefaultItems();
+    let invoiceNumber = 'INV000010';
+    let nextInvoiceNumber = 11;
+
+    // Load state
+    function loadState() {
+      try {
+        const saved = localStorage.getItem('merowish_invoice_state');
+        if (saved) {
+          const state = JSON.parse(saved);
+          items = state.items || getDefaultItems();
+          invoiceNumber = state.invoiceNumber || 'INV000010';
+          nextInvoiceNumber = state.nextInvoiceNumber || 11;
+          document.getElementById('billCompany').value = state.billCompany || '';
+          document.getElementById('billAddress').value = state.billAddress || '';
+          document.getElementById('billPhone').value = state.billPhone || '';
+          document.getElementById('trackingNo').value = state.trackingNo || '';
+          document.getElementById('actualWeight').value = state.actualWeight || '';
+          document.getElementById('orderNo').value = state.orderNo || '';
+          document.getElementById('country').value = state.country || '';
+          let maxId = 0;
+          items.forEach(it => { if (it.id > maxId) maxId = it.id; });
+          itemCounter = maxId;
+        }
+      } catch (_) { /* ignore */ }
+    }
+
+    function saveState() {
+      try {
+        const state = {
+          items: items,
+          invoiceNumber: invoiceNumber,
+          nextInvoiceNumber: nextInvoiceNumber,
+          billCompany: document.getElementById('billCompany').value,
+          billAddress: document.getElementById('billAddress').value,
+          billPhone: document.getElementById('billPhone').value,
+          trackingNo: document.getElementById('trackingNo').value,
+          actualWeight: document.getElementById('actualWeight').value,
+          orderNo: document.getElementById('orderNo').value,
+          country: document.getElementById('country').value,
+        };
+        localStorage.setItem('merowish_invoice_state', JSON.stringify(state));
+      } catch (_) { /* ignore */ }
+    }
+
+    // Render items editor
+    function renderItemsEditor() {
+      const tbody = document.getElementById('itemsBody');
+      tbody.innerHTML = '';
+      items.forEach((item, idx) => {
+        const total = item.totalIncVat || 0;
+        const net = total / 1.13;
+        const vat = total - net;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align:center;font-weight:600;">${idx+1}</td>
+          <td><input class="edit-hs" value="${item.hs}" data-id="${item.id}"></td>
+          <td><input class="edit-name" value="${item.name}" data-id="${item.id}" style="width:100%;"></td>
+          <td><input class="edit-qty qty-input" type="number" step="0.01" value="${item.qty}" data-id="${item.id}"></td>
+          <td><input class="edit-total total-input" type="number" step="0.01" value="${total.toFixed(2)}" data-id="${item.id}"></td>
+          <td class="computed-net">${net.toFixed(2)}</td>
+          <td class="computed-vat">${vat.toFixed(2)}</td>
+          <td><button class="btn-remove-item" data-id="${item.id}">×</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Attach events
+      tbody.querySelectorAll('.edit-hs, .edit-name, .edit-qty, .edit-total').forEach(el => {
+        el.addEventListener('input', function() {
+          const id = parseInt(this.dataset.id);
+          const item = items.find(it => it.id === id);
+          if (!item) return;
+          if (this.classList.contains('edit-hs')) item.hs = this.value;
+          else if (this.classList.contains('edit-name')) item.name = this.value;
+          else if (this.classList.contains('edit-qty')) item.qty = parseFloat(this.value) || 0;
+          else if (this.classList.contains('edit-total')) item.totalIncVat = parseFloat(this.value) || 0;
+          // Recalculate and update display
+          updateInvoice();
+          // Update computed columns in the editor (net and vat)
+          const row = this.closest('tr');
+          const total = item.totalIncVat || 0;
+          const net = total / 1.13;
+          const vat = total - net;
+          row.querySelector('.computed-net').textContent = net.toFixed(2);
+          row.querySelector('.computed-vat').textContent = vat.toFixed(2);
+          saveState();
+        });
+      });
+
+      tbody.querySelectorAll('.btn-remove-item').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = parseInt(this.dataset.id);
+          if (items.length <= 1) { alert('At least one item required.'); return; }
+          items = items.filter(it => it.id !== id);
+          renderItemsEditor();
+          updateInvoice();
+          saveState();
+        });
+      });
+    }
+
+    // Add item
+    document.getElementById('addItemBtn').addEventListener('click', function() {
+      items.push({ id: ++itemCounter, hs: '', name: 'New Item', qty: 1, totalIncVat: 0 });
+      renderItemsEditor();
+      updateInvoice();
+      saveState();
+    });
+
+    // ─── Increment invoice number ───
+    function incrementInvoiceNumber() {
+      const newNum = 'INV' + String(nextInvoiceNumber).padStart(6, '0');
+      invoiceNumber = newNum;
+      document.getElementById('invNumber').value = newNum;
+      nextInvoiceNumber++;
+      saveState();
+    }
+
+    // ─── Update invoice preview (live) ───
+    function updateInvoice() {
+      // 1. Bill fields
+      const billCompany = document.getElementById('billCompany').value.trim();
+      const billAddress = document.getElementById('billAddress').value.trim();
+      const billPhone = document.getElementById('billPhone').value.trim();
+
+      // 2. Extra shipping fields
+      const trackingNo = document.getElementById('trackingNo').value.trim();
+      const actualWeight = document.getElementById('actualWeight').value.trim();
+      const orderNo = document.getElementById('orderNo').value.trim();
+      const country = document.getElementById('country').value.trim();
+
+      // 3. Date & time
+      const now = new Date();
+      const adDateStr =
+        `${String(now.getDate()).padStart(2,'0')}.${String(now.getMonth()+1).padStart(2,'0')}.${now.getFullYear()}`;
+      const bs = getNepaliDate(now);
+      const bsDateStr = formatBsShort(bs);
+      const fullDateDisplay = `${adDateStr} | ${bsDateStr}`;
+      const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+      // 4. Invoice number
+      const invInput = document.getElementById('invNumber');
+      invoiceNumber = invInput.value;
+
+      // 5. Compute totals from items
+      let subtotalNet = 0;
+      let totalVat = 0;
+      let grandTotal = 0;
+
+      items.forEach(it => {
+        const total = it.totalIncVat || 0;
+        const net = total / 1.13;
+        const vat = total - net;
+        subtotalNet += net;
+        totalVat += vat;
+        grandTotal += total;
+      });
+
+      // Round
+      subtotalNet = Math.round(subtotalNet * 100) / 100;
+      totalVat = Math.round(totalVat * 100) / 100;
+      grandTotal = Math.round(grandTotal * 100) / 100;
+
+      // 6. Update preview DOM – Bill fields
+      document.getElementById('previewBillName').textContent = billCompany;
+      document.getElementById('previewBillAddr').textContent = billAddress;
+      document.getElementById('previewBillPhone').textContent = billPhone;
+      document.getElementById('previewInvNo').textContent = invoiceNumber;
+      document.getElementById('previewInvDate').textContent = fullDateDisplay;
+      document.getElementById('previewFooterDate').textContent = bsDateStr;
+      document.getElementById('previewFooterTime').textContent = timeStr;
+
+      document.getElementById('invDateDisplay').value = adDateStr;
+      document.getElementById('invMitiDisplay').value = formatBsDisplay(bs);
+
+      // 7. Extra shipping fields – conditional display
+      const extraContainer = document.getElementById('shippingExtraContainer');
+      let html = '';
+      const fields = [
+        { label: 'Tracking No:', value: trackingNo },
+        { label: 'Actual Weight:', value: actualWeight },
+        { label: 'Order No. :', value: orderNo },
+        { label: 'Country:', value: country },
+      ];
+      const nonEmpty = fields.filter(f => f.value !== '');
+      if (nonEmpty.length > 0) {
+        html = '<div class="shipping-row">';
+        nonEmpty.forEach(f => {
+          html += `<div class="shipping-item"><span class="label">${f.label}</span><span class="value">${f.value}</span></div>`;
+        });
+        html += '</div>';
+      }
+      extraContainer.innerHTML = html;
+
+      // 8. Items – Total = Qty × Rate (net)
+      const previewBody = document.getElementById('previewItemsBody');
+      previewBody.innerHTML = '';
+      items.forEach((it, idx) => {
+        const qty = it.qty || 0;
+        const total = it.totalIncVat || 0;
+        const netTotal = total / 1.13;
+        const unitNet = qty > 0 ? netTotal / qty : 0;
+        const lineTotal = qty * unitNet;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="text-center">${idx+1}</td>
+          <td>${it.hs || ''}</td>
+          <td>${it.name || ''}</td>
+          <td class="text-center">${qty}</td>
+          <td class="text-right">${formatIndianNumber(unitNet)}</td>
+          <td class="text-right">${formatIndianNumber(lineTotal)}</td>
+        `;
+        previewBody.appendChild(tr);
+      });
+
+      // 9. Summary - with Indian comma formatting
+      document.getElementById('previewSubtotal').textContent = formatIndianNumber(subtotalNet);
+      document.getElementById('previewTaxable').textContent = formatIndianNumber(subtotalNet);
+      document.getElementById('previewVat').textContent = formatIndianNumber(totalVat);
+      document.getElementById('previewTotal').textContent = formatIndianNumber(grandTotal);
+      document.getElementById('previewWords').textContent = numberToWords(grandTotal);
+
+      // 10. Auto-save
+      saveState();
+    }
+
+    // ─── Refresh (manual) ───
+    function refreshPreview() {
+      updateInvoice();
+    }
+
+    // ─── Reset ───
+    function resetInvoice() {
+      if (!confirm('Reset all fields and items to default?')) return;
+      items = getDefaultItems();
+      itemCounter = items.reduce((max, it) => Math.max(max, it.id), 0);
+      // Empty all input fields
+      document.getElementById('billCompany').value = '';
+      document.getElementById('billAddress').value = '';
+      document.getElementById('billPhone').value = '';
+      document.getElementById('trackingNo').value = '';
+      document.getElementById('actualWeight').value = '';
+      document.getElementById('orderNo').value = '';
+      document.getElementById('country').value = '';
+      invoiceNumber = 'INV000010';
+      nextInvoiceNumber = 11;
+      document.getElementById('invNumber').value = invoiceNumber;
+      renderItemsEditor();
+      updateInvoice();
+      saveState();
+      localStorage.removeItem('merowish_invoice_state');
+    }
+
+    // ─── Handle Print ───
+    function handlePrint() {
+      incrementInvoiceNumber();
+      updateInvoice();
+      setTimeout(() => window.print(), 300);
+    }
+
+    // ─── Handle PDF ───
+    function handlePDF() {
+      incrementInvoiceNumber();
+      updateInvoice();
+      setTimeout(() => {
+        const element = document.getElementById('invoice');
+        const opt = {
+          margin: 0,
+          filename: `Invoice_${invoiceNumber}.pdf`,
+          image: { type: 'jpeg', quality: 1 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+      }, 300);
+    }
+
+    // ─── Auto-update on input changes ───
+    document.querySelectorAll('#billCompany, #billAddress, #billPhone, #trackingNo, #actualWeight, #orderNo, #country')
+      .forEach(el => {
+        el.addEventListener('input', function() {
+          updateInvoice();
+          saveState();
+        });
+      });
+
+    // ─── Init ───
+    loadState();
+    let maxId = 0;
+    items.forEach(it => { if (it.id > maxId) maxId = it.id; });
+    itemCounter = maxId;
+    renderItemsEditor();
+    updateInvoice();
+
+    // Expose globals
+    window.updateInvoice = updateInvoice;
+    window.refreshPreview = refreshPreview;
+    window.handlePrint = handlePrint;
+    window.handlePDF = handlePDF;
+    window.resetInvoice = resetInvoice;
+
+    console.log('✅ Merowish Invoice Dashboard ready – number formatting and words fixed.');
+  </script>
+</body>
+</html>
