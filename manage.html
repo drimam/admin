@@ -39,7 +39,6 @@
         }
     </script>
     <style>
-        /* ── Custom scrollbar ── */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -78,7 +77,6 @@
             border-radius: 6px;
         }
 
-        /* ── Product Image Wrapper ── */
         .product-img-wrapper {
             position: relative;
             display: inline-block;
@@ -119,7 +117,6 @@
             opacity: 1;
             transform: translateY(-50%) scale(1);
         }
-        /* Mobile product image zoom: different positioning */
         @media (max-width: 767px) {
             .product-img-zoom {
                 left: 50%;
@@ -208,7 +205,6 @@
             box-shadow: inset 3px 0 0 #4F46E5;
         }
 
-        /* ── Status Tabs ── */
         .status-tab {
             padding: 6px 16px;
             border-radius: 20px;
@@ -235,7 +231,6 @@
             background: #4338CA;
         }
 
-        /* ── Type Tabs ── */
         .type-tab {
             padding: 6px 16px;
             border-radius: 20px;
@@ -301,7 +296,6 @@
             border-radius: 4px;
         }
 
-        /* ── Cancel Dropdown (Modal version) ── */
         .cancel-dropdown-modal .field select {
             width: 100%;
             padding: 8px 12px;
@@ -362,7 +356,6 @@
             border-bottom-color: #D97706;
         }
 
-        /* ── Timeline ── */
         .timeline-connector {
             position: absolute;
             left: 15px;
@@ -382,7 +375,6 @@
             color: #3730A3;
         }
 
-        /* ── Cost Modal ── */
         .cost-modal-body .field input,
         .cost-modal-body .field select {
             width: 100%;
@@ -583,14 +575,7 @@
         .cost-modal-body .full-width {
             grid-column: 1 / -1;
         }
-        .cost-modal-body .mt-1 {
-            margin-top: 6px;
-        }
-        .cost-modal-body .text-muted {
-            color: #6f83a8;
-        }
 
-        /* ── User Tier Badges ── */
         .tier-diamond {
             color: #b9f2ff;
             filter: drop-shadow(0 0 6px rgba(0, 206, 255, 0.5));
@@ -608,7 +593,6 @@
             filter: drop-shadow(0 0 6px rgba(205, 127, 50, 0.3));
         }
 
-        /* ── Mobile Card Styles ── */
         .order-card {
             background: #fff;
             border-radius: 16px;
@@ -771,6 +755,7 @@
             border-radius: 20px;
             font-size: 11px;
             font-weight: 600;
+            cursor: pointer;
         }
         .order-card .type-badge {
             display: inline-flex;
@@ -785,8 +770,23 @@
             border-top: 1px solid #f1f5f9;
             margin: 4px 0;
         }
+        .order-card .status-select {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background: white;
+            min-width: 100px;
+            max-width: 140px;
+        }
+        .order-card .checkbox-wrap input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
 
-        /* ── Responsive fixes ── */
         @media (max-width: 767px) {
             .order-card .card-actions .action-btn {
                 flex: 1 1 auto;
@@ -840,22 +840,15 @@
             .filter-section .filter-group {
                 flex-wrap: wrap;
             }
-            .top-bar-mobile {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            .top-bar-mobile .search-wrap {
-                flex: 1;
-                min-width: 120px;
-            }
-            .cart-btn-mobile {
-                padding: 4px 10px;
+            .order-card .status-select {
                 font-size: 12px;
+                padding: 4px 8px;
+                min-width: 120px;
+                max-width: 100%;
             }
-            .cart-btn-mobile .badge {
-                width: 18px;
-                height: 18px;
-                font-size: 9px;
+            .order-card .checkbox-wrap input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
             }
         }
 
@@ -895,9 +888,13 @@
             .stats-grid .stat-card .stat-label {
                 font-size: 10px;
             }
+            .order-card .status-select {
+                font-size: 11px;
+                padding: 3px 6px;
+                min-width: 100px;
+            }
         }
 
-        /* ── Price Corrections Cart ── */
         .cart-btn {
             position: relative;
             display: inline-flex;
@@ -949,7 +946,114 @@
             transform: scale(1.1);
         }
 
-        /* ── Print ── */
+        .bulk-actions-bar {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 16px;
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .bulk-actions-bar.visible {
+            display: flex;
+        }
+        .bulk-actions-bar .count-badge {
+            background: #4F46E5;
+            color: #fff;
+            border-radius: 20px;
+            padding: 2px 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .bulk-actions-bar .action-btn-bulk {
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .bulk-actions-bar .action-btn-bulk.primary {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .bulk-actions-bar .action-btn-bulk.primary:hover {
+            background: #4338CA;
+        }
+        .bulk-actions-bar .action-btn-bulk.green {
+            background: #10B981;
+            color: #fff;
+        }
+        .bulk-actions-bar .action-btn-bulk.green:hover {
+            background: #059669;
+        }
+        .bulk-actions-bar .action-btn-bulk.outline {
+            background: transparent;
+            color: #475569;
+            border: 1px solid #d1d5db;
+        }
+        .bulk-actions-bar .action-btn-bulk.outline:hover {
+            background: #f1f5f9;
+        }
+        .bulk-actions-bar .bulk-input {
+            padding: 4px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            background: #fff;
+            min-width: 150px;
+        }
+        .bulk-actions-bar .bulk-input:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        .select-all-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 500;
+        }
+        .select-all-wrap input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+        }
+
+        @media (max-width: 767px) {
+            .bulk-actions-bar {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+            .bulk-actions-bar .action-btn-bulk {
+                font-size: 12px;
+                padding: 4px 12px;
+            }
+            .select-all-wrap {
+                font-size: 12px;
+            }
+            .select-all-wrap input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+            }
+            .bulk-actions-bar .bulk-input {
+                min-width: 120px;
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
+
         @media print {
             .sidebar,
             .top-bar,
@@ -969,12 +1073,63 @@
             .table-container {
                 overflow: visible !important;
             }
+            .bulk-actions-bar,
+            .checkbox-wrap,
+            .select-all-wrap,
+            .select-all-header {
+                display: none !important;
+            }
+        }
+
+        .shipping-label-modal .label-preview {
+            background: #f8fafc;
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        .shipping-label-modal .label-preview .label-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #e9eef6;
+        }
+        .shipping-label-modal .label-preview .label-row:last-child {
+            border-bottom: none;
+        }
+        .shipping-label-modal .label-preview .label-row .lbl {
+            font-weight: 600;
+            color: #475569;
+        }
+        .shipping-label-modal .label-preview .label-row .val {
+            color: #0f172a;
+        }
+
+        .arrival-count {
+            display: inline-block;
+            background: #E0E7FF;
+            color: #4338CA;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 0 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 2px;
+        }
+        .arrival-count:hover {
+            background: #C7D2FE;
+            transform: scale(1.05);
+        }
+        .arrival-count .count-num {
+            font-weight: 700;
+            margin-right: 2px;
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- Mobile overlay -->
     <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
@@ -1025,7 +1180,6 @@
                 <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">📦 Orders</span>
             </div>
             <div class="flex items-center gap-2 sm:gap-3">
-                <!-- Price Corrections Cart Button -->
                 <button onclick="openPriceCorrections()" class="cart-btn no-print hidden sm:inline-flex">
                     <span class="cart-icon">🛒</span>
                     <span>Price Corrections</span>
@@ -1045,7 +1199,7 @@
 
         <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
 
-            <!-- Stats Cards - All 8 visible on all screens -->
+            <!-- Stats Cards -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 stats-grid">
                 <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
                     <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Total Orders</p>
@@ -1105,7 +1259,7 @@
                 <div id="activeFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
             </div>
 
-            <!-- Type Navigation Tabs + Universal Search -->
+            <!-- Type Tabs + Universal Search -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3">
                 <div class="flex flex-wrap items-center gap-1 sm:gap-2 mb-1">
                     <span class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wider">Type:</span>
@@ -1122,7 +1276,7 @@
                 </div>
             </div>
 
-            <!-- Status Navigation Tabs -->
+            <!-- Status Tabs -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3">
                 <div class="flex items-center gap-1 sm:gap-2 mb-1">
                     <span class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase tracking-wider">Status:</span>
@@ -1131,6 +1285,25 @@
                 <div class="tabs-scroll" id="statusTabsContainer">
                     <button class="status-tab active text-[10px] sm:text-xs" data-status="all" onclick="filterByStatusTab('all')">📋 All</button>
                 </div>
+            </div>
+
+            <!-- Bulk Actions Bar -->
+            <div class="bulk-actions-bar no-print" id="bulkActionsBar">
+                <div class="select-all-wrap">
+                    <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()" />
+                    <label for="selectAllCheckbox" class="cursor-pointer select-all-label">Select All</label>
+                </div>
+                <span class="count-badge" id="selectedCount">0 selected</span>
+                <input type="text" id="bulkWaybillInput" placeholder="Total Weight" class="bulk-input" />
+                <button class="action-btn-bulk primary" onclick="generateBulkShippingLabel()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                    Shipping Label
+                </button>
+                <button class="action-btn-bulk green" onclick="generateBulkInvoice()">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    Bulk Invoice
+                </button>
+                <button class="action-btn-bulk outline" onclick="clearAllSelections()">Clear</button>
             </div>
 
             <!-- Orders Table / Cards -->
@@ -1161,6 +1334,9 @@
                     <table class="w-full text-sm" id="ordersTable">
                         <thead>
                             <tr class="bg-gray-100 text-gray-600 text-xs font-semibold uppercase tracking-wider">
+                                <th class="px-3 py-3 text-center whitespace-nowrap select-all-header">
+                                    <input type="checkbox" id="selectAllDesktop" onchange="toggleSelectAllDesktop()" class="w-4 h-4 accent-primary-600 cursor-pointer" />
+                                </th>
                                 <th class="px-3 py-3 text-left whitespace-nowrap">Action</th>
                                 <th class="px-3 py-3 text-left whitespace-nowrap">Cost Calc</th>
                                 <th class="px-3 py-3 text-left whitespace-nowrap">Product</th>
@@ -1179,9 +1355,7 @@
                 </div>
 
                 <!-- MOBILE CARDS VIEW -->
-                <div class="block md:hidden p-2 sm:p-3 space-y-3" id="mobileCardsContainer">
-                    <!-- Cards rendered by JS -->
-                </div>
+                <div class="block md:hidden p-2 sm:p-3 space-y-3" id="mobileCardsContainer"></div>
 
                 <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
                     <div class="text-gray-500" id="paginationInfo">Page 1 of 1</div>
@@ -1193,7 +1367,6 @@
 
     <!-- ─── MODALS ──────────────────────────────────────────────────────── -->
 
-    <!-- Timeline Modal -->
     <div id="timelineModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeTimelineModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-3 sm:mx-4 max-h-[85vh] overflow-y-auto animate-fade-in z-10">
@@ -1212,7 +1385,6 @@
         </div>
     </div>
 
-    <!-- Tracking Modal -->
     <div id="trackingModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeTrackingModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
@@ -1238,7 +1410,6 @@
         </div>
     </div>
 
-    <!-- Comments Modal -->
     <div id="commentsModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeCommentsModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
@@ -1256,7 +1427,6 @@
         </div>
     </div>
 
-    <!-- Cancel Modal -->
     <div id="cancelModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeCancelModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
@@ -1286,7 +1456,6 @@
         </div>
     </div>
 
-    <!-- Cost Modal -->
     <div id="costModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeCostModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10">
@@ -1298,7 +1467,6 @@
         </div>
     </div>
 
-    <!-- Customer Image Modal -->
     <div id="customerImageModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeCustomerImageModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
@@ -1310,7 +1478,6 @@
         </div>
     </div>
 
-    <!-- Price Corrections Modal -->
     <div id="priceCorrectionsModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closePriceCorrections()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
@@ -1342,7 +1509,17 @@
         </div>
     </div>
 
-    <!-- Toast -->
+    <div id="bulkLabelModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeBulkLabelModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 shipping-label-modal">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="bulkModalTitle">📦 Bulk Shipping Label</h3>
+                <button onclick="closeBulkLabelModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6" id="bulkLabelContent"></div>
+        </div>
+    </div>
+
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
             <span id="toastIcon">✅</span>
@@ -1360,15 +1537,37 @@
                 'Delivery Delayed', 'Delivery Failed', 'Undelivered Returning', 'Return Requested', 'Return Received'
             ];
 
+            const statusToIndexMap = {
+                'Order Approved': 3,
+                'Arrived at India WH': 6,
+                'Custom Clearance': 9,
+                'Arrived at Nepal WH': 11,
+                'Custom Hold': 10,
+                'Shipped': 12,
+                'Wrong Product Received': 7,
+                'Return to Seller': 8
+            };
+
+            const statusUpdateOptions = [
+                'Order Approved',
+                'Arrived at India WH',
+                'Custom Clearance',
+                'Arrived at Nepal WH',
+                'Custom Hold',
+                'Shipped',
+                'Wrong Product Received',
+                'Return to Seller'
+            ];
+
             const userTiers = {
-                'Damodar Bhattarai': { tier: 'Diamond', mobile: '+9779845925880', icon: '💎' },
-                'Sita Sharma': { tier: 'Silver', mobile: '+9779705510555', icon: '🥈' },
-                'Ramesh Adhikari': { tier: 'Gold', mobile: '+9779705510555', icon: '🥇' },
-                'Priya Gurung': { tier: 'Silver', mobile: '+9779845925880', icon: '🥈' },
-                'Bikash Thapa': { tier: 'Gold', mobile: '+9779705510555', icon: '🥇' },
-                'Anita Rai': { tier: 'Silver', mobile: '+9779705510555', icon: '🥈' },
-                'Kiran Bhandari': { tier: 'Bronze', mobile: '+9779845925880', icon: '🥉' },
-                'Maya Devi': { tier: 'Gold', mobile: '+9779705510555', icon: '🥇' }
+                'Damodar Bhattarai': { tier: 'Diamond', mobile: '+977-980-123-4567', icon: '💎' },
+                'Sita Sharma': { tier: 'Silver', mobile: '+977-981-234-5678', icon: '🥈' },
+                'Ramesh Adhikari': { tier: 'Gold', mobile: '+977-982-345-6789', icon: '🥇' },
+                'Priya Gurung': { tier: 'Silver', mobile: '+977-983-456-7890', icon: '🥈' },
+                'Bikash Thapa': { tier: 'Gold', mobile: '+977-984-567-8901', icon: '🥇' },
+                'Anita Rai': { tier: 'Silver', mobile: '+977-985-678-9012', icon: '🥈' },
+                'Kiran Bhandari': { tier: 'Bronze', mobile: '+977-986-789-0123', icon: '🥉' },
+                'Maya Devi': { tier: 'Gold', mobile: '+977-987-890-1234', icon: '🥇' }
             };
 
             const ordersData = [{
@@ -1391,7 +1590,8 @@
                 currentStageIndex: 13,
                 customerImage: 'https://picsum.photos/seed/cust1/400/300',
                 trackingNumber: 'TRK-2026-001234',
-                trackingUrl: 'https://track.dhl.com/TRK-2026-001234'
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001234',
+                address: 'Kathmandu, Nepal'
             }, {
                 id: 'MW202600045',
                 user: 'Sita Sharma',
@@ -1411,7 +1611,8 @@
                 comment: '',
                 currentStageIndex: 12,
                 trackingNumber: 'TRK-2026-001235',
-                trackingUrl: 'https://track.dhl.com/TRK-2026-001235'
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001235',
+                address: 'Pokhara, Nepal'
             }, {
                 id: 'MW202600078',
                 user: 'Ramesh Adhikari',
@@ -1431,7 +1632,8 @@
                 comment: 'Express delivery requested. Customer called and asked for rush.',
                 currentStageIndex: 11,
                 trackingNumber: 'TRK-2026-001236',
-                trackingUrl: 'https://track.dhl.com/TRK-2026-001236'
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001236',
+                address: 'Biratnagar, Nepal'
             }, {
                 id: 'MW202600092',
                 user: 'Priya Gurung',
@@ -1451,7 +1653,8 @@
                 comment: '',
                 currentStageIndex: 9,
                 trackingNumber: '',
-                trackingUrl: ''
+                trackingUrl: '',
+                address: 'Lalitpur, Nepal'
             }, {
                 id: 'MW202600115',
                 user: 'Bikash Thapa',
@@ -1472,7 +1675,8 @@
                 currentStageIndex: 10,
                 customerImage: 'https://picsum.photos/seed/cust2/400/300',
                 trackingNumber: '',
-                trackingUrl: ''
+                trackingUrl: '',
+                address: 'Butwal, Nepal'
             }, {
                 id: 'MW202600130',
                 user: 'Anita Rai',
@@ -1492,7 +1696,8 @@
                 comment: 'Waiting for quotation. Customer requested blue color.',
                 currentStageIndex: 0,
                 trackingNumber: '',
-                trackingUrl: ''
+                trackingUrl: '',
+                address: 'Dharan, Nepal'
             }, {
                 id: 'MW202600142',
                 user: 'Kiran Bhandari',
@@ -1512,7 +1717,8 @@
                 comment: 'Cancelled by customer. Refund initiated.',
                 currentStageIndex: 4,
                 trackingNumber: '',
-                trackingUrl: ''
+                trackingUrl: '',
+                address: 'Nepalgunj, Nepal'
             }, {
                 id: 'MW202600158',
                 user: 'Maya Devi',
@@ -1533,7 +1739,8 @@
                 currentStageIndex: 5,
                 customerImage: 'https://picsum.photos/seed/cust3/400/300',
                 trackingNumber: 'TRK-2026-001237',
-                trackingUrl: 'https://track.dhl.com/TRK-2026-001237'
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001237',
+                address: 'Janakpur, Nepal'
             }];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -1544,6 +1751,7 @@
             let activeTypeTab = 'all';
             let currentTrackingOrderId = null;
             let pendingCancelOrderId = null;
+            let selectedOrders = new Set();
 
             // ─── STATS ──────────────────────────────────────────────────────
             function updateStats() {
@@ -1567,8 +1775,22 @@
                 document.getElementById('statIndiaWH').textContent = indiaWH;
                 document.getElementById('statNepalWH').textContent = nepalWH;
                 document.getElementById('statDelayed').textContent = delayed;
-                // Revenue is static NPR 2.4M
             }
+
+            // ─── UPDATE STATUS ─────────────────────────────────────────────
+            window.updateOrderStatus = function(orderId, newStatus) {
+                if (!newStatus) return;
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) {
+                    showToast('❌', 'Order not found');
+                    return;
+                }
+                order.status = newStatus;
+                order.currentStageIndex = statusToIndexMap[newStatus] || order.currentStageIndex;
+                updateStats();
+                filterOrders();
+                showToast('✅', `Order ${orderId} updated to ${newStatus}`);
+            };
 
             // ─── HELPERS ────────────────────────────────────────────────────
             function getUserTier(userName) {
@@ -1589,12 +1811,17 @@
                     'Delivered': { bg: 'bg-green-100', text: 'text-green-700', dot: 'bg-green-500' },
                     'Shipped': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'bg-blue-500' },
                     'Arrived at Nepal Warehouse': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'bg-indigo-500' },
+                    'Arrived at Nepal WH': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'bg-indigo-500' },
+                    'Arrived at India Warehouse': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'bg-purple-500' },
+                    'Arrived at India WH': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'bg-purple-500' },
                     'Custom Clearance': { bg: 'bg-cyan-100', text: 'text-cyan-700', dot: 'bg-cyan-500' },
                     'Custom Hold': { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
                     'Incoming Shipment': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'bg-teal-500' },
                     'Order Created': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'bg-yellow-500' },
                     'Order Cancelled': { bg: 'bg-red-100', text: 'text-red-700', dot: 'bg-red-500' },
-                    'Arrived at India Warehouse': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'bg-purple-500' },
+                    'Order Approved': { bg: 'bg-lime-100', text: 'text-lime-700', dot: 'bg-lime-500' },
+                    'Wrong Product Received': { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'bg-orange-500' },
+                    'Return to Seller': { bg: 'bg-rose-100', text: 'text-rose-700', dot: 'bg-rose-500' },
                 };
                 return map[status] || { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'bg-gray-400' };
             }
@@ -1608,7 +1835,6 @@
                 return `<span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold ${map[type] || 'bg-gray-100 text-gray-700'}">${type}</span>`;
             }
 
-            // ─── SVG Icons for mobile actions ─────────────────────────────
             function getActionSVGs() {
                 return {
                     track: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>`,
@@ -1620,233 +1846,203 @@
                 };
             }
 
-            // ─── RENDER: DESKTOP TABLE ────────────────────────────────────
-            function renderDesktopTable(orders) {
-                const tbody = document.getElementById('tableBodyDesktop');
-                tbody.innerHTML = '';
-                if (orders.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="11" class="px-6 py-16 text-center text-gray-400"><svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg><p class="font-semibold">No orders found</p></td></tr>`;
-                    return;
-                }
-                orders.forEach(order => {
-                    const statusColor = getStatusColor(order.status);
-                    const typeBadge = getTypeBadge(order.type);
-                    const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
-                        'Custom Hold' ? 'status-pulse-red' : '');
-                    const hasComment = order.comment && order.comment.trim().length > 0;
-                    const tierData = getUserTier(order.user);
-                    const tierIcon = tierData.icon;
-                    const tierClass = tierData.tier.toLowerCase();
-                    const mobile = tierData.mobile;
+            // ─── SELECTION ──────────────────────────────────────────────────
+            function getCheckboxId(orderId, prefix) { return `cb_${prefix}_${orderId}`; }
 
-                    let verifyButton = '';
-                    if (order.type === 'Buy For Me') {
-                        verifyButton =
-                            `<button onclick="verifyPayment('${order.id}')" class="mt-1 text-xs bg-blue-500 text-white px-2 py-0.5 rounded hover:bg-blue-600">Verify Payment</button>`;
-                    }
-                    const pcts = calcPercentages(order.paymentSummary);
-
-                    const row = document.createElement('tr');
-                    row.className = 'order-row border-b border-gray-100';
-                    row.innerHTML = `
-                <td class="px-3 py-3 whitespace-nowrap relative overflow-visible">
-                  <div class="flex items-center gap-1">
-                    <button onclick="openTrackingModal('${order.id}')" class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100" title="Add Tracking Number"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg></button>
-                    <button onclick="openCancelModal('${order.id}')" class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100" title="Cancel Order"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-                    <button onclick="printShippingLabel('${order.id}')" class="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
-                    <button onclick="printInvoice('${order.id}')" class="p-1.5 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></button>
-                  </div>
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap">
-                  <button onclick="openCostModal('${order.id}')" class="inline-flex items-center gap-1 p-1.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100" title="Cost Calculation">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                    <span class="text-xs font-medium">View</span>
-                  </button>
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap overflow-visible" style="overflow: visible !important; position: relative;">
-                  <div class="product-img-wrapper">
-                    <img src="${order.productImage}" alt="Product" class="product-thumb" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><rect fill=%22%23e2e8f0%22 width=%2248%22 height=%2248%22 rx=%228%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 font-size=%2216%22 fill=%22%2394a3b8%22>📦</text></svg>'">
-                    <img src="${order.productImage}" alt="Product Zoom" class="product-img-zoom" loading="lazy" onerror="this.style.display='none'">
-                  </div>
-                  <div class="mt-1 text-xs text-gray-500 truncate max-w-[80px]">${order.productName}</div>
-                </td>
-                <td class="px-3 py-3 text-center font-semibold text-gray-700">${order.qty}</td>
-                <td class="px-3 py-3 text-xs text-gray-700 max-w-[200px]">
-                  <div><a href="${order.productLink}" target="_blank" class="text-primary hover:underline">${order.productName}</a></div>
-                  ${hasComment ? `<div class="mt-1"><span class="comment-trigger" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 30 ? order.comment.substring(0,30)+'…' : order.comment}</span></div>` : ''}
-                  ${order.trackingNumber ? `<div class="mt-1 text-[10px] text-blue-500">🔗 ${order.trackingNumber}</div>` : ''}
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap">
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')"><span class="w-1.5 h-1.5 rounded-full ${statusColor.dot}"></span>${order.status}</span>
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap text-xs text-gray-600">
-                  <div><span class="font-semibold">Order:</span> ${order.dateTime}</div>
-                  <div><span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}</div>
-                  <div><span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}</div>
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap">
-                  <div class="font-medium text-blue-700 cursor-pointer hover:underline" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</div>
-                  <div class="text-xs text-gray-400 flex items-center gap-1"><span class="tier-${tierClass}">${tierIcon}</span> ${mobile}</div>
-                </td>
-                <td class="px-3 py-3 whitespace-nowrap">
-                  <div class="flex items-center gap-2">
-                    ${typeBadge}
-                    ${order.type === 'Self Order' && order.customerImage ? `<button onclick="openCustomerImageModal('${order.customerImage}')" class="p-1 bg-gray-100 rounded-full hover:bg-gray-200" title="View customer image"><svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></button>` : ''}
-                  </div>
-                </td>
-                <td class="px-3 py-3 text-xs text-gray-600 max-w-[200px]">
-                  <div class="space-y-0.5">
-                    <div><span class="font-semibold">Total:</span> ${order.paymentSummary.total}</div>
-                    <div><span class="text-gray-400">Adv:</span> ${order.paymentSummary.advance} <span class="text-[10px] text-green-500">(${pcts.advPct}%)</span></div>
-                    <div><span class="text-gray-400">Gateway:</span> ${order.paymentSummary.gateway}</div>
-                    <div><span class="text-gray-400">COD:</span> ${order.paymentSummary.cod} <span class="text-[10px] text-orange-500">(${pcts.codPct}%)</span></div>
-                    ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="text-orange-600 font-medium">Extra COD: ${order.paymentSummary.extraCOD}</div>` : ''}
-                  </div>
-                </td>
-                <td class="px-3 py-3 text-right whitespace-nowrap">
-                  <div class="font-bold text-gray-800">${order.totalAmount}</div>
-                  <div class="text-[10px] text-gray-400">Gross: ${order.paymentSummary.gross}</div>
-                  <div class="text-[10px] text-green-600">Disc: ${order.paymentSummary.discount}</div>
-                  ${verifyButton}
-                </td>
-              `;
-                    tbody.appendChild(row);
-                });
+            function toggleOrderSelection(orderId, checked) {
+                if (checked) selectedOrders.add(orderId);
+                else selectedOrders.delete(orderId);
+                updateBulkActionsBar();
+                updateSelectAllState();
             }
 
-            // ─── RENDER: MOBILE CARDS ─────────────────────────────────────
-            function renderMobileCards(orders) {
-                const container = document.getElementById('mobileCardsContainer');
-                container.innerHTML = '';
-                if (orders.length === 0) {
-                    container.innerHTML =
-                        `<div class="text-center py-12 text-gray-400"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg><p class="font-semibold">No orders found</p></div>`;
-                    return;
-                }
-                const icons = getActionSVGs();
-                orders.forEach(order => {
-                    const statusColor = getStatusColor(order.status);
-                    const typeBadge = getTypeBadge(order.type);
-                    const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
-                        'Custom Hold' ? 'status-pulse-red' : '');
-                    const hasComment = order.comment && order.comment.trim().length > 0;
-                    const tierData = getUserTier(order.user);
-                    const tierIcon = tierData.icon;
-                    const tierClass = tierData.tier.toLowerCase();
-                    const mobile = tierData.mobile;
-                    const pcts = calcPercentages(order.paymentSummary);
-
-                    const waMsg = encodeURIComponent(
-                        `Hello, I have an order #${order.id} for product: ${order.productName}. Please check.`
-                    );
-                    const waLink = `https://wa.me/${mobile.replace(/[^0-9]/g, '')}?text=${waMsg}`;
-
-                    let verifyButton = '';
-                    if (order.type === 'Buy For Me') {
-                        verifyButton =
-                            `<button onclick="verifyPayment('${order.id}')" class="action-btn green-btn flex-1">${icons.verify} <span class="hidden xs:inline">Verify</span></button>`;
-                    }
-
-                    let customerImageBtn = '';
-                    if (order.type === 'Self Order' && order.customerImage) {
-                        customerImageBtn =
-                            `<button onclick="openCustomerImageModal('${order.customerImage}')" class="action-btn" title="Customer Image"><svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></button>`;
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = 'order-card';
-                    card.innerHTML = `
-                <div class="card-header">
-                  <span class="font-bold text-sm text-primary">${order.id}</span>
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <span class="status-badge ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')"><span class="w-1.5 h-1.5 rounded-full ${statusColor.dot} inline-block"></span> ${order.status}</span>
-                    <span class="type-badge ${typeBadge.replace(/^<span[^>]*>|<\/span>$/g, '').split(' ').filter(c => c.startsWith('bg-') || c.startsWith('text-') || c.startsWith('border-')).join(' ')}">${order.type}</span>
-                  </div>
-                </div>
-                <div class="card-body">
-                  <div class="product-section">
-                    <img src="${order.productImage}" alt="Product" class="product-img" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2252%22 height=%2252%22><rect fill=%22%23e2e8f0%22 width=%2252%22 height=%2252%22 rx=%228%22/><text x=%2226%22 y=%2230%22 text-anchor=%22middle%22 font-size=%2218%22 fill=%22%2394a3b8%22>📦</text></svg>'">
-                    <div class="product-info">
-                      <div class="name"><a href="${order.productLink}" target="_blank" class="text-primary hover:underline">${order.productName}</a></div>
-                      <div class="qty">QTY: ${order.qty}</div>
-                      ${order.trackingNumber ? `<div class="text-[10px] text-blue-500 mt-0.5">🔗 ${order.trackingNumber}</div>` : ''}
-                      ${hasComment ? `<div class="text-[10px] text-amber-500 mt-0.5"><span class="comment-trigger text-[10px]" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 40 ? order.comment.substring(0,40)+'…' : order.comment}</span></div>` : ''}
-                    </div>
-                    ${customerImageBtn}
-                  </div>
-                  <hr class="divider">
-                  <div class="card-row">
-                    <span class="label">👤 User</span>
-                    <span class="value flex items-center gap-1 flex-wrap">
-                      <span class="tier-${tierClass}">${tierIcon}</span> ${order.user}
-                      <span class="text-muted text-xs">${mobile}</span>
-                      <a href="${waLink}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">💬</a>
-                    </span>
-                  </div>
-                  <div class="card-row">
-                    <span class="label">📅 Dates</span>
-                    <span class="value text-xs">
-                      <span class="font-semibold">Order:</span> ${order.dateTime}<br>
-                      <span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}<br>
-                      <span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}
-                    </span>
-                  </div>
-                  <hr class="divider">
-                  <div class="card-row">
-                    <span class="label">💰 Payment</span>
-                    <span class="value text-xs">
-                      <div><span class="font-semibold">Total:</span> ${order.paymentSummary.total}</div>
-                      <div><span class="font-semibold text-green-600">Adv:</span> ${order.paymentSummary.advance} (${pcts.advPct}%) <span class="text-muted">|</span> <span class="font-semibold text-orange-600">COD:</span> ${order.paymentSummary.cod} (${pcts.codPct}%)</div>
-                      <div><span class="text-muted">Gateway:</span> ${order.paymentSummary.gateway}</div>
-                      <div><span class="text-muted">Gross:</span> ${order.paymentSummary.gross} <span class="text-muted">|</span> <span class="text-green-600">Disc:</span> ${order.paymentSummary.discount}</div>
-                      ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="text-orange-600 font-medium">Extra COD: ${order.paymentSummary.extraCOD}</div>` : ''}
-                    </span>
-                  </div>
-                  <div class="card-row">
-                    <span class="label">💵 Total</span>
-                    <span class="value font-bold text-primary">${order.totalAmount}</span>
-                  </div>
-                </div>
-                <div class="card-actions">
-                  <button onclick="openTrackingModal('${order.id}')" class="action-btn" title="Track">${icons.track} <span class="hidden xs:inline">Track</span></button>
-                  <button onclick="openCancelModal('${order.id}')" class="action-btn danger-btn" title="Cancel">${icons.cancel} <span class="hidden xs:inline">Cancel</span></button>
-                  <button onclick="printShippingLabel('${order.id}')" class="action-btn purple-btn" title="Label">${icons.label} <span class="hidden xs:inline">Label</span></button>
-                  <button onclick="printInvoice('${order.id}')" class="action-btn amber-btn" title="Invoice">${icons.invoice} <span class="hidden xs:inline">Invoice</span></button>
-                  <button onclick="openCostModal('${order.id}')" class="action-btn primary-btn" title="Cost">${icons.cost} <span class="hidden xs:inline">Cost</span></button>
-                  ${verifyButton}
-                </div>
-              `;
-                    container.appendChild(card);
-                });
+            function toggleSelectAll() {
+                const isChecked = document.getElementById('selectAllCheckbox').checked;
+                const visibleOrders = getVisibleOrders();
+                if (isChecked) visibleOrders.forEach(o => selectedOrders.add(o.id));
+                else visibleOrders.forEach(o => selectedOrders.delete(o.id));
+                updateAllCheckboxes();
+                updateBulkActionsBar();
+                updateSelectAllState();
             }
 
-            // ─── MAIN RENDER ───────────────────────────────────────────────
-            function renderPaginatedOrders() {
+            function toggleSelectAllDesktop() {
+                const isChecked = document.getElementById('selectAllDesktop').checked;
+                const visibleOrders = getVisibleOrders();
+                if (isChecked) visibleOrders.forEach(o => selectedOrders.add(o.id));
+                else visibleOrders.forEach(o => selectedOrders.delete(o.id));
+                updateAllCheckboxes();
+                updateBulkActionsBar();
+                updateSelectAllState();
+                const mobileSelectAll = document.getElementById('selectAllCheckbox');
+                if (mobileSelectAll) mobileSelectAll.checked = isChecked;
+            }
+
+            function getVisibleOrders() {
                 const start = (currentPage - 1) * pageSize;
                 const end = start + pageSize;
-                const pageOrders = filteredOrders.slice(start, end);
-                renderDesktopTable(pageOrders);
-                renderMobileCards(pageOrders);
-                updatePaginationControls();
-                document.getElementById('resultCount').textContent = `Showing ${pageOrders.length} of ${filteredOrders.length} orders`;
+                return filteredOrders.slice(start, end);
+            }
+
+            function updateAllCheckboxes() {
+                const visibleOrders = getVisibleOrders();
+                visibleOrders.forEach(o => {
+                    const desktopCb = document.getElementById(getCheckboxId(o.id, 'desktop'));
+                    if (desktopCb) desktopCb.checked = selectedOrders.has(o.id);
+                    const mobileCb = document.getElementById(getCheckboxId(o.id, 'mobile'));
+                    if (mobileCb) mobileCb.checked = selectedOrders.has(o.id);
+                });
+            }
+
+            function updateSelectAllState() {
+                const visibleOrders = getVisibleOrders();
+                const allSelected = visibleOrders.length > 0 && visibleOrders.every(o => selectedOrders.has(o.id));
+                const someSelected = visibleOrders.some(o => selectedOrders.has(o.id));
+                const desktopSelectAll = document.getElementById('selectAllDesktop');
+                const mobileSelectAll = document.getElementById('selectAllCheckbox');
+                if (desktopSelectAll) { desktopSelectAll.checked = allSelected;
+                    desktopSelectAll.indeterminate = someSelected && !allSelected; }
+                if (mobileSelectAll) { mobileSelectAll.checked = allSelected;
+                    mobileSelectAll.indeterminate = someSelected && !allSelected; }
+            }
+
+            function updateBulkActionsBar() {
+                const bar = document.getElementById('bulkActionsBar');
+                const countEl = document.getElementById('selectedCount');
+                const count = selectedOrders.size;
+                if (count > 0) { bar.classList.add('visible');
+                    countEl.textContent = `${count} selected`; } else bar.classList.remove('visible');
+            }
+
+            function clearAllSelections() {
+                selectedOrders.clear();
+                updateAllCheckboxes();
+                updateBulkActionsBar();
+                updateSelectAllState();
+                showToast('🔄', 'All selections cleared');
+            }
+
+            // ─── BULK LABEL / INVOICE ──────────────────────────────────────
+            function generateBulkShippingLabel() {
+                if (selectedOrders.size === 0) { showToast('⚠️', 'Please select at least one order'); return; }
+                const selectedOrderData = ordersData.filter(o => selectedOrders.has(o.id));
+                const waybill = document.getElementById('bulkWaybillInput').value.trim() || 'N/A';
+                document.getElementById('bulkModalTitle').textContent = '📦 Bulk Shipping Label';
+                let html = `
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500">Generating consolidated shipping label for <strong>${selectedOrderData.length}</strong> order(s)</p>
+                        <p class="text-sm text-gray-500 mt-1">Waybill / Reference: <strong>${waybill}</strong></p>
+                    </div>
+                    <div class="label-preview">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-bold text-primary">MeroLogix</h4>
+                            <p class="text-sm text-gray-500">Consolidated Shipping Label</p>
+                            <p class="text-xs text-gray-400">Generated: ${new Date().toLocaleString()}</p>
+                            <p class="text-xs text-gray-400">Waybill: ${waybill}</p>
+                        </div>
+                        <div class="label-row"><span class="lbl">Total Orders</span><span class="val">${selectedOrderData.length}</span></div>
+                        <div class="label-row"><span class="lbl">Total Items</span><span class="val">${selectedOrderData.reduce((sum, o) => sum + o.qty, 0)}</span></div>
+                        <div class="label-row"><span class="lbl">Total Weight</span><span class="val">${selectedOrderData.reduce((sum, o) => sum + parseFloat(o.paymentSummary.approxWeight), 0).toFixed(2)} KG</span></div>
+                        <div class="label-row"><span class="lbl">Total Value</span><span class="val">NPR ${selectedOrderData.reduce((sum, o) => sum + parseFloat(o.totalAmount.replace(/[^0-9.]/g, '')), 0).toFixed(2)}</span></div>
+                        <div class="mt-3 pt-3 border-t border-gray-300">
+                            <p class="font-semibold text-sm mb-2">📦 Order Details:</p>
+                            ${selectedOrderData.map(o => `<div class="text-sm py-1 border-b border-gray-100 flex justify-between"><span>${o.id} - ${o.productName}</span><span class="text-gray-500">${o.qty} × ${o.totalAmount}</span></div>`).join('')}
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-300">
+                            <p class="font-semibold text-sm mb-2">📍 Delivery Addresses:</p>
+                            ${selectedOrderData.map(o => `<div class="text-sm py-1 border-b border-gray-100"><span class="font-medium">${o.user}:</span> ${o.address || 'Address not specified'}</div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-5">
+                        <button onclick="printBulkLabel()" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">🖨️ Print Label</button>
+                        <button onclick="closeBulkLabelModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+                    </div>
+                `;
+                document.getElementById('bulkLabelContent').innerHTML = html;
+                document.getElementById('bulkLabelModal').classList.add('flex');
+                document.getElementById('bulkLabelModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function generateBulkInvoice() {
+                if (selectedOrders.size === 0) { showToast('⚠️', 'Please select at least one order'); return; }
+                const selectedOrderData = ordersData.filter(o => selectedOrders.has(o.id));
+                const waybill = document.getElementById('bulkWaybillInput').value.trim() || 'N/A';
+                document.getElementById('bulkModalTitle').textContent = '🧾 Bulk Invoice';
+                let html = `
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500">Generating consolidated invoice for <strong>${selectedOrderData.length}</strong> order(s)</p>
+                        <p class="text-sm text-gray-500 mt-1">Invoice Reference: <strong>${waybill}</strong></p>
+                    </div>
+                    <div class="label-preview">
+                        <div class="text-center mb-4">
+                            <h4 class="text-lg font-bold text-primary">MeroLogix</h4>
+                            <p class="text-sm text-gray-500">Consolidated Invoice</p>
+                            <p class="text-xs text-gray-400">Generated: ${new Date().toLocaleString()}</p>
+                            <p class="text-xs text-gray-400">Invoice #: ${waybill}</p>
+                        </div>
+                        <div class="label-row"><span class="lbl">Total Orders</span><span class="val">${selectedOrderData.length}</span></div>
+                        <div class="label-row"><span class="lbl">Total Items</span><span class="val">${selectedOrderData.reduce((sum, o) => sum + o.qty, 0)}</span></div>
+                        <div class="label-row"><span class="lbl">Total Amount</span><span class="val">NPR ${selectedOrderData.reduce((sum, o) => sum + parseFloat(o.totalAmount.replace(/[^0-9.]/g, '')), 0).toFixed(2)}</span></div>
+                        <div class="mt-3 pt-3 border-t border-gray-300">
+                            <p class="font-semibold text-sm mb-2">📋 Order Items:</p>
+                            ${selectedOrderData.map(o => `
+                                <div class="text-sm py-1 border-b border-gray-100">
+                                    <div class="flex justify-between"><span>${o.id} - ${o.productName}</span><span>${o.qty} × ${o.totalAmount}</span></div>
+                                    <div class="text-xs text-gray-400 flex justify-between"><span>${o.user} (${o.paymentSummary.gateway})</span><span>${o.paymentSummary.total}</span></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-300">
+                            <div class="flex justify-between font-bold text-base"><span>Grand Total</span><span>NPR ${selectedOrderData.reduce((sum, o) => sum + parseFloat(o.totalAmount.replace(/[^0-9.]/g, '')), 0).toFixed(2)}</span></div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-5">
+                        <button onclick="printBulkInvoice()" class="flex-1 bg-green-600 text-white py-2.5 rounded-xl font-semibold hover:bg-green-700 transition-colors">🖨️ Print Invoice</button>
+                        <button onclick="closeBulkLabelModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+                    </div>
+                `;
+                document.getElementById('bulkLabelContent').innerHTML = html;
+                document.getElementById('bulkLabelModal').classList.add('flex');
+                document.getElementById('bulkLabelModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function printBulkLabel() {
+                const content = document.getElementById('bulkLabelContent');
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                printWindow.document.write(
+                    `<html><head><title>Bulk Shipping Label</title><style>body{font-family:Arial,sans-serif;padding:30px}.label{max-width:700px;margin:0 auto;border:2px solid #000;padding:20px}.header{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:15px}.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:none}.lbl{font-weight:600}.order-item{padding:4px 0;border-bottom:1px solid #f0f0f0}.mt-2{margin-top:10px}.text-center{text-align:center}@media print{body{padding:10px}.no-print{display:none}}</style></head><body><div class="label">${content.innerHTML}<div class="text-center mt-4 text-gray-400 text-xs no-print"><button onclick="window.print()" style="padding:8px 20px;background:#4F46E5;color:#fff;border:none;border-radius:8px;cursor:pointer;">Print</button></div></div></body></html>`
+                );
+                printWindow.document.close();
+                setTimeout(() => { printWindow.print(); }, 500);
+            }
+
+            function printBulkInvoice() {
+                const content = document.getElementById('bulkLabelContent');
+                const printWindow = window.open('', '_blank', 'width=800,height=600');
+                printWindow.document.write(
+                    `<html><head><title>Bulk Invoice</title><style>body{font-family:Arial,sans-serif;padding:30px}.label{max-width:700px;margin:0 auto;border:2px solid #000;padding:20px}.header{text-align:center;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:15px}.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:none}.lbl{font-weight:600}.order-item{padding:4px 0;border-bottom:1px solid #f0f0f0}.mt-2{margin-top:10px}.text-center{text-align:center}@media print{body{padding:10px}.no-print{display:none}}</style></head><body><div class="label">${content.innerHTML}<div class="text-center mt-4 text-gray-400 text-xs no-print"><button onclick="window.print()" style="padding:8px 20px;background:#059669;color:#fff;border:none;border-radius:8px;cursor:pointer;">Print</button></div></div></body></html>`
+                );
+                printWindow.document.close();
+                setTimeout(() => { printWindow.print(); }, 500);
+            }
+
+            function closeBulkLabelModal() {
+                document.getElementById('bulkLabelModal').classList.add('hidden');
+                document.body.style.overflow = '';
             }
 
             // ─── FILTERS ────────────────────────────────────────────────────
             function applyAllFilters() {
                 let base = [...ordersData];
-                if (activeStatusTab !== 'all') {
-                    base = base.filter(o => o.status === activeStatusTab);
-                }
-                if (activeTypeTab !== 'all') {
-                    base = base.filter(o => o.type === activeTypeTab);
-                }
+                if (activeStatusTab !== 'all') base = base.filter(o => o.status === activeStatusTab);
+                if (activeTypeTab !== 'all') base = base.filter(o => o.type === activeTypeTab);
                 const dateFrom = document.getElementById('filterDateFrom').value;
                 const dateTo = document.getElementById('filterDateTo').value;
                 const searchTerm = document.getElementById('searchInput').value.toLowerCase();
                 const universalTerm = document.getElementById('universalSearchInput').value.toLowerCase();
                 const combinedTerm = searchTerm || universalTerm;
-
                 base = base.filter(order => {
                     if (dateFrom && new Date(dateFrom) > new Date(order.dateTime)) return false;
                     if (dateTo && new Date(dateTo + 'T23:59:59') < new Date(order.dateTime)) return false;
@@ -1865,18 +2061,15 @@
                 filteredOrders = base;
             }
 
-            function filterOrders() {
-                applyAllFilters();
+            function filterOrders() { applyAllFilters();
                 currentPage = 1;
                 renderPaginatedOrders();
-                updateActiveFilters();
-            }
+                updateActiveFilters(); }
 
             function filterByStatusTab(status) {
                 activeStatusTab = status;
-                document.querySelectorAll('#statusTabsContainer .status-tab').forEach(tab => {
-                    tab.classList.toggle('active', tab.dataset.status === status);
-                });
+                document.querySelectorAll('#statusTabsContainer .status-tab').forEach(tab => tab.classList.toggle('active',
+                    tab.dataset.status === status));
                 filterOrders();
             }
 
@@ -1898,6 +2091,26 @@
             function filterByUser(username) {
                 document.getElementById('searchInput').value = username;
                 filterOrders();
+            }
+
+            function filterByUserAndStatus(username, status) {
+                document.getElementById('searchInput').value = username;
+                activeStatusTab = 'all';
+                document.querySelectorAll('#statusTabsContainer .status-tab').forEach(tab => tab.classList.toggle(
+                    'active', tab.dataset.status === 'all'));
+                let base = ordersData.filter(o => o.user === username && o.status === status);
+                const dateFrom = document.getElementById('filterDateFrom').value;
+                const dateTo = document.getElementById('filterDateTo').value;
+                base = base.filter(order => {
+                    if (dateFrom && new Date(dateFrom) > new Date(order.dateTime)) return false;
+                    if (dateTo && new Date(dateTo + 'T23:59:59') < new Date(order.dateTime)) return false;
+                    return true;
+                });
+                filteredOrders = base;
+                currentPage = 1;
+                renderPaginatedOrders();
+                updateActiveFilters();
+                showToast('🔍', `Showing ${status} orders for ${username}`);
             }
 
             function updateActiveFilters() {
@@ -1960,12 +2173,270 @@
                 });
             }
 
-            // ─── VERIFY PAYMENT ─────────────────────────────────────────────
-            function verifyPayment(orderId) {
-                showToast('💳', `Payment verification initiated for order ${orderId}`);
+            // ─── RENDER ──────────────────────────────────────────────────────
+            function renderPaginatedOrders() {
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                const pageOrders = filteredOrders.slice(start, end);
+                renderDesktopTable(pageOrders);
+                renderMobileCards(pageOrders);
+                updatePaginationControls();
+                document.getElementById('resultCount').textContent = `Showing ${pageOrders.length} of ${filteredOrders.length} orders`;
+                updateBulkActionsBar();
+                updateSelectAllState();
             }
 
-            // ─── TIMELINE MODAL ────────────────────────────────────────────
+            function renderDesktopTable(orders) {
+                const tbody = document.getElementById('tableBodyDesktop');
+                tbody.innerHTML = '';
+                if (orders.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="12" class="px-6 py-16 text-center text-gray-400"><svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg><p class="font-semibold">No orders found</p></td></tr>`;
+                    return;
+                }
+                orders.forEach(order => {
+                    const statusColor = getStatusColor(order.status);
+                    const typeBadge = getTypeBadge(order.type);
+                    const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
+                        'Custom Hold' ? 'status-pulse-red' : '');
+                    const hasComment = order.comment && order.comment.trim().length > 0;
+                    const tierData = getUserTier(order.user);
+                    const tierIcon = tierData.icon;
+                    const tierClass = tierData.tier.toLowerCase();
+                    const mobile = tierData.mobile;
+                    const isSelected = selectedOrders.has(order.id);
+
+                    const userArrivals = ordersData.filter(o => o.user === order.user && (o.status === 'Arrived at Nepal Warehouse' ||
+                        o.status === 'Arrived at Nepal WH'));
+                    const arrivalCount = userArrivals.length;
+
+                    let verifyButton = '';
+                    if (order.type === 'Buy For Me') {
+                        verifyButton =
+                            `<button onclick="verifyPayment('${order.id}')" class="mt-1 text-xs bg-blue-500 text-white px-2 py-0.5 rounded hover:bg-blue-600">Verify Payment</button>`;
+                    }
+                    const pcts = calcPercentages(order.paymentSummary);
+                    const statusOptions = statusUpdateOptions.map(s =>
+                        `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+
+                    const row = document.createElement('tr');
+                    row.className = 'order-row border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="px-3 py-3 text-center">
+                            <input type="checkbox" id="${getCheckboxId(order.id, 'desktop')}" 
+                                   ${isSelected ? 'checked' : ''} 
+                                   onchange="toggleOrderSelection('${order.id}', this.checked)" 
+                                   class="w-4 h-4 accent-primary-600 cursor-pointer" />
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap relative overflow-visible">
+                            <div class="flex items-center gap-1">
+                                <button onclick="openTrackingModal('${order.id}')" class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100" title="Add Tracking Number"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg></button>
+                                <button onclick="openCancelModal('${order.id}')" class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100" title="Cancel Order"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                <button onclick="printShippingLabel('${order.id}')" class="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
+                                <button onclick="printInvoice('${order.id}')" class="p-1.5 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></button>
+                            </div>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap">
+                            <button onclick="openCostModal('${order.id}')" class="inline-flex items-center gap-1 p-1.5 bg-emerald-50 text-emerald-600 rounded-lg hover:bg-emerald-100" title="Cost Calculation">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                <span class="text-xs font-medium">View</span>
+                            </button>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap overflow-visible" style="overflow: visible !important; position: relative;">
+                            <div class="product-img-wrapper">
+                                <img src="${order.productImage}" alt="Product" class="product-thumb" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2248%22 height=%2248%22><rect fill=%22%23e2e8f0%22 width=%2248%22 height=%2248%22 rx=%228%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 font-size=%2216%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                                <img src="${order.productImage}" alt="Product Zoom" class="product-img-zoom" loading="lazy" onerror="this.style.display='none'">
+                            </div>
+                            <div class="mt-1 text-xs text-gray-500 truncate max-w-[80px]">${order.productName}</div>
+                        </td>
+                        <td class="px-3 py-3 text-center">
+                            <div class="font-semibold text-gray-700">${order.qty}</div>
+                            <div class="text-[10px] text-gray-400">${order.paymentSummary.invoiceValue}</div>
+                        </td>
+                        <td class="px-3 py-3 text-xs text-gray-700 max-w-[200px]">
+                            <div><a href="${order.productLink}" target="_blank" class="text-primary hover:underline">${order.productName}</a></div>
+                            ${hasComment ? `<div class="mt-1"><span class="comment-trigger" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 30 ? order.comment.substring(0,30)+'…' : order.comment}</span></div>` : ''}
+                            ${order.trackingNumber ? `<div class="mt-1 text-[10px] text-blue-500">🔗 ${order.trackingNumber}</div>` : ''}
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap">
+                            <div class="flex flex-col items-start gap-1">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
+                                    <span class="w-1.5 h-1.5 rounded-full ${statusColor.dot}"></span>${order.status}
+                                </span>
+                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-[11px] border border-gray-300 rounded px-1.5 py-0.5 bg-white hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors w-full max-w-[130px]">
+                                    <option value="">Move to...</option>
+                                    ${statusOptions}
+                                </select>
+                            </div>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap text-xs text-gray-600">
+                            <div><span class="font-semibold">Order:</span> ${order.dateTime}</div>
+                            <div><span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}</div>
+                            <div><span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}</div>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap">
+                            <div class="font-medium text-blue-700 cursor-pointer hover:underline" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</div>
+                            <div class="text-xs text-gray-400 flex items-center gap-1 flex-wrap">
+                                <span class="tier-${tierClass}">${tierIcon}</span> ${mobile}
+                                ${arrivalCount > 0 ? `<span class="arrival-count" onclick="filterByUserAndStatus('${order.user.replace(/'/g, "\\'")}', 'Arrived at Nepal WH')"><span class="count-num">${arrivalCount}</span> at Nepal WH</span>` : ''}
+                            </div>
+                        </td>
+                        <td class="px-3 py-3 whitespace-nowrap">
+                            <div class="flex items-center gap-2">
+                                ${typeBadge}
+                                ${order.type === 'Self Order' && order.customerImage ? `<button onclick="openCustomerImageModal('${order.customerImage}')" class="p-1 bg-gray-100 rounded-full hover:bg-gray-200" title="View customer image"><svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></button>` : ''}
+                            </div>
+                        </td>
+                        <td class="px-3 py-3 text-xs text-gray-600 max-w-[200px]">
+                            <div class="space-y-0.5">
+                                <div><span class="font-semibold">Total:</span> ${order.paymentSummary.total}</div>
+                                <div><span class="text-gray-400">Adv:</span> ${order.paymentSummary.advance} <span class="text-[10px] text-green-500">(${pcts.advPct}%)</span></div>
+                                <div><span class="text-gray-400">Gateway:</span> ${order.paymentSummary.gateway}</div>
+                                <div><span class="text-gray-400">COD:</span> ${order.paymentSummary.cod} <span class="text-[10px] text-orange-500">(${pcts.codPct}%)</span></div>
+                                ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="text-orange-600 font-medium">Extra COD: ${order.paymentSummary.extraCOD}</div>` : ''}
+                            </div>
+                        </td>
+                        <td class="px-3 py-3 text-right whitespace-nowrap">
+                            <div class="font-bold text-gray-800">${order.totalAmount}</div>
+                            <div class="text-[10px] text-gray-400">Gross: ${order.paymentSummary.gross}</div>
+                            <div class="text-[10px] text-green-600">Disc: ${order.paymentSummary.discount}</div>
+                            ${verifyButton}
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            function renderMobileCards(orders) {
+                const container = document.getElementById('mobileCardsContainer');
+                container.innerHTML = '';
+                if (orders.length === 0) {
+                    container.innerHTML =
+                        `<div class="text-center py-12 text-gray-400"><svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg><p class="font-semibold">No orders found</p></div>`;
+                    return;
+                }
+                const icons = getActionSVGs();
+                orders.forEach(order => {
+                    const statusColor = getStatusColor(order.status);
+                    const typeBadge = getTypeBadge(order.type);
+                    const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
+                        'Custom Hold' ? 'status-pulse-red' : '');
+                    const hasComment = order.comment && order.comment.trim().length > 0;
+                    const tierData = getUserTier(order.user);
+                    const tierIcon = tierData.icon;
+                    const tierClass = tierData.tier.toLowerCase();
+                    const mobile = tierData.mobile;
+                    const pcts = calcPercentages(order.paymentSummary);
+                    const isSelected = selectedOrders.has(order.id);
+                    const userArrivals = ordersData.filter(o => o.user === order.user && (o.status === 'Arrived at Nepal Warehouse' ||
+                        o.status === 'Arrived at Nepal WH'));
+                    const arrivalCount = userArrivals.length;
+
+                    const waMsg = encodeURIComponent(
+                        `Hello, I have an order #${order.id} for product: ${order.productName}. Please check.`);
+                    const waLink = `https://wa.me/${mobile.replace(/[^0-9]/g, '')}?text=${waMsg}`;
+
+                    let verifyButton = '';
+                    if (order.type === 'Buy For Me') {
+                        verifyButton =
+                            `<button onclick="verifyPayment('${order.id}')" class="action-btn green-btn flex-1">${icons.verify} <span class="hidden xs:inline">Verify</span></button>`;
+                    }
+                    let customerImageBtn = '';
+                    if (order.type === 'Self Order' && order.customerImage) {
+                        customerImageBtn =
+                            `<button onclick="openCustomerImageModal('${order.customerImage}')" class="action-btn" title="Customer Image"><svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></button>`;
+                    }
+                    const statusOptions = statusUpdateOptions.map(s =>
+                        `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
+                    ).join('');
+
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="${getCheckboxId(order.id, 'mobile')}" 
+                                       ${isSelected ? 'checked' : ''} 
+                                       onchange="toggleOrderSelection('${order.id}', this.checked)" 
+                                       class="w-5 h-5 accent-primary-600 cursor-pointer flex-shrink-0" />
+                                <span class="font-bold text-sm text-primary">${order.id}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="status-badge ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
+                                    <span class="w-1.5 h-1.5 rounded-full ${statusColor.dot} inline-block"></span> ${order.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="product-section">
+                                <img src="${order.productImage}" alt="Product" class="product-img" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2252%22 height=%2252%22><rect fill=%22%23e2e8f0%22 width=%2252%22 height=%2252%22 rx=%228%22/><text x=%2226%22 y=%2230%22 text-anchor=%22middle%22 font-size=%2218%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                                <div class="product-info">
+                                    <div class="name"><a href="${order.productLink}" target="_blank" class="text-primary hover:underline">${order.productName}</a></div>
+                                    <div class="qty">QTY: ${order.qty}</div>
+                                    <div class="text-[10px] text-gray-400">${order.paymentSummary.invoiceValue}</div>
+                                    ${order.trackingNumber ? `<div class="text-[10px] text-blue-500 mt-0.5">🔗 ${order.trackingNumber}</div>` : ''}
+                                    ${hasComment ? `<div class="text-[10px] text-amber-500 mt-0.5"><span class="comment-trigger text-[10px]" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 40 ? order.comment.substring(0,40)+'…' : order.comment}</span></div>` : ''}
+                                </div>
+                                ${customerImageBtn}
+                            </div>
+                            <div class="flex items-center gap-2 w-full mt-1">
+                                <span class="text-[10px] font-semibold text-gray-400 uppercase">Status:</span>
+                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="status-select flex-1">
+                                    <option value="">Move to...</option>
+                                    ${statusOptions}
+                                </select>
+                            </div>
+                            <hr class="divider">
+                            <div class="card-row">
+                                <span class="label">👤 User</span>
+                                <span class="value flex items-center gap-1 flex-wrap">
+                                    <span class="tier-${tierClass}">${tierIcon}</span> ${order.user}
+                                    <span class="text-muted text-xs">${mobile}</span>
+                                    <a href="${waLink}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">💬</a>
+                                    ${arrivalCount > 0 ? `<span class="arrival-count" onclick="filterByUserAndStatus('${order.user.replace(/'/g, "\\'")}', 'Arrived at Nepal WH')"><span class="count-num">${arrivalCount}</span> at Nepal WH</span>` : ''}
+                                </span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">📅 Dates</span>
+                                <span class="value text-xs">
+                                    <span class="font-semibold">Order:</span> ${order.dateTime}<br>
+                                    <span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}<br>
+                                    <span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}
+                                </span>
+                            </div>
+                            <hr class="divider">
+                            <div class="card-row">
+                                <span class="label">💰 Payment</span>
+                                <span class="value text-xs">
+                                    <div><span class="font-semibold">Total:</span> ${order.paymentSummary.total}</div>
+                                    <div><span class="font-semibold text-green-600">Adv:</span> ${order.paymentSummary.advance} (${pcts.advPct}%) <span class="text-muted">|</span> <span class="font-semibold text-orange-600">COD:</span> ${order.paymentSummary.cod} (${pcts.codPct}%)</div>
+                                    <div><span class="text-muted">Gateway:</span> ${order.paymentSummary.gateway}</div>
+                                    <div><span class="text-muted">Gross:</span> ${order.paymentSummary.gross} <span class="text-muted">|</span> <span class="text-green-600">Disc:</span> ${order.paymentSummary.discount}</div>
+                                    ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="text-orange-600 font-medium">Extra COD: ${order.paymentSummary.extraCOD}</div>` : ''}
+                                </span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">💵 Total</span>
+                                <span class="value font-bold text-primary">${order.totalAmount}</span>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button onclick="openTrackingModal('${order.id}')" class="action-btn" title="Track">${icons.track} <span class="hidden xs:inline">Track</span></button>
+                            <button onclick="openCancelModal('${order.id}')" class="action-btn danger-btn" title="Cancel">${icons.cancel} <span class="hidden xs:inline">Cancel</span></button>
+                            <button onclick="printShippingLabel('${order.id}')" class="action-btn purple-btn" title="Label">${icons.label} <span class="hidden xs:inline">Label</span></button>
+                            <button onclick="printInvoice('${order.id}')" class="action-btn amber-btn" title="Invoice">${icons.invoice} <span class="hidden xs:inline">Invoice</span></button>
+                            <button onclick="openCostModal('${order.id}')" class="action-btn primary-btn" title="Cost">${icons.cost} <span class="hidden xs:inline">Cost</span></button>
+                            ${verifyButton}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // ─── MODAL FUNCTIONS ─────────────────────────────────────────────
+            function verifyPayment(orderId) { showToast('💳', `Payment verification initiated for order ${orderId}`); }
+
             function openTimelineModal(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) return;
@@ -1977,9 +2448,7 @@
                         `| <a href="${order.trackingUrl}" target="_blank" class="timeline-track-link">🔗 Track: ${order.trackingNumber}</a>`;
                 } else if (order.trackingNumber) {
                     linkEl.innerHTML = `| <span class="text-gray-400 text-sm">Track: ${order.trackingNumber}</span>`;
-                } else {
-                    linkEl.innerHTML = '';
-                }
+                } else linkEl.innerHTML = '';
                 const container = document.getElementById('timelineContainer');
                 container.innerHTML = '';
                 allTrackingStages.forEach((stage, idx) => {
@@ -2002,11 +2471,11 @@
                     }
                     const isLast = idx === allTrackingStages.length - 1;
                     container.innerHTML += `
-                <div class="relative flex items-start gap-4 pb-5">
-                  <div class="timeline-connector ${lineClass}" style="top:28px;left:15px;width:2px;${isLast ? 'bottom:auto;height:28px;' : 'bottom:-10px;'}"></div>
-                  <div class="relative z-10 flex-shrink-0 w-8 h-8 rounded-full ${dotClass} flex items-center justify-center text-xs font-bold">${icon || idx+1}</div>
-                  <div class="flex-1 min-w-0 pt-1"><p class="text-sm ${textClass}">${stage}</p>${isCurrent ? '<p class="text-[10px] text-blue-500 mt-0.5">📍 Current Stage</p>' : ''}</div>
-                </div>`;
+                        <div class="relative flex items-start gap-4 pb-5">
+                            <div class="timeline-connector ${lineClass}" style="top:28px;left:15px;width:2px;${isLast ? 'bottom:auto;height:28px;' : 'bottom:-10px;'}"></div>
+                            <div class="relative z-10 flex-shrink-0 w-8 h-8 rounded-full ${dotClass} flex items-center justify-center text-xs font-bold">${icon || idx+1}</div>
+                            <div class="flex-1 min-w-0 pt-1"><p class="text-sm ${textClass}">${stage}</p>${isCurrent ? '<p class="text-[10px] text-blue-500 mt-0.5">📍 Current Stage</p>' : ''}</div>
+                        </div>`;
                 });
                 document.getElementById('timelineModal').classList.add('flex');
                 document.getElementById('timelineModal').classList.remove('hidden');
@@ -2018,7 +2487,6 @@
                 document.body.style.overflow = '';
             }
 
-            // ─── TRACKING ───────────────────────────────────────────────────
             function openTrackingModal(orderId) {
                 currentTrackingOrderId = orderId;
                 const order = ordersData.find(o => o.id === orderId);
@@ -2051,12 +2519,9 @@
                     showToast('✅', `Tracking number saved for ${currentTrackingOrderId}`);
                     closeTrackingModal();
                     renderPaginatedOrders();
-                } else {
-                    showToast('❌', 'Order not found');
-                }
+                } else showToast('❌', 'Order not found');
             }
 
-            // ─── COMMENTS ───────────────────────────────────────────────────
             function openCommentsModal(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) return;
@@ -2072,7 +2537,6 @@
                 document.body.style.overflow = '';
             }
 
-            // ─── CANCEL ─────────────────────────────────────────────────────
             function openCancelModal(orderId) {
                 pendingCancelOrderId = orderId;
                 document.getElementById('cancelOrderId').textContent = `#${orderId}`;
@@ -2102,69 +2566,66 @@
                 filterOrders();
             }
 
-            // ─── COST MODAL ─────────────────────────────────────────────────
             function openCostModal(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) return;
                 const html = `
-              <div class="cost-modal-body">
-                <div class="flex justify-between items-center mb-4">
-                  <div>
-                    <div><span class="text-sm text-gray-500">Product:</span> <span class="font-semibold text-primary">${order.productName}</span></div>
-                    <div><span class="text-sm text-gray-500">Order:</span> <span class="font-semibold text-primary">${order.id}</span></div>
-                  </div>
-                  <div class="flex gap-2">
-                    <button onclick="closeCostModal()" class="px-4 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-300">Close</button>
-                    <button onclick="updateEstimate()" class="px-4 py-1.5 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primaryDark">Update</button>
-                  </div>
-                </div>
-                <div class="form-grid">
-                  <div class="field"><label>Product Name</label><input type="text" value="${order.productName}" id="costProductName" /></div>
-                  <div class="field"><label>Category</label><select id="costCategory"><option selected>Clothings & Accessories</option><option>Electronics</option><option>Home & Living</option></select></div>
-                  <div class="field"><label>SubCategory</label><select id="costSubcategory"><option selected>Underwear & Sleepwear</option><option>Shirts</option><option>Pants</option></select></div>
-                  <div class="field"><label>Price (INR)</label><div class="relative"><input type="number" value="545" id="costProductPrice" class="pr-12" /><span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">INR</span></div></div>
-                  <div class="field"><label>Weight (KG)</label><input type="number" step="0.01" value="0.2" id="costWeight" /></div>
-                  <div class="field"><label>Quantity</label><input type="number" value="${order.qty}" id="costQuantity" min="1" /></div>
-                  <div class="field"><label>User Comment</label><input type="text" value="${order.comment || ''}" id="costUserComment" /></div>
-                  <div class="field"><label>ETA Date</label><input type="date" value="${order.etaDeliveryDate || ''}" id="costArrivalDate" /></div>
-                  <div class="field full-width">
-                    <label>Dimensions (CM)</label>
-                    <div class="dimensions-row">
-                      <div class="dim-field"><label>W</label><input type="number" step="0.1" value="0.5" id="costDimWidth" /></div>
-                      <div class="dim-field"><label>H</label><input type="number" step="0.1" value="38.1" id="costDimHeight" /></div>
-                      <div class="dim-field"><label>L</label><input type="number" step="0.1" value="27.9" id="costDimLength" /></div>
+                    <div class="cost-modal-body">
+                        <div class="flex justify-between items-center mb-4">
+                            <div><div><span class="text-sm text-gray-500">Product:</span> <span class="font-semibold text-primary">${order.productName}</span></div>
+                            <div><span class="text-sm text-gray-500">Order:</span> <span class="font-semibold text-primary">${order.id}</span></div></div>
+                            <div class="flex gap-2">
+                                <button onclick="closeCostModal()" class="px-4 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-sm font-semibold hover:bg-gray-300">Close</button>
+                                <button onclick="updateEstimate()" class="px-4 py-1.5 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primaryDark">Update</button>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="field"><label>Product Name</label><input type="text" value="${order.productName}" id="costProductName" /></div>
+                            <div class="field"><label>Category</label><select id="costCategory"><option selected>Clothings & Accessories</option><option>Electronics</option><option>Home & Living</option></select></div>
+                            <div class="field"><label>SubCategory</label><select id="costSubcategory"><option selected>Underwear & Sleepwear</option><option>Shirts</option><option>Pants</option></select></div>
+                            <div class="field"><label>Price (INR)</label><div class="relative"><input type="number" value="545" id="costProductPrice" class="pr-12" /><span class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">INR</span></div></div>
+                            <div class="field"><label>Weight (KG)</label><input type="number" step="0.01" value="0.2" id="costWeight" /></div>
+                            <div class="field"><label>Quantity</label><input type="number" value="${order.qty}" id="costQuantity" min="1" /></div>
+                            <div class="field"><label>User Comment</label><input type="text" value="${order.comment || ''}" id="costUserComment" /></div>
+                            <div class="field"><label>ETA Date</label><input type="date" value="${order.etaDeliveryDate || ''}" id="costArrivalDate" /></div>
+                            <div class="field full-width">
+                                <label>Dimensions (CM)</label>
+                                <div class="dimensions-row">
+                                    <div class="dim-field"><label>W</label><input type="number" step="0.1" value="0.5" id="costDimWidth" /></div>
+                                    <div class="dim-field"><label>H</label><input type="number" step="0.1" value="38.1" id="costDimHeight" /></div>
+                                    <div class="dim-field"><label>L</label><input type="number" step="0.1" value="27.9" id="costDimLength" /></div>
+                                </div>
+                            </div>
+                            <div class="field full-width">
+                                <div class="discount-row">
+                                    <div class="field" style="flex:0 0 140px;"><label>Discount (NPR)</label><input type="number" value="0" id="costDiscount" min="0" step="0.01" /></div>
+                                    <div class="discount-badge"><span>💡 Suggested 6.53%</span><button class="apply-btn" onclick="applySuggestedDiscount()">Apply</button></div>
+                                    <span class="discount-hint">ℹ️ Click to apply</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cost-table">
+                            <div class="row header-row"><span>DESCRIPTION</span><span style="text-align:right;">AMOUNT</span></div>
+                            <div class="row"><span class="label">QUANTITY</span><span class="value" id="costDispQty">${order.qty}</span></div>
+                            <div class="row"><span class="label">ITEM PRICE (INR)</span><span class="value" id="costDispINR">INR 545.00</span></div>
+                            <div class="row"><span class="label">ITEM PRICE (NPR)</span><span class="value" id="costDispNPR">NPR 872.82</span></div>
+                            <div class="row"><span class="label">IMPORT DUTY <span class="pct-badge" id="costImportPct">15%</span></span><span class="value" id="costDispImport">NPR 130.92</span></div>
+                            <div class="row"><span class="label">EXCISE DUTY <span class="pct-badge" id="costExcisePct">0%</span></span><span class="value" id="costDispExcise">NPR 0.00</span></div>
+                            <div class="row"><span class="label">SERVICE FEES <span class="pct-badge" id="costServicePct">3.45%</span></span><span class="value" id="costDispService">NPR 30.11</span></div>
+                            <div class="row"><span class="label">VAT <span class="pct-badge" id="costVatPct">13%</span></span><span class="value" id="costDispVat">NPR 134.40</span></div>
+                            <div class="row"><span class="label">INTL. SHIPPING</span><span class="value" id="costDispShipping">NPR 280.00</span></div>
+                            <div class="row"><span class="label">DISCOUNT</span><span class="value" id="costDispDiscount">NPR 0.00</span></div>
+                        </div>
+                        <div class="grand-total-section">
+                            <div class="total-left"><span class="total-label">GRAND TOTAL</span><span class="total-amount" id="costGrandTotal">NPR 1,448.25</span></div>
+                            <div class="total-right">
+                                <span>FINAL <span class="amount" id="costFinalCost">NPR 1,448.25</span></span>
+                                <span>PAID <span class="amount" id="costPaidAdvance">NPR 362.06</span></span>
+                                <span>PENDING <span class="amount pending" id="costPendingPayment">NPR 1,086.19</span></span>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="field full-width">
-                    <div class="discount-row">
-                      <div class="field" style="flex:0 0 140px;"><label>Discount (NPR)</label><input type="number" value="0" id="costDiscount" min="0" step="0.01" /></div>
-                      <div class="discount-badge"><span>💡 Suggested 6.53%</span><button class="apply-btn" onclick="applySuggestedDiscount()">Apply</button></div>
-                      <span class="discount-hint">ℹ️ Click to apply</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="cost-table" id="costTable">
-                  <div class="row header-row"><span>DESCRIPTION</span><span style="text-align:right;">AMOUNT</span></div>
-                  <div class="row"><span class="label">QUANTITY</span><span class="value" id="costDispQty">${order.qty}</span></div>
-                  <div class="row"><span class="label">ITEM PRICE (INR)</span><span class="value" id="costDispINR">INR 545.00</span></div>
-                  <div class="row"><span class="label">ITEM PRICE (NPR)</span><span class="value" id="costDispNPR">NPR 872.82</span></div>
-                  <div class="row"><span class="label">IMPORT DUTY <span class="pct-badge" id="costImportPct">15%</span></span><span class="value" id="costDispImport">NPR 130.92</span></div>
-                  <div class="row"><span class="label">EXCISE DUTY <span class="pct-badge" id="costExcisePct">0%</span></span><span class="value" id="costDispExcise">NPR 0.00</span></div>
-                  <div class="row"><span class="label">SERVICE FEES <span class="pct-badge" id="costServicePct">3.45%</span></span><span class="value" id="costDispService">NPR 30.11</span></div>
-                  <div class="row"><span class="label">VAT <span class="pct-badge" id="costVatPct">13%</span></span><span class="value" id="costDispVat">NPR 134.40</span></div>
-                  <div class="row"><span class="label">INTL. SHIPPING</span><span class="value" id="costDispShipping">NPR 280.00</span></div>
-                  <div class="row"><span class="label">DISCOUNT</span><span class="value" id="costDispDiscount">NPR 0.00</span></div>
-                </div>
-                <div class="grand-total-section">
-                  <div class="total-left"><span class="total-label">GRAND TOTAL</span><span class="total-amount" id="costGrandTotal">NPR 1,448.25</span></div>
-                  <div class="total-right">
-                    <span>FINAL <span class="amount" id="costFinalCost">NPR 1,448.25</span></span>
-                    <span>PAID <span class="amount" id="costPaidAdvance">NPR 362.06</span></span>
-                    <span>PENDING <span class="amount pending" id="costPendingPayment">NPR 1,086.19</span></span>
-                  </div>
-                </div>
-              </div>
-            `;
+                `;
                 document.getElementById('costModalContent').innerHTML = html;
                 initCostCalculator(order);
                 document.getElementById('costModal').classList.add('flex');
@@ -2186,7 +2647,6 @@
                     const priceINR = getVal('costProductPrice');
                     const wt = getVal('costWeight');
                     const discNPR = getVal('costDiscount');
-
                     const priceNPR = priceINR * INR_TO_NPR;
                     const IMPORT_DUTY_RATE = 0.15,
                         EXCISE_DUTY_RATE = 0,
@@ -2203,7 +2663,6 @@
                     const total = subtotal - discountApplied;
                     const advance = total * 0.25;
                     const pending = total - advance;
-
                     const el = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
                     el('costDispQty', qty);
                     el('costDispINR', formatINR(priceINR));
@@ -2224,19 +2683,12 @@
                     pEl('costServicePct', (SERVICE_FEE_RATE * 100).toFixed(2) + '%');
                     pEl('costVatPct', (VAT_RATE * 100).toFixed(0) + '%');
                 }
-
                 const ids = ['costProductPrice', 'costWeight', 'costQuantity', 'costDiscount', 'costDimWidth',
                     'costDimHeight', 'costDimLength', 'costArrivalDate'
                 ];
-                ids.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.addEventListener('input', calc);
-                });
-                ['costCategory', 'costSubcategory'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.addEventListener('change', calc);
-                });
-
+                ids.forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input', calc); });
+                ['costCategory', 'costSubcategory'].forEach(id => { const el = document.getElementById(id); if (el) el
+                        .addEventListener('change', calc); });
                 window.applySuggestedDiscount = function() {
                     const price = getVal('costProductPrice');
                     const suggested = price * INR_TO_NPR * 0.0653;
@@ -2244,12 +2696,8 @@
                     if (discEl) { discEl.value = Math.round(suggested * 100) / 100;
                         calc(); }
                 };
-
-                window.updateEstimate = function() {
-                    calc();
-                    showToast('✅', 'Estimate updated!');
-                };
-
+                window.updateEstimate = function() { calc();
+                    showToast('✅', 'Estimate updated!'); };
                 calc();
             }
 
@@ -2258,7 +2706,6 @@
                 document.body.style.overflow = '';
             }
 
-            // ─── CUSTOMER IMAGE ────────────────────────────────────────────
             function openCustomerImageModal(imgSrc) {
                 document.getElementById('customerImageDisplay').src = imgSrc;
                 document.getElementById('customerImageModal').classList.add('flex');
@@ -2271,7 +2718,6 @@
                 document.body.style.overflow = '';
             }
 
-            // ─── PRICE CORRECTIONS ─────────────────────────────────────────
             function openPriceCorrections() {
                 document.getElementById('priceCorrectionsModal').classList.add('flex');
                 document.getElementById('priceCorrectionsModal').classList.remove('hidden');
@@ -2283,14 +2729,13 @@
                 document.body.style.overflow = '';
             }
 
-            // ─── PRINT ──────────────────────────────────────────────────────
             function printShippingLabel(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) return;
                 const w = window.open('', '_blank', 'width=400,height=600');
                 w.document.write(
-                    `<html><head><title>Shipping Label - ${order.id}</title><style>body{font-family:Arial;padding:20px;} .label{border:2px solid #000;padding:15px;width:300px;} h3{margin-top:0;}</style></head><body><div class="label"><h3>MeroLogix</h3><p><strong>Order ID:</strong> ${order.id}</p><p><strong>User:</strong> ${order.user}</p><p><strong>Product:</strong> ${order.productName}</p><p><strong>Weight:</strong> ${order.paymentSummary.approxWeight}</p><p><strong>Date:</strong> ${order.dateTime}</p><button onclick="window.print()">Print</button></div></body></html>`
-                    );
+                    `<html><head><title>Shipping Label - ${order.id}</title><style>body{font-family:Arial;padding:20px} .label{border:2px solid #000;padding:15px;width:300px} h3{margin-top:0}</style></head><body><div class="label"><h3>MeroLogix</h3><p><strong>Order ID:</strong> ${order.id}</p><p><strong>User:</strong> ${order.user}</p><p><strong>Product:</strong> ${order.productName}</p><p><strong>Weight:</strong> ${order.paymentSummary.approxWeight}</p><p><strong>Date:</strong> ${order.dateTime}</p><button onclick="window.print()">Print</button></div></body></html>`
+                );
                 w.document.close();
             }
 
@@ -2299,12 +2744,11 @@
                 if (!order) return;
                 const w = window.open('', '_blank', 'width=600,height=500');
                 w.document.write(
-                    `<html><head><title>Invoice - ${order.id}</title><style>body{font-family:Arial;padding:30px;} table{width:100%;border-collapse:collapse;} th,td{border:1px solid #ccc;padding:8px;text-align:left;}</style></head><body><h2>MeroLogix Invoice</h2><p>Order ID: ${order.id}</p><p>User: ${order.user}</p><table><tr><th>Description</th><th>Qty</th><th>Amount</th></tr><tr><td>${order.productName}</td><td>${order.qty}</td><td>${order.totalAmount}</td></tr></table><p><strong>Total:</strong> ${order.totalAmount}</p><button onclick="window.print()">Print</button></body></html>`
-                    );
+                    `<html><head><title>Invoice - ${order.id}</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #ccc;padding:8px;text-align:left}</style></head><body><h2>MeroLogix Invoice</h2><p>Order ID: ${order.id}</p><p>User: ${order.user}</p><table><tr><th>Description</th><th>Qty</th><th>Amount</th></tr><tr><td>${order.productName}</td><td>${order.qty}</td><td>${order.totalAmount}</td></tr></table><p><strong>Total:</strong> ${order.totalAmount}</p><button onclick="window.print()">Print</button></body></html>`
+                );
                 w.document.close();
             }
 
-            // ─── EXPORT / REFRESH ──────────────────────────────────────────
             function exportToExcel() {
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(() => {
@@ -2334,6 +2778,7 @@
                     t.dataset.status === 'all'));
                 document.querySelectorAll('#typeTabsContainer .type-tab').forEach(t => { t.className = 'type-tab'; if (t
                         .dataset.type === 'all') t.classList.add('active-all'); });
+                selectedOrders.clear();
                 filteredOrders = [...ordersData];
                 currentPage = 1;
                 renderPaginatedOrders();
@@ -2342,7 +2787,6 @@
                 showToast('🔄', 'Data refreshed');
             }
 
-            // ─── TOAST ──────────────────────────────────────────────────────
             function showToast(icon, msg) {
                 const t = document.getElementById('toast');
                 document.getElementById('toastIcon').textContent = icon;
@@ -2353,7 +2797,6 @@
                     t.classList.remove('toast'); }, 2800);
             }
 
-            // ─── SIDEBAR ────────────────────────────────────────────────────
             function toggleSidebar() {
                 document.getElementById('sidebar').classList.toggle('-translate-x-full');
                 document.getElementById('sidebarOverlay').classList.toggle('hidden');
@@ -2383,14 +2826,16 @@
                     closeCommentsModal();
                     closeCancelModal();
                     closePriceCorrections();
+                    closeBulkLabelModal();
                 }
             });
 
-            // ─── EXPOSE GLOBALLY ────────────────────────────────────────────
+            // ─── EXPOSE ──────────────────────────────────────────────────────
             window.filterOrders = filterOrders;
             window.filterByStatusTab = filterByStatusTab;
             window.filterByType = filterByType;
             window.filterByUser = filterByUser;
+            window.filterByUserAndStatus = filterByUserAndStatus;
             window.clearFilter = clearFilter;
             window.changePageSize = changePageSize;
             window.verifyPayment = verifyPayment;
@@ -2416,6 +2861,16 @@
             window.refreshData = refreshData;
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
+            window.updateOrderStatus = updateOrderStatus;
+            window.toggleOrderSelection = toggleOrderSelection;
+            window.toggleSelectAll = toggleSelectAll;
+            window.toggleSelectAllDesktop = toggleSelectAllDesktop;
+            window.clearAllSelections = clearAllSelections;
+            window.generateBulkShippingLabel = generateBulkShippingLabel;
+            window.generateBulkInvoice = generateBulkInvoice;
+            window.printBulkLabel = printBulkLabel;
+            window.printBulkInvoice = printBulkInvoice;
+            window.closeBulkLabelModal = closeBulkLabelModal;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
