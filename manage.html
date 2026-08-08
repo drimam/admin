@@ -833,12 +833,14 @@
                 font-size: 20px;
             }
             .filter-section {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 6px;
             }
             .filter-section .filter-group {
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
+                flex: 1 1 auto;
             }
             .order-card .status-select {
                 font-size: 12px;
@@ -849,6 +851,25 @@
             .order-card .checkbox-wrap input[type="checkbox"] {
                 width: 20px;
                 height: 20px;
+            }
+            /* mobile filter: keep buttons inline */
+            .filter-section .filter-actions {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 4px;
+                flex-shrink: 0;
+            }
+            .filter-section .filter-actions button {
+                font-size: 11px;
+                padding: 4px 10px;
+                white-space: nowrap;
+            }
+            .filter-section .filter-actions button span {
+                display: none;
+            }
+            .filter-section .filter-actions button svg {
+                width: 14px;
+                height: 14px;
             }
         }
 
@@ -892,6 +913,19 @@
                 font-size: 11px;
                 padding: 3px 6px;
                 min-width: 100px;
+            }
+            /* further mobile filter tweaks */
+            .filter-section .filter-group input[type="date"] {
+                width: 80px;
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+            .filter-section .filter-group span {
+                font-size: 10px;
+            }
+            .filter-section .filter-actions button {
+                font-size: 10px;
+                padding: 3px 8px;
             }
         }
 
@@ -1126,6 +1160,83 @@
             font-weight: 700;
             margin-right: 2px;
         }
+
+        /* stats collapse toggle button */
+        .stats-toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #4F46E5;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .stats-toggle-btn:hover {
+            background: #f1f5f9;
+        }
+        .stats-toggle-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .stats-toggle-btn .arrow.collapsed {
+            transform: rotate(0deg);
+        }
+        .stats-toggle-btn .arrow.expanded {
+            transform: rotate(180deg);
+        }
+
+        .stats-collapsible-wrapper {
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            max-height: 3000px;
+        }
+        .stats-collapsible-wrapper.collapsed {
+            max-height: 0 !important;
+        }
+
+        @media (max-width: 767px) {
+            .stats-toggle-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .stats-toggle-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: #4F46E5;
+            }
+            .stats-collapsible-wrapper.collapsed {
+                max-height: 0 !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .stats-collapsible-wrapper {
+                max-height: none !important;
+            }
+            .stats-toggle-btn {
+                display: none !important;
+            }
+        }
+
+        /* extra stat cards row */
+        .stats-grid-extra {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 640px) {
+            .stats-grid-extra {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 420px) {
+            .stats-grid-extra {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -1199,62 +1310,112 @@
 
         <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
 
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 stats-grid">
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Total Orders</p>
-                    <p class="text-lg sm:text-2xl font-bold text-gray-800 mt-0.5 stat-value" id="statTotal">0</p>
-                    <p class="text-[9px] sm:text-xs text-green-600 mt-0.5">↑ 12% this week</p>
+            <!-- Stats Cards - Collapsible on mobile -->
+            <div>
+                <!-- Toggle button for mobile -->
+                <div class="flex items-center justify-between mb-1 sm:mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">📊 Dashboard Stats</span>
+                        <span class="text-xs font-semibold text-gray-700 sm:hidden">📊 Stats</span>
+                    </div>
+                    <button class="stats-toggle-btn" onclick="toggleStats()" aria-label="Toggle stats">
+                        <span class="stats-toggle-label sm:hidden">Show Stats</span>
+                        <span class="arrow collapsed" id="statsArrow">▼</span>
+                    </button>
                 </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">In Transit</p>
-                    <p class="text-lg sm:text-2xl font-bold text-blue-600 mt-0.5 stat-value" id="statTransit">0</p>
-                    <p class="text-[9px] sm:text-xs text-blue-500 mt-0.5">Active</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Delivered</p>
-                    <p class="text-lg sm:text-2xl font-bold text-green-600 mt-0.5 stat-value" id="statDelivered">0</p>
-                    <p class="text-[9px] sm:text-xs text-green-500 mt-0.5">↑ 95%</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Pending</p>
-                    <p class="text-lg sm:text-2xl font-bold text-yellow-600 mt-0.5 stat-value" id="statPending">0</p>
-                    <p class="text-[9px] sm:text-xs text-yellow-500 mt-0.5">Attention</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">At India WH</p>
-                    <p class="text-lg sm:text-2xl font-bold text-purple-600 mt-0.5 stat-value" id="statIndiaWH">0</p>
-                    <p class="text-[9px] sm:text-xs text-purple-500 mt-0.5">Warehouse</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">At Nepal WH</p>
-                    <p class="text-lg sm:text-2xl font-bold text-indigo-600 mt-0.5 stat-value" id="statNepalWH">0</p>
-                    <p class="text-[9px] sm:text-xs text-indigo-500 mt-0.5">Warehouse</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Delayed</p>
-                    <p class="text-lg sm:text-2xl font-bold text-orange-600 mt-0.5 stat-value" id="statDelayed">0</p>
-                    <p class="text-[9px] sm:text-xs text-orange-500 mt-0.5">Action</p>
-                </div>
-                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
-                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Revenue</p>
-                    <p class="text-lg sm:text-2xl font-bold text-primary mt-0.5 stat-value">NPR 2.4M</p>
-                    <p class="text-[9px] sm:text-xs text-primary mt-0.5">This month</p>
+
+                <div class="stats-collapsible-wrapper collapsed" id="statsWrapper">
+                    <!-- Main Stats Cards -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 stats-grid">
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Total Orders</p>
+                            <p class="text-lg sm:text-2xl font-bold text-gray-800 mt-0.5 stat-value" id="statTotal">0</p>
+                            <p class="text-[9px] sm:text-xs text-green-600 mt-0.5">↑ 12% this week</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">In Transit</p>
+                            <p class="text-lg sm:text-2xl font-bold text-blue-600 mt-0.5 stat-value" id="statTransit">0</p>
+                            <p class="text-[9px] sm:text-xs text-blue-500 mt-0.5">Active</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Delivered</p>
+                            <p class="text-lg sm:text-2xl font-bold text-green-600 mt-0.5 stat-value" id="statDelivered">0</p>
+                            <p class="text-[9px] sm:text-xs text-green-500 mt-0.5">↑ 95%</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Pending</p>
+                            <p class="text-lg sm:text-2xl font-bold text-yellow-600 mt-0.5 stat-value" id="statPending">0</p>
+                            <p class="text-[9px] sm:text-xs text-yellow-500 mt-0.5">Attention</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">At India WH</p>
+                            <p class="text-lg sm:text-2xl font-bold text-purple-600 mt-0.5 stat-value" id="statIndiaWH">0</p>
+                            <p class="text-[9px] sm:text-xs text-purple-500 mt-0.5">Warehouse</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">At Nepal WH</p>
+                            <p class="text-lg sm:text-2xl font-bold text-indigo-600 mt-0.5 stat-value" id="statNepalWH">0</p>
+                            <p class="text-[9px] sm:text-xs text-indigo-500 mt-0.5">Warehouse</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Delayed</p>
+                            <p class="text-lg sm:text-2xl font-bold text-orange-600 mt-0.5 stat-value" id="statDelayed">0</p>
+                            <p class="text-[9px] sm:text-xs text-orange-500 mt-0.5">Action</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Revenue</p>
+                            <p class="text-lg sm:text-2xl font-bold text-primary mt-0.5 stat-value">NPR 2.4M</p>
+                            <p class="text-[9px] sm:text-xs text-primary mt-0.5">This month</p>
+                        </div>
+                    </div>
+
+                    <!-- 4 Extra Stats Cards -->
+                    <div class="stats-grid-extra mt-2 sm:mt-3">
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Quotation Pending</p>
+                            <p class="text-lg sm:text-2xl font-bold text-cyan-600 mt-0.5 stat-value" id="statQuotationPending">0</p>
+                            <p class="text-[9px] sm:text-xs text-cyan-500 mt-0.5">Awaiting quote</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Payment Received</p>
+                            <p class="text-lg sm:text-2xl font-bold text-emerald-600 mt-0.5 stat-value" id="statPaymentReceived">0</p>
+                            <p class="text-[9px] sm:text-xs text-emerald-500 mt-0.5">Confirmed</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Assign Pending</p>
+                            <p class="text-lg sm:text-2xl font-bold text-amber-600 mt-0.5 stat-value" id="statAssignPending">0</p>
+                            <p class="text-[9px] sm:text-xs text-amber-500 mt-0.5">Awaiting assignment</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
+                            <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Payment Pending</p>
+                            <p class="text-lg sm:text-2xl font-bold text-rose-600 mt-0.5 stat-value" id="statPaymentPending">0</p>
+                            <p class="text-[9px] sm:text-xs text-rose-500 mt-0.5">Due</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Filters -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-4">
                 <div class="flex flex-wrap items-center gap-2 sm:gap-3 filter-section">
-                    <div class="flex items-center gap-1 sm:gap-2 filter-group flex-wrap">
-                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase">Date:</label>
-                        <input type="date" id="filterDateFrom" value="2026-05-07" class="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 focus:ring-2 focus:ring-primary/20 outline-none w-[100px] sm:w-auto" onchange="filterOrders()" />
+                    <div class="flex items-center gap-1 sm:gap-2 filter-group flex-wrap flex-1 min-w-[180px]">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Date:</label>
+                        <input type="date" id="filterDateFrom" value="2026-05-07" class="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 focus:ring-2 focus:ring-primary/20 outline-none w-[90px] sm:w-auto" onchange="filterOrders()" />
                         <span class="text-gray-400 text-xs sm:text-sm">–</span>
-                        <input type="date" id="filterDateTo" value="2026-05-07" class="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 focus:ring-2 focus:ring-primary/20 outline-none w-[100px] sm:w-auto" onchange="filterOrders()" />
+                        <input type="date" id="filterDateTo" value="2026-05-07" class="text-xs sm:text-sm border border-gray-300 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 focus:ring-2 focus:ring-primary/20 outline-none w-[90px] sm:w-auto" onchange="filterOrders()" />
                     </div>
-                    <div class="flex-1"></div>
-                    <button onclick="exportToExcel()" class="flex items-center gap-1 sm:gap-2 bg-green-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-700 transition-colors"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="hidden xs:inline">Excel</span></button>
-                    <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg><span class="hidden xs:inline">Refresh</span></button>
+                    <div class="flex items-center gap-1 sm:gap-2 filter-actions ml-auto flex-shrink-0">
+                        <button onclick="exportToExcel()" class="flex items-center gap-1 sm:gap-2 bg-green-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-700 transition-colors whitespace-nowrap">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                            <span class="hidden xs:inline">Excel</span>
+                            <span class="xs:hidden">📊</span>
+                        </button>
+                        <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap">
+                            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            <span class="hidden xs:inline">Refresh</span>
+                            <span class="xs:hidden">⟳</span>
+                        </button>
+                    </div>
                 </div>
                 <div id="activeFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
             </div>
@@ -1283,7 +1444,7 @@
                     <span class="text-[9px] sm:text-xs text-gray-400 hidden xs:inline">(click to filter)</span>
                 </div>
                 <div class="tabs-scroll" id="statusTabsContainer">
-                    <button class="status-tab active text-[10px] sm:text-xs" data-status="all" onclick="filterByStatusTab('all')">📋 All</button>
+                    <!-- populated by JS -->
                 </div>
             </div>
 
@@ -1529,6 +1690,54 @@
 
     <script>
         (function() {
+            // ─── NEW STATUS TABS LIST ────────────────────────────────────
+            const NEW_STATUS_TABS = [
+                'All',
+                'Order Created',
+                'Quotation Sent',
+                'Payment Pending',
+                'Payment Received',
+                'Assign Pending',
+                'Assigned Tracking',
+                'Arrived at WH India',
+                'Dispatch by WH India',
+                'Custom Clearance',
+                'Custom Hold',
+                'Pending at WH India',
+                'Arrived at WH Nepal',
+                'Shipped',
+                'Delivered',
+                'Wrong Product Received',
+                'Ageing',
+                'Failed Delivery',
+                'Returned',
+                'Cancelled'
+            ];
+
+            // ─── MAPPING: new status tab -> array of existing order.status values ──
+            const STATUS_TAB_MAP = {
+                'All': null,
+                'Order Created': ['Order Created'],
+                'Quotation Sent': ['Quotation Sent (Buy For Me)'],
+                'Payment Pending': ['Order Created'],
+                'Payment Received': ['Order Approved', 'Incoming Shipment', 'Arrived at India Warehouse',
+                    'Arrived at India WH', 'Arrived at Nepal Warehouse', 'Arrived at Nepal WH', 'Shipped',
+                    'Delivered', 'Custom Clearance'
+                ],
+                'Assign Pending': ['Order Approved'],
+                'Assigned Tracking': ['Incoming Shipment'],
+                'Arrived at WH India': ['Arrived at India Warehouse', 'Arrived at India WH'],
+                'Dispatch by WH India': ['Custom Clearance'],
+                'Pending at WH India': ['Custom Hold', 'Wrong Product Received'],
+                'Arrived at WH Nepal': ['Arrived at Nepal Warehouse', 'Arrived at Nepal WH'],
+                'Shipped': ['Shipped'],
+                'Delivered': ['Delivered'],
+                'Ageing': ['Delivery Delayed'],
+                'Failed Delivery': ['Delivery Failed'],
+                'Returned': ['Return Requested', 'Return Received', 'Return to Seller'],
+                'Cancelled': ['Order Cancelled']
+            };
+
             // ─── DATA ──────────────────────────────────────────────────────
             const allTrackingStages = [
                 'Order Created', 'Quotation Received', 'Quotation Sent (Buy For Me)', 'Order Approved', 'Order Cancelled',
@@ -1549,7 +1758,7 @@
             };
 
             const statusUpdateOptions = [
-                'Order Approved',
+                'Payment Received',
                 'Arrived at India WH',
                 'Custom Clearance',
                 'Arrived at Nepal WH',
@@ -1747,25 +1956,76 @@
             let currentPage = 1;
             let pageSize = 100;
             let filteredOrders = [...ordersData];
-            let activeStatusTab = 'all';
+            let activeStatusTab = 'All';
             let activeTypeTab = 'all';
             let currentTrackingOrderId = null;
             let pendingCancelOrderId = null;
             let selectedOrders = new Set();
+            let statsCollapsed = true; // start collapsed on mobile
+
+            // ─── STATS TOGGLE ──────────────────────────────────────────────
+            window.toggleStats = function() {
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                statsCollapsed = !statsCollapsed;
+                if (statsCollapsed) {
+                    wrapper.classList.add('collapsed');
+                    arrow.classList.remove('expanded');
+                    arrow.classList.add('collapsed');
+                    if (label) label.textContent = 'Show Stats';
+                } else {
+                    wrapper.classList.remove('collapsed');
+                    arrow.classList.remove('collapsed');
+                    arrow.classList.add('expanded');
+                    if (label) label.textContent = 'Hide Stats';
+                }
+            };
+
+            // on desktop, always expanded
+            function handleStatsOnResize() {
+                const isDesktop = window.innerWidth >= 768;
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                if (isDesktop) {
+                    wrapper.classList.remove('collapsed');
+                    if (arrow) { arrow.classList.remove('collapsed');
+                        arrow.classList.add('expanded'); }
+                    if (label) label.textContent = 'Hide Stats';
+                    statsCollapsed = false;
+                } else {
+                    // on mobile, keep as per user toggle; default collapsed
+                    if (statsCollapsed === undefined) statsCollapsed = true;
+                    if (statsCollapsed) {
+                        wrapper.classList.add('collapsed');
+                        if (arrow) { arrow.classList.remove('expanded');
+                            arrow.classList.add('collapsed'); }
+                        if (label) label.textContent = 'Show Stats';
+                    } else {
+                        wrapper.classList.remove('collapsed');
+                        if (arrow) { arrow.classList.remove('collapsed');
+                            arrow.classList.add('expanded'); }
+                        if (label) label.textContent = 'Hide Stats';
+                    }
+                }
+            }
 
             // ─── STATS ──────────────────────────────────────────────────────
             function updateStats() {
                 const total = ordersData.length;
                 const transitStatuses = ['Shipped', 'Incoming Shipment', 'Custom Clearance', 'Arrived at India Warehouse',
-                    'Arrived at Nepal Warehouse'
+                    'Arrived at India WH', 'Arrived at Nepal Warehouse', 'Arrived at Nepal WH'
                 ];
                 const inTransit = ordersData.filter(o => transitStatuses.includes(o.status)).length;
                 const delivered = ordersData.filter(o => o.status === 'Delivered').length;
                 const pending = ordersData.filter(o => ['Order Created', 'Quotation Received',
                     'Quotation Sent (Buy For Me)', 'Order Approved'
                 ].includes(o.status)).length;
-                const indiaWH = ordersData.filter(o => o.status === 'Arrived at India Warehouse').length;
-                const nepalWH = ordersData.filter(o => o.status === 'Arrived at Nepal Warehouse').length;
+                const indiaWH = ordersData.filter(o => o.status === 'Arrived at India Warehouse' || o.status ===
+                    'Arrived at India WH').length;
+                const nepalWH = ordersData.filter(o => o.status === 'Arrived at Nepal Warehouse' || o.status ===
+                    'Arrived at Nepal WH').length;
                 const delayed = ordersData.filter(o => o.status === 'Delivery Delayed').length;
 
                 document.getElementById('statTotal').textContent = total;
@@ -1775,6 +2035,26 @@
                 document.getElementById('statIndiaWH').textContent = indiaWH;
                 document.getElementById('statNepalWH').textContent = nepalWH;
                 document.getElementById('statDelayed').textContent = delayed;
+
+                const quotationPending = ordersData.filter(o =>
+                    o.status === 'Order Created' || o.status === 'Quotation Received' || o.status ===
+                    'Quotation Sent (Buy For Me)'
+                ).length;
+                const paymentReceived = ordersData.filter(o =>
+                    ['Order Approved', 'Incoming Shipment', 'Arrived at India Warehouse', 'Arrived at India WH',
+                        'Arrived at Nepal Warehouse', 'Arrived at Nepal WH', 'Shipped', 'Delivered',
+                        'Custom Clearance'
+                    ].includes(o.status)
+                ).length;
+                const assignPending = ordersData.filter(o => o.status === 'Order Approved').length;
+                const paymentPending = ordersData.filter(o =>
+                    o.status === 'Order Created' || o.status === 'Quotation Received'
+                ).length;
+
+                document.getElementById('statQuotationPending').textContent = quotationPending;
+                document.getElementById('statPaymentReceived').textContent = paymentReceived;
+                document.getElementById('statAssignPending').textContent = assignPending;
+                document.getElementById('statPaymentPending').textContent = paymentPending;
             }
 
             // ─── UPDATE STATUS ─────────────────────────────────────────────
@@ -2036,7 +2316,14 @@
             // ─── FILTERS ────────────────────────────────────────────────────
             function applyAllFilters() {
                 let base = [...ordersData];
-                if (activeStatusTab !== 'all') base = base.filter(o => o.status === activeStatusTab);
+                if (activeStatusTab !== 'All') {
+                    const mappedStatuses = STATUS_TAB_MAP[activeStatusTab] || [];
+                    if (mappedStatuses && mappedStatuses.length > 0) {
+                        base = base.filter(o => mappedStatuses.includes(o.status));
+                    } else {
+                        base = [];
+                    }
+                }
                 if (activeTypeTab !== 'all') base = base.filter(o => o.type === activeTypeTab);
                 const dateFrom = document.getElementById('filterDateFrom').value;
                 const dateTo = document.getElementById('filterDateTo').value;
@@ -2095,9 +2382,9 @@
 
             function filterByUserAndStatus(username, status) {
                 document.getElementById('searchInput').value = username;
-                activeStatusTab = 'all';
+                activeStatusTab = 'All';
                 document.querySelectorAll('#statusTabsContainer .status-tab').forEach(tab => tab.classList.toggle(
-                    'active', tab.dataset.status === 'all'));
+                    'active', tab.dataset.status === 'All'));
                 let base = ordersData.filter(o => o.user === username && o.status === status);
                 const dateFrom = document.getElementById('filterDateFrom').value;
                 const dateTo = document.getElementById('filterDateTo').value;
@@ -2118,7 +2405,7 @@
                 let html = '';
                 if (activeTypeTab !== 'all') html +=
                     `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">Type: ${activeTypeTab} <button onclick="clearFilter('type')" class="hover:text-red-500">×</button></span>`;
-                if (activeStatusTab !== 'all') html +=
+                if (activeStatusTab !== 'All') html +=
                     `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${activeStatusTab} <button onclick="clearFilter('status')" class="hover:text-red-500">×</button></span>`;
                 container.innerHTML = html;
             }
@@ -2127,9 +2414,9 @@
                 if (type === 'type') { activeTypeTab = 'all';
                     document.querySelectorAll('#typeTabsContainer .type-tab').forEach(t => { t.className = 'type-tab';
                         t.classList.add('active-all'); }); }
-                if (type === 'status') { activeStatusTab = 'all';
+                if (type === 'status') { activeStatusTab = 'All';
                     document.querySelectorAll('#statusTabsContainer .status-tab').forEach(t => t.classList.toggle(
-                        'active', t.dataset.status === 'all')); }
+                        'active', t.dataset.status === 'All')); }
                 filterOrders();
             }
 
@@ -2161,13 +2448,12 @@
             // ─── STATUS TABS POPULATE ──────────────────────────────────────
             function populateStatusTabs() {
                 const container = document.getElementById('statusTabsContainer');
-                const statuses = ['all', ...new Set(ordersData.map(o => o.status))];
                 container.innerHTML = '';
-                statuses.forEach(st => {
+                NEW_STATUS_TABS.forEach(st => {
                     const btn = document.createElement('button');
                     btn.className = `status-tab ${st === activeStatusTab ? 'active' : ''}`;
                     btn.dataset.status = st;
-                    btn.textContent = st === 'all' ? '📋 All' : st;
+                    btn.textContent = st === 'All' ? '📋 All' : st;
                     btn.onclick = () => filterByStatusTab(st);
                     container.appendChild(btn);
                 });
@@ -2772,10 +3058,10 @@
                 document.getElementById('filterDateTo').value = '2026-05-07';
                 document.getElementById('searchInput').value = '';
                 document.getElementById('universalSearchInput').value = '';
-                activeStatusTab = 'all';
+                activeStatusTab = 'All';
                 activeTypeTab = 'all';
                 document.querySelectorAll('#statusTabsContainer .status-tab').forEach(t => t.classList.toggle('active',
-                    t.dataset.status === 'all'));
+                    t.dataset.status === 'All'));
                 document.querySelectorAll('#typeTabsContainer .type-tab').forEach(t => { t.className = 'type-tab'; if (t
                         .dataset.type === 'all') t.classList.add('active-all'); });
                 selectedOrders.clear();
@@ -2830,6 +3116,9 @@
                 }
             });
 
+            // ─── RESIZE HANDLER ─────────────────────────────────────────────
+            window.addEventListener('resize', handleStatsOnResize);
+
             // ─── EXPOSE ──────────────────────────────────────────────────────
             window.filterOrders = filterOrders;
             window.filterByStatusTab = filterByStatusTab;
@@ -2871,6 +3160,7 @@
             window.printBulkLabel = printBulkLabel;
             window.printBulkInvoice = printBulkInvoice;
             window.closeBulkLabelModal = closeBulkLabelModal;
+            window.toggleStats = toggleStats;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
@@ -2878,6 +3168,8 @@
             populateStatusTabs();
             renderPaginatedOrders();
             updateActiveFilters();
+            // set initial stats state: collapsed on mobile, expanded on desktop
+            handleStatsOnResize();
         })();
     </script>
 </body>
