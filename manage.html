@@ -787,6 +787,89 @@
             flex-shrink: 0;
         }
 
+        /* ===== ORDERED BUTTON ===== */
+        .ordered-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            background: #6366F1;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            min-height: 26px;
+            line-height: 1.2;
+        }
+        .ordered-btn:hover {
+            background: #4F46E5;
+            transform: scale(1.02);
+        }
+        .ordered-btn:active {
+            transform: scale(0.97);
+        }
+        .ordered-btn-mobile {
+            font-size: 11px;
+            padding: 3px 10px;
+            min-height: 30px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: #6366F1;
+            color: #fff;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .ordered-btn-mobile:hover {
+            background: #4F46E5;
+        }
+
+        .status-cell-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+            width: 100%;
+        }
+        .status-cell-wrapper .status-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .status-cell-wrapper .status-row .status-select-desktop {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            background: white;
+            min-width: 110px;
+            max-width: 140px;
+            outline: none;
+            flex: 0 0 auto;
+        }
+        .status-cell-wrapper .status-row .status-select-desktop:focus {
+            border-color: #4F46E5;
+            ring: 2px solid rgba(79, 70, 229, 0.2);
+        }
+        .status-cell-wrapper .ordered-btn-wrap {
+            width: 40%;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .status-cell-wrapper .ordered-btn-wrap .ordered-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
         @media (max-width: 767px) {
             .order-card .card-actions .action-btn {
                 flex: 1 1 auto;
@@ -852,7 +935,6 @@
                 width: 20px;
                 height: 20px;
             }
-            /* mobile filter: keep buttons inline */
             .filter-section .filter-actions {
                 display: flex;
                 flex-wrap: nowrap;
@@ -914,7 +996,6 @@
                 padding: 3px 6px;
                 min-width: 100px;
             }
-            /* further mobile filter tweaks */
             .filter-section .filter-group input[type="date"] {
                 width: 80px;
                 font-size: 10px;
@@ -926,6 +1007,11 @@
             .filter-section .filter-actions button {
                 font-size: 10px;
                 padding: 3px 8px;
+            }
+            .ordered-btn-mobile {
+                font-size: 10px;
+                padding: 2px 8px;
+                min-height: 26px;
             }
         }
 
@@ -1161,7 +1247,6 @@
             margin-right: 2px;
         }
 
-        /* stats collapse toggle button */
         .stats-toggle-btn {
             display: none;
             background: none;
@@ -1220,7 +1305,6 @@
             }
         }
 
-        /* extra stat cards row */
         .stats-grid-extra {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -1236,6 +1320,19 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 6px;
             }
+        }
+        .user-clickable {
+            color: #1d4ed8;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.15s;
+        }
+        .user-clickable:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        .user-clickable:active {
+            color: #1e3a8a;
         }
     </style>
 </head>
@@ -1408,12 +1505,10 @@
                         <button onclick="exportToExcel()" class="flex items-center gap-1 sm:gap-2 bg-green-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-700 transition-colors whitespace-nowrap">
                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                             <span class="hidden xs:inline">Excel</span>
-        
                         </button>
                         <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap">
                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                             <span class="hidden xs:inline">Refresh</span>
-                           
                         </button>
                     </div>
                 </div>
@@ -1961,7 +2056,7 @@
             let currentTrackingOrderId = null;
             let pendingCancelOrderId = null;
             let selectedOrders = new Set();
-            let statsCollapsed = true; // start collapsed on mobile
+            let statsCollapsed = true;
 
             // ─── STATS TOGGLE ──────────────────────────────────────────────
             window.toggleStats = function() {
@@ -1982,7 +2077,6 @@
                 }
             };
 
-            // on desktop, always expanded
             function handleStatsOnResize() {
                 const isDesktop = window.innerWidth >= 768;
                 const wrapper = document.getElementById('statsWrapper');
@@ -1995,7 +2089,6 @@
                     if (label) label.textContent = 'Hide Stats';
                     statsCollapsed = false;
                 } else {
-                    // on mobile, keep as per user toggle; default collapsed
                     if (statsCollapsed === undefined) statsCollapsed = true;
                     if (statsCollapsed) {
                         wrapper.classList.add('collapsed');
@@ -2070,6 +2163,34 @@
                 updateStats();
                 filterOrders();
                 showToast('✅', `Order ${orderId} updated to ${newStatus}`);
+            };
+
+            // ─── ORDERED BUTTON FUNCTION ──────────────────────────────────
+            window.setOrdered = function(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) {
+                    showToast('❌', 'Order not found');
+                    return;
+                }
+                // If already Order Approved, just notify
+                if (order.status === 'Order Approved') {
+                    showToast('ℹ️', `Order ${orderId} is already in Assign Pending`);
+                    return;
+                }
+                // If order is in a terminal state, warn but allow
+                const terminal = ['Delivered', 'Order Cancelled', 'Failed Delivery', 'Returned'];
+                if (terminal.includes(order.status)) {
+                    if (!confirm(
+                            `Order ${orderId} is currently "${order.status}". Moving it to "Order Approved" will remove it from its current state. Continue?`
+                            )) {
+                        return;
+                    }
+                }
+                order.status = 'Order Approved';
+                order.currentStageIndex = 3;
+                updateStats();
+                filterOrders();
+                showToast('✅', `Order ${orderId} moved to Ordered (Assign Pending)`);
             };
 
             // ─── HELPERS ────────────────────────────────────────────────────
@@ -2506,6 +2627,26 @@
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
 
+                    // Build status cell with Ordered button
+                    const statusCellHtml = `
+                        <div class="status-cell-wrapper">
+                            <div class="status-row">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
+                                    <span class="w-1.5 h-1.5 rounded-full ${statusColor.dot}"></span>${order.status}
+                                </span>
+                            </div>
+                            <div class="status-row">
+                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="status-select-desktop">
+                                    <option value="">Move to...</option>
+                                    ${statusOptions}
+                                </select>
+                            </div>
+                            <div class="ordered-btn-wrap">
+                                <button onclick="setOrdered('${order.id}')" class="ordered-btn">📋 Ordered</button>
+                            </div>
+                        </div>
+                    `;
+
                     const row = document.createElement('tr');
                     row.className = 'order-row border-b border-gray-100';
                     row.innerHTML = `
@@ -2546,15 +2687,7 @@
                             ${order.trackingNumber ? `<div class="mt-1 text-[10px] text-blue-500">🔗 ${order.trackingNumber}</div>` : ''}
                         </td>
                         <td class="px-3 py-3 whitespace-nowrap">
-                            <div class="flex flex-col items-start gap-1">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
-                                    <span class="w-1.5 h-1.5 rounded-full ${statusColor.dot}"></span>${order.status}
-                                </span>
-                                <select onchange="updateOrderStatus('${order.id}', this.value)" class="text-[11px] border border-gray-300 rounded px-1.5 py-0.5 bg-white hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors w-full max-w-[130px]">
-                                    <option value="">Move to...</option>
-                                    ${statusOptions}
-                                </select>
-                            </div>
+                            ${statusCellHtml}
                         </td>
                         <td class="px-3 py-3 whitespace-nowrap text-xs text-gray-600">
                             <div><span class="font-semibold">Order:</span> ${order.dateTime}</div>
@@ -2637,6 +2770,10 @@
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
 
+                    // Mobile user name: clickable
+                    const userNameHtml =
+                        `<span class="user-clickable" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</span>`;
+
                     const card = document.createElement('div');
                     card.className = 'order-card';
                     card.innerHTML = `
@@ -2672,12 +2809,13 @@
                                     <option value="">Move to...</option>
                                     ${statusOptions}
                                 </select>
+                                <button onclick="setOrdered('${order.id}')" class="ordered-btn-mobile">📋 Ordered</button>
                             </div>
                             <hr class="divider">
                             <div class="card-row">
                                 <span class="label">👤 User</span>
                                 <span class="value flex items-center gap-1 flex-wrap">
-                                    <span class="tier-${tierClass}">${tierIcon}</span> ${order.user}
+                                    <span class="tier-${tierClass}">${tierIcon}</span> ${userNameHtml}
                                     <span class="text-muted text-xs">${mobile}</span>
                                     <a href="${waLink}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">💬</a>
                                     ${arrivalCount > 0 ? `<span class="arrival-count" onclick="filterByUserAndStatus('${order.user.replace(/'/g, "\\'")}', 'Arrived at Nepal WH')"><span class="count-num">${arrivalCount}</span> at Nepal WH</span>` : ''}
@@ -2696,7 +2834,7 @@
                                 <span class="label">💰 Payment</span>
                                 <span class="value text-xs">
                                     <div><span class="font-semibold">Total:</span> ${order.paymentSummary.total}</div>
-                                    <div><span class="font-semibold text-green-600">Adv:</span> ${order.paymentSummary.advance} (${pcts.advPct}%) <span class="text-muted">|</span> <span class="font-semibold text-orange-600">COD:</span> ${order.paymentSummary.cod} (${pcts.codPct}%)</div>
+                                    <div><span class="font-semibold text-green-600">Adv:</span> ${order.paymentSummary.advance} (${pcts.advPct}%) <span class="text-muted"><br></span> <span class="font-semibold text-orange-600">COD:</span> ${order.paymentSummary.cod} (${pcts.codPct}%)</div>
                                     <div><span class="text-muted">Gateway:</span> ${order.paymentSummary.gateway}</div>
                                     <div><span class="text-muted">Gross:</span> ${order.paymentSummary.gross} <span class="text-muted">|</span> <span class="text-green-600">Disc:</span> ${order.paymentSummary.discount}</div>
                                     ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="text-orange-600 font-medium">Extra COD: ${order.paymentSummary.extraCOD}</div>` : ''}
@@ -3116,7 +3254,6 @@
                 }
             });
 
-            // ─── RESIZE HANDLER ─────────────────────────────────────────────
             window.addEventListener('resize', handleStatsOnResize);
 
             // ─── EXPOSE ──────────────────────────────────────────────────────
@@ -3151,6 +3288,7 @@
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
             window.updateOrderStatus = updateOrderStatus;
+            window.setOrdered = setOrdered;
             window.toggleOrderSelection = toggleOrderSelection;
             window.toggleSelectAll = toggleSelectAll;
             window.toggleSelectAllDesktop = toggleSelectAllDesktop;
@@ -3168,7 +3306,6 @@
             populateStatusTabs();
             renderPaginatedOrders();
             updateActiveFilters();
-            // set initial stats state: collapsed on mobile, expanded on desktop
             handleStatsOnResize();
         })();
     </script>
