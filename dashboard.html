@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Main Dashboard</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
+    </script>
+    <style>
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .stat-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 240px;
+            width: 100%;
+        }
+        .chart-container-sm {
+            height: 200px;
+        }
+        .chart-container-xs {
+            height: 160px;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        @media (max-width: 767px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+            .stats-grid .stat-card {
+                padding: 8px 10px;
+            }
+            .stats-grid .stat-card .stat-value {
+                font-size: 14px;
+            }
+            .stats-grid .stat-card .stat-label {
+                font-size: 8px;
+                letter-spacing: 0.2px;
+            }
+            .stats-grid .stat-card .stat-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+            .stats-grid-extra {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
+            .stats-grid-extra .stat-card {
+                padding: 8px 10px !important;
+            }
+            .stats-grid-extra .stat-card .stat-value {
+                font-size: 13px !important;
+            }
+            .stats-grid-extra .stat-card .stat-label {
+                font-size: 8px !important;
+            }
+            .filter-section .filter-group {
+                flex-wrap: nowrap;
+                flex: 1 1 auto;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .filter-section .filter-actions button {
+                font-size: 11px;
+                padding: 4px 10px;
+                white-space: nowrap;
+            }
+            .filter-section .filter-actions button span {
+                display: none;
+            }
+            .dashboard-charts-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .chart-container {
+                height: 200px;
+            }
+            .chart-container-sm {
+                height: 170px;
+            }
+            .chart-container-xs {
+                height: 150px;
+            }
+            .valuable-customers-table td,
+            .valuable-customers-table th {
+                font-size: 10px !important;
+                padding: 4px 6px !important;
+            }
+            .period-toggle button {
+                padding: 2px 10px;
+                font-size: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
+            }
+            .stats-grid .stat-card {
+                padding: 6px 8px;
+            }
+            .stats-grid .stat-card .stat-value {
+                font-size: 12px;
+            }
+            .stats-grid .stat-card .stat-label {
+                font-size: 7px;
+            }
+            .stats-grid .stat-card .stat-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 10px;
+            }
+            .stats-grid-extra {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4px !important;
+            }
+            .stats-grid-extra .stat-card {
+                padding: 6px 8px !important;
+            }
+            .stats-grid-extra .stat-card .stat-value {
+                font-size: 11px !important;
+            }
+            .stats-grid-extra .stat-card .stat-label {
+                font-size: 7px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 55px;
+            }
+            .dashboard-charts-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .chart-container {
+                height: 170px;
+            }
+            .chart-container-sm {
+                height: 150px;
+            }
+            .chart-container-xs {
+                height: 130px;
+            }
+            .period-toggle button {
+                padding: 2px 8px;
+                font-size: 9px;
+            }
+        }
+
+        @media print {
+            .sidebar,
+            .top-bar,
+            .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            .stat-card {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+            .dashboard-charts-grid {
+                page-break-inside: avoid;
+            }
+            .filter-section .filter-actions {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
+        .print-only {
+            display: none;
+        }
+
+        .recent-orders-table td,
+        .recent-orders-table th {
+            padding: 5px 8px;
+            font-size: 11px;
+        }
+        .recent-orders-table .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .recent-orders-table .status-badge .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .period-toggle {
+            display: inline-flex;
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 3px;
+            gap: 2px;
+        }
+        .period-toggle button {
+            padding: 4px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+        }
+        .period-toggle button.active {
+            background: #4F46E5;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+        .period-toggle button:hover:not(.active) {
+            background: #e2e8f0;
+        }
+
+        .stats-toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #4F46E5;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .stats-toggle-btn:hover {
+            background: #f1f5f9;
+        }
+        .stats-toggle-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .stats-toggle-btn .arrow.collapsed {
+            transform: rotate(0deg);
+        }
+        .stats-toggle-btn .arrow.expanded {
+            transform: rotate(180deg);
+        }
+        .stats-collapsible-wrapper {
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            max-height: 5000px;
+        }
+        .stats-collapsible-wrapper.collapsed {
+            max-height: 0 !important;
+        }
+        @media (max-width: 767px) {
+            .stats-toggle-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .stats-toggle-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: #4F46E5;
+            }
+            .stats-collapsible-wrapper.collapsed {
+                max-height: 0 !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .stats-collapsible-wrapper {
+                max-height: none !important;
+            }
+            .stats-toggle-btn {
+                display: none !important;
+            }
+        }
+
+        .stats-grid-extra {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .valuable-customers-table td,
+        .valuable-customers-table th {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        .valuable-customers-table .user-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .stat-label-one {
+            font-size: 9px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .stat-value-sm {
+            font-size: 15px;
+        }
+        @media (min-width: 768px) {
+            .stat-label-one {
+                font-size: 10px;
+            }
+            .stat-value-sm {
+                font-size: 17px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .stat-label-one {
+                font-size: 11px;
+            }
+            .stat-value-sm {
+                font-size: 20px;
+            }
+        }
+
+        /* ─── VIEW ALL BUTTON ─── */
+        .view-all-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 14px;
+            border-radius: 8px;
+            background: #4F46E5;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+        }
+        .view-all-btn:hover {
+            background: #4338CA;
+            transform: translateY(-1px);
+        }
+        @media (max-width: 480px) {
+            .view-all-btn {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+        }
+
+        /* ─── SIDEBAR ORIGINAL STYLES ─── */
+        .sidebar .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        /* ensure sidebar menu items same as original */
+        .sidebar .flex.items-center.gap-3.px-3.py-2.5.rounded-lg {
+            color: #cbd5e1;
+        }
+        .sidebar .flex.items-center.gap-3.px-3.py-2.5.rounded-lg:hover {
+            background: #334155;
+            color: #fff;
+        }
+        .sidebar .bg-sidebarActive {
+            background: #4F46E5;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR (ORIGINAL FROM SHIPMENT PAGE) ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">📊 Main Dashboard</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">📊 Dashboard</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="exportPDF()" class="flex items-center gap-1 sm:gap-2 bg-red-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-700 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="hidden xs:inline">PDF</span>
+                </button>
+                <button onclick="refreshDashboard()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── FILTERS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                <div class="filter-section">
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Date Range:</label>
+                        <input type="date" id="filterDateFrom" class="text-xs sm:text-sm" onchange="applyFilters()" />
+                        <span class="text-gray-400 text-xs">–</span>
+                        <input type="date" id="filterDateTo" class="text-xs sm:text-sm" onchange="applyFilters()" />
+                    </div>
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">View:</label>
+                        <div class="period-toggle" id="periodToggle">
+                            <button class="active" data-period="daily" onclick="setPeriod('daily')">Daily</button>
+                            <button data-period="weekly" onclick="setPeriod('weekly')">Weekly</button>
+                            <button data-period="monthly" onclick="setPeriod('monthly')">Monthly</button>
+                        </div>
+                    </div>
+                    <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                        <button onclick="clearFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                        <button onclick="applyFilters()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                    </div>
+                </div>
+                <div id="activeDashboardFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+            </div>
+
+            <!-- ─── TOP STATS ─── -->
+            <div>
+                <div class="flex items-center justify-between mb-1 sm:mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">📊 Key Metrics</span>
+                        <span class="text-xs font-semibold text-gray-700 sm:hidden">📊 Metrics</span>
+                    </div>
+                    <button class="stats-toggle-btn" onclick="toggleStats()" aria-label="Toggle stats">
+                        <span class="stats-toggle-label sm:hidden">Show Stats</span>
+                        <span class="arrow collapsed" id="statsArrow">▼</span>
+                    </button>
+                </div>
+                <div class="stats-collapsible-wrapper collapsed" id="statsWrapper">
+                    <!-- Row 1: Main KPIs -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 stats-grid">
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-blue-50 text-blue-600">👥</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Users</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-800 stat-value-sm" id="statTotalUsers">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-purple-50 text-purple-600">📦</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Orders</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-800 stat-value-sm" id="statTotalOrders">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-emerald-50 text-emerald-600">💰</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Revenue</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-emerald-600 stat-value-sm" id="statTotalRevenue">NPR 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Active Users</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-green-600 stat-value-sm" id="statActiveUsers">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-amber-50 text-amber-600">🆕</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">New (Month)</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-amber-600 stat-value-sm" id="statNewUsers">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-rose-50 text-rose-600">🚚</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">In Transit</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-rose-600 stat-value-sm" id="statInTransit">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Financial Metrics -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2 stats-grid-extra">
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-indigo-50 text-indigo-600">🏛️</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Import Duty</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-indigo-600 stat-value-sm" id="statImportDuty">NPR 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-violet-50 text-violet-600">📊</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">VAT Collected</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-violet-600 stat-value-sm" id="statVAT">NPR 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-cyan-50 text-cyan-600">✈️</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Shipping Fees</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-cyan-600 stat-value-sm" id="statShippingFees">NPR 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-teal-50 text-teal-600">📅</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Month Orders</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-teal-600 stat-value-sm" id="statMonthOrders">NPR 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-pink-50 text-pink-600">📦</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Today Shipments</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-pink-600 stat-value-sm" id="statTodayShipments">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-orange-50 text-orange-600">👤</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">New Joined</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-orange-600 stat-value-sm" id="statNewJoined">0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Today's Metrics -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2 stats-grid-extra">
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-red-50 text-red-600">🇮🇳</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">India WH Today</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-red-600 stat-value-sm" id="statIndiaWHToday">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-purple-50 text-purple-600">🇳🇵</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Nepal WH Today</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-purple-600 stat-value-sm" id="statNepalWHToday">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Quotes Confirmed</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-green-600 stat-value-sm" id="statQuotesConfirmed">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-red-100 text-red-600">❌</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Quotes Rejected</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-red-600 stat-value-sm" id="statQuotesRejected">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-blue-50 text-blue-600">💳</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Prepaid Amt/Units</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-blue-600 stat-value-sm" id="statPrepaid">NPR 0 / 0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
+                            <div class="flex items-center gap-2">
+                                <div class="stat-icon bg-amber-50 text-amber-600">💵</div>
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">COD Pending</p>
+                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-amber-600 stat-value-sm" id="statCODPending">NPR 0 / 0</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── CHARTS ROW 1 ─── -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 dashboard-charts-grid">
+                <!-- Revenue Chart -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">📈 Revenue Trend</h3>
+                        <span class="text-[10px] text-gray-400" id="revenuePeriodLabel">Daily</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Order Status Distribution -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">📊 Order Status</h3>
+                        <span class="text-[10px] text-gray-400">Distribution</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── CHARTS ROW 2 ─── -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 dashboard-charts-grid">
+                <!-- User Tier Distribution -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">🏅 User Tiers</h3>
+                        <span class="text-[10px] text-gray-400">Count</span>
+                    </div>
+                    <div class="chart-container-sm chart-container">
+                        <canvas id="tierChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Order Type Distribution -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">📋 Order Types</h3>
+                        <span class="text-[10px] text-gray-400">Distribution</span>
+                    </div>
+                    <div class="chart-container-sm chart-container">
+                        <canvas id="typeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Shipped Weight by Category -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">⚖️ Shipped Weight by Category</h3>
+                        <span class="text-[10px] text-gray-400">KG</span>
+                    </div>
+                    <div class="chart-container-sm chart-container">
+                        <canvas id="weightChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── CHARTS ROW 3 ─── -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 dashboard-charts-grid">
+                <!-- Delivered Shipment by Category -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">📦 Delivered Shipments by Category</h3>
+                        <span class="text-[10px] text-gray-400">Count</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="deliveredCategoryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Delivered Cities (BAR CHART) -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-sm font-semibold text-gray-700">📍 Delivered Cities</h3>
+                        <span class="text-[10px] text-gray-400">Count</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="deliveredCityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── VALUABLE CUSTOMERS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50">
+                    <div>
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700">⭐ Valuable Customers</span>
+                        <span class="text-[10px] sm:text-xs text-gray-500 ml-2">Based on Paid Orders Count</span>
+                    </div>
+                    <span class="text-[10px] text-gray-400">Top customers</span>
+                </div>
+                <div class="table-container">
+                    <table class="valuable-customers-table w-full text-xs" id="valuableCustomersTable">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wider">
+                                <th class="px-3 py-2 text-left">#</th>
+                                <th class="px-3 py-2 text-left">User</th>
+                                <th class="px-3 py-2 text-left">Email</th>
+                                <th class="px-3 py-2 text-center">Orders</th>
+                                <th class="px-3 py-2 text-center">Total Spent</th>
+                                <th class="px-3 py-2 text-left">Tier</th>
+                            </tr>
+                        </thead>
+                        <tbody id="valuableCustomersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ─── RECENT ORDERS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50">
+                    <div>
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700">📋 Recent Orders</span>
+                        <span class="text-[10px] sm:text-xs text-gray-500 ml-2" id="recentOrdersCount">0 orders</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-gray-400 hidden sm:inline">Showing latest 5</span>
+                        <button onclick="viewAllOrders()" class="view-all-btn">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                            View All
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="recent-orders-table w-full text-xs" id="recentOrdersTable">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wider">
+                                <th class="px-2 py-2 text-left">Order ID</th>
+                                <th class="px-2 py-2 text-left">User</th>
+                                <th class="px-2 py-2 text-left">Product</th>
+                                <th class="px-2 py-2 text-center">QTY</th>
+                                <th class="px-2 py-2 text-center">Amount</th>
+                                <th class="px-2 py-2 text-left">Status</th>
+                                <th class="px-2 py-2 text-left">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ─── FOOTER PRINT INFO ─── -->
+            <div class="text-center text-[10px] text-gray-400 py-2 print-only">
+                <p>Generated on: <span id="printDate"></span> | MeroWish Admin Dashboard</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── DATA ──────────────────────────────────────────────────────
+
+            const usersData = [{
+                id: 1,
+                name: 'Damodar Bhattarai',
+                email: 'damodar@example.com',
+                phone: '+977-980-123-4567',
+                tier: 'Diamond',
+                status: 'active',
+                joinDate: '2026-01-15',
+                ordersCount: 28,
+                totalSpent: 45200,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2027-01-15'
+            }, {
+                id: 2,
+                name: 'Sita Sharma',
+                email: 'sita@example.com',
+                phone: '+977-981-234-5678',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2026-02-10',
+                ordersCount: 12,
+                totalSpent: 18300,
+                address: 'Pokhara, Nepal',
+                membershipExpiry: '2026-12-10'
+            }, {
+                id: 3,
+                name: 'Ramesh Adhikari',
+                email: 'ramesh@example.com',
+                phone: '+977-982-345-6789',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-12-05',
+                ordersCount: 34,
+                totalSpent: 67800,
+                address: 'Biratnagar, Nepal',
+                membershipExpiry: '2026-11-05'
+            }, {
+                id: 4,
+                name: 'Priya Gurung',
+                email: 'priya@example.com',
+                phone: '+977-983-456-7890',
+                tier: 'Silver',
+                status: 'blocked',
+                joinDate: '2026-03-01',
+                ordersCount: 5,
+                totalSpent: 7200,
+                address: 'Lalitpur, Nepal',
+                membershipExpiry: '2027-03-01'
+            }, {
+                id: 5,
+                name: 'Bikash Thapa',
+                email: 'bikash@example.com',
+                phone: '+977-984-567-8901',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-11-20',
+                ordersCount: 19,
+                totalSpent: 31200,
+                address: 'Butwal, Nepal',
+                membershipExpiry: '2026-10-20'
+            }, {
+                id: 6,
+                name: 'Anita Rai',
+                email: 'anita@example.com',
+                phone: '+977-985-678-9012',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2026-02-25',
+                ordersCount: 8,
+                totalSpent: 14500,
+                address: 'Dharan, Nepal',
+                membershipExpiry: '2027-02-25'
+            }, {
+                id: 7,
+                name: 'Kiran Bhandari',
+                email: 'kiran@example.com',
+                phone: '+977-986-789-0123',
+                tier: 'Free',
+                status: 'blocked',
+                joinDate: '2026-01-02',
+                ordersCount: 2,
+                totalSpent: 2900,
+                address: 'Nepalgunj, Nepal',
+                membershipExpiry: '2026-07-02'
+            }, {
+                id: 8,
+                name: 'Maya Devi',
+                email: 'maya@example.com',
+                phone: '+977-987-890-1234',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-10-15',
+                ordersCount: 42,
+                totalSpent: 89400,
+                address: 'Janakpur, Nepal',
+                membershipExpiry: '2026-09-15'
+            }, {
+                id: 9,
+                name: 'Sujan Adhikari',
+                email: 'sujan@example.com',
+                phone: '+977-988-901-2345',
+                tier: 'Free',
+                status: 'active',
+                joinDate: '2026-04-12',
+                ordersCount: 3,
+                totalSpent: 4100,
+                address: 'Hetauda, Nepal',
+                membershipExpiry: '2027-04-12'
+            }, {
+                id: 10,
+                name: 'Nisha Shrestha',
+                email: 'nisha@example.com',
+                phone: '+977-989-012-3456',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2025-09-28',
+                ordersCount: 15,
+                totalSpent: 22100,
+                address: 'Bhaktapur, Nepal',
+                membershipExpiry: '2026-08-28'
+            }, {
+                id: 11,
+                name: 'Rajesh Hamal',
+                email: 'rajesh@example.com',
+                phone: '+977-970-123-4567',
+                tier: 'Diamond',
+                status: 'active',
+                joinDate: '2025-08-10',
+                ordersCount: 56,
+                totalSpent: 125000,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2027-08-10'
+            }, {
+                id: 12,
+                name: 'Sarita Koirala',
+                email: 'sarita@example.com',
+                phone: '+977-971-234-5678',
+                tier: 'Gold',
+                status: 'blocked',
+                joinDate: '2026-05-01',
+                ordersCount: 7,
+                totalSpent: 9800,
+                address: 'Pokhara, Nepal',
+                membershipExpiry: '2026-11-01'
+            }, {
+                id: 13,
+                name: 'Prakash Neupane',
+                email: 'prakash@example.com',
+                phone: '+977-972-345-6789',
+                tier: 'Free',
+                status: 'active',
+                joinDate: '2026-06-15',
+                ordersCount: 1,
+                totalSpent: 1200,
+                address: 'Biratnagar, Nepal',
+                membershipExpiry: '2027-06-15'
+            }, {
+                id: 14,
+                name: 'Goma Thapa',
+                email: 'goma@example.com',
+                phone: '+977-973-456-7890',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2025-07-22',
+                ordersCount: 22,
+                totalSpent: 36700,
+                address: 'Lalitpur, Nepal',
+                membershipExpiry: '2026-07-22'
+            }, {
+                id: 15,
+                name: 'Hari Sharma',
+                email: 'hari@example.com',
+                phone: '+977-974-567-8901',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-06-18',
+                ordersCount: 31,
+                totalSpent: 51200,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2026-06-18'
+            }];
+
+            const ordersData = [{
+                id: 'MW202600003',
+                user: 'Damodar Bhattarai',
+                dateTime: '06 May 2026 20:57',
+                paymentReceivedDateTime: '06 May 2026 21:15',
+                etaDeliveryDate: '12 May 2026',
+                type: 'Self Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 665.07', advance: 'NPR 281.86', gateway: 'Fonepay(1003281879)',
+                    cod: 'NPR 383.21', invoiceValue: 'INR 176.00', approxWeight: '0.50 KG', gross: 'NPR 701.71',
+                    discount: 'NPR 36.64', final: 'NPR 665.07', extraCOD: 'NPR 374.10' },
+                productLink: 'https://example.com/product/456',
+                productImage: 'https://picsum.photos/seed/prod1/200/200',
+                qty: 1,
+                productName: 'Wireless Bluetooth Earphones - Black',
+                totalAmount: 'NPR 665.07',
+                comment: 'Handle with care. Fragile item. Please use bubble wrap.',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001234',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001234',
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '07 May 2026 10:30',
+                orderStage: 'Delivered',
+                category: 'Electronics',
+                weight: 0.50
+            }, {
+                id: 'MW202600045',
+                user: 'Sita Sharma',
+                dateTime: '05 May 2026 14:30',
+                paymentReceivedDateTime: '05 May 2026 14:45',
+                etaDeliveryDate: '10 May 2026',
+                type: 'Quick Order',
+                status: 'Shipped',
+                paymentSummary: { total: 'NPR 1,250.00', advance: 'NPR 500.00', gateway: 'Fonepay(1003281880)',
+                    cod: 'NPR 750.00', invoiceValue: 'INR 320.00', approxWeight: '1.20 KG', gross: 'NPR 1,320.00',
+                    discount: 'NPR 70.00', final: 'NPR 1,250.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/789',
+                productImage: 'https://picsum.photos/seed/prod2/200/200',
+                qty: 2,
+                productName: 'Cotton Bed Sheet Set - Queen Size',
+                totalAmount: 'NPR 1,250.00',
+                comment: '',
+                currentStageIndex: 12,
+                trackingNumber: 'TRK-2026-001235',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001235',
+                address: 'Pokhara, Nepal',
+                lastUpdate: '06 May 2026 08:15',
+                orderStage: 'Shipped',
+                category: 'Home & Living',
+                weight: 1.20
+            }, {
+                id: 'MW202600078',
+                user: 'Ramesh Adhikari',
+                dateTime: '04 May 2026 09:15',
+                paymentReceivedDateTime: '04 May 2026 09:30',
+                etaDeliveryDate: '15 May 2026',
+                type: 'Buy For Me',
+                status: 'Arrived at Nepal Warehouse',
+                paymentSummary: { total: 'NPR 3,420.50', advance: 'NPR 1,500.00', gateway: 'Fonepay(1003281881)',
+                    cod: 'NPR 1,920.50', invoiceValue: 'INR 890.00', approxWeight: '2.80 KG',
+                    gross: 'NPR 3,600.00', discount: 'NPR 179.50', final: 'NPR 3,420.50', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/101',
+                productImage: 'https://picsum.photos/seed/prod3/200/200',
+                qty: 1,
+                productName: 'Samsung Galaxy Watch 6 - 44mm',
+                totalAmount: 'NPR 3,420.50',
+                comment: 'Express delivery requested. Customer called and asked for rush.',
+                currentStageIndex: 11,
+                trackingNumber: 'TRK-2026-001236',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001236',
+                address: 'Biratnagar, Nepal',
+                lastUpdate: '07 May 2026 06:45',
+                orderStage: 'Arrived at Nepal WH',
+                category: 'Electronics',
+                weight: 2.80
+            }, {
+                id: 'MW202600092',
+                user: 'Priya Gurung',
+                dateTime: '03 May 2026 16:45',
+                paymentReceivedDateTime: '03 May 2026 17:00',
+                etaDeliveryDate: '09 May 2026',
+                type: 'Quick Order',
+                status: 'Custom Clearance',
+                paymentSummary: { total: 'NPR 890.00', advance: 'NPR 890.00', gateway: 'Fonepay(1003281882)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 225.00', approxWeight: '0.35 KG', gross: 'NPR 920.00',
+                    discount: 'NPR 30.00', final: 'NPR 890.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/202',
+                productImage: 'https://picsum.photos/seed/prod4/200/200',
+                qty: 3,
+                productName: 'USB-C Fast Charging Cable',
+                totalAmount: 'NPR 890.00',
+                comment: '',
+                currentStageIndex: 9,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Lalitpur, Nepal',
+                lastUpdate: '06 May 2026 14:20',
+                orderStage: 'Custom Clearance',
+                category: 'Electronics',
+                weight: 0.35
+            }, {
+                id: 'MW202600115',
+                user: 'Bikash Thapa',
+                dateTime: '02 May 2026 11:00',
+                paymentReceivedDateTime: '02 May 2026 11:20',
+                etaDeliveryDate: '20 May 2026',
+                type: 'Self Order',
+                status: 'Custom Hold',
+                paymentSummary: { total: 'NPR 5,100.00', advance: 'NPR 2,000.00', gateway: 'Fonepay(1003281883)',
+                    cod: 'NPR 3,100.00', invoiceValue: 'INR 1,350.00', approxWeight: '4.50 KG',
+                    gross: 'NPR 5,350.00', discount: 'NPR 250.00', final: 'NPR 5,100.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/303',
+                productImage: 'https://picsum.photos/seed/prod5/200/200',
+                qty: 1,
+                productName: 'Home Theater Sound System',
+                totalAmount: 'NPR 5,100.00',
+                comment: '⚠️ Held at customs - documentation pending. Need invoice copy.',
+                currentStageIndex: 10,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Butwal, Nepal',
+                lastUpdate: '06 May 2026 11:00',
+                orderStage: 'Custom Hold',
+                category: 'Electronics',
+                weight: 4.50
+            }, {
+                id: 'MW202600130',
+                user: 'Anita Rai',
+                dateTime: '01 May 2026 08:30',
+                paymentReceivedDateTime: '01 May 2026 08:50',
+                etaDeliveryDate: '14 May 2026',
+                type: 'Buy For Me',
+                status: 'Order Created',
+                paymentSummary: { total: 'NPR 1,750.00', advance: 'NPR 0.00', gateway: 'Pending', cod: 'NPR 1,750.00',
+                    invoiceValue: 'INR 450.00', approxWeight: '0.90 KG', gross: 'NPR 1,800.00',
+                    discount: 'NPR 50.00', final: 'NPR 1,750.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/404',
+                productImage: 'https://picsum.photos/seed/prod6/200/200',
+                qty: 2,
+                productName: 'Yoga Mat Premium',
+                totalAmount: 'NPR 1,750.00',
+                comment: 'Waiting for quotation. Customer requested blue color.',
+                currentStageIndex: 0,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Dharan, Nepal',
+                lastUpdate: '01 May 2026 08:50',
+                orderStage: 'Order Created',
+                category: 'Sports & Fitness',
+                weight: 0.90
+            }, {
+                id: 'MW202600142',
+                user: 'Kiran Bhandari',
+                dateTime: '30 Apr 2026 19:20',
+                paymentReceivedDateTime: '30 Apr 2026 19:35',
+                etaDeliveryDate: 'N/A',
+                type: 'Quick Order',
+                status: 'Order Cancelled',
+                paymentSummary: { total: 'NPR 450.00', advance: 'NPR 450.00', gateway: 'Refund Pending',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 115.00', approxWeight: '0.20 KG', gross: 'NPR 470.00',
+                    discount: 'NPR 20.00', final: 'NPR 450.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/505',
+                productImage: 'https://picsum.photos/seed/prod7/200/200',
+                qty: 1,
+                productName: 'Phone Screen Protector',
+                totalAmount: 'NPR 450.00',
+                comment: 'Cancelled by customer. Refund initiated.',
+                currentStageIndex: 4,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Nepalgunj, Nepal',
+                lastUpdate: '30 Apr 2026 19:40',
+                orderStage: 'Cancelled',
+                category: 'Electronics',
+                weight: 0.20
+            }, {
+                id: 'MW202600158',
+                user: 'Maya Devi',
+                dateTime: '29 Apr 2026 13:10',
+                paymentReceivedDateTime: '29 Apr 2026 13:25',
+                etaDeliveryDate: '08 May 2026',
+                type: 'Self Order',
+                status: 'Incoming Shipment',
+                paymentSummary: { total: 'NPR 2,200.00', advance: 'NPR 1,000.00', gateway: 'Fonepay(1003281884)',
+                    cod: 'NPR 1,200.00', invoiceValue: 'INR 570.00', approxWeight: '1.60 KG',
+                    gross: 'NPR 2,320.00', discount: 'NPR 120.00', final: 'NPR 2,200.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/606',
+                productImage: 'https://picsum.photos/seed/prod8/200/200',
+                qty: 1,
+                productName: 'Leather Handbag - Brown',
+                totalAmount: 'NPR 2,200.00',
+                comment: 'En route to India warehouse. Tracking available soon.',
+                currentStageIndex: 5,
+                trackingNumber: 'TRK-2026-001237',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001237',
+                address: 'Janakpur, Nepal',
+                lastUpdate: '05 May 2026 09:10',
+                orderStage: 'Incoming Shipment',
+                category: 'Fashion',
+                weight: 1.60
+            }, {
+                id: 'MW202600170',
+                user: 'Sujan Adhikari',
+                dateTime: '28 Apr 2026 10:00',
+                paymentReceivedDateTime: '28 Apr 2026 10:15',
+                etaDeliveryDate: '12 May 2026',
+                type: 'Quick Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 320.00', advance: 'NPR 320.00', gateway: 'Fonepay(1003281885)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 85.00', approxWeight: '0.10 KG', gross: 'NPR 340.00',
+                    discount: 'NPR 20.00', final: 'NPR 320.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/707',
+                productImage: 'https://picsum.photos/seed/prod9/200/200',
+                qty: 1,
+                productName: 'USB-C to Lightning Cable',
+                totalAmount: 'NPR 320.00',
+                comment: '',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001238',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001238',
+                address: 'Hetauda, Nepal',
+                lastUpdate: '02 May 2026 16:00',
+                orderStage: 'Delivered',
+                category: 'Electronics',
+                weight: 0.10
+            }, {
+                id: 'MW202600171',
+                user: 'Test User',
+                dateTime: '27 Apr 2026 09:00',
+                paymentReceivedDateTime: '27 Apr 2026 09:15',
+                etaDeliveryDate: '05 May 2026',
+                type: 'Quick Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 1,500.00', advance: 'NPR 1,500.00', gateway: 'Fonepay(1003281886)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 400.00', approxWeight: '2.00 KG', gross: 'NPR 1,550.00',
+                    discount: 'NPR 50.00', final: 'NPR 1,500.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/808',
+                productImage: 'https://picsum.photos/seed/prod10/200/200',
+                qty: 1,
+                productName: 'Premium Cotton Towel Set',
+                totalAmount: 'NPR 1,500.00',
+                comment: '',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001239',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001239',
+                address: 'Lalitpur, Nepal',
+                lastUpdate: '05 May 2026 10:00',
+                orderStage: 'Delivered',
+                category: 'Home & Living',
+                weight: 2.00
+            }, {
+                id: 'MW202600172',
+                user: 'Test User 2',
+                dateTime: '26 Apr 2026 11:30',
+                paymentReceivedDateTime: '26 Apr 2026 11:45',
+                etaDeliveryDate: '03 May 2026',
+                type: 'Self Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 800.00', advance: 'NPR 800.00', gateway: 'Fonepay(1003281887)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 210.00', approxWeight: '0.50 KG', gross: 'NPR 830.00',
+                    discount: 'NPR 30.00', final: 'NPR 800.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/909',
+                productImage: 'https://picsum.photos/seed/prod11/200/200',
+                qty: 2,
+                productName: 'Wireless Mouse',
+                totalAmount: 'NPR 800.00',
+                comment: '',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001240',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001240',
+                address: 'Biratnagar, Nepal',
+                lastUpdate: '03 May 2026 15:00',
+                orderStage: 'Delivered',
+                category: 'Electronics',
+                weight: 0.50
+            }, {
+                id: 'MW202600173',
+                user: 'Test User 3',
+                dateTime: '25 Apr 2026 14:00',
+                paymentReceivedDateTime: '25 Apr 2026 14:20',
+                etaDeliveryDate: '02 May 2026',
+                type: 'Buy For Me',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 2,200.00', advance: 'NPR 1,000.00', gateway: 'Fonepay(1003281888)',
+                    cod: 'NPR 1,200.00', invoiceValue: 'INR 580.00', approxWeight: '1.20 KG', gross: 'NPR 2,300.00',
+                    discount: 'NPR 100.00', final: 'NPR 2,200.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/1010',
+                productImage: 'https://picsum.photos/seed/prod12/200/200',
+                qty: 1,
+                productName: 'Leather Jacket',
+                totalAmount: 'NPR 2,200.00',
+                comment: 'Rush delivery',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001241',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001241',
+                address: 'Butwal, Nepal',
+                lastUpdate: '02 May 2026 12:00',
+                orderStage: 'Delivered',
+                category: 'Fashion',
+                weight: 1.20
+            }, {
+                id: 'MW202600174',
+                user: 'Test User 4',
+                dateTime: '24 Apr 2026 16:30',
+                paymentReceivedDateTime: '24 Apr 2026 16:45',
+                etaDeliveryDate: '30 Apr 2026',
+                type: 'Quick Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 1,200.00', advance: 'NPR 1,200.00', gateway: 'Fonepay(1003281889)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 320.00', approxWeight: '0.80 KG', gross: 'NPR 1,240.00',
+                    discount: 'NPR 40.00', final: 'NPR 1,200.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/1111',
+                productImage: 'https://picsum.photos/seed/prod13/200/200',
+                qty: 1,
+                productName: 'Yoga Block Set',
+                totalAmount: 'NPR 1,200.00',
+                comment: '',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001242',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001242',
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '30 Apr 2026 18:00',
+                orderStage: 'Delivered',
+                category: 'Sports & Fitness',
+                weight: 0.80
+            }];
+
+            const valuableCustomers = [{
+                name: 'Albin Bhattarai',
+                email: 'damodar.bhattarai.1999@gmail.com',
+                orders: 28,
+                spent: 45200,
+                tier: 'Diamond'
+            }, {
+                name: 'Golo App',
+                email: 'info.goloapp@gmail.com',
+                orders: 15,
+                spent: 22100,
+                tier: 'Silver'
+            }, {
+                name: 'Merowish User',
+                email: 'zm649z6yp2@privaterelay.appleid.com',
+                orders: 12,
+                spent: 18300,
+                tier: 'Silver'
+            }, {
+                name: 'Sange Yonjan',
+                email: 'usa.sange@gmail.com',
+                orders: 8,
+                spent: 14500,
+                tier: 'Silver'
+            }, {
+                name: 'James Shrestha',
+                email: 'jamesnpp83@gmail.com',
+                orders: 7,
+                spent: 9800,
+                tier: 'Gold'
+            }, {
+                name: 'Nawa Raj Chapagain',
+                email: 'nrchapagain@msn.com',
+                orders: 5,
+                spent: 7200,
+                tier: 'Silver'
+            }, {
+                name: 'Bikram Dhimal',
+                email: 'dhimal.bik@gmail.com',
+                orders: 3,
+                spent: 4100,
+                tier: 'Free'
+            }];
+
+            const financialData = {
+                importDuty: 34517.19,
+                vat: 34182.63,
+                shippingFees: 29390,
+                monthOrderAmount: 326515.8
+            };
+
+            const todayData = {
+                newJoined: 305,
+                totalShipmentsAdded: 13,
+                indiaWH: 5,
+                nepalWH: 5,
+                quotesConfirmed: 3,
+                quotesRejected: 8,
+                prepaidAmount: 0,
+                prepaidUnits: 0,
+                codPendingAmount: 0,
+                codPendingUnits: 0
+            };
+
+            const categoryWeightData = {
+                'Electronics': 8.45,
+                'Home & Living': 1.20,
+                'Fashion': 1.60,
+                'Sports & Fitness': 0.90
+            };
+
+            // ─── STATE ──────────────────────────────────────────────────────
+            let currentPeriod = 'daily';
+            let chartInstances = {};
+            let filteredUsers = [...usersData];
+            let filteredOrders = [...ordersData];
+
+            // ─── HELPERS ────────────────────────────────────────────────────
+            function parseNPR(str) {
+                return parseFloat(str.replace(/[^0-9.]/g, '')) || 0;
+            }
+
+            function getStatusColor(status) {
+                const map = {
+                    'Delivered': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green' },
+                    'Shipped': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue' },
+                    'Arrived at Nepal Warehouse': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'purple' },
+                    'Arrived at Nepal WH': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'purple' },
+                    'Arrived at India Warehouse': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple' },
+                    'Arrived at India WH': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple' },
+                    'Custom Clearance': { bg: 'bg-cyan-100', text: 'text-cyan-700', dot: 'blue' },
+                    'Custom Hold': { bg: 'bg-red-100', text: 'text-red-700', dot: 'red' },
+                    'Incoming Shipment': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'blue' },
+                    'Order Created': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow' },
+                    'Order Cancelled': { bg: 'bg-red-100', text: 'text-red-700', dot: 'red' },
+                    'Order Approved': { bg: 'bg-lime-100', text: 'text-lime-700', dot: 'green' },
+                    'Wrong Product Received': { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'orange' },
+                };
+                return map[status] || { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'gray' };
+            }
+
+            function getTierIcon(tier) {
+                const map = { 'Diamond': '💎', 'Gold': '🥇', 'Silver': '🥈', 'Free': '🥉' };
+                return map[tier] || '⭐';
+            }
+
+            function getDateObj(dateStr) {
+                const parts = dateStr.split(' ');
+                if (parts.length >= 3) {
+                    const monthMap = { 'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Aug': 7,
+                        'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11 };
+                    const day = parseInt(parts[0]);
+                    const month = monthMap[parts[1]];
+                    const year = parseInt(parts[2]);
+                    return new Date(year, month, day);
+                }
+                return new Date(dateStr);
+            }
+
+            function formatDateShort(d) {
+                const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                return `${monthNames[d.getMonth()]} ${d.getDate()}`;
+            }
+
+            function getWeekNumber(d) {
+                const date = new Date(d);
+                date.setHours(0, 0, 0, 0);
+                date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+                const week1 = new Date(date.getFullYear(), 0, 4);
+                return 1 + Math.round(((date - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+            }
+
+            function getInitials(name) {
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function getAvatarColor(name) {
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
+                return colors[hash];
+            }
+
+            function getCityFromAddress(address) {
+                if (!address) return 'Unknown';
+                const parts = address.split(',');
+                return parts[0].trim();
+            }
+
+            function viewAllOrders() {
+                showToast('📋', 'Redirecting to full orders list...');
+                setTimeout(() => {
+                    document.querySelector('.top-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+
+            // ─── FILTERS ────────────────────────────────────────────────────
+            function applyFilters() {
+                const dateFrom = document.getElementById('filterDateFrom').value;
+                const dateTo = document.getElementById('filterDateTo').value;
+
+                let filteredUsersData = [...usersData];
+                let filteredOrdersData = [...ordersData];
+
+                if (dateFrom) {
+                    const from = new Date(dateFrom);
+                    filteredUsersData = filteredUsersData.filter(u => new Date(u.joinDate) >= from);
+                    filteredOrdersData = filteredOrdersData.filter(o => getDateObj(o.dateTime) >= from);
+                }
+                if (dateTo) {
+                    const to = new Date(dateTo + 'T23:59:59');
+                    filteredUsersData = filteredUsersData.filter(u => new Date(u.joinDate) <= to);
+                    filteredOrdersData = filteredOrdersData.filter(o => getDateObj(o.dateTime) <= to);
+                }
+
+                filteredUsers = filteredUsersData;
+                filteredOrders = filteredOrdersData;
+
+                updateStats();
+                updateCharts();
+                updateRecentOrders();
+                updateValuableCustomers();
+                updateActiveFilters();
+                showToast('📊', 'Dashboard updated');
+            }
+
+            function clearFilters() {
+                document.getElementById('filterDateFrom').value = '';
+                document.getElementById('filterDateTo').value = '';
+                filteredUsers = [...usersData];
+                filteredOrders = [...ordersData];
+                updateStats();
+                updateCharts();
+                updateRecentOrders();
+                updateValuableCustomers();
+                updateActiveFilters();
+                showToast('🔄', 'Filters cleared');
+            }
+
+            function updateActiveFilters() {
+                const container = document.getElementById('activeDashboardFilters');
+                let html = '';
+                const dateFrom = document.getElementById('filterDateFrom').value;
+                const dateTo = document.getElementById('filterDateTo').value;
+                if (dateFrom || dateTo) {
+                    let dateStr = '';
+                    if (dateFrom && dateTo) dateStr = `${dateFrom} → ${dateTo}`;
+                    else if (dateFrom) dateStr = `From ${dateFrom}`;
+                    else dateStr = `Until ${dateTo}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${dateStr} <button onclick="clearFilters()" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                const periodLabel = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
+                html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">📊 ${periodLabel} View</span>`;
+                container.innerHTML = html || '<span class="text-xs text-gray-400">No active filters</span>';
+            }
+
+            function setPeriod(period) {
+                currentPeriod = period;
+                document.querySelectorAll('#periodToggle button').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.period === period);
+                });
+                document.getElementById('revenuePeriodLabel').textContent =
+                    period.charAt(0).toUpperCase() + period.slice(1);
+                updateCharts();
+                updateActiveFilters();
+            }
+
+            // ─── UPDATE STATS ──────────────────────────────────────────────
+            function updateStats() {
+                const totalUsers = filteredUsers.length;
+                const activeUsers = filteredUsers.filter(u => u.status === 'active').length;
+                const totalOrders = filteredOrders.length;
+                const totalRevenue = filteredOrders.reduce((sum, o) => sum + parseNPR(o.totalAmount), 0);
+                const inTransit = filteredOrders.filter(o => ['Shipped', 'Incoming Shipment', 'Custom Clearance',
+                    'Arrived at India Warehouse', 'Arrived at India WH', 'Arrived at Nepal Warehouse',
+                    'Arrived at Nepal WH'
+                ].includes(o.status)).length;
+
+                const now = new Date();
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                const newUsers = filteredUsers.filter(u => new Date(u.joinDate) >= monthStart).length;
+
+                document.getElementById('statTotalUsers').textContent = totalUsers;
+                document.getElementById('statActiveUsers').textContent = activeUsers;
+                document.getElementById('statTotalOrders').textContent = totalOrders;
+                document.getElementById('statTotalRevenue').textContent =
+                    `NPR ${totalRevenue.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                document.getElementById('statNewUsers').textContent = newUsers;
+                document.getElementById('statInTransit').textContent = inTransit;
+
+                document.getElementById('statImportDuty').textContent =
+                    `NPR ${financialData.importDuty.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                document.getElementById('statVAT').textContent =
+                    `NPR ${financialData.vat.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                document.getElementById('statShippingFees').textContent =
+                    `NPR ${financialData.shippingFees.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                document.getElementById('statMonthOrders').textContent =
+                    `NPR ${financialData.monthOrderAmount.toFixed(1).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+
+                document.getElementById('statTodayShipments').textContent = todayData.totalShipmentsAdded;
+                document.getElementById('statNewJoined').textContent = todayData.newJoined;
+                document.getElementById('statIndiaWHToday').textContent = todayData.indiaWH;
+                document.getElementById('statNepalWHToday').textContent = todayData.nepalWH;
+                document.getElementById('statQuotesConfirmed').textContent = todayData.quotesConfirmed;
+                document.getElementById('statQuotesRejected').textContent = todayData.quotesRejected;
+                document.getElementById('statPrepaid').textContent =
+                    `NPR ${todayData.prepaidAmount} / ${todayData.prepaidUnits}`;
+                document.getElementById('statCODPending').textContent =
+                    `NPR ${todayData.codPendingAmount} / ${todayData.codPendingUnits}`;
+            }
+
+            function updateValuableCustomers() {
+                const tbody = document.getElementById('valuableCustomersBody');
+                if (valuableCustomers.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-6 text-center text-gray-400 text-xs">No valuable customers found</td></tr>`;
+                    return;
+                }
+
+                const sorted = [...valuableCustomers].sort((a, b) => b.orders - a.orders);
+
+                tbody.innerHTML = sorted.map((c, idx) => {
+                    const initials = getInitials(c.name);
+                    const color = getAvatarColor(c.name);
+                    const tierIcon = getTierIcon(c.tier);
+                    return `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="px-3 py-2 text-center text-gray-500 font-semibold">${idx + 1}</td>
+                            <td class="px-3 py-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="user-avatar-sm" style="background:${color}">${initials}</div>
+                                    <span class="font-medium text-gray-800">${c.name}</span>
+                                </div>
+                            </td>
+                            <td class="px-3 py-2 text-gray-600 text-xs">${c.email}</td>
+                            <td class="px-3 py-2 text-center font-semibold text-gray-700">${c.orders}</td>
+                            <td class="px-3 py-2 text-center text-gray-600">NPR ${c.spent.toLocaleString()}</td>
+                            <td class="px-3 py-2"><span class="text-sm font-semibold">${tierIcon} ${c.tier}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            function updateRecentOrders() {
+                const sorted = [...filteredOrders].sort((a, b) => {
+                    const da = getDateObj(a.dateTime);
+                    const db = getDateObj(b.dateTime);
+                    return db - da;
+                });
+                const recent = sorted.slice(0, 5);
+                const tbody = document.getElementById('recentOrdersBody');
+                document.getElementById('recentOrdersCount').textContent = `${filteredOrders.length} orders`;
+
+                if (recent.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="7" class="px-4 py-6 text-center text-gray-400 text-xs">No orders found</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = recent.map(o => {
+                    const sc = getStatusColor(o.status);
+                    return `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                            <td class="px-2 py-2 font-mono text-primary font-semibold text-xs">${o.id}</td>
+                            <td class="px-2 py-2 text-gray-700 text-xs">${o.user}</td>
+                            <td class="px-2 py-2 text-gray-600 text-xs truncate max-w-[100px]" title="${o.productName}">${o.productName}</td>
+                            <td class="px-2 py-2 text-center font-semibold text-xs">${o.qty}</td>
+                            <td class="px-2 py-2 text-center font-semibold text-xs">${o.totalAmount}</td>
+                            <td class="px-2 py-2"><span class="status-badge ${sc.bg} ${sc.text}"><span class="dot ${sc.dot}"></span> ${o.status}</span></td>
+                            <td class="px-2 py-2 text-gray-500 text-xs">${o.dateTime}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // ─── CHARTS ─────────────────────────────────────────────────────
+            function updateCharts() {
+                const period = currentPeriod;
+                const isMobile = window.innerWidth < 768;
+                const legendFontSize = isMobile ? 8 : 9;
+                const tooltipFontSize = isMobile ? 9 : 11;
+
+                // ─── Revenue Chart ───
+                const revenueData = getRevenueData(period);
+                const ctx1 = document.getElementById('revenueChart').getContext('2d');
+                if (chartInstances.revenue) chartInstances.revenue.destroy();
+                chartInstances.revenue = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: revenueData.labels,
+                        datasets: [{
+                            label: 'Revenue (NPR)',
+                            data: revenueData.values,
+                            borderColor: '#4F46E5',
+                            backgroundColor: 'rgba(79,70,229,0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#4F46E5',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: isMobile ? 2 : 4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `NPR ${ctx.raw.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return 'NPR ' + value.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                                    },
+                                    font: { size: isMobile ? 8 : 9 }
+                                },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: isMobile ? 8 : 9 }, maxRotation: 45 }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Status Chart ───
+                const statusData = getStatusDistribution();
+                const ctx2 = document.getElementById('statusChart').getContext('2d');
+                if (chartInstances.status) chartInstances.status.destroy();
+                const statusColors = {
+                    'Delivered': '#10B981',
+                    'Shipped': '#3B82F6',
+                    'Arrived at Nepal Warehouse': '#8B5CF6',
+                    'Arrived at Nepal WH': '#8B5CF6',
+                    'Arrived at India Warehouse': '#8B5CF6',
+                    'Arrived at India WH': '#8B5CF6',
+                    'Custom Clearance': '#06B6D4',
+                    'Custom Hold': '#EF4444',
+                    'Incoming Shipment': '#14B8A6',
+                    'Order Created': '#F59E0B',
+                    'Order Cancelled': '#EF4444',
+                    'Order Approved': '#84CC16',
+                    'Wrong Product Received': '#F97316',
+                };
+                chartInstances.status = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: statusData.labels,
+                        datasets: [{
+                            data: statusData.values,
+                            backgroundColor: statusData.labels.map(l => statusColors[l] || '#94A3B8'),
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: legendFontSize },
+                                    padding: 6,
+                                    boxWidth: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                }
+                            },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                        const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                        return `${ctx.label}: ${ctx.raw} (${pct}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Tier Chart ───
+                const tierData = getTierDistribution();
+                const ctx3 = document.getElementById('tierChart').getContext('2d');
+                if (chartInstances.tier) chartInstances.tier.destroy();
+                const tierColors = {
+                    'Diamond': '#7DD3FC',
+                    'Gold': '#FBBF24',
+                    'Silver': '#9CA3AF',
+                    'Free': '#D97706'
+                };
+                chartInstances.tier = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: tierData.labels,
+                        datasets: [{
+                            label: 'Users',
+                            data: tierData.values,
+                            backgroundColor: tierData.labels.map(l => tierColors[l] || '#94A3B8'),
+                            borderRadius: 4,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `${ctx.raw} users`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1, font: { size: isMobile ? 8 : 9 } },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: isMobile ? 8 : 9 } }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Type Chart ───
+                const typeData = getTypeDistribution();
+                const ctx4 = document.getElementById('typeChart').getContext('2d');
+                if (chartInstances.type) chartInstances.type.destroy();
+                const typeColors = {
+                    'Quick Order': '#3B82F6',
+                    'Buy For Me': '#8B5CF6',
+                    'Self Order': '#10B981'
+                };
+                chartInstances.type = new Chart(ctx4, {
+                    type: 'doughnut',
+                    data: {
+                        labels: typeData.labels,
+                        datasets: [{
+                            data: typeData.values,
+                            backgroundColor: typeData.labels.map(l => typeColors[l] || '#94A3B8'),
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: legendFontSize },
+                                    padding: 6,
+                                    boxWidth: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                }
+                            },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                        const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                        return `${ctx.label}: ${ctx.raw} (${pct}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Weight by Category Chart ───
+                const weightData = getWeightDistribution();
+                const ctx5 = document.getElementById('weightChart').getContext('2d');
+                if (chartInstances.weight) chartInstances.weight.destroy();
+                const weightColors = {
+                    'Electronics': '#4F46E5',
+                    'Home & Living': '#10B981',
+                    'Fashion': '#F59E0B',
+                    'Sports & Fitness': '#8B5CF6',
+                    'Other': '#94A3B8'
+                };
+                chartInstances.weight = new Chart(ctx5, {
+                    type: 'bar',
+                    data: {
+                        labels: weightData.labels,
+                        datasets: [{
+                            label: 'Weight (KG)',
+                            data: weightData.values,
+                            backgroundColor: weightData.labels.map(l => weightColors[l] || '#94A3B8'),
+                            borderRadius: 4,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `${ctx.raw.toFixed(2)} KG`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { font: { size: isMobile ? 8 : 9 } },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: isMobile ? 8 : 9 } }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Delivered Category Chart ───
+                const deliveredCatData = getDeliveredCategoryData();
+                const ctx6 = document.getElementById('deliveredCategoryChart').getContext('2d');
+                if (chartInstances.deliveredCategory) chartInstances.deliveredCategory.destroy();
+                const catColors = {
+                    'Electronics': '#4F46E5',
+                    'Home & Living': '#10B981',
+                    'Fashion': '#F59E0B',
+                    'Sports & Fitness': '#8B5CF6',
+                    'Other': '#94A3B8'
+                };
+                chartInstances.deliveredCategory = new Chart(ctx6, {
+                    type: 'doughnut',
+                    data: {
+                        labels: deliveredCatData.labels,
+                        datasets: [{
+                            data: deliveredCatData.values,
+                            backgroundColor: deliveredCatData.labels.map(l => catColors[l] || '#94A3B8'),
+                            borderWidth: 2,
+                            borderColor: '#fff',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { size: legendFontSize },
+                                    padding: 6,
+                                    boxWidth: 10,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                }
+                            },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                                        const pct = total > 0 ? ((ctx.raw / total) * 100).toFixed(1) : 0;
+                                        return `${ctx.label}: ${ctx.raw} (${pct}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // ─── Delivered City Chart (BAR) ───
+                const deliveredCityData = getDeliveredCityData();
+                const ctx7 = document.getElementById('deliveredCityChart').getContext('2d');
+                if (chartInstances.deliveredCity) chartInstances.deliveredCity.destroy();
+                const cityColors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                chartInstances.deliveredCity = new Chart(ctx7, {
+                    type: 'bar',
+                    data: {
+                        labels: deliveredCityData.labels,
+                        datasets: [{
+                            label: 'Delivered Orders',
+                            data: deliveredCityData.values,
+                            backgroundColor: deliveredCityData.labels.map((_, i) => cityColors[i % cityColors
+                                .length]),
+                            borderRadius: 4,
+                            borderSkipped: false,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                bodyFont: { size: tooltipFontSize },
+                                callbacks: {
+                                    label: function(ctx) {
+                                        return `${ctx.raw} order${ctx.raw > 1 ? 's' : ''}`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1, font: { size: isMobile ? 8 : 9 } },
+                                grid: { color: 'rgba(0,0,0,0.05)' }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: isMobile ? 7 : 9 }, maxRotation: 30 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ─── DATA HELPERS FOR CHARTS ──────────────────────────────────
+
+            function getRevenueData(period) {
+                const orders = filteredOrders;
+                if (orders.length === 0) return { labels: ['No Data'], values: [0] };
+
+                const sorted = [...orders].sort((a, b) => getDateObj(a.dateTime) - getDateObj(b.dateTime));
+
+                if (period === 'daily') {
+                    const map = {};
+                    sorted.forEach(o => {
+                        const d = getDateObj(o.dateTime);
+                        const key = formatDateShort(d);
+                        map[key] = (map[key] || 0) + parseNPR(o.totalAmount);
+                    });
+                    const labels = Object.keys(map);
+                    const values = labels.map(k => map[k]);
+                    return { labels, values };
+                } else if (period === 'weekly') {
+                    const map = {};
+                    sorted.forEach(o => {
+                        const d = getDateObj(o.dateTime);
+                        const key = `W${getWeekNumber(d)}`;
+                        map[key] = (map[key] || 0) + parseNPR(o.totalAmount);
+                    });
+                    const labels = Object.keys(map);
+                    const values = labels.map(k => map[k]);
+                    return { labels, values };
+                } else {
+                    const map = {};
+                    sorted.forEach(o => {
+                        const d = getDateObj(o.dateTime);
+                        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+                        map[key] = (map[key] || 0) + parseNPR(o.totalAmount);
+                    });
+                    const labels = Object.keys(map);
+                    const values = labels.map(k => map[k]);
+                    return { labels, values };
+                }
+            }
+
+            function getStatusDistribution() {
+                const map = {};
+                filteredOrders.forEach(o => {
+                    map[o.status] = (map[o.status] || 0) + 1;
+                });
+                const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+                return {
+                    labels: sorted.map(s => s[0]),
+                    values: sorted.map(s => s[1])
+                };
+            }
+
+            function getTierDistribution() {
+                const map = { 'Diamond': 0, 'Gold': 0, 'Silver': 0, 'Free': 0 };
+                filteredUsers.forEach(u => {
+                    if (map[u.tier] !== undefined) map[u.tier]++;
+                });
+                const labels = Object.keys(map);
+                const values = labels.map(k => map[k]);
+                return { labels, values };
+            }
+
+            function getTypeDistribution() {
+                const map = {};
+                filteredOrders.forEach(o => {
+                    map[o.type] = (map[o.type] || 0) + 1;
+                });
+                const labels = Object.keys(map);
+                const values = labels.map(k => map[k]);
+                return { labels, values };
+            }
+
+            function getWeightDistribution() {
+                const labels = Object.keys(categoryWeightData);
+                const values = labels.map(k => categoryWeightData[k]);
+                return { labels, values };
+            }
+
+            function getDeliveredCategoryData() {
+                const deliveredOrders = filteredOrders.filter(o => o.status === 'Delivered');
+                const map = {};
+                deliveredOrders.forEach(o => {
+                    const cat = o.category || 'Other';
+                    map[cat] = (map[cat] || 0) + 1;
+                });
+                const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+                return {
+                    labels: sorted.length > 0 ? sorted.map(s => s[0]) : ['No Data'],
+                    values: sorted.length > 0 ? sorted.map(s => s[1]) : [1]
+                };
+            }
+
+            function getDeliveredCityData() {
+                const deliveredOrders = filteredOrders.filter(o => o.status === 'Delivered');
+                const map = {};
+                deliveredOrders.forEach(o => {
+                    const city = getCityFromAddress(o.address);
+                    map[city] = (map[city] || 0) + 1;
+                });
+                const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+                return {
+                    labels: sorted.length > 0 ? sorted.map(s => s[0]) : ['No Data'],
+                    values: sorted.length > 0 ? sorted.map(s => s[1]) : [1]
+                };
+            }
+
+            // ─── REFRESH ──────────────────────────────────────────────────
+            function refreshDashboard() {
+                filteredUsers = [...usersData];
+                filteredOrders = [...ordersData];
+                document.getElementById('filterDateFrom').value = '';
+                document.getElementById('filterDateTo').value = '';
+                updateStats();
+                updateCharts();
+                updateRecentOrders();
+                updateValuableCustomers();
+                updateActiveFilters();
+                showToast('🔄', 'Dashboard refreshed');
+            }
+
+            // ─── EXPORT PDF ─────────────────────────────────────────────────
+            function exportPDF() {
+                showToast('📄', 'Generating PDF...');
+                const printDate = new Date().toLocaleString();
+                document.getElementById('printDate').textContent = printDate;
+                setTimeout(() => { window.print(); }, 500);
+            }
+
+            // ─── STATS TOGGLE ──────────────────────────────────────────────
+            let statsCollapsed = true;
+
+            window.toggleStats = function() {
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                statsCollapsed = !statsCollapsed;
+                if (statsCollapsed) {
+                    wrapper.classList.add('collapsed');
+                    arrow.classList.remove('expanded');
+                    arrow.classList.add('collapsed');
+                    if (label) label.textContent = 'Show Stats';
+                } else {
+                    wrapper.classList.remove('collapsed');
+                    arrow.classList.remove('collapsed');
+                    arrow.classList.add('expanded');
+                    if (label) label.textContent = 'Hide Stats';
+                }
+            };
+
+            function handleStatsOnResize() {
+                const isDesktop = window.innerWidth >= 768;
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                if (isDesktop) {
+                    wrapper.classList.remove('collapsed');
+                    if (arrow) { arrow.classList.remove('collapsed');
+                        arrow.classList.add('expanded'); }
+                    if (label) label.textContent = 'Hide Stats';
+                    statsCollapsed = false;
+                } else {
+                    if (statsCollapsed === undefined) statsCollapsed = true;
+                    if (statsCollapsed) {
+                        wrapper.classList.add('collapsed');
+                        if (arrow) { arrow.classList.remove('expanded');
+                            arrow.classList.add('collapsed'); }
+                        if (label) label.textContent = 'Show Stats';
+                    } else {
+                        wrapper.classList.remove('collapsed');
+                        if (arrow) { arrow.classList.remove('collapsed');
+                            arrow.classList.add('expanded'); }
+                        if (label) label.textContent = 'Hide Stats';
+                    }
+                }
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {}
+            });
+            window.addEventListener('resize', function() {
+                handleStatsOnResize();
+                // Redraw charts on resize to adjust responsiveness
+                updateCharts();
+            });
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            window.applyFilters = applyFilters;
+            window.clearFilters = clearFilters;
+            window.setPeriod = setPeriod;
+            window.refreshDashboard = refreshDashboard;
+            window.exportPDF = exportPDF;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.toggleStats = toggleStats;
+            window.showToast = showToast;
+            window.viewAllOrders = viewAllOrders;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+            document.getElementById('filterDateFrom').value = firstDay.toISOString().slice(0, 10);
+            document.getElementById('filterDateTo').value = today.toISOString().slice(0, 10);
+
+            filteredUsers = [...usersData];
+            filteredOrders = [...ordersData];
+
+            updateStats();
+            updateCharts();
+            updateRecentOrders();
+            updateValuableCustomers();
+            updateActiveFilters();
+            handleStatsOnResize();
+
+            document.getElementById('revenuePeriodLabel').textContent = 'Daily';
+
+            showToast('✅', 'Dashboard loaded successfully');
+
+        })();
+    </script>
+</body>
+</html>
