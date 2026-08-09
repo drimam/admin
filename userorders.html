@@ -1,0 +1,2211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | User Order History</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        /* ─── MODAL BACKDROP ─── */
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* ─── SIDEBAR SECTION ─── */
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        /* ─── ORDER ROW ─── */
+        .order-row {
+            transition: all 0.15s ease;
+        }
+        .order-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        /* ─── STATUS TABS ─── */
+        .status-tab {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .status-tab:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+        .status-tab.active {
+            background: #4F46E5;
+            color: #fff;
+            border-color: #4F46E5;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .status-tab.active:hover {
+            background: #4338CA;
+        }
+
+        .tabs-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 2px 8px 2px;
+            scrollbar-width: thin;
+            align-items: center;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tabs-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .tabs-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* ─── FILTER SECTION ─── */
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 4px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        /* ─── ORDER CARD (mobile) ─── */
+        .order-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f1f5f9;
+            transition: all 0.15s ease;
+            overflow: hidden;
+        }
+        .order-card:hover {
+            border-color: #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .order-card .card-header {
+            padding: 14px 16px 10px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f1f5f9;
+            gap: 6px;
+        }
+        .order-card .card-body {
+            padding: 12px 16px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .order-card .card-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 4px 12px;
+        }
+        .order-card .card-row .label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 60px;
+        }
+        .order-card .card-row .value {
+            font-size: 13px;
+            color: #1e293b;
+            font-weight: 500;
+            flex: 1;
+            word-break: break-word;
+        }
+        .order-card .card-actions {
+            padding: 10px 16px 14px 16px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .order-card .card-actions .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 10px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.15s;
+            cursor: pointer;
+            min-height: 40px;
+            min-width: 40px;
+            flex: 0 0 auto;
+            gap: 4px;
+        }
+        .order-card .card-actions .action-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .order-card .card-actions .action-btn.primary-btn {
+            background: #4F46E5;
+            border-color: #4F46E5;
+            color: #fff;
+        }
+        .order-card .card-actions .action-btn.primary-btn:hover {
+            background: #4338CA;
+        }
+        .order-card .card-actions .action-btn.danger-btn {
+            background: #FEF2F2;
+            border-color: #FECACA;
+            color: #DC2626;
+        }
+        .order-card .card-actions .action-btn.danger-btn:hover {
+            background: #FEE2E2;
+        }
+        .order-card .card-actions .action-btn .icon-svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* ─── STATUS BADGE ─── */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge .dot.green {
+            background: #10B981;
+        }
+        .status-badge .dot.blue {
+            background: #3B82F6;
+        }
+        .status-badge .dot.yellow {
+            background: #F59E0B;
+        }
+        .status-badge .dot.red {
+            background: #EF4444;
+        }
+        .status-badge .dot.purple {
+            background: #8B5CF6;
+        }
+        .status-badge .dot.gray {
+            background: #9CA3AF;
+        }
+
+        /* ─── STATS TOGGLE (mobile) ─── */
+        .stats-toggle-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #4F46E5;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .stats-toggle-btn:hover {
+            background: #f1f5f9;
+        }
+        .stats-toggle-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        .stats-toggle-btn .arrow.collapsed {
+            transform: rotate(0deg);
+        }
+        .stats-toggle-btn .arrow.expanded {
+            transform: rotate(180deg);
+        }
+        .stats-collapsible-wrapper {
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            max-height: 3000px;
+        }
+        .stats-collapsible-wrapper.collapsed {
+            max-height: 0 !important;
+        }
+        @media (max-width: 767px) {
+            .stats-toggle-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .stats-toggle-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: #4F46E5;
+            }
+            .stats-collapsible-wrapper.collapsed {
+                max-height: 0 !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .stats-collapsible-wrapper {
+                max-height: none !important;
+            }
+            .stats-toggle-btn {
+                display: none !important;
+            }
+        }
+
+        /* ─── ORDER DETAIL MODAL ─── */
+        .order-detail-modal .detail-field {
+            margin-bottom: 12px;
+        }
+        .order-detail-modal .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .order-detail-modal .detail-field .value {
+            font-size: 14px;
+            color: #0f172a;
+            font-weight: 500;
+            padding: 6px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .order-detail-modal .detail-field .value-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 12px;
+            padding: 6px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .order-detail-modal .detail-field .value-grid .item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .order-detail-modal .detail-field .value-grid .item .lbl {
+            color: #64748b;
+            font-weight: 400;
+        }
+        .order-detail-modal .detail-field .value-grid .item .val {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* ─── RESPONSIVE TWEAKS ─── */
+        @media (max-width: 767px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+            .stats-grid .stat-card {
+                padding: 10px 8px;
+            }
+            .stats-grid .stat-card .stat-value {
+                font-size: 16px;
+            }
+            .stats-grid .stat-card .stat-label {
+                font-size: 9px;
+            }
+            .filter-section .filter-group {
+                flex-wrap: nowrap;
+                flex: 1 1 auto;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 3px 8px;
+                min-width: 80px;
+            }
+            .filter-section .filter-actions button {
+                font-size: 11px;
+                padding: 4px 10px;
+                white-space: nowrap;
+            }
+            .filter-section .filter-actions button span {
+                display: none;
+            }
+            .filter-section .filter-actions button svg {
+                width: 14px;
+                height: 14px;
+            }
+            .order-card .card-actions .action-btn {
+                flex: 1 1 auto;
+                min-width: 40px;
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+            .status-tab {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+            .tabs-scroll {
+                gap: 6px;
+            }
+        }
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4px;
+            }
+            .stats-grid .stat-card {
+                padding: 8px 6px;
+            }
+            .stats-grid .stat-card .stat-value {
+                font-size: 14px;
+            }
+            .stats-grid .stat-card .stat-label {
+                font-size: 8px;
+            }
+            .order-card .card-actions .action-btn {
+                font-size: 11px;
+                padding: 6px 8px;
+                min-height: 36px;
+                min-width: 36px;
+            }
+            .order-card .card-actions .action-btn .icon-svg {
+                width: 16px;
+                height: 16px;
+            }
+            .order-card .card-row .label {
+                font-size: 10px;
+                min-width: 50px;
+            }
+            .order-card .card-row .value {
+                font-size: 12px;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 2px 6px;
+                min-width: 60px;
+            }
+            .status-tab {
+                font-size: 10px;
+                padding: 3px 10px;
+            }
+        }
+
+        /* ─── PRINT ─── */
+        @media print {
+            .sidebar,
+            .top-bar,
+            .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+            .order-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+            .table-container {
+                overflow: visible !important;
+            }
+        }
+
+        /* ─── COMPACT TABLE ─── */
+        .compact-table td,
+        .compact-table th {
+            padding: 4px 6px;
+            font-size: 11px;
+        }
+        .compact-table .status-badge {
+            font-size: 10px;
+            padding: 1px 8px;
+        }
+        .compact-table td:first-child,
+        .compact-table th:first-child {
+            padding-left: 8px;
+        }
+        .compact-table td:last-child,
+        .compact-table th:last-child {
+            padding-right: 8px;
+        }
+
+        .table-fixed {
+            table-layout: fixed;
+            width: 100%;
+        }
+        .table-fixed .col-order {
+            width: 12%;
+        }
+        .table-fixed .col-product {
+            width: 16%;
+        }
+        .table-fixed .col-qty {
+            width: 5%;
+        }
+        .table-fixed .col-amount {
+            width: 9%;
+        }
+        .table-fixed .col-status {
+            width: 12%;
+        }
+        .table-fixed .col-date {
+            width: 13%;
+        }
+        .table-fixed .col-type {
+            width: 9%;
+        }
+        .table-fixed .col-payment {
+            width: 10%;
+        }
+        .table-fixed .col-actions {
+            width: 14%;
+        }
+
+        .truncate-product {
+            max-width: 110px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        /* ─── USER HEADER ─── */
+        .user-header-card {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            border-radius: 16px;
+            padding: 20px 24px;
+            color: #fff;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .user-header-card .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .user-header-card .user-avatar-lg {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 28px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            flex-shrink: 0;
+        }
+        .user-header-card .user-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .user-header-card .user-detail {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+        .user-header-card .user-stats {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .user-header-card .user-stats .stat-item {
+            text-align: center;
+        }
+        .user-header-card .user-stats .stat-item .num {
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .user-header-card .user-stats .stat-item .lbl {
+            font-size: 11px;
+            opacity: 0.75;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 640px) {
+            .user-header-card {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 16px;
+            }
+            .user-header-card .user-info {
+                flex-direction: column;
+            }
+            .user-header-card .user-stats {
+                justify-content: center;
+                gap: 16px;
+            }
+            .user-header-card .user-stats .stat-item .num {
+                font-size: 18px;
+            }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #4F46E5;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .back-link:hover {
+            color: #3730A3;
+            text-decoration: underline;
+        }
+
+        .action-icon-btn {
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.green:hover {
+            color: #10B981;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+        .action-icon-btn.purple:hover {
+            color: #7C3AED;
+            background: #F5F3FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            transition: transform 0.1s;
+            margin-left: 4px;
+        }
+        .whatsapp-link:hover {
+            transform: scale(1.15);
+        }
+        .whatsapp-link svg {
+            width: 18px;
+            height: 18px;
+            fill: #25D366;
+        }
+
+        /* ─── STAT CARD CLICKABLE ─── */
+        .stat-card-clickable {
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .stat-card-clickable:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .stat-card-clickable .stat-value {
+            font-weight: 700;
+        }
+        .stat-delivered .stat-value { color: #10B981; }
+        .stat-transit .stat-value { color: #3B82F6; }
+        .stat-cancelled .stat-value { color: #EF4444; }
+        .stat-pending .stat-value { color: #F59E0B; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>Users</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">📦 User Order History</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">📦 Orders</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="exportOrdersCSV()" class="flex items-center gap-1 sm:gap-2 bg-green-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-700 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="hidden xs:inline">Export</span>
+                </button>
+                <button onclick="refreshOrders()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+                <a href="#" onclick="goBackToUsers()" class="flex items-center gap-1 sm:gap-2 bg-primary text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-primaryDark transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                    <span class="hidden xs:inline">Back to Users</span>
+                </a>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── USER HEADER ─── -->
+            <div id="userHeaderContainer">
+                <!-- populated by JS -->
+            </div>
+
+            <!-- ─── STATS CARDS ─── -->
+            <div>
+                <div class="flex items-center justify-between mb-1 sm:mb-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">📊 Order Stats</span>
+                        <span class="text-xs font-semibold text-gray-700 sm:hidden">📊 Stats</span>
+                    </div>
+                    <button class="stats-toggle-btn" onclick="toggleStats()" aria-label="Toggle stats">
+                        <span class="stats-toggle-label sm:hidden">Show Stats</span>
+                        <span class="arrow collapsed" id="statsArrow">▼</span>
+                    </button>
+                </div>
+                <div class="stats-collapsible-wrapper collapsed" id="statsWrapper">
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3 stats-grid">
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card stat-total" onclick="filterByStatus('all')">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">Total</p>
+                            <p class="text-base sm:text-xl font-bold text-gray-800 mt-0.5 stat-value" id="statTotalOrders">0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Click to view all</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card stat-delivered" onclick="filterByStatus('Delivered')">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">✅ Delivered</p>
+                            <p class="text-base sm:text-xl font-bold stat-value" id="statDelivered">0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Completed</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card stat-transit" onclick="filterByStatus('transit')">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">🚚 In Transit</p>
+                            <p class="text-base sm:text-xl font-bold stat-value" id="statInTransit">0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Active</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card stat-cancelled" onclick="filterByStatus('Order Cancelled')">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">❌ Cancelled</p>
+                            <p class="text-base sm:text-xl font-bold stat-value" id="statCancelled">0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Cancelled orders</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card stat-pending" onclick="filterByStatus('pending')">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">⏳ Delivery Pending</p>
+                            <p class="text-base sm:text-xl font-bold stat-value" id="statDeliveryPending">0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Awaiting dispatch</p>
+                        </div>
+                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card" onclick="filterByStatus('all')" style="background:linear-gradient(135deg,#f0f4ff,#e8edf5);">
+                            <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wider stat-label">💰 Total Spent</p>
+                            <p class="text-base sm:text-xl font-bold text-primary mt-0.5 stat-value" id="statTotalSpent">NPR 0</p>
+                            <p class="text-[7px] sm:text-[9px] text-gray-400 mt-0.5">Lifetime</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FILTERS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-4">
+                <div class="filter-section">
+                    <div class="filter-group flex-1 min-w-[120px]">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                        <input type="text" id="orderSearchInput" placeholder="Order ID, product..." class="flex-1 min-w-[100px] text-xs sm:text-sm" oninput="filterOrders()" />
+                    </div>
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                        <select id="statusFilter" onchange="filterOrders()" class="text-xs sm:text-sm">
+                            <option value="all">All</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Order Created">Order Created</option>
+                            <option value="Order Cancelled">Cancelled</option>
+                            <option value="Arrived at Nepal WH">Arrived Nepal WH</option>
+                            <option value="Custom Clearance">Custom Clearance</option>
+                            <option value="Custom Hold">Custom Hold</option>
+                            <option value="Incoming Shipment">Incoming Shipment</option>
+                            <option value="Order Approved">Order Approved</option>
+                            <option value="Wrong Product Received">Wrong Product</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Type:</label>
+                        <select id="typeFilter" onchange="filterOrders()" class="text-xs sm:text-sm">
+                            <option value="all">All</option>
+                            <option value="Quick Order">Quick Order</option>
+                            <option value="Buy For Me">Buy For Me</option>
+                            <option value="Self Order">Self Order</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Date:</label>
+                        <input type="date" id="filterDateFrom" class="text-xs sm:text-sm" onchange="filterOrders()" />
+                        <span class="text-gray-400 text-xs">–</span>
+                        <input type="date" id="filterDateTo" class="text-xs sm:text-sm" onchange="filterOrders()" />
+                    </div>
+                    <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                        <button onclick="clearOrderFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                        <button onclick="filterOrders()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                    </div>
+                </div>
+                <div id="activeOrderFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+            </div>
+
+            <!-- ─── ORDERS TABLE / CARDS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                    <div><span class="text-xs sm:text-sm font-semibold text-gray-700">Order History</span><span id="orderResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 orders</span></div>
+                    <div class="flex items-center gap-1 sm:gap-3">
+                        <div class="flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs text-gray-500 hidden xs:flex">
+                            <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500"></span> Delivered
+                            <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500"></span> Transit
+                            <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-500"></span> Pending
+                            <span class="inline-block w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-500"></span> Issue
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-2">
+                            <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                            <select id="orderPageSizeSelect" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeOrderPageSize()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50" selected>50</option>
+                            </select>
+                            <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESKTOP TABLE -->
+                <div class="hidden md:block table-container">
+                    <table class="table-fixed compact-table w-full text-xs" id="ordersTable">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wider">
+                                <th class="col-order px-1 py-1.5 text-left cursor-pointer" onclick="sortOrders('id')">Order ID ↕</th>
+                                <th class="col-product px-1 py-1.5 text-left cursor-pointer" onclick="sortOrders('product')">Product ↕</th>
+                                <th class="col-qty px-1 py-1.5 text-center">QTY</th>
+                                <th class="col-amount px-1 py-1.5 text-center cursor-pointer" onclick="sortOrders('amount')">Amount ↕</th>
+                                <th class="col-status px-1 py-1.5 text-left cursor-pointer" onclick="sortOrders('status')">Status ↕</th>
+                                <th class="col-date px-1 py-1.5 text-left cursor-pointer" onclick="sortOrders('date')">Date ↕</th>
+                                <th class="col-type px-1 py-1.5 text-left">Type</th>
+                                <th class="col-payment px-1 py-1.5 text-left">Payment</th>
+                                <th class="col-actions px-1 py-1.5 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- MOBILE CARDS -->
+                <div class="block md:hidden p-2 sm:p-3 space-y-3" id="orderMobileCards"></div>
+
+                <!-- PAGINATION -->
+                <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                    <div class="text-gray-500" id="orderPaginationInfo">Page 1 of 1</div>
+                    <div class="flex gap-1" id="orderPaginationButtons"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── ORDER DETAIL MODAL ─── -->
+    <div id="orderDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center order-detail-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeOrderDetailModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="orderDetailTitle">📋 Order Details</h3>
+                <button onclick="closeOrderDetailModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6" id="orderDetailContent">
+                <!-- populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── USER DATA ──────────────────────────────────────────────────
+            const usersData = [{
+                id: 1,
+                name: 'Damodar Bhattarai',
+                email: 'damodar@example.com',
+                phone: '+977-980-123-4567',
+                tier: 'Diamond',
+                status: 'active',
+                joinDate: '2026-01-15',
+                ordersCount: 28,
+                totalSpent: 45200,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2027-01-15'
+            }, {
+                id: 2,
+                name: 'Sita Sharma',
+                email: 'sita@example.com',
+                phone: '+977-981-234-5678',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2026-02-10',
+                ordersCount: 12,
+                totalSpent: 18300,
+                address: 'Pokhara, Nepal',
+                membershipExpiry: '2026-12-10'
+            }, {
+                id: 3,
+                name: 'Ramesh Adhikari',
+                email: 'ramesh@example.com',
+                phone: '+977-982-345-6789',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-12-05',
+                ordersCount: 34,
+                totalSpent: 67800,
+                address: 'Biratnagar, Nepal',
+                membershipExpiry: '2026-11-05'
+            }, {
+                id: 4,
+                name: 'Priya Gurung',
+                email: 'priya@example.com',
+                phone: '+977-983-456-7890',
+                tier: 'Silver',
+                status: 'blocked',
+                joinDate: '2026-03-01',
+                ordersCount: 5,
+                totalSpent: 7200,
+                address: 'Lalitpur, Nepal',
+                membershipExpiry: '2027-03-01'
+            }, {
+                id: 5,
+                name: 'Bikash Thapa',
+                email: 'bikash@example.com',
+                phone: '+977-984-567-8901',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-11-20',
+                ordersCount: 19,
+                totalSpent: 31200,
+                address: 'Butwal, Nepal',
+                membershipExpiry: '2026-10-20'
+            }, {
+                id: 6,
+                name: 'Anita Rai',
+                email: 'anita@example.com',
+                phone: '+977-985-678-9012',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2026-02-25',
+                ordersCount: 8,
+                totalSpent: 14500,
+                address: 'Dharan, Nepal',
+                membershipExpiry: '2027-02-25'
+            }, {
+                id: 7,
+                name: 'Kiran Bhandari',
+                email: 'kiran@example.com',
+                phone: '+977-986-789-0123',
+                tier: 'Bronze',
+                status: 'blocked',
+                joinDate: '2026-01-02',
+                ordersCount: 2,
+                totalSpent: 2900,
+                address: 'Nepalgunj, Nepal',
+                membershipExpiry: '2026-07-02'
+            }, {
+                id: 8,
+                name: 'Maya Devi',
+                email: 'maya@example.com',
+                phone: '+977-987-890-1234',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-10-15',
+                ordersCount: 42,
+                totalSpent: 89400,
+                address: 'Janakpur, Nepal',
+                membershipExpiry: '2026-09-15'
+            }, {
+                id: 9,
+                name: 'Sujan Adhikari',
+                email: 'sujan@example.com',
+                phone: '+977-988-901-2345',
+                tier: 'Bronze',
+                status: 'active',
+                joinDate: '2026-04-12',
+                ordersCount: 3,
+                totalSpent: 4100,
+                address: 'Hetauda, Nepal',
+                membershipExpiry: '2027-04-12'
+            }, {
+                id: 10,
+                name: 'Nisha Shrestha',
+                email: 'nisha@example.com',
+                phone: '+977-989-012-3456',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2025-09-28',
+                ordersCount: 15,
+                totalSpent: 22100,
+                address: 'Bhaktapur, Nepal',
+                membershipExpiry: '2026-08-28'
+            }, {
+                id: 11,
+                name: 'Rajesh Hamal',
+                email: 'rajesh@example.com',
+                phone: '+977-970-123-4567',
+                tier: 'Diamond',
+                status: 'active',
+                joinDate: '2025-08-10',
+                ordersCount: 56,
+                totalSpent: 125000,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2027-08-10'
+            }, {
+                id: 12,
+                name: 'Sarita Koirala',
+                email: 'sarita@example.com',
+                phone: '+977-971-234-5678',
+                tier: 'Gold',
+                status: 'blocked',
+                joinDate: '2026-05-01',
+                ordersCount: 7,
+                totalSpent: 9800,
+                address: 'Pokhara, Nepal',
+                membershipExpiry: '2026-11-01'
+            }, {
+                id: 13,
+                name: 'Prakash Neupane',
+                email: 'prakash@example.com',
+                phone: '+977-972-345-6789',
+                tier: 'Bronze',
+                status: 'active',
+                joinDate: '2026-06-15',
+                ordersCount: 1,
+                totalSpent: 1200,
+                address: 'Biratnagar, Nepal',
+                membershipExpiry: '2027-06-15'
+            }, {
+                id: 14,
+                name: 'Goma Thapa',
+                email: 'goma@example.com',
+                phone: '+977-973-456-7890',
+                tier: 'Silver',
+                status: 'active',
+                joinDate: '2025-07-22',
+                ordersCount: 22,
+                totalSpent: 36700,
+                address: 'Lalitpur, Nepal',
+                membershipExpiry: '2026-07-22'
+            }, {
+                id: 15,
+                name: 'Hari Sharma',
+                email: 'hari@example.com',
+                phone: '+977-974-567-8901',
+                tier: 'Gold',
+                status: 'active',
+                joinDate: '2025-06-18',
+                ordersCount: 31,
+                totalSpent: 51200,
+                address: 'Kathmandu, Nepal',
+                membershipExpiry: '2026-06-18'
+            }];
+
+            // ─── ORDERS DATA (mutable) ────────────────────────────────────
+            let ordersData = [{
+                id: 'MW202600003',
+                user: 'Damodar Bhattarai',
+                dateTime: '06 May 2026 20:57',
+                paymentReceivedDateTime: '06 May 2026 21:15',
+                etaDeliveryDate: '12 May 2026',
+                type: 'Self Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 665.07', advance: 'NPR 281.86', gateway: 'Fonepay(1003281879)',
+                    cod: 'NPR 383.21', invoiceValue: 'INR 176.00', approxWeight: '0.50 KG', gross: 'NPR 701.71',
+                    discount: 'NPR 36.64', final: 'NPR 665.07', extraCOD: 'NPR 374.10' },
+                productLink: 'https://example.com/product/456',
+                productImage: 'https://picsum.photos/seed/prod1/200/200',
+                qty: 1,
+                productName: 'Wireless Bluetooth Earphones - Black',
+                totalAmount: 'NPR 665.07',
+                comment: 'Handle with care. Fragile item. Please use bubble wrap.',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001234',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001234',
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '07 May 2026 10:30',
+                orderStage: 'Delivered'
+            }, {
+                id: 'MW202600045',
+                user: 'Sita Sharma',
+                dateTime: '05 May 2026 14:30',
+                paymentReceivedDateTime: '05 May 2026 14:45',
+                etaDeliveryDate: '10 May 2026',
+                type: 'Quick Order',
+                status: 'Shipped',
+                paymentSummary: { total: 'NPR 1,250.00', advance: 'NPR 500.00', gateway: 'Fonepay(1003281880)',
+                    cod: 'NPR 750.00', invoiceValue: 'INR 320.00', approxWeight: '1.20 KG', gross: 'NPR 1,320.00',
+                    discount: 'NPR 70.00', final: 'NPR 1,250.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/789',
+                productImage: 'https://picsum.photos/seed/prod2/200/200',
+                qty: 2,
+                productName: 'Cotton Bed Sheet Set - Queen Size',
+                totalAmount: 'NPR 1,250.00',
+                comment: '',
+                currentStageIndex: 12,
+                trackingNumber: 'TRK-2026-001235',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001235',
+                address: 'Pokhara, Nepal',
+                lastUpdate: '06 May 2026 08:15',
+                orderStage: 'Shipped'
+            }, {
+                id: 'MW202600078',
+                user: 'Ramesh Adhikari',
+                dateTime: '04 May 2026 09:15',
+                paymentReceivedDateTime: '04 May 2026 09:30',
+                etaDeliveryDate: '15 May 2026',
+                type: 'Buy For Me',
+                status: 'Arrived at Nepal Warehouse',
+                paymentSummary: { total: 'NPR 3,420.50', advance: 'NPR 1,500.00', gateway: 'Fonepay(1003281881)',
+                    cod: 'NPR 1,920.50', invoiceValue: 'INR 890.00', approxWeight: '2.80 KG',
+                    gross: 'NPR 3,600.00', discount: 'NPR 179.50', final: 'NPR 3,420.50', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/101',
+                productImage: 'https://picsum.photos/seed/prod3/200/200',
+                qty: 1,
+                productName: 'Samsung Galaxy Watch 6 - 44mm',
+                totalAmount: 'NPR 3,420.50',
+                comment: 'Express delivery requested. Customer called and asked for rush.',
+                currentStageIndex: 11,
+                trackingNumber: 'TRK-2026-001236',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001236',
+                address: 'Biratnagar, Nepal',
+                lastUpdate: '07 May 2026 06:45',
+                orderStage: 'Arrived at Nepal WH'
+            }, {
+                id: 'MW202600092',
+                user: 'Priya Gurung',
+                dateTime: '03 May 2026 16:45',
+                paymentReceivedDateTime: '03 May 2026 17:00',
+                etaDeliveryDate: '09 May 2026',
+                type: 'Quick Order',
+                status: 'Custom Clearance',
+                paymentSummary: { total: 'NPR 890.00', advance: 'NPR 890.00', gateway: 'Fonepay(1003281882)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 225.00', approxWeight: '0.35 KG', gross: 'NPR 920.00',
+                    discount: 'NPR 30.00', final: 'NPR 890.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/202',
+                productImage: 'https://picsum.photos/seed/prod4/200/200',
+                qty: 3,
+                productName: 'USB-C Fast Charging Cable',
+                totalAmount: 'NPR 890.00',
+                comment: '',
+                currentStageIndex: 9,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Lalitpur, Nepal',
+                lastUpdate: '06 May 2026 14:20',
+                orderStage: 'Custom Clearance'
+            }, {
+                id: 'MW202600115',
+                user: 'Bikash Thapa',
+                dateTime: '02 May 2026 11:00',
+                paymentReceivedDateTime: '02 May 2026 11:20',
+                etaDeliveryDate: '20 May 2026',
+                type: 'Self Order',
+                status: 'Custom Hold',
+                paymentSummary: { total: 'NPR 5,100.00', advance: 'NPR 2,000.00', gateway: 'Fonepay(1003281883)',
+                    cod: 'NPR 3,100.00', invoiceValue: 'INR 1,350.00', approxWeight: '4.50 KG',
+                    gross: 'NPR 5,350.00', discount: 'NPR 250.00', final: 'NPR 5,100.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/303',
+                productImage: 'https://picsum.photos/seed/prod5/200/200',
+                qty: 1,
+                productName: 'Home Theater Sound System',
+                totalAmount: 'NPR 5,100.00',
+                comment: '⚠️ Held at customs - documentation pending. Need invoice copy.',
+                currentStageIndex: 10,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Butwal, Nepal',
+                lastUpdate: '06 May 2026 11:00',
+                orderStage: 'Custom Hold'
+            }, {
+                id: 'MW202600130',
+                user: 'Anita Rai',
+                dateTime: '01 May 2026 08:30',
+                paymentReceivedDateTime: '01 May 2026 08:50',
+                etaDeliveryDate: '14 May 2026',
+                type: 'Buy For Me',
+                status: 'Order Created',
+                paymentSummary: { total: 'NPR 1,750.00', advance: 'NPR 0.00', gateway: 'Pending', cod: 'NPR 1,750.00',
+                    invoiceValue: 'INR 450.00', approxWeight: '0.90 KG', gross: 'NPR 1,800.00',
+                    discount: 'NPR 50.00', final: 'NPR 1,750.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/404',
+                productImage: 'https://picsum.photos/seed/prod6/200/200',
+                qty: 2,
+                productName: 'Yoga Mat Premium',
+                totalAmount: 'NPR 1,750.00',
+                comment: 'Waiting for quotation. Customer requested blue color.',
+                currentStageIndex: 0,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Dharan, Nepal',
+                lastUpdate: '01 May 2026 08:50',
+                orderStage: 'Order Created'
+            }, {
+                id: 'MW202600142',
+                user: 'Kiran Bhandari',
+                dateTime: '30 Apr 2026 19:20',
+                paymentReceivedDateTime: '30 Apr 2026 19:35',
+                etaDeliveryDate: 'N/A',
+                type: 'Quick Order',
+                status: 'Order Cancelled',
+                paymentSummary: { total: 'NPR 450.00', advance: 'NPR 450.00', gateway: 'Refund Pending',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 115.00', approxWeight: '0.20 KG', gross: 'NPR 470.00',
+                    discount: 'NPR 20.00', final: 'NPR 450.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/505',
+                productImage: 'https://picsum.photos/seed/prod7/200/200',
+                qty: 1,
+                productName: 'Phone Screen Protector',
+                totalAmount: 'NPR 450.00',
+                comment: 'Cancelled by customer. Refund initiated.',
+                currentStageIndex: 4,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Nepalgunj, Nepal',
+                lastUpdate: '30 Apr 2026 19:40',
+                orderStage: 'Cancelled'
+            }, {
+                id: 'MW202600158',
+                user: 'Maya Devi',
+                dateTime: '29 Apr 2026 13:10',
+                paymentReceivedDateTime: '29 Apr 2026 13:25',
+                etaDeliveryDate: '08 May 2026',
+                type: 'Self Order',
+                status: 'Incoming Shipment',
+                paymentSummary: { total: 'NPR 2,200.00', advance: 'NPR 1,000.00', gateway: 'Fonepay(1003281884)',
+                    cod: 'NPR 1,200.00', invoiceValue: 'INR 570.00', approxWeight: '1.60 KG',
+                    gross: 'NPR 2,320.00', discount: 'NPR 120.00', final: 'NPR 2,200.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/606',
+                productImage: 'https://picsum.photos/seed/prod8/200/200',
+                qty: 1,
+                productName: 'Leather Handbag - Brown',
+                totalAmount: 'NPR 2,200.00',
+                comment: 'En route to India warehouse. Tracking available soon.',
+                currentStageIndex: 5,
+                trackingNumber: 'TRK-2026-001237',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001237',
+                address: 'Janakpur, Nepal',
+                lastUpdate: '05 May 2026 09:10',
+                orderStage: 'Incoming Shipment'
+            }, {
+                id: 'MW202600170',
+                user: 'Sujan Adhikari',
+                dateTime: '28 Apr 2026 10:00',
+                paymentReceivedDateTime: '28 Apr 2026 10:15',
+                etaDeliveryDate: '12 May 2026',
+                type: 'Quick Order',
+                status: 'Delivered',
+                paymentSummary: { total: 'NPR 320.00', advance: 'NPR 320.00', gateway: 'Fonepay(1003281885)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 85.00', approxWeight: '0.10 KG', gross: 'NPR 340.00',
+                    discount: 'NPR 20.00', final: 'NPR 320.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/707',
+                productImage: 'https://picsum.photos/seed/prod9/200/200',
+                qty: 1,
+                productName: 'USB-C to Lightning Cable',
+                totalAmount: 'NPR 320.00',
+                comment: '',
+                currentStageIndex: 13,
+                trackingNumber: 'TRK-2026-001238',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001238',
+                address: 'Hetauda, Nepal',
+                lastUpdate: '02 May 2026 16:00',
+                orderStage: 'Delivered'
+            }];
+
+            // ─── STATE ──────────────────────────────────────────────────────
+            let filteredOrders = [];
+            let currentOrderPage = 1;
+            let orderPageSize = 50;
+            let currentSort = { field: 'date', direction: 'desc' };
+            let selectedUserId = 1;
+            let statusFilterOverride = null;
+
+            // ─── HELPERS ────────────────────────────────────────────────────
+            function getUserById(id) {
+                return usersData.find(u => u.id === id);
+            }
+
+            function getOrdersForUser(userId) {
+                const user = getUserById(userId);
+                if (!user) return [];
+                return ordersData.filter(o => o.user === user.name);
+            }
+
+            function getStatusColor(status) {
+                const map = {
+                    'Delivered': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green' },
+                    'Shipped': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue' },
+                    'Arrived at Nepal Warehouse': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'purple' },
+                    'Arrived at Nepal WH': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'purple' },
+                    'Arrived at India Warehouse': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple' },
+                    'Arrived at India WH': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple' },
+                    'Custom Clearance': { bg: 'bg-cyan-100', text: 'text-cyan-700', dot: 'blue' },
+                    'Custom Hold': { bg: 'bg-red-100', text: 'text-red-700', dot: 'red' },
+                    'Incoming Shipment': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'blue' },
+                    'Order Created': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow' },
+                    'Order Cancelled': { bg: 'bg-red-100', text: 'text-red-700', dot: 'red' },
+                    'Order Approved': { bg: 'bg-lime-100', text: 'text-lime-700', dot: 'green' },
+                    'Wrong Product Received': { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'orange' },
+                    'Return to Seller': { bg: 'bg-rose-100', text: 'text-rose-700', dot: 'red' },
+                };
+                return map[status] || { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'gray' };
+            }
+
+            function getTypeBadge(type) {
+                const map = {
+                    'Quick Order': 'bg-blue-100 text-blue-700',
+                    'Buy For Me': 'bg-purple-100 text-purple-700',
+                    'Self Order': 'bg-emerald-100 text-emerald-700',
+                };
+                return `<span class="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold ${map[type] || 'bg-gray-100 text-gray-700'}">${type}</span>`;
+            }
+
+            function getInitials(name) {
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function getAvatarColor(name) {
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
+                return colors[hash];
+            }
+
+            function getTierIcon(tier) {
+                const map = { 'Diamond': '💎', 'Gold': '🥇', 'Silver': '🥈', 'Bronze': '🥉' };
+                return map[tier] || '⭐';
+            }
+
+            function generateUserId(user) {
+                const tierMap = { 'Diamond': 'D', 'Gold': 'G', 'Silver': 'S', 'Bronze': 'B' };
+                const prefix = tierMap[user.tier] || 'U';
+                const num = String(user.id).padStart(5, '0');
+                return prefix + num;
+            }
+
+            function getWhatsAppLink(phone) {
+                const digits = phone.replace(/[^0-9]/g, '');
+                return `https://wa.me/${digits}`;
+            }
+
+            function getWhatsAppIcon() {
+                return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+            }
+
+            // ─── DELETE ORDER ─────────────────────────────────────────────
+            function deleteOrder(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) {
+                    showToast('❌', 'Order not found');
+                    return;
+                }
+                if (!confirm(`Are you sure you want to delete order ${orderId} for ${order.user}? This action cannot be undone.`)) {
+                    return;
+                }
+                const idx = ordersData.indexOf(order);
+                if (idx > -1) {
+                    ordersData.splice(idx, 1);
+                    // Also remove from filteredOrders if present
+                    const fIdx = filteredOrders.findIndex(o => o.id === orderId);
+                    if (fIdx > -1) filteredOrders.splice(fIdx, 1);
+                    showToast('🗑️', `Order ${orderId} deleted successfully`);
+                    renderUserHeader();
+                    updateOrderStats();
+                    renderOrders();
+                    updateActiveOrderFilters();
+                } else {
+                    showToast('❌', 'Order not found in data');
+                }
+            }
+
+            // ─── FILTER BY STATUS (click stats) ──────────────────────────
+            function filterByStatus(status) {
+                if (status === 'all') {
+                    document.getElementById('statusFilter').value = 'all';
+                    statusFilterOverride = null;
+                } else if (status === 'transit') {
+                    // In Transit: Shipped, Incoming Shipment, Custom Clearance, Arrived at Nepal WH, Arrived at India WH
+                    document.getElementById('statusFilter').value = 'all';
+                    statusFilterOverride = 'transit';
+                } else if (status === 'pending') {
+                    // Delivery Pending: Order Created, Order Approved
+                    document.getElementById('statusFilter').value = 'all';
+                    statusFilterOverride = 'pending';
+                } else {
+                    document.getElementById('statusFilter').value = status;
+                    statusFilterOverride = null;
+                }
+                filterOrders();
+                // scroll to table
+                document.querySelector('.bg-white.rounded-xl.shadow-sm.border.border-gray-100.overflow-hidden')
+                    .scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            // ─── RENDER USER HEADER ────────────────────────────────────────
+            function renderUserHeader() {
+                const user = getUserById(selectedUserId);
+                if (!user) {
+                    document.getElementById('userHeaderContainer').innerHTML = `
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center text-gray-500">
+                            User not found. Please select a valid user.
+                        </div>
+                    `;
+                    return;
+                }
+
+                const tierIcon = getTierIcon(user.tier);
+                const userIdStr = generateUserId(user);
+                const initials = getInitials(user.name);
+                const color = getAvatarColor(user.name);
+                const userOrders = getOrdersForUser(selectedUserId);
+                const totalSpent = userOrders.reduce((sum, o) => sum + parseFloat(o.totalAmount.replace(/[^0-9.]/g, '')), 0);
+
+                document.getElementById('userHeaderContainer').innerHTML = `
+                    <div class="user-header-card">
+                        <div class="user-info">
+                            <div class="user-avatar-lg" style="background:${color}">${initials}</div>
+                            <div>
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-detail">${tierIcon} ${user.tier} • ID: ${userIdStr}</div>
+                                <div class="user-detail">${user.email} • ${user.phone}</div>
+                                <div class="user-detail">📍 ${user.address || '—'} • Expiry: ${user.membershipExpiry || '—'}</div>
+                            </div>
+                        </div>
+                        <div class="user-stats">
+                            <div class="stat-item">
+                                <div class="num">${userOrders.length}</div>
+                                <div class="lbl">Orders</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="num">NPR ${totalSpent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>
+                                <div class="lbl">Total Spent</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="num">${user.status === 'active' ? '✅' : '🚫'}</div>
+                                <div class="lbl">${user.status === 'active' ? 'Active' : 'Blocked'}</div>
+                            </div>
+                            <div class="stat-item">
+                                <a href="${getWhatsAppLink(user.phone)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp" style="font-size:28px;color:#25D366;">${getWhatsAppIcon()}</a>
+                                <div class="lbl">WhatsApp</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // ─── STATS ──────────────────────────────────────────────────────
+            function updateOrderStats() {
+                const userOrders = getOrdersForUser(selectedUserId);
+                const total = userOrders.length;
+                const totalSpent = userOrders.reduce((sum, o) => sum + parseFloat(o.totalAmount.replace(/[^0-9.]/g, '')), 0);
+                const delivered = userOrders.filter(o => o.status === 'Delivered').length;
+                const inTransit = userOrders.filter(o => ['Shipped', 'Incoming Shipment', 'Custom Clearance',
+                    'Arrived at India Warehouse', 'Arrived at India WH', 'Arrived at Nepal Warehouse',
+                    'Arrived at Nepal WH'
+                ].includes(o.status)).length;
+                const cancelled = userOrders.filter(o => o.status === 'Order Cancelled').length;
+                const deliveryPending = userOrders.filter(o => o.status === 'Order Created' || o.status === 'Order Approved')
+                    .length;
+
+                document.getElementById('statTotalOrders').textContent = total;
+                document.getElementById('statTotalSpent').textContent = `NPR ${totalSpent.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+                document.getElementById('statDelivered').textContent = delivered;
+                document.getElementById('statInTransit').textContent = inTransit;
+                document.getElementById('statCancelled').textContent = cancelled;
+                document.getElementById('statDeliveryPending').textContent = deliveryPending;
+            }
+
+            // ─── STATS TOGGLE ──────────────────────────────────────────────
+            let statsCollapsed = true;
+
+            window.toggleStats = function() {
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                statsCollapsed = !statsCollapsed;
+                if (statsCollapsed) {
+                    wrapper.classList.add('collapsed');
+                    arrow.classList.remove('expanded');
+                    arrow.classList.add('collapsed');
+                    if (label) label.textContent = 'Show Stats';
+                } else {
+                    wrapper.classList.remove('collapsed');
+                    arrow.classList.remove('collapsed');
+                    arrow.classList.add('expanded');
+                    if (label) label.textContent = 'Hide Stats';
+                }
+            };
+
+            function handleStatsOnResize() {
+                const isDesktop = window.innerWidth >= 768;
+                const wrapper = document.getElementById('statsWrapper');
+                const arrow = document.getElementById('statsArrow');
+                const label = document.querySelector('.stats-toggle-label');
+                if (isDesktop) {
+                    wrapper.classList.remove('collapsed');
+                    if (arrow) { arrow.classList.remove('collapsed');
+                        arrow.classList.add('expanded'); }
+                    if (label) label.textContent = 'Hide Stats';
+                    statsCollapsed = false;
+                } else {
+                    if (statsCollapsed === undefined) statsCollapsed = true;
+                    if (statsCollapsed) {
+                        wrapper.classList.add('collapsed');
+                        if (arrow) { arrow.classList.remove('expanded');
+                            arrow.classList.add('collapsed'); }
+                        if (label) label.textContent = 'Show Stats';
+                    } else {
+                        wrapper.classList.remove('collapsed');
+                        if (arrow) { arrow.classList.remove('collapsed');
+                            arrow.classList.add('expanded'); }
+                        if (label) label.textContent = 'Hide Stats';
+                    }
+                }
+            }
+
+            // ─── FILTERS ────────────────────────────────────────────────────
+            function applyOrderFilters() {
+                let base = getOrdersForUser(selectedUserId);
+                const search = document.getElementById('orderSearchInput').value.toLowerCase().trim();
+                const status = document.getElementById('statusFilter').value;
+                const type = document.getElementById('typeFilter').value;
+                const dateFrom = document.getElementById('filterDateFrom').value;
+                const dateTo = document.getElementById('filterDateTo').value;
+
+                // Apply status override from stat clicks
+                let effectiveStatus = status;
+                if (statusFilterOverride === 'transit') {
+                    effectiveStatus = 'transit';
+                } else if (statusFilterOverride === 'pending') {
+                    effectiveStatus = 'pending';
+                }
+
+                if (search) {
+                    base = base.filter(o =>
+                        o.id.toLowerCase().includes(search) ||
+                        o.productName.toLowerCase().includes(search) ||
+                        o.status.toLowerCase().includes(search)
+                    );
+                }
+                if (effectiveStatus !== 'all') {
+                    if (effectiveStatus === 'transit') {
+                        base = base.filter(o => ['Shipped', 'Incoming Shipment', 'Custom Clearance',
+                            'Arrived at India Warehouse', 'Arrived at India WH', 'Arrived at Nepal Warehouse',
+                            'Arrived at Nepal WH'
+                        ].includes(o.status));
+                    } else if (effectiveStatus === 'pending') {
+                        base = base.filter(o => o.status === 'Order Created' || o.status === 'Order Approved');
+                    } else {
+                        base = base.filter(o => o.status === effectiveStatus);
+                    }
+                }
+                if (type !== 'all') base = base.filter(o => o.type === type);
+                if (dateFrom) {
+                    base = base.filter(o => {
+                        const d = new Date(o.dateTime);
+                        return d >= new Date(dateFrom);
+                    });
+                }
+                if (dateTo) {
+                    base = base.filter(o => {
+                        const d = new Date(o.dateTime);
+                        return d <= new Date(dateTo + 'T23:59:59');
+                    });
+                }
+
+                // Sort
+                const field = currentSort.field;
+                const dir = currentSort.direction;
+                base.sort((a, b) => {
+                    let valA, valB;
+                    if (field === 'id') { valA = a.id;
+                        valB = b.id; } else if (field === 'product') { valA = a.productName.toLowerCase();
+                        valB = b.productName.toLowerCase(); } else if (field === 'amount') { valA = parseFloat(a
+                        .totalAmount.replace(/[^0-9.]/g, ''));
+                        valB = parseFloat(b.totalAmount.replace(/[^0-9.]/g, '')); } else if (field === 'status') { valA =
+                            a.status;
+                        valB = b.status; } else { valA = new Date(a.dateTime);
+                        valB = new Date(b.dateTime); }
+                    if (valA < valB) return dir === 'asc' ? -1 : 1;
+                    if (valA > valB) return dir === 'asc' ? 1 : -1;
+                    return 0;
+                });
+
+                filteredOrders = base;
+                currentOrderPage = 1;
+                renderOrders();
+                updateActiveOrderFilters();
+            }
+
+            function filterOrders() { applyOrderFilters(); }
+
+            function clearOrderFilters() {
+                document.getElementById('orderSearchInput').value = '';
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('typeFilter').value = 'all';
+                document.getElementById('filterDateFrom').value = '';
+                document.getElementById('filterDateTo').value = '';
+                statusFilterOverride = null;
+                filterOrders();
+            }
+
+            function updateActiveOrderFilters() {
+                const container = document.getElementById('activeOrderFilters');
+                let html = '';
+                const search = document.getElementById('orderSearchInput').value.trim();
+                const status = document.getElementById('statusFilter').value;
+                const type = document.getElementById('typeFilter').value;
+                const dateFrom = document.getElementById('filterDateFrom').value;
+                const dateTo = document.getElementById('filterDateTo').value;
+                const effectiveStatus = statusFilterOverride || status;
+
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${search} <button onclick="clearOrderFilters()" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (effectiveStatus !== 'all') {
+                    let displayStatus = effectiveStatus;
+                    if (effectiveStatus === 'transit') displayStatus = 'In Transit';
+                    else if (effectiveStatus === 'pending') displayStatus = 'Delivery Pending';
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${displayStatus} <button onclick="document.getElementById('statusFilter').value='all';statusFilterOverride=null;filterOrders();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                if (type !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">Type: ${type} <button onclick="document.getElementById('typeFilter').value='all';filterOrders();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (dateFrom || dateTo) {
+                    let dateStr = '';
+                    if (dateFrom && dateTo) dateStr = `${dateFrom} → ${dateTo}`;
+                    else if (dateFrom) dateStr = `From ${dateFrom}`;
+                    else dateStr = `Until ${dateTo}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${dateStr} <button onclick="document.getElementById('filterDateFrom').value='';document.getElementById('filterDateTo').value='';filterOrders();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            // ─── SORT ──────────────────────────────────────────────────────
+            function sortOrders(field) {
+                if (currentSort.field === field) {
+                    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+                } else {
+                    currentSort.field = field;
+                    currentSort.direction = 'asc';
+                }
+                filterOrders();
+            }
+
+            // ─── PAGINATION ────────────────────────────────────────────────
+            function updateOrderPagination() {
+                const totalPages = Math.ceil(filteredOrders.length / orderPageSize) || 1;
+                document.getElementById('orderPaginationInfo').textContent =
+                    `Page ${currentOrderPage} of ${totalPages} (${filteredOrders.length} orders)`;
+                const btnContainer = document.getElementById('orderPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === currentOrderPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { currentOrderPage = i;
+                        renderOrders(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function changeOrderPageSize() {
+                orderPageSize = parseInt(document.getElementById('orderPageSizeSelect').value, 10);
+                currentOrderPage = 1;
+                renderOrders();
+            }
+
+            // ─── RENDER ─────────────────────────────────────────────────────
+            function renderOrders() {
+                const start = (currentOrderPage - 1) * orderPageSize;
+                const end = start + orderPageSize;
+                const pageOrders = filteredOrders.slice(start, end);
+                renderOrderTable(pageOrders);
+                renderOrderCards(pageOrders);
+                updateOrderPagination();
+                document.getElementById('orderResultCount').textContent =
+                    `Showing ${pageOrders.length} of ${filteredOrders.length} orders`;
+                updateOrderStats();
+            }
+
+            function renderOrderTable(orders) {
+                const tbody = document.getElementById('ordersTableBody');
+                tbody.innerHTML = '';
+                if (orders.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="9" class="px-2 py-8 text-center text-gray-400"><span class="block text-sm">No orders found</span></td></tr>`;
+                    return;
+                }
+                orders.forEach(o => {
+                    const statusColor = getStatusColor(o.status);
+                    const typeBadge = getTypeBadge(o.type);
+                    const productTrunc = o.productName.length > 25 ? o.productName.slice(0, 22) + '…' : o
+                        .productName;
+                    const statusDot = statusColor.dot;
+
+                    const row = document.createElement('tr');
+                    row.className = 'order-row border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="col-order px-1 py-1 font-mono text-primary font-semibold text-xs">${o.id}</td>
+                        <td class="col-product px-1 py-1 text-gray-700 text-xs">
+                            <span class="truncate-product" title="${o.productName}">${productTrunc}</span>
+                        </td>
+                        <td class="col-qty px-1 py-1 text-center font-semibold">${o.qty}</td>
+                        <td class="col-amount px-1 py-1 text-center font-semibold text-gray-800">${o.totalAmount}</td>
+                        <td class="col-status px-1 py-1">
+                            <span class="status-badge ${statusColor.bg} ${statusColor.text}">
+                                <span class="dot ${statusColor.dot}"></span> ${o.status}
+                            </span>
+                        </td>
+                        <td class="col-date px-1 py-1 text-gray-500 text-xs">${o.dateTime}</td>
+                        <td class="col-type px-1 py-1">${typeBadge}</td>
+                        <td class="col-payment px-1 py-1 text-xs text-gray-600">
+                            <span class="font-medium">${o.paymentSummary.total}</span>
+                            <span class="text-[10px] text-gray-400 block">${o.paymentSummary.gateway}</span>
+                        </td>
+                        <td class="col-actions px-1 py-1 text-center whitespace-nowrap">
+                            <button onclick="openOrderDetailModal('${o.id}')" class="action-icon-btn primary" title="View Details">👁️</button>
+                            <button onclick="printInvoice('${o.id}')" class="action-icon-btn amber" title="Print Invoice">🧾</button>
+                            ${o.trackingNumber ? `<button onclick="showToast('🔗','Tracking: ${o.trackingNumber}')" class="action-icon-btn green" title="Track">📦</button>` : ''}
+                            <button onclick="deleteOrder('${o.id}')" class="action-icon-btn danger" title="Delete Order">🗑️</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            function renderOrderCards(orders) {
+                const container = document.getElementById('orderMobileCards');
+                container.innerHTML = '';
+                if (orders.length === 0) {
+                    container.innerHTML =
+                        `<div class="text-center py-12 text-gray-400"><p class="font-semibold">No orders found</p></div>`;
+                    return;
+                }
+                orders.forEach(o => {
+                    const statusColor = getStatusColor(o.status);
+                    const typeBadge = getTypeBadge(o.type);
+                    const statusDot = statusColor.dot;
+
+                    const card = document.createElement('div');
+                    card.className = 'order-card';
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div>
+                                <span class="font-bold text-sm text-primary">${o.id}</span>
+                                <span class="text-xs text-gray-400 ml-2">${o.dateTime}</span>
+                            </div>
+                            <span class="status-badge ${statusColor.bg} ${statusColor.text}">
+                                <span class="dot ${statusColor.dot}"></span> ${o.status}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-row">
+                                <span class="label">📦 Product</span>
+                                <span class="value text-sm font-medium">${o.productName}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">🔢 QTY</span>
+                                <span class="value">${o.qty}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">💰 Amount</span>
+                                <span class="value font-bold text-primary">${o.totalAmount}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">📋 Type</span>
+                                <span class="value">${typeBadge}</span>
+                            </div>
+                            <div class="card-row">
+                                <span class="label">💳 Payment</span>
+                                <span class="value text-xs">${o.paymentSummary.total} • ${o.paymentSummary.gateway}</span>
+                            </div>
+                            ${o.trackingNumber ? `<div class="card-row"><span class="label">🔗 Tracking</span><span class="value text-xs text-blue-500">${o.trackingNumber}</span></div>` : ''}
+                            ${o.comment ? `<div class="card-row"><span class="label">💬 Note</span><span class="value text-xs text-amber-600">${o.comment}</span></div>` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button onclick="openOrderDetailModal('${o.id}')" class="action-btn primary-btn flex-1">👁️ View</button>
+                            <button onclick="printInvoice('${o.id}')" class="action-btn amber-btn flex-1">🧾 Invoice</button>
+                            ${o.trackingNumber ? `<button onclick="showToast('🔗','Tracking: ${o.trackingNumber}')" class="action-btn green-btn flex-1">📦 Track</button>` : ''}
+                            <button onclick="deleteOrder('${o.id}')" class="action-btn danger-btn flex-1">🗑️ Delete</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // ─── ORDER DETAIL MODAL ────────────────────────────────────────
+            function openOrderDetailModal(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) return;
+                const user = usersData.find(u => u.name === order.user);
+
+                const statusColor = getStatusColor(order.status);
+                const statusDot = statusColor.dot;
+                const typeBadge = getTypeBadge(order.type);
+
+                document.getElementById('orderDetailTitle').textContent = `📋 Order ${order.id}`;
+                document.getElementById('orderDetailContent').innerHTML = `
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <div>
+                            <div class="text-sm text-gray-500">User: <span class="font-semibold text-gray-800">${order.user}</span></div>
+                            <div class="text-sm text-gray-500">Type: ${typeBadge}</div>
+                            <div class="text-sm text-gray-500">Status: <span class="status-badge ${statusColor.bg} ${statusColor.text}"><span class="dot ${statusColor.dot}"></span> ${order.status}</span></div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-500">Order Date</div>
+                            <div class="font-semibold">${order.dateTime}</div>
+                            <div class="text-xs text-gray-400">Payment: ${order.paymentReceivedDateTime || '—'}</div>
+                            <div class="text-xs text-gray-400">ETA: ${order.etaDeliveryDate || '—'}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="detail-field">
+                            <label>Product</label>
+                            <div class="value">${order.productName}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Quantity</label>
+                            <div class="value">${order.qty}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Total Amount</label>
+                            <div class="value font-bold text-primary">${order.totalAmount}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Weight</label>
+                            <div class="value">${order.paymentSummary.approxWeight}</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Payment Summary</label>
+                        <div class="value-grid">
+                            <div class="item"><span class="lbl">Total</span><span class="val">${order.paymentSummary.total}</span></div>
+                            <div class="item"><span class="lbl">Advance</span><span class="val">${order.paymentSummary.advance}</span></div>
+                            <div class="item"><span class="lbl">Gateway</span><span class="val">${order.paymentSummary.gateway}</span></div>
+                            <div class="item"><span class="lbl">COD</span><span class="val">${order.paymentSummary.cod}</span></div>
+                            <div class="item"><span class="lbl">Gross</span><span class="val">${order.paymentSummary.gross}</span></div>
+                            <div class="item"><span class="lbl">Discount</span><span class="val">${order.paymentSummary.discount}</span></div>
+                            ${order.paymentSummary.extraCOD !== 'NPR 0.00' ? `<div class="item"><span class="lbl">Extra COD</span><span class="val text-orange-600">${order.paymentSummary.extraCOD}</span></div>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="detail-field">
+                            <label>Tracking Number</label>
+                            <div class="value">${order.trackingNumber || '—'}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Last Update</label>
+                            <div class="value">${order.lastUpdate || '—'}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Order Stage</label>
+                            <div class="value">${order.orderStage || order.status}</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Address</label>
+                            <div class="value">${order.address || '—'}</div>
+                        </div>
+                    </div>
+
+                    ${order.comment ? `
+                        <div class="detail-field mt-2">
+                            <label>📝 Comment</label>
+                            <div class="value bg-amber-50 border-amber-200 text-amber-800">${order.comment}</div>
+                        </div>
+                    ` : ''}
+
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="closeOrderDetailModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+                        <button onclick="printInvoice('${order.id}')" class="flex-1 bg-amber-500 text-white py-2.5 rounded-xl font-semibold hover:bg-amber-600 transition-colors">🧾 Print Invoice</button>
+                        <button onclick="deleteOrder('${order.id}');closeOrderDetailModal();" class="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors">🗑️ Delete</button>
+                    </div>
+                `;
+                document.getElementById('orderDetailModal').classList.add('flex');
+                document.getElementById('orderDetailModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeOrderDetailModal() {
+                document.getElementById('orderDetailModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            // ─── PRINT INVOICE ─────────────────────────────────────────────
+            function printInvoice(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) return;
+                const w = window.open('', '_blank', 'width=600,height=500');
+                w.document.write(
+                    `<html><head><title>Invoice - ${order.id}</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse;margin-top:15px} th,td{border:1px solid #ccc;padding:8px;text-align:left} h2{color:#4F46E5} .total{font-weight:700;font-size:18px}</style></head><body><h2>MeroWish Invoice</h2><p><strong>Order ID:</strong> ${order.id}</p><p><strong>User:</strong> ${order.user}</p><p><strong>Date:</strong> ${order.dateTime}</p><p><strong>Status:</strong> ${order.status}</p><p><strong>Payment:</strong> ${order.paymentSummary.gateway}</p><table><tr><th>Description</th><th>Qty</th><th>Amount</th></tr><tr><td>${order.productName}</td><td>${order.qty}</td><td>${order.totalAmount}</td></tr></table><p class="total">Total: ${order.totalAmount}</p><p><strong>Payment Summary:</strong> ${order.paymentSummary.total} (Adv: ${order.paymentSummary.advance}, COD: ${order.paymentSummary.cod})</p><p>${order.address || 'Address not specified'}</p><button onclick="window.print()" style="margin-top:20px;padding:8px 24px;background:#4F46E5;color:#fff;border:none;border-radius:6px;cursor:pointer;">Print</button></body></html>`
+                );
+                w.document.close();
+                setTimeout(() => { w.print(); }, 500);
+            }
+
+            // ─── EXPORT CSV ────────────────────────────────────────────────
+            function exportOrdersCSV() {
+                if (filteredOrders.length === 0) {
+                    showToast('⚠️', 'No orders to export');
+                    return;
+                }
+                showToast('📥', 'Exporting orders...');
+                setTimeout(() => {
+                    let csv =
+                        'Order ID,User,Product,QTY,Total Amount,Status,Date,Type,Payment Gateway,Advance,COD,Tracking,Address\n';
+                    filteredOrders.forEach(o => {
+                        csv +=
+                            `${o.id},"${o.user}","${o.productName}",${o.qty},"${o.totalAmount}","${o.status}","${o.dateTime}","${o.type}","${o.paymentSummary.gateway}","${o.paymentSummary.advance}","${o.paymentSummary.cod}","${o.trackingNumber || ''}","${o.address || ''}"\n`;
+                    });
+                    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download =
+                        `order_history_${getUserById(selectedUserId)?.name.replace(/\s/g,'_')}_${new Date().toISOString().slice(0,10)}.csv`;
+                    a.click();
+                    showToast('✅', 'Orders exported!');
+                }, 500);
+            }
+
+            function refreshOrders() {
+                document.getElementById('orderSearchInput').value = '';
+                document.getElementById('statusFilter').value = 'all';
+                document.getElementById('typeFilter').value = 'all';
+                document.getElementById('filterDateFrom').value = '';
+                document.getElementById('filterDateTo').value = '';
+                statusFilterOverride = null;
+                currentSort = { field: 'date', direction: 'desc' };
+                filterOrders();
+                renderUserHeader();
+                showToast('🔄', 'Orders refreshed');
+            }
+
+            // ─── NAVIGATION ─────────────────────────────────────────────────
+            function goBackToUsers() {
+                window.location.href = 'users.html';
+                showToast('🔙', 'Returning to Users page');
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeOrderDetailModal();
+                }
+            });
+            window.addEventListener('resize', handleStatsOnResize);
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            window.filterOrders = filterOrders;
+            window.clearOrderFilters = clearOrderFilters;
+            window.changeOrderPageSize = changeOrderPageSize;
+            window.sortOrders = sortOrders;
+            window.openOrderDetailModal = openOrderDetailModal;
+            window.closeOrderDetailModal = closeOrderDetailModal;
+            window.printInvoice = printInvoice;
+            window.exportOrdersCSV = exportOrdersCSV;
+            window.refreshOrders = refreshOrders;
+            window.goBackToUsers = goBackToUsers;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.toggleStats = toggleStats;
+            window.showToast = showToast;
+            window.filterByStatus = filterByStatus;
+            window.deleteOrder = deleteOrder;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+            const urlParams = new URLSearchParams(window.location.search);
+            const userIdParam = parseInt(urlParams.get('uid'));
+            if (userIdParam && getUserById(userIdParam)) {
+                selectedUserId = userIdParam;
+            }
+
+            renderUserHeader();
+            filteredOrders = getOrdersForUser(selectedUserId);
+            renderOrders();
+            updateActiveOrderFilters();
+            handleStatsOnResize();
+            setTimeout(updateOrderStats, 100);
+
+        })();
+    </script>
+</body>
+</html>
