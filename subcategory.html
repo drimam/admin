@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Sub Category</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .subcategory-row {
+            transition: all 0.15s ease;
+        }
+        .subcategory-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        .keyword-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 1px 10px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 500;
+            background: #EEF2FF;
+            color: #4338CA;
+            border: 1px solid #C7D2FE;
+            margin: 1px 2px;
+            white-space: nowrap;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .keyword-chip:hover {
+            background: #E0E7FF;
+            border-color: #818CF8;
+        }
+        .keyword-chip .more-badge {
+            background: #4F46E5;
+            color: #fff;
+            border-radius: 12px;
+            padding: 0 6px;
+            font-size: 9px;
+            margin-left: 2px;
+            cursor: pointer;
+        }
+        .keyword-chip .more-badge:hover {
+            background: #3730A3;
+        }
+        .keyword-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            max-width: 280px;
+        }
+        .keyword-container .keyword-chip {
+            margin: 1px 1px;
+        }
+
+        @media (max-width: 767px) {
+            .keyword-container {
+                max-width: 160px;
+            }
+            .keyword-chip {
+                font-size: 9px;
+                padding: 1px 8px;
+                max-width: 80px;
+            }
+            .subcategory-table td,
+            .subcategory-table th {
+                padding: 4px 6px !important;
+                font-size: 11px !important;
+            }
+            .action-btns .action-icon-btn {
+                font-size: 12px !important;
+                padding: 1px 4px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .keyword-container {
+                max-width: 120px;
+            }
+            .keyword-chip {
+                font-size: 8px;
+                padding: 1px 6px;
+                max-width: 60px;
+            }
+            .subcategory-table td,
+            .subcategory-table th {
+                padding: 3px 4px !important;
+                font-size: 10px !important;
+            }
+            .action-btns .action-icon-btn {
+                font-size: 10px !important;
+                padding: 1px 3px !important;
+            }
+        }
+
+        .action-icon-btn {
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+        .action-icon-btn.green:hover {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 4px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .detail-field {
+            margin-bottom: 12px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .detail-field input,
+        .detail-field select,
+        .detail-field textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .detail-field input:focus,
+        .detail-field select:focus,
+        .detail-field textarea:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+        .detail-field textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .detail-field .hint {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a>
+            <!-- Active: Categories -->
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">12</span></div></div>
+            <!-- Sub-category active -->
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">📂 View SubCategory</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">📂 SubCategory</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="openAddSubCategoryModal()" class="flex items-center gap-1 sm:gap-2 bg-primary text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-primaryDark transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span class="hidden xs:inline">Add Sub Category</span>
+                    <span class="xs:hidden">Add</span>
+                </button>
+                <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── FILTERS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                <div class="filter-section">
+                    <div class="filter-group flex-1 min-w-[140px]">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                        <input type="text" id="searchInput" placeholder="SubCategory, Category, HSN..." class="flex-1 min-w-[100px] text-xs sm:text-sm" oninput="filterSubCategories()" />
+                    </div>
+                    <div class="filter-group">
+                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Category:</label>
+                        <select id="categoryFilter" onchange="filterSubCategories()" class="text-xs sm:text-sm">
+                            <option value="all">All Categories</option>
+                            <option value="Food & FMCG Products">Food & FMCG</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Home & Living">Home & Living</option>
+                            <option value="Sports & Fitness">Sports & Fitness</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                        <button onclick="clearFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                        <button onclick="filterSubCategories()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                    </div>
+                </div>
+                <div id="activeFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+            </div>
+
+            <!-- ─── SUB CATEGORY TABLE ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                    <div>
+                        <span class="text-xs sm:text-sm font-semibold text-gray-700">SubCategory List</span>
+                        <span id="resultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                    </div>
+                    <div class="flex items-center gap-1 sm:gap-3">
+                        <div class="flex items-center gap-1 sm:gap-2">
+                            <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                            <select id="pageSizeSelect" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changePageSize()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50" selected>50</option>
+                            </select>
+                            <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DESKTOP TABLE -->
+                <div class="table-container">
+                    <table class="subcategory-table w-full text-xs sm:text-sm" id="subcategoryTable">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-center whitespace-nowrap w-[60px]">Action</th>
+                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">SubCategory</th>
+                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">Category</th>
+                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap w-[100px]">HSN Code</th>
+                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">Keywords</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subcategoryTableBody"></tbody>
+                    </table>
+                </div>
+
+                <!-- PAGINATION -->
+                <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                    <div class="text-gray-500" id="paginationInfo">Page 1 of 1</div>
+                    <div class="flex gap-1" id="paginationButtons"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── ADD / EDIT SUB CATEGORY MODAL ─── -->
+    <div id="subCategoryModal" class="fixed inset-0 z-50 hidden items-center justify-center user-detail-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeSubCategoryModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="modalTitle">➕ Add Sub Category</h3>
+                <button onclick="closeSubCategoryModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <form id="subCategoryForm" onsubmit="saveSubCategory(event)">
+                    <div class="detail-field">
+                        <label>SubCategory Name *</label>
+                        <input type="text" id="editSubCategory" placeholder="e.g. Daily Consumables" required />
+                    </div>
+                    <div class="detail-field">
+                        <label>Category *</label>
+                        <select id="editCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="Food & FMCG Products">Food & FMCG Products</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Fashion">Fashion</option>
+                            <option value="Home & Living">Home & Living</option>
+                            <option value="Sports & Fitness">Sports & Fitness</option>
+                            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                            <option value="Automotive">Automotive</option>
+                        </select>
+                    </div>
+                    <div class="detail-field">
+                        <label>HSN Code</label>
+                        <input type="text" id="editHsn" placeholder="e.g. 0713" />
+                    </div>
+                    <div class="detail-field">
+                        <label>Keywords</label>
+                        <textarea id="editKeywords" placeholder="Enter keywords separated by commas&#10;e.g. rice, wheat, flour, dal"></textarea>
+                        <div class="hint">Separate keywords with commas. They will appear as tags.</div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save</button>
+                        <button type="button" onclick="closeSubCategoryModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── KEYWORD DETAIL MODAL ─── -->
+    <div id="keywordDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeKeywordDetailModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">🔑 Keywords</h3>
+                <button onclick="closeKeywordDetailModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-3">SubCategory: <span id="keywordSubCategory" class="font-semibold text-gray-800">—</span></p>
+                <div class="flex flex-wrap gap-2" id="keywordListContainer"></div>
+                <button onclick="closeKeywordDetailModal()" class="mt-4 w-full bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── DELETE CONFIRM MODAL ─── -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="p-4 sm:p-6 text-center">
+                <div class="text-5xl mb-3">🗑️</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Delete SubCategory</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete <span id="deleteItemName" class="font-semibold text-gray-800">—</span>? This action cannot be undone.</p>
+                <div class="flex gap-3">
+                    <button onclick="confirmDelete()" class="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors">Delete</button>
+                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── DATA ──────────────────────────────────────────────────────
+            let subCategories = [{
+                id: 1,
+                name: 'Daily Consumables',
+                category: 'Food & FMCG Products',
+                hsn: '0713',
+                keywords: ['rice', 'chawal', 'aata', 'atta', 'wheat flour', 'maida', 'sooji', 'semolina', 'besan',
+                    'gram flour', 'corn flour', 'maida flour', 'dal', 'macaroon dal', 'moong dal', 'urad dal',
+                    'chana dal', 'amhar dal', 'toor dal', 'rajma', 'kidney beans', 'peas', 'matar', 'soybeans',
+                    'rice flour', 'poha', 'chhuna', 'basmati rice', 'murumur', 'puffed rice', 'sugar', 'chini',
+                    'salt', 'rau', 'black salt', 'kala jamkand', 'jaggery', 'gud', 'gur', 'makhri', 'oil',
+                    'cooking oil', 'soybean oil', 'soya oil', 'sunflower oil', 'mustard oil', 'sarsoo oil',
+                    'toor oil', 'palim oil', 'palmolie oil', 'coconut oil', 'olive oil', 'sesame oil', 'oil',
+                    'ghee', 'deep ghee', 'butter', 'turmeric', 'khat', 'turmeric powder', 'chilli', 'red chilli',
+                    'capsicum', 'black pepper', 'salt', 'black salt', 'black pepper', 'salt', 'black pepper',
+                    'salt', 'black pepper', 'salt', 'black pepper'
+                ]
+            }, {
+                id: 2,
+                name: 'Beverages',
+                category: 'Food & FMCG Products',
+                hsn: '2202',
+                keywords: ['tea', 'chai', 'coffee', 'juice', 'soft drink', 'energy drink', 'water', 'mineral water',
+                    'coconut water', 'milk', 'shake', 'smoothie'
+                ]
+            }, {
+                id: 3,
+                name: 'Smartphones',
+                category: 'Electronics',
+                hsn: '8517',
+                keywords: ['mobile', 'phone', 'smartphone', 'android', 'iOS', '5G', '4G', 'touchscreen', 'camera',
+                    'battery', 'charger', 'earphone'
+                ]
+            }, {
+                id: 4,
+                name: 'Laptops',
+                category: 'Electronics',
+                hsn: '8471',
+                keywords: ['laptop', 'notebook', 'macbook', 'windows', 'gaming', 'ultrabook', 'processor', 'RAM',
+                    'SSD', 'HDD', 'graphics', 'display'
+                ]
+            }, {
+                id: 5,
+                name: 'Men Apparel',
+                category: 'Fashion',
+                hsn: '6203',
+                keywords: ['shirt', 'pant', 'trouser', 'jeans', 'jacket', 'blazer', 'suit', 't-shirt', 'hoodie',
+                    'sweater', 'cardigan', 'kurta', 'dhoti'
+                ]
+            }, {
+                id: 6,
+                name: 'Women Apparel',
+                category: 'Fashion',
+                hsn: '6204',
+                keywords: ['dress', 'saree', 'lehenga', 'kurta', 'dupatta', 'top', 'blouse', 'skirt', 'trouser',
+                    'jeans', 'jacket', 'shawl', 'stole'
+                ]
+            }, {
+                id: 7,
+                name: 'Furniture',
+                category: 'Home & Living',
+                hsn: '9403',
+                keywords: ['sofa', 'bed', 'table', 'chair', 'dining', 'wardrobe', 'cabinet', 'shelf', 'desk',
+                    'stool', 'recliner', 'ottoman'
+                ]
+            }, {
+                id: 8,
+                name: 'Kitchen Appliances',
+                category: 'Home & Living',
+                hsn: '8509',
+                keywords: ['blender', 'mixer', 'grinder', 'juicer', 'toaster', 'oven', 'microwave', 'kettle',
+                    'cooker', 'fryer', 'sandwich maker', 'coffee machine'
+                ]
+            }, {
+                id: 9,
+                name: 'Fitness Equipment',
+                category: 'Sports & Fitness',
+                hsn: '9506',
+                keywords: ['treadmill', 'exercise bike', 'weights', 'dumbbell', 'barbell', 'bench', 'yoga mat',
+                    'resistance band', 'jump rope', 'kettlebell', 'pull up bar'
+                ]
+            }, {
+                id: 10,
+                name: 'Skincare',
+                category: 'Beauty & Personal Care',
+                hsn: '3304',
+                keywords: ['face cream', 'moisturizer', 'sunscreen', 'serum', 'toner', 'face wash', 'scrub',
+                    'mask', 'eye cream', 'lip balm', 'anti-aging'
+                ]
+            }, {
+                id: 11,
+                name: 'Car Accessories',
+                category: 'Automotive',
+                hsn: '8708',
+                keywords: ['seat cover', 'steering wheel cover', 'floor mat', 'car perfume', 'phone holder',
+                    'charger', 'dash cam', 'GPS', 'car cover', 'cleaning kit'
+                ]
+            }, {
+                id: 12,
+                name: 'Bike Accessories',
+                category: 'Automotive',
+                hsn: '8714',
+                keywords: ['helmet', 'gloves', 'bike cover', 'chain lube', 'mirror', 'handle grip', 'tail bag',
+                    'phone mount', 'bike cleaner', 'brake pad'
+                ]
+            }];
+
+            // ─── STATE ──────────────────────────────────────────────────────
+            let filteredData = [...subCategories];
+            let currentPage = 1;
+            let pageSize = 50;
+            let editingId = null;
+            let deleteTargetId = null;
+
+            // ─── RENDER ─────────────────────────────────────────────────────
+            function renderTable() {
+                const start = (currentPage - 1) * pageSize;
+                const end = Math.min(start + pageSize, filteredData.length);
+                const pageData = filteredData.slice(start, end);
+                const tbody = document.getElementById('subcategoryTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No sub-categories found</td></tr>`;
+                    document.getElementById('resultCount').textContent = 'Showing 0 entries';
+                    updatePagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(item => {
+                    const keywordsHtml = renderKeywords(item.keywords);
+                    return `
+                        <tr class="subcategory-row border-b border-gray-100">
+                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-center action-btns whitespace-nowrap">
+                                <button onclick="editSubCategory(${item.id})" class="action-icon-btn primary" title="Edit">✏️</button>
+                                <button onclick="deleteSubCategory(${item.id})" class="action-icon-btn danger" title="Delete">🗑️</button>
+                            </td>
+                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">${item.name}</td>
+                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category}</td>
+                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 font-mono text-gray-500 text-xs sm:text-sm">${item.hsn || '—'}</td>
+                            <td class="px-2 sm:px-3 py-1.5 sm:py-2">
+                                <div class="keyword-container">${keywordsHtml}</div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('resultCount').textContent = `Showing ${pageData.length} of ${filteredData.length} entries`;
+                updatePagination();
+            }
+
+            function renderKeywords(keywords) {
+                if (!keywords || keywords.length === 0) {
+                    return '<span class="text-gray-400 text-xs">—</span>';
+                }
+                const display = keywords.slice(0, 6);
+                const remaining = keywords.length - 6;
+                let html = display.map(k =>
+                    `<span class="keyword-chip">${escapeHtml(k)}</span>`
+                ).join('');
+                if (remaining > 0) {
+                    html +=
+                        `<span class="keyword-chip" style="background:#4F46E5;color:#fff;border-color:#4F46E5;cursor:pointer;" onclick="showAllKeywords(${escapeHtml(JSON.stringify(keywords))}, '${escapeHtml(currentSubCategoryName || '')}')">+${remaining} more</span>`;
+                }
+                return html;
+            }
+
+            let currentSubCategoryName = '';
+
+            function showAllKeywords(keywords, name) {
+                currentSubCategoryName = name;
+                document.getElementById('keywordSubCategory').textContent = name || '—';
+                const container = document.getElementById('keywordListContainer');
+                if (!keywords || keywords.length === 0) {
+                    container.innerHTML = '<span class="text-gray-400 text-sm">No keywords</span>';
+                } else {
+                    container.innerHTML = keywords.map(k =>
+                        `<span class="keyword-chip" style="font-size:12px;padding:4px 14px;">${escapeHtml(k)}</span>`
+                    ).join('');
+                }
+                document.getElementById('keywordDetailModal').classList.add('flex');
+                document.getElementById('keywordDetailModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeKeywordDetailModal() {
+                document.getElementById('keywordDetailModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // ─── PAGINATION ────────────────────────────────────────────────
+            function updatePagination() {
+                const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
+                document.getElementById('paginationInfo').textContent =
+                    `Page ${currentPage} of ${totalPages} (${filteredData.length} entries)`;
+                const btnContainer = document.getElementById('paginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === currentPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { currentPage = i;
+                        renderTable(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function changePageSize() {
+                pageSize = parseInt(document.getElementById('pageSizeSelect').value, 10);
+                currentPage = 1;
+                renderTable();
+            }
+
+            // ─── FILTERS ────────────────────────────────────────────────────
+            function filterSubCategories() {
+                const search = document.getElementById('searchInput').value.toLowerCase().trim();
+                const category = document.getElementById('categoryFilter').value;
+
+                let filtered = [...subCategories];
+
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.name.toLowerCase().includes(search) ||
+                        item.category.toLowerCase().includes(search) ||
+                        (item.hsn && item.hsn.includes(search)) ||
+                        (item.keywords && item.keywords.some(k => k.toLowerCase().includes(search)))
+                    );
+                }
+
+                if (category !== 'all') {
+                    filtered = filtered.filter(item => item.category === category);
+                }
+
+                filteredData = filtered;
+                currentPage = 1;
+                renderTable();
+                updateActiveFilters();
+            }
+
+            function clearFilters() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('categoryFilter').value = 'all';
+                filterSubCategories();
+            }
+
+            function updateActiveFilters() {
+                const container = document.getElementById('activeFilters');
+                let html = '';
+                const search = document.getElementById('searchInput').value.trim();
+                const category = document.getElementById('categoryFilter').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${search} <button onclick="document.getElementById('searchInput').value='';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (category !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">📁 ${category} <button onclick="document.getElementById('categoryFilter').value='all';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
+                container.innerHTML = html || '';
+            }
+
+            // ─── MODAL FUNCTIONS ───────────────────────────────────────────
+            function openAddSubCategoryModal() {
+                editingId = null;
+                document.getElementById('modalTitle').textContent = '➕ Add Sub Category';
+                document.getElementById('subCategoryForm').reset();
+                document.getElementById('editSubCategory').value = '';
+                document.getElementById('editCategory').value = '';
+                document.getElementById('editHsn').value = '';
+                document.getElementById('editKeywords').value = '';
+                document.getElementById('subCategoryModal').classList.add('flex');
+                document.getElementById('subCategoryModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('editSubCategory').focus(), 100);
+            }
+
+            function editSubCategory(id) {
+                const item = subCategories.find(s => s.id === id);
+                if (!item) return;
+                editingId = id;
+                document.getElementById('modalTitle').textContent = '✏️ Edit Sub Category';
+                document.getElementById('editSubCategory').value = item.name;
+                document.getElementById('editCategory').value = item.category;
+                document.getElementById('editHsn').value = item.hsn || '';
+                document.getElementById('editKeywords').value = (item.keywords || []).join(', ');
+                document.getElementById('subCategoryModal').classList.add('flex');
+                document.getElementById('subCategoryModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('editSubCategory').focus(), 100);
+            }
+
+            function closeSubCategoryModal() {
+                document.getElementById('subCategoryModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                editingId = null;
+            }
+
+            function saveSubCategory(e) {
+                e.preventDefault();
+                const name = document.getElementById('editSubCategory').value.trim();
+                const category = document.getElementById('editCategory').value;
+                const hsn = document.getElementById('editHsn').value.trim();
+                const keywordsStr = document.getElementById('editKeywords').value.trim();
+
+                if (!name || !category) {
+                    showToast('⚠️', 'Please fill in all required fields');
+                    return;
+                }
+
+                const keywords = keywordsStr ? keywordsStr.split(',').map(k => k.trim()).filter(k => k) : [];
+
+                if (editingId) {
+                    const item = subCategories.find(s => s.id === editingId);
+                    if (item) {
+                        item.name = name;
+                        item.category = category;
+                        item.hsn = hsn || '';
+                        item.keywords = keywords;
+                        showToast('✅', `SubCategory "${name}" updated successfully!`);
+                    }
+                } else {
+                    const newId = Math.max(...subCategories.map(s => s.id), 0) + 1;
+                    subCategories.push({
+                        id: newId,
+                        name,
+                        category,
+                        hsn: hsn || '',
+                        keywords
+                    });
+                    showToast('✅', `SubCategory "${name}" added successfully!`);
+                }
+
+                closeSubCategoryModal();
+                filterSubCategories();
+            }
+
+            function deleteSubCategory(id) {
+                const item = subCategories.find(s => s.id === id);
+                if (!item) return;
+                deleteTargetId = id;
+                document.getElementById('deleteItemName').textContent = item.name;
+                document.getElementById('deleteModal').classList.add('flex');
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                deleteTargetId = null;
+            }
+
+            function confirmDelete() {
+                if (deleteTargetId === null) return;
+                const idx = subCategories.findIndex(s => s.id === deleteTargetId);
+                if (idx > -1) {
+                    const name = subCategories[idx].name;
+                    subCategories.splice(idx, 1);
+                    showToast('🗑️', `SubCategory "${name}" deleted successfully!`);
+                }
+                closeDeleteModal();
+                filterSubCategories();
+            }
+
+            // ─── REFRESH ──────────────────────────────────────────────────
+            function refreshData() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('categoryFilter').value = 'all';
+                filteredData = [...subCategories];
+                currentPage = 1;
+                renderTable();
+                updateActiveFilters();
+                showToast('🔄', 'Data refreshed');
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeSubCategoryModal();
+                    closeDeleteModal();
+                    closeKeywordDetailModal();
+                }
+            });
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            window.filterSubCategories = filterSubCategories;
+            window.clearFilters = clearFilters;
+            window.changePageSize = changePageSize;
+            window.openAddSubCategoryModal = openAddSubCategoryModal;
+            window.editSubCategory = editSubCategory;
+            window.closeSubCategoryModal = closeSubCategoryModal;
+            window.saveSubCategory = saveSubCategory;
+            window.deleteSubCategory = deleteSubCategory;
+            window.closeDeleteModal = closeDeleteModal;
+            window.confirmDelete = confirmDelete;
+            window.showAllKeywords = showAllKeywords;
+            window.closeKeywordDetailModal = closeKeywordDetailModal;
+            window.refreshData = refreshData;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.showToast = showToast;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+            filteredData = [...subCategories];
+            renderTable();
+            updateActiveFilters();
+            showToast('✅', 'SubCategory loaded successfully');
+
+        })();
+    </script>
+</body>
+</html>
