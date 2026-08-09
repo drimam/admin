@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>MeroLogix | Shipment Management</title>
+    <title>MeroWish | Shipment Management</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
     <script>
@@ -787,7 +787,6 @@
             flex-shrink: 0;
         }
 
-        /* ===== ORDERED BUTTON ===== */
         .ordered-btn {
             display: inline-flex;
             align-items: center;
@@ -999,14 +998,14 @@
             .filter-section .filter-group input[type="date"] {
                 width: 80px;
                 font-size: 10px;
-                padding: 3px 6px;
+                padding: 3px 3px;
             }
             .filter-section .filter-group span {
                 font-size: 10px;
             }
             .filter-section .filter-actions button {
                 font-size: 10px;
-                padding: 3px 8px;
+                padding: 3px 4px;
             }
             .ordered-btn-mobile {
                 font-size: 10px;
@@ -1334,6 +1333,153 @@
         .user-clickable:active {
             color: #1e3a8a;
         }
+
+        /* ─── SETTINGS MODAL STYLES ─── */
+        .settings-modal .partner-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .settings-modal .partner-checkbox:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .settings-modal .partner-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .settings-modal .partner-checkbox .partner-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .settings-modal .partner-checkbox .partner-icon {
+            font-size: 20px;
+            margin-right: 4px;
+        }
+        .settings-modal .saved-badge {
+            background: #D1FAE5;
+            color: #065F46;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+        .settings-modal .settings-note {
+            font-size: 12px;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: 8px;
+        }
+        .settings-modal .settings-note strong {
+            color: #0f172a;
+        }
+        .settings-modal .btn-save-settings {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .settings-modal .btn-save-settings:hover {
+            background: #4338CA;
+        }
+        .settings-modal .btn-close-settings {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .settings-modal .btn-close-settings:hover {
+            background: #e2e8f0;
+        }
+        .settings-modal .btn-row-settings {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            justify-content: flex-end;
+        }
+        .settings-modal .selected-partners-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .settings-modal .selected-partners-display .partner-chip {
+            background: #E0E7FF;
+            color: #3730A3;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .settings-modal .selected-partners-display .partner-chip .remove-chip {
+            cursor: pointer;
+            font-weight: 700;
+            color: #6366F1;
+            margin-left: 2px;
+        }
+        .settings-modal .selected-partners-display .partner-chip .remove-chip:hover {
+            color: #DC2626;
+        }
+
+        .settings-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            transition: all 0.15s;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+        .settings-icon-btn:hover {
+            background: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+
+        .date-col-last-update {
+            font-size: 11px;
+            color: #475569;
+            margin-top: 2px;
+        }
+        .date-col-last-update .stage-tag {
+            display: inline-block;
+            background: #E0E7FF;
+            color: #4338CA;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 0 8px;
+            border-radius: 12px;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -1347,7 +1493,7 @@
                 <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </div>
-                <div><span class="font-bold text-base tracking-tight">MeroLogix</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
             </div>
             <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
         </div>
@@ -1373,7 +1519,7 @@
         <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
             <div class="flex items-center gap-3">
                 <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
-                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merologix.com</p></div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
                 <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
             </div>
         </div>
@@ -1409,7 +1555,6 @@
 
             <!-- Stats Cards - Collapsible on mobile -->
             <div>
-                <!-- Toggle button for mobile -->
                 <div class="flex items-center justify-between mb-1 sm:mb-2">
                     <div class="flex items-center gap-2">
                         <span class="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">📊 Dashboard Stats</span>
@@ -1422,7 +1567,6 @@
                 </div>
 
                 <div class="stats-collapsible-wrapper collapsed" id="statsWrapper">
-                    <!-- Main Stats Cards -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 stats-grid">
                         <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
                             <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Total Orders</p>
@@ -1466,7 +1610,6 @@
                         </div>
                     </div>
 
-                    <!-- 4 Extra Stats Cards -->
                     <div class="stats-grid-extra mt-2 sm:mt-3">
                         <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer stat-card">
                             <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Quotation Pending</p>
@@ -1510,6 +1653,10 @@
                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                             <span class="hidden xs:inline">Refresh</span>
                         </button>
+                        <!-- ─── SETTINGS ICON ─── -->
+                        <button onclick="openSettingsModal()" class="settings-icon-btn" title="Settings">
+                            ⚙️
+                        </button>
                     </div>
                 </div>
                 <div id="activeFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
@@ -1539,7 +1686,6 @@
                     <span class="text-[9px] sm:text-xs text-gray-400 hidden xs:inline">(click to filter)</span>
                 </div>
                 <div class="tabs-scroll" id="statusTabsContainer">
-                    <!-- populated by JS -->
                 </div>
             </div>
 
@@ -1776,6 +1922,47 @@
         </div>
     </div>
 
+    <!-- ─── SETTINGS MODAL ────────────────────────────────────────────── -->
+    <div id="settingsModal" class="fixed inset-0 z-50 hidden items-center justify-center settings-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeSettingsModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">⚙️ Logistic Partners</h3>
+                <button onclick="closeSettingsModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-4">Select the logistic partners you work with.</p>
+                <div class="space-y-2" id="settingsPartnerList">
+                    <label class="partner-checkbox">
+                        <input type="checkbox" value="ExpoExpress" />
+                        <span class="partner-icon">🚚</span>
+                        <span class="partner-label">ExpoExpress</span>
+                    </label>
+                    <label class="partner-checkbox">
+                        <input type="checkbox" value="Pathao" />
+                        <span class="partner-icon">🛵</span>
+                        <span class="partner-label">Pathao</span>
+                    </label>
+                    <label class="partner-checkbox">
+                        <input type="checkbox" value="Daraz Dex" />
+                        <span class="partner-icon">📦</span>
+                        <span class="partner-label">Daraz Dex</span>
+                    </label>
+                </div>
+                <div class="settings-note">
+                    <strong>Selected:</strong>
+                    <div class="selected-partners-display" id="selectedPartnersDisplay">
+                        <span class="text-gray-400 text-xs">None selected</span>
+                    </div>
+                </div>
+                <div class="btn-row-settings">
+                    <button class="btn-close-settings" onclick="closeSettingsModal()">Cancel</button>
+                    <button class="btn-save-settings" onclick="saveSettings()">💾 Save Partners</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
             <span id="toastIcon">✅</span>
@@ -1806,10 +1993,10 @@
                 'Ageing',
                 'Failed Delivery',
                 'Returned',
-                'Cancelled'
+                'User Cancelled - Refund Pending',
+                'Cancelled by Merowish'
             ];
 
-            // ─── MAPPING: new status tab -> array of existing order.status values ──
             const STATUS_TAB_MAP = {
                 'All': null,
                 'Order Created': ['Order Created'],
@@ -1874,6 +2061,7 @@
                 'Maya Devi': { tier: 'Gold', mobile: '+977-987-890-1234', icon: '🥇' }
             };
 
+            // ─── ORDERS DATA with lastUpdate & orderStage ──────────────
             const ordersData = [{
                 id: 'MW202600003',
                 user: 'Damodar Bhattarai',
@@ -1895,7 +2083,9 @@
                 customerImage: 'https://picsum.photos/seed/cust1/400/300',
                 trackingNumber: 'TRK-2026-001234',
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001234',
-                address: 'Kathmandu, Nepal'
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '07 May 2026 10:30',
+                orderStage: 'Delivered'
             }, {
                 id: 'MW202600045',
                 user: 'Sita Sharma',
@@ -1916,7 +2106,9 @@
                 currentStageIndex: 12,
                 trackingNumber: 'TRK-2026-001235',
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001235',
-                address: 'Pokhara, Nepal'
+                address: 'Pokhara, Nepal',
+                lastUpdate: '06 May 2026 08:15',
+                orderStage: 'Shipped'
             }, {
                 id: 'MW202600078',
                 user: 'Ramesh Adhikari',
@@ -1937,7 +2129,9 @@
                 currentStageIndex: 11,
                 trackingNumber: 'TRK-2026-001236',
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001236',
-                address: 'Biratnagar, Nepal'
+                address: 'Biratnagar, Nepal',
+                lastUpdate: '07 May 2026 06:45',
+                orderStage: 'Arrived at Nepal WH'
             }, {
                 id: 'MW202600092',
                 user: 'Priya Gurung',
@@ -1958,7 +2152,9 @@
                 currentStageIndex: 9,
                 trackingNumber: '',
                 trackingUrl: '',
-                address: 'Lalitpur, Nepal'
+                address: 'Lalitpur, Nepal',
+                lastUpdate: '06 May 2026 14:20',
+                orderStage: 'Custom Clearance'
             }, {
                 id: 'MW202600115',
                 user: 'Bikash Thapa',
@@ -1980,7 +2176,9 @@
                 customerImage: 'https://picsum.photos/seed/cust2/400/300',
                 trackingNumber: '',
                 trackingUrl: '',
-                address: 'Butwal, Nepal'
+                address: 'Butwal, Nepal',
+                lastUpdate: '06 May 2026 11:00',
+                orderStage: 'Custom Hold'
             }, {
                 id: 'MW202600130',
                 user: 'Anita Rai',
@@ -2001,7 +2199,9 @@
                 currentStageIndex: 0,
                 trackingNumber: '',
                 trackingUrl: '',
-                address: 'Dharan, Nepal'
+                address: 'Dharan, Nepal',
+                lastUpdate: '01 May 2026 08:50',
+                orderStage: 'Order Created'
             }, {
                 id: 'MW202600142',
                 user: 'Kiran Bhandari',
@@ -2022,7 +2222,9 @@
                 currentStageIndex: 4,
                 trackingNumber: '',
                 trackingUrl: '',
-                address: 'Nepalgunj, Nepal'
+                address: 'Nepalgunj, Nepal',
+                lastUpdate: '30 Apr 2026 19:40',
+                orderStage: 'Cancelled'
             }, {
                 id: 'MW202600158',
                 user: 'Maya Devi',
@@ -2044,7 +2246,9 @@
                 customerImage: 'https://picsum.photos/seed/cust3/400/300',
                 trackingNumber: 'TRK-2026-001237',
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001237',
-                address: 'Janakpur, Nepal'
+                address: 'Janakpur, Nepal',
+                lastUpdate: '05 May 2026 09:10',
+                orderStage: 'Incoming Shipment'
             }];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -2057,6 +2261,27 @@
             let pendingCancelOrderId = null;
             let selectedOrders = new Set();
             let statsCollapsed = true;
+
+            // ─── LOGISTIC PARTNERS SETTINGS ──────────────────────────────
+            const PARTNER_KEY = 'MeroWish_logistic_partners';
+            const ALL_PARTNERS = ['ExpoExpress', 'Pathao', 'Daraz Dex'];
+
+            function loadSavedPartners() {
+                try {
+                    const raw = localStorage.getItem(PARTNER_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed)) return parsed;
+                    }
+                } catch (_) { /* ignore */ }
+                return [];
+            }
+
+            function savePartnersToStorage(partners) {
+                localStorage.setItem(PARTNER_KEY, JSON.stringify(partners));
+            }
+
+            let selectedPartners = loadSavedPartners();
 
             // ─── STATS TOGGLE ──────────────────────────────────────────────
             window.toggleStats = function() {
@@ -2160,6 +2385,9 @@
                 }
                 order.status = newStatus;
                 order.currentStageIndex = statusToIndexMap[newStatus] || order.currentStageIndex;
+                order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                order.orderStage = newStatus;
                 updateStats();
                 filterOrders();
                 showToast('✅', `Order ${orderId} updated to ${newStatus}`);
@@ -2172,12 +2400,10 @@
                     showToast('❌', 'Order not found');
                     return;
                 }
-                // If already Order Approved, just notify
                 if (order.status === 'Order Approved') {
                     showToast('ℹ️', `Order ${orderId} is already in Assign Pending`);
                     return;
                 }
-                // If order is in a terminal state, warn but allow
                 const terminal = ['Delivered', 'Order Cancelled', 'Failed Delivery', 'Returned'];
                 if (terminal.includes(order.status)) {
                     if (!confirm(
@@ -2188,6 +2414,9 @@
                 }
                 order.status = 'Order Approved';
                 order.currentStageIndex = 3;
+                order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                order.orderStage = 'Assign Pending';
                 updateStats();
                 filterOrders();
                 showToast('✅', `Order ${orderId} moved to Ordered (Assign Pending)`);
@@ -2336,7 +2565,7 @@
                     </div>
                     <div class="label-preview">
                         <div class="text-center mb-4">
-                            <h4 class="text-lg font-bold text-primary">MeroLogix</h4>
+                            <h4 class="text-lg font-bold text-primary">MeroWish</h4>
                             <p class="text-sm text-gray-500">Consolidated Shipping Label</p>
                             <p class="text-xs text-gray-400">Generated: ${new Date().toLocaleString()}</p>
                             <p class="text-xs text-gray-400">Waybill: ${waybill}</p>
@@ -2377,7 +2606,7 @@
                     </div>
                     <div class="label-preview">
                         <div class="text-center mb-4">
-                            <h4 class="text-lg font-bold text-primary">MeroLogix</h4>
+                            <h4 class="text-lg font-bold text-primary">MeroWish</h4>
                             <p class="text-sm text-gray-500">Consolidated Invoice</p>
                             <p class="text-xs text-gray-400">Generated: ${new Date().toLocaleString()}</p>
                             <p class="text-xs text-gray-400">Invoice #: ${waybill}</p>
@@ -2627,7 +2856,6 @@
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
 
-                    // Build status cell with Ordered button
                     const statusCellHtml = `
                         <div class="status-cell-wrapper">
                             <div class="status-row">
@@ -2693,6 +2921,9 @@
                             <div><span class="font-semibold">Order:</span> ${order.dateTime}</div>
                             <div><span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}</div>
                             <div><span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}</div>
+                            <!-- ─── NEW: Last Update & Order Stage ─── -->
+                            <div class="date-col-last-update"><span class="font-semibold">Last Update:</span> ${order.lastUpdate || '—'}</div>
+                            <div class="date-col-last-update"><span class="font-semibold">Stage:</span> <span class="stage-tag">${order.orderStage || order.status}</span></div>
                         </td>
                         <td class="px-3 py-3 whitespace-nowrap">
                             <div class="font-medium text-blue-700 cursor-pointer hover:underline" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</div>
@@ -2770,7 +3001,6 @@
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
 
-                    // Mobile user name: clickable
                     const userNameHtml =
                         `<span class="user-clickable" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</span>`;
 
@@ -2826,7 +3056,9 @@
                                 <span class="value text-xs">
                                     <span class="font-semibold">Order:</span> ${order.dateTime}<br>
                                     <span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}<br>
-                                    <span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}
+                                    <span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}<br>
+                                    <span class="font-semibold">Last Update:</span> ${order.lastUpdate || '—'}<br>
+                                    <span class="font-semibold">Stage:</span> <span class="stage-tag">${order.orderStage || order.status}</span>
                                 </span>
                             </div>
                             <hr class="divider">
@@ -2940,6 +3172,8 @@
                     order.trackingNumber = trackingNum;
                     order.trackingUrl = `https://track.dhl.com/${trackingNum}`;
                     if (etaDate) order.etaDeliveryDate = etaDate;
+                    order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     showToast('✅', `Tracking number saved for ${currentTrackingOrderId}`);
                     closeTrackingModal();
                     renderPaginatedOrders();
@@ -2984,6 +3218,9 @@
                 order.status = 'Order Cancelled';
                 order.currentStageIndex = 4;
                 order.comment = order.comment ? `${order.comment} | Cancelled: ${reason}` : `Cancelled: ${reason}`;
+                order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                order.orderStage = 'Cancelled';
                 closeCancelModal();
                 showToast('🗑️', `Order ${pendingCancelOrderId} cancelled. Reason: ${reason}`);
                 updateStats();
@@ -3158,7 +3395,7 @@
                 if (!order) return;
                 const w = window.open('', '_blank', 'width=400,height=600');
                 w.document.write(
-                    `<html><head><title>Shipping Label - ${order.id}</title><style>body{font-family:Arial;padding:20px} .label{border:2px solid #000;padding:15px;width:300px} h3{margin-top:0}</style></head><body><div class="label"><h3>MeroLogix</h3><p><strong>Order ID:</strong> ${order.id}</p><p><strong>User:</strong> ${order.user}</p><p><strong>Product:</strong> ${order.productName}</p><p><strong>Weight:</strong> ${order.paymentSummary.approxWeight}</p><p><strong>Date:</strong> ${order.dateTime}</p><button onclick="window.print()">Print</button></div></body></html>`
+                    `<html><head><title>Shipping Label - ${order.id}</title><style>body{font-family:Arial;padding:20px} .label{border:2px solid #000;padding:15px;width:300px} h3{margin-top:0}</style></head><body><div class="label"><h3>MeroWish</h3><p><strong>Order ID:</strong> ${order.id}</p><p><strong>User:</strong> ${order.user}</p><p><strong>Product:</strong> ${order.productName}</p><p><strong>Weight:</strong> ${order.paymentSummary.approxWeight}</p><p><strong>Date:</strong> ${order.dateTime}</p><button onclick="window.print()">Print</button></div></body></html>`
                 );
                 w.document.close();
             }
@@ -3168,7 +3405,7 @@
                 if (!order) return;
                 const w = window.open('', '_blank', 'width=600,height=500');
                 w.document.write(
-                    `<html><head><title>Invoice - ${order.id}</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #ccc;padding:8px;text-align:left}</style></head><body><h2>MeroLogix Invoice</h2><p>Order ID: ${order.id}</p><p>User: ${order.user}</p><table><tr><th>Description</th><th>Qty</th><th>Amount</th></tr><tr><td>${order.productName}</td><td>${order.qty}</td><td>${order.totalAmount}</td></tr></table><p><strong>Total:</strong> ${order.totalAmount}</p><button onclick="window.print()">Print</button></body></html>`
+                    `<html><head><title>Invoice - ${order.id}</title><style>body{font-family:Arial;padding:30px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #ccc;padding:8px;text-align:left}</style></head><body><h2>MeroWish Invoice</h2><p>Order ID: ${order.id}</p><p>User: ${order.user}</p><table><tr><th>Description</th><th>Qty</th><th>Amount</th></tr><tr><td>${order.productName}</td><td>${order.qty}</td><td>${order.totalAmount}</td></tr></table><p><strong>Total:</strong> ${order.totalAmount}</p><button onclick="window.print()">Print</button></body></html>`
                 );
                 w.document.close();
             }
@@ -3176,11 +3413,11 @@
             function exportToExcel() {
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(() => {
-                    let csv = 'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA\n';
+                    let csv = 'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage\n';
                     filteredOrders.forEach(o => {
                         const tierData = getUserTier(o.user);
                         csv +=
-                            `${o.id},"${o.user}",${tierData.mobile},"${o.type}","${o.status}","${o.productName}",${o.qty},"${o.totalAmount}","${o.paymentSummary.advance}","${o.paymentSummary.cod}","${o.paymentSummary.gateway}","${o.paymentSummary.gross}","${o.paymentSummary.discount}","${o.paymentSummary.invoiceValue}","${o.paymentSummary.approxWeight}","${o.dateTime}","${o.paymentReceivedDateTime || ''}","${o.etaDeliveryDate || ''}"\n`;
+                            `${o.id},"${o.user}",${tierData.mobile},"${o.type}","${o.status}","${o.productName}",${o.qty},"${o.totalAmount}","${o.paymentSummary.advance}","${o.paymentSummary.cod}","${o.paymentSummary.gateway}","${o.paymentSummary.gross}","${o.paymentSummary.discount}","${o.paymentSummary.invoiceValue}","${o.paymentSummary.approxWeight}","${o.dateTime}","${o.paymentReceivedDateTime || ''}","${o.etaDeliveryDate || ''}","${o.lastUpdate || ''}","${o.orderStage || o.status}"\n`;
                     });
                     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     const a = document.createElement('a');
@@ -3240,7 +3477,57 @@
                 }
             }
 
-            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            // ─── SETTINGS MODAL ──────────────────────────────────────────
+            function openSettingsModal() {
+                const modal = document.getElementById('settingsModal');
+                modal.classList.add('flex');
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                // sync checkboxes
+                const checkboxes = document.querySelectorAll('#settingsPartnerList input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.checked = selectedPartners.includes(cb.value);
+                });
+                updateSettingsDisplay();
+            }
+
+            function closeSettingsModal() {
+                document.getElementById('settingsModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function updateSettingsDisplay() {
+                const display = document.getElementById('selectedPartnersDisplay');
+                if (selectedPartners.length === 0) {
+                    display.innerHTML = '<span class="text-gray-400 text-xs">None selected</span>';
+                    return;
+                }
+                display.innerHTML = selectedPartners.map(p =>
+                    `<span class="partner-chip">${p} <span class="remove-chip" onclick="removePartner('${p}')">×</span></span>`
+                ).join('');
+            }
+
+            function removePartner(name) {
+                selectedPartners = selectedPartners.filter(p => p !== name);
+                const checkboxes = document.querySelectorAll('#settingsPartnerList input[type="checkbox"]');
+                checkboxes.forEach(cb => { if (cb.value === name) cb.checked = false; });
+                updateSettingsDisplay();
+                savePartnersToStorage(selectedPartners);
+                showToast('🗑️', `Removed ${name} from partners`);
+            }
+
+            function saveSettings() {
+                const checkboxes = document.querySelectorAll('#settingsPartnerList input[type="checkbox"]');
+                const selected = [];
+                checkboxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
+                selectedPartners = selected;
+                savePartnersToStorage(selectedPartners);
+                updateSettingsDisplay();
+                closeSettingsModal();
+                showToast('✅', `Saved ${selectedPartners.length} logistic partner(s)`);
+            }
+
+            // ─── KEYBOARD SHORTCUTS ──────────────────────────────────────
             document.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
                     closeTimelineModal();
@@ -3251,9 +3538,11 @@
                     closeCancelModal();
                     closePriceCorrections();
                     closeBulkLabelModal();
+                    closeSettingsModal();
                 }
             });
 
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
             window.addEventListener('resize', handleStatsOnResize);
 
             // ─── EXPOSE ──────────────────────────────────────────────────────
@@ -3299,6 +3588,10 @@
             window.printBulkInvoice = printBulkInvoice;
             window.closeBulkLabelModal = closeBulkLabelModal;
             window.toggleStats = toggleStats;
+            window.openSettingsModal = openSettingsModal;
+            window.closeSettingsModal = closeSettingsModal;
+            window.saveSettings = saveSettings;
+            window.removePartner = removePartner;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
@@ -3307,6 +3600,8 @@
             renderPaginatedOrders();
             updateActiveFilters();
             handleStatsOnResize();
+            // restore settings display on load
+            updateSettingsDisplay();
         })();
     </script>
 </body>
