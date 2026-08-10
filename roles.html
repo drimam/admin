@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Role Management</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .role-row {
+            transition: all 0.15s ease;
+        }
+        .role-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+        .user-row {
+            transition: all 0.15s ease;
+        }
+        .user-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge .dot.green {
+            background: #10B981;
+        }
+        .status-badge .dot.blue {
+            background: #3B82F6;
+        }
+        .status-badge .dot.yellow {
+            background: #F59E0B;
+        }
+        .status-badge .dot.red {
+            background: #EF4444;
+        }
+        .status-badge .dot.purple {
+            background: #8B5CF6;
+        }
+        .status-badge .dot.gray {
+            background: #9CA3AF;
+        }
+
+        .action-icon-btn {
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+        .action-icon-btn.green:hover {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+        .action-icon-btn.purple:hover {
+            color: #7C3AED;
+            background: #F5F3FF;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .detail-field {
+            margin-bottom: 14px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-field input,
+        .detail-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .detail-field input:focus,
+        .detail-field select:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+        .detail-field .hint {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .permission-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .permission-grid .module-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 16px;
+            padding: 6px 10px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .permission-grid .module-row .module-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #0f172a;
+            min-width: 130px;
+        }
+        .permission-grid .module-row .perms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 10px;
+        }
+        .permission-grid .module-row .perms label {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            color: #475569;
+            cursor: pointer;
+        }
+        .permission-grid .module-row .perms input[type="checkbox"] {
+            width: 13px;
+            height: 13px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+        }
+        .perm-group-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 4px 0 2px 0;
+            display: block;
+        }
+
+        @media (max-width: 767px) {
+            .permission-grid .module-row {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 8px 10px;
+                gap: 4px;
+            }
+            .permission-grid .module-row .module-name {
+                min-width: auto;
+                font-size: 12px;
+            }
+            .permission-grid .module-row .perms {
+                gap: 2px 6px;
+            }
+            .permission-grid .module-row .perms label {
+                font-size: 10px;
+            }
+            .permission-grid .module-row .perms input[type="checkbox"] {
+                width: 12px;
+                height: 12px;
+            }
+            .role-table td,
+            .role-table th,
+            .user-table td,
+            .user-table th {
+                padding: 4px 6px !important;
+                font-size: 10px !important;
+            }
+            .action-icon-btn {
+                font-size: 11px !important;
+                padding: 1px 4px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .status-badge {
+                font-size: 9px;
+                padding: 1px 8px;
+            }
+            .detail-field .value-box {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .permission-grid .module-row .module-name {
+                font-size: 11px;
+            }
+            .permission-grid .module-row .perms label {
+                font-size: 9px;
+            }
+            .role-table td,
+            .role-table th,
+            .user-table td,
+            .user-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 0 3px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 55px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .status-badge {
+                font-size: 8px;
+                padding: 1px 6px;
+            }
+            .detail-field .value-box {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+            .permission-grid {
+                max-height: 300px;
+            }
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom-color: #4F46E5;
+            background: #f8fafc;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .user-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #EEF2FF;
+            color: #4338CA;
+            border: 1px solid #C7D2FE;
+        }
+        .role-badge.admin {
+            background: #FEF2F2;
+            color: #DC2626;
+            border-color: #FECACA;
+        }
+        .role-badge.manager {
+            background: #ECFDF5;
+            color: #059669;
+            border-color: #A7F3D0;
+        }
+        .role-badge.staff {
+            background: #FFFBEB;
+            color: #D97706;
+            border-color: #FDE68A;
+        }
+
+        .stat-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .stat-value-sm {
+            font-size: 15px;
+        }
+        @media (min-width: 768px) {
+            .stat-value-sm {
+                font-size: 17px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .stat-value-sm {
+                font-size: 20px;
+            }
+        }
+        .stat-label-one {
+            font-size: 9px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (min-width: 768px) {
+            .stat-label-one {
+                font-size: 10px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .stat-label-one {
+                font-size: 11px;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        .perm-count-badge {
+            background: #E0E7FF;
+            color: #4338CA;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 12px;
+            margin-left: 4px;
+        }
+        .order-perm-section {
+            border-left: 3px solid #4F46E5;
+            padding-left: 8px;
+            margin-left: 4px;
+        }
+        .order-perm-section .perms label {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <!-- Active: Role Management -->
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">12</span></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+            <!-- Role Management active -->
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>Role Management<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">3</span></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">🔐 Role Management</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">🔐 Roles</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+                <button onclick="openAddRoleModal()" class="flex items-center gap-1 sm:gap-2 bg-primary text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-primaryDark transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span class="hidden xs:inline">Add Role</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── STATS ─── -->
+            <div class="stats-grid">
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-blue-50 text-blue-600">👥</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Roles</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 stat-value-sm" id="statTotalRoles">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Active Users</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-green-600 stat-value-sm" id="statActiveUsers">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-purple-50 text-purple-600">👤</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Users</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 stat-value-sm" id="statTotalUsers">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-amber-50 text-amber-600">📋</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Permissions</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-amber-600 stat-value-sm" id="statPermissions">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TABS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
+                <div class="flex flex-wrap gap-1 border-b border-gray-200">
+                    <button class="tab-btn active" data-tab="roles" onclick="switchTab('roles')">📋 Roles</button>
+                    <button class="tab-btn" data-tab="users" onclick="switchTab('users')">👥 Users</button>
+                </div>
+            </div>
+
+            <!-- ─── TAB: ROLES ─── -->
+            <div id="tab-roles" class="tab-content active">
+                <!-- Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[120px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchRoles" placeholder="Role name..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterRoles()" />
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearRoleFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterRoles()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roles Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Roles List</span>
+                            <span id="roleResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="rolePageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeRolePageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="role-table w-full text-xs sm:text-sm" id="rolesTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Role</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Description</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Users</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Permissions</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rolesTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="rolePaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="rolePaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TAB: USERS ─── -->
+            <div id="tab-users" class="tab-content">
+                <!-- Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[120px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchUsers" placeholder="User name, email..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterUsers()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Role:</label>
+                            <select id="roleUserFilter" onchange="filterUsers()" class="text-xs sm:text-sm">
+                                <option value="all">All Roles</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearUserFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterUsers()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                    <div id="activeUserFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Users List</span>
+                            <span id="userResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="userPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeUserPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="user-table w-full text-xs sm:text-sm" id="usersTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Email</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Role</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Status</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="userPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="userPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ─── ADD / EDIT ROLE MODAL ─── -->
+    <div id="roleModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeRoleModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-3 sm:mx-4 max-h-[95vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl z-10">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="roleModalTitle">➕ Add Role</h3>
+                <button onclick="closeRoleModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <form id="roleForm" onsubmit="saveRole(event)">
+                    <input type="hidden" id="editRoleId" />
+                    <div class="detail-field">
+                        <label>Role Name *</label>
+                        <input type="text" id="roleName" placeholder="e.g. Manager" required />
+                    </div>
+                    <div class="detail-field">
+                        <label>Description</label>
+                        <input type="text" id="roleDescription" placeholder="Brief description of the role" />
+                    </div>
+                    <div class="detail-field">
+                        <label>Permissions</label>
+                        <div class="permission-grid" id="permissionGrid">
+                            <!-- populated by JS -->
+                        </div>
+                        <div class="hint mt-2">Select the permissions for this role. <span class="text-blue-600 font-medium">Orders</span> module has granular controls.</div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save</button>
+                        <button type="button" onclick="closeRoleModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ASSIGN ROLE MODAL ─── -->
+    <div id="assignRoleModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeAssignRoleModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">👤 Assign Role</h3>
+                <button onclick="closeAssignRoleModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-3">Assign a role to <span id="assignUserName" class="font-semibold text-gray-800">—</span></p>
+                <div class="detail-field">
+                    <label>Role</label>
+                    <select id="assignRoleSelect" class="w-full"></select>
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="saveAssignRole()" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">Assign</button>
+                    <button onclick="closeAssignRoleModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── DELETE CONFIRM MODAL ─── -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="p-4 sm:p-6 text-center">
+                <div class="text-5xl mb-3">🗑️</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Delete Role</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete role <span id="deleteRoleName" class="font-semibold text-gray-800">—</span>? This action cannot be undone.</p>
+                <div class="flex gap-3">
+                    <button onclick="confirmDeleteRole()" class="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors">Delete</button>
+                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── MODULE DEFINITIONS WITH PERMISSIONS ─────────────────────
+
+            // Each module has: id, label, and permissions array
+            // Orders module has more granular permissions
+            const MODULE_DEFS = [{
+                id: 'dashboard',
+                label: 'Dashboard',
+                perms: ['view']
+            }, {
+                id: 'users',
+                label: 'Users',
+                perms: ['view', 'add', 'edit', 'delete', 'export']
+            }, {
+                id: 'orders',
+                label: 'Orders',
+                perms: [
+                    'view', 'create', 'edit', 'delete',
+                    'cancel', 'refund', 'update_status',
+                    'assign_delivery', 'print_invoice', 'shipping_label',
+                    'view_timeline', 'export', 'approve_price'
+                ]
+            }, {
+                id: 'categories',
+                label: 'Categories',
+                perms: ['view', 'add', 'edit', 'delete']
+            }, {
+                id: 'subcategories',
+                label: 'SubCategories',
+                perms: ['view', 'add', 'edit', 'delete']
+            }, {
+                id: 'price_corrections',
+                label: 'Price Corrections',
+                perms: ['view', 'review', 'approve', 'reject', 'export']
+            }, {
+                id: 'reports',
+                label: 'Reports',
+                perms: ['view', 'export', 'download']
+            }, {
+                id: 'settings',
+                label: 'Settings',
+                perms: ['view', 'edit']
+            }, {
+                id: 'delivery',
+                label: 'Delivery',
+                perms: ['view', 'assign', 'track', 'update']
+            }, {
+                id: 'feedback',
+                label: 'Feedback & Tickets',
+                perms: ['view', 'reply', 'resolve', 'delete']
+            }, {
+                id: 'blog',
+                label: 'Blog',
+                perms: ['view', 'add', 'edit', 'delete']
+            }, {
+                id: 'role_management',
+                label: 'Role Management',
+                perms: ['view', 'add', 'edit', 'delete', 'assign']
+            }];
+
+            // ─── PERMISSION LABEL MAP ─────────────────────────────────────
+
+            const PERM_LABELS = {
+                // Common
+                'view': '👁️ View',
+                'add': '➕ Add',
+                'edit': '✏️ Edit',
+                'delete': '🗑️ Delete',
+                'export': '📤 Export',
+                'approve': '✅ Approve',
+
+                // Orders specific
+                'create': '📝 Create',
+                'cancel': '❌ Cancel',
+                'refund': '💸 Refund',
+                'update_status': '🔄 Update Status',
+                'assign_delivery': '🚚 Assign Delivery',
+                'print_invoice': '🧾 Print Invoice',
+                'shipping_label': '📦 Shipping Label',
+                'view_timeline': '📋 View Timeline',
+                'approve_price': '💰 Approve Price',
+
+                // Price Corrections specific
+                'review': '🔍 Review',
+                'reject': '🚫 Reject',
+
+                // Delivery specific
+                'assign': '📌 Assign',
+                'track': '📍 Track',
+                'update': '🔄 Update',
+
+                // Feedback specific
+                'reply': '💬 Reply',
+                'resolve': '✅ Resolve',
+
+                // Role Management specific
+                'assign': '🔑 Assign',
+
+                // Reports specific
+                'download': '⬇️ Download',
+            };
+
+            // ─── DEFAULT ROLES WITH PERMISSIONS ──────────────────────────
+
+            function buildDefaultPermissions() {
+                const perms = {};
+                MODULE_DEFS.forEach(mod => {
+                    const p = {};
+                    mod.perms.forEach(perm => {
+                        p[perm] = false;
+                    });
+                    perms[mod.id] = p;
+                });
+                return perms;
+            }
+
+            function getAllPermissions(roleName) {
+                const perms = buildDefaultPermissions();
+
+                if (roleName === 'Admin') {
+                    // Admin gets all permissions
+                    MODULE_DEFS.forEach(mod => {
+                        mod.perms.forEach(perm => {
+                            perms[mod.id][perm] = true;
+                        });
+                    });
+                } else if (roleName === 'Manager') {
+                    // Manager gets most permissions except sensitive ones
+                    MODULE_DEFS.forEach(mod => {
+                        mod.perms.forEach(perm => {
+                            if (mod.id === 'settings' && (perm === 'edit' || perm === 'delete')) {
+                                perms[mod.id][perm] = false;
+                            } else if (mod.id === 'role_management' && perm !== 'view') {
+                                perms[mod.id][perm] = false;
+                            } else if (mod.id === 'users' && (perm === 'delete' || perm === 'add')) {
+                                perms[mod.id][perm] = false;
+                            } else if (mod.id === 'reports' && perm === 'download') {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'price_corrections' && (perm === 'approve' || perm ===
+                                    'reject')) {
+                                perms[mod.id][perm] = false;
+                            } else {
+                                perms[mod.id][perm] = true;
+                            }
+                        });
+                    });
+                } else if (roleName === 'Staff') {
+                    // Staff gets limited permissions
+                    MODULE_DEFS.forEach(mod => {
+                        mod.perms.forEach(perm => {
+                            if (mod.id === 'dashboard' && perm === 'view') {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'orders' && (perm === 'view' || perm === 'create' ||
+                                    perm === 'edit' || perm === 'update_status' || perm ===
+                                    'print_invoice' || perm === 'shipping_label' || perm ===
+                                    'view_timeline')) {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'delivery' && (perm === 'view' || perm === 'track' ||
+                                    perm === 'update')) {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'price_corrections' && (perm === 'view' || perm ===
+                                    'review')) {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'feedback' && (perm === 'view' || perm === 'reply')) {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'categories' && perm === 'view') {
+                                perms[mod.id][perm] = true;
+                            } else if (mod.id === 'subcategories' && perm === 'view') {
+                                perms[mod.id][perm] = true;
+                            } else {
+                                perms[mod.id][perm] = false;
+                            }
+                        });
+                    });
+                }
+
+                return perms;
+            }
+
+            // ─── ROLES DATA ──────────────────────────────────────────────
+
+            let roles = [{
+                id: 1,
+                name: 'Admin',
+                description: 'Full access to all features',
+                permissions: getAllPermissions('Admin')
+            }, {
+                id: 2,
+                name: 'Manager',
+                description: 'Manage orders, users, and content',
+                permissions: getAllPermissions('Manager')
+            }, {
+                id: 3,
+                name: 'Staff',
+                description: 'Basic operational access',
+                permissions: getAllPermissions('Staff')
+            }];
+
+            // ─── USERS DATA ──────────────────────────────────────────────
+
+            let users = [
+                { id: 1, name: 'Damodar Bhattarai', email: 'damodar@example.com', role: 'Admin', status: 'active' },
+                { id: 2, name: 'Sita Sharma', email: 'sita@example.com', role: 'Manager', status: 'active' },
+                { id: 3, name: 'Ramesh Adhikari', email: 'ramesh@example.com', role: 'Staff', status: 'active' },
+                { id: 4, name: 'Priya Gurung', email: 'priya@example.com', role: 'Staff', status: 'blocked' },
+                { id: 5, name: 'Bikash Thapa', email: 'bikash@example.com', role: 'Manager', status: 'active' },
+            ];
+
+            // ─── STATE ──────────────────────────────────────────────────────
+
+            let roleFiltered = [...roles];
+            let rolePage = 1;
+            let roleSize = 50;
+            let userFiltered = [...users];
+            let userPage = 1;
+            let userSize = 50;
+            let deleteTargetId = null;
+            let assignTargetUserId = null;
+
+            // ─── HELPERS ────────────────────────────────────────────────────
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function getInitials(name) {
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function getAvatarColor(name) {
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
+                return colors[hash];
+            }
+
+            function getStatusBadge(status) {
+                if (status === 'active') {
+                    return '<span class="status-badge bg-green-100 text-green-700"><span class="dot green"></span>Active</span>';
+                } else {
+                    return '<span class="status-badge bg-red-100 text-red-700"><span class="dot red"></span>Blocked</span>';
+                }
+            }
+
+            function getRoleBadge(roleName) {
+                const map = {
+                    'Admin': 'admin',
+                    'Manager': 'manager',
+                    'Staff': 'staff'
+                };
+                const cls = map[roleName] || '';
+                return `<span class="role-badge ${cls}">${escapeHtml(roleName)}</span>`;
+            }
+
+            function countUsersForRole(roleName) {
+                return users.filter(u => u.role === roleName).length;
+            }
+
+            function countPermissions(perms) {
+                let count = 0;
+                MODULE_DEFS.forEach(mod => {
+                    const p = perms[mod.id] || {};
+                    mod.perms.forEach(perm => {
+                        if (p[perm]) count++;
+                    });
+                });
+                return count;
+            }
+
+            function getPermLabel(perm) {
+                return PERM_LABELS[perm] || perm;
+            }
+
+            // ─── RENDER ROLES ──────────────────────────────────────────────
+
+            function renderRoles() {
+                const start = (rolePage - 1) * roleSize;
+                const end = Math.min(start + roleSize, roleFiltered.length);
+                const pageData = roleFiltered.slice(start, end);
+                const tbody = document.getElementById('rolesTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No roles found</td></tr>`;
+                    document.getElementById('roleResultCount').textContent = 'Showing 0 entries';
+                    updateRolePagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(role => {
+                    const userCount = countUsersForRole(role.name);
+                    const permCount = countPermissions(role.permissions);
+                    return `
+                        <tr class="role-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">${getRoleBadge(role.name)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${escapeHtml(role.description || '—')}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm">${userCount}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm">${permCount}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                                <button onclick="editRole(${role.id})" class="action-icon-btn primary" title="Edit">✏️</button>
+                                <button onclick="deleteRole(${role.id})" class="action-icon-btn danger" title="Delete">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('roleResultCount').textContent =
+                    `Showing ${pageData.length} of ${roleFiltered.length} entries`;
+                updateRolePagination();
+                updateStats();
+            }
+
+            function updateRolePagination() {
+                const totalPages = Math.ceil(roleFiltered.length / roleSize) || 1;
+                document.getElementById('rolePaginationInfo').textContent =
+                    `Page ${rolePage} of ${totalPages} (${roleFiltered.length} entries)`;
+                const btnContainer = document.getElementById('rolePaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === rolePage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { rolePage = i;
+                        renderRoles(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function filterRoles() {
+                const search = document.getElementById('searchRoles').value.toLowerCase().trim();
+                let filtered = [...roles];
+                if (search) {
+                    filtered = filtered.filter(r => r.name.toLowerCase().includes(search) ||
+                        (r.description && r.description.toLowerCase().includes(search)));
+                }
+                roleFiltered = filtered;
+                rolePage = 1;
+                renderRoles();
+            }
+
+            function clearRoleFilters() {
+                document.getElementById('searchRoles').value = '';
+                filterRoles();
+            }
+
+            function changeRolePageSize() {
+                roleSize = parseInt(document.getElementById('rolePageSize').value, 10);
+                rolePage = 1;
+                renderRoles();
+            }
+
+            // ─── RENDER USERS ──────────────────────────────────────────────
+
+            function renderUsers() {
+                const start = (userPage - 1) * userSize;
+                const end = Math.min(start + userSize, userFiltered.length);
+                const pageData = userFiltered.slice(start, end);
+                const tbody = document.getElementById('usersTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No users found</td></tr>`;
+                    document.getElementById('userResultCount').textContent = 'Showing 0 entries';
+                    updateUserPagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(user => {
+                    const color = getAvatarColor(user.name);
+                    const initials = getInitials(user.name);
+                    const statusBadge = getStatusBadge(user.status);
+                    return `
+                        <tr class="user-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="user-avatar-sm" style="background:${color}">${initials}</div>
+                                    <span class="font-medium">${escapeHtml(user.name)}</span>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${escapeHtml(user.email)}</td>
+                            <td class="px-2 py-1 sm:py-2">${getRoleBadge(user.role)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center">${statusBadge}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                                <button onclick="openAssignRoleModal(${user.id})" class="action-icon-btn primary" title="Assign Role">🔑</button>
+                                <button onclick="toggleUserStatus(${user.id})" class="action-icon-btn ${user.status === 'active' ? 'danger' : 'green'}" title="${user.status === 'active' ? 'Block' : 'Unblock'}">${user.status === 'active' ? '🚫' : '✅'}</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('userResultCount').textContent =
+                    `Showing ${pageData.length} of ${userFiltered.length} entries`;
+                updateUserPagination();
+                updateStats();
+            }
+
+            function updateUserPagination() {
+                const totalPages = Math.ceil(userFiltered.length / userSize) || 1;
+                document.getElementById('userPaginationInfo').textContent =
+                    `Page ${userPage} of ${totalPages} (${userFiltered.length} entries)`;
+                const btnContainer = document.getElementById('userPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === userPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { userPage = i;
+                        renderUsers(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function filterUsers() {
+                const search = document.getElementById('searchUsers').value.toLowerCase().trim();
+                const roleFilter = document.getElementById('roleUserFilter').value;
+                let filtered = [...users];
+                if (search) {
+                    filtered = filtered.filter(u => u.name.toLowerCase().includes(search) ||
+                        u.email.toLowerCase().includes(search));
+                }
+                if (roleFilter !== 'all') {
+                    filtered = filtered.filter(u => u.role === roleFilter);
+                }
+                userFiltered = filtered;
+                userPage = 1;
+                renderUsers();
+                updateActiveUserFilters();
+            }
+
+            function clearUserFilters() {
+                document.getElementById('searchUsers').value = '';
+                document.getElementById('roleUserFilter').value = 'all';
+                filterUsers();
+            }
+
+            function updateActiveUserFilters() {
+                const container = document.getElementById('activeUserFilters');
+                let html = '';
+                const search = document.getElementById('searchUsers').value.trim();
+                const role = document.getElementById('roleUserFilter').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchUsers').value='';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (role !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Role: ${escapeHtml(role)} <button onclick="document.getElementById('roleUserFilter').value='all';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                container.innerHTML = html || '';
+            }
+
+            function changeUserPageSize() {
+                userSize = parseInt(document.getElementById('userPageSize').value, 10);
+                userPage = 1;
+                renderUsers();
+            }
+
+            // ─── POPULATE ROLE FILTER DROPDOWN ────────────────────────────
+
+            function populateRoleFilter() {
+                const select = document.getElementById('roleUserFilter');
+                const currentVal = select.value;
+                select.innerHTML = '<option value="all">All Roles</option>';
+                roles.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r.name;
+                    opt.textContent = r.name;
+                    select.appendChild(opt);
+                });
+                select.value = currentVal;
+            }
+
+            // ─── PERMISSION GRID ───────────────────────────────────────────
+
+            function renderPermissionGrid(permissions) {
+                const container = document.getElementById('permissionGrid');
+                container.innerHTML = '';
+
+                MODULE_DEFS.forEach(mod => {
+                    const perms = permissions[mod.id] || {};
+                    const row = document.createElement('div');
+                    row.className = 'module-row';
+
+                    // Module name with count badge
+                    const nameSpan = document.createElement('span');
+                    nameSpan.className = 'module-name';
+                    const count = mod.perms.filter(p => perms[p]).length;
+                    nameSpan.innerHTML =
+                        `${mod.label} <span class="perm-count-badge">${count}/${mod.perms.length}</span>`;
+                    row.appendChild(nameSpan);
+
+                    const permsDiv = document.createElement('div');
+                    permsDiv.className = 'perms';
+
+                    // For Orders module, show permissions with nicer grouping
+                    if (mod.id === 'orders') {
+                        // Group order permissions
+                        const groups = [
+                            { label: 'Basic', perms: ['view', 'create', 'edit', 'delete'] },
+                            { label: 'Actions', perms: ['cancel', 'refund', 'update_status', 'assign_delivery'] },
+                            { label: 'Documents', perms: ['print_invoice', 'shipping_label', 'view_timeline'] },
+                            { label: 'Advanced', perms: ['export', 'approve_price'] }
+                        ];
+                        groups.forEach(group => {
+                            const groupSpan = document.createElement('span');
+                            groupSpan.className = 'perm-group-label';
+                            groupSpan.textContent = group.label;
+                            permsDiv.appendChild(groupSpan);
+
+                            group.perms.forEach(perm => {
+                                const label = document.createElement('label');
+                                const cb = document.createElement('input');
+                                cb.type = 'checkbox';
+                                cb.checked = perms[perm] || false;
+                                cb.dataset.module = mod.id;
+                                cb.dataset.perm = perm;
+                                label.appendChild(cb);
+                                label.appendChild(document.createTextNode(getPermLabel(perm)));
+                                permsDiv.appendChild(label);
+                            });
+                        });
+                    } else {
+                        // Standard permissions
+                        mod.perms.forEach(perm => {
+                            const label = document.createElement('label');
+                            const cb = document.createElement('input');
+                            cb.type = 'checkbox';
+                            cb.checked = perms[perm] || false;
+                            cb.dataset.module = mod.id;
+                            cb.dataset.perm = perm;
+                            label.appendChild(cb);
+                            label.appendChild(document.createTextNode(getPermLabel(perm)));
+                            permsDiv.appendChild(label);
+                        });
+                    }
+
+                    row.appendChild(permsDiv);
+                    container.appendChild(row);
+                });
+            }
+
+            function getPermissionsFromGrid() {
+                const perms = {};
+                MODULE_DEFS.forEach(mod => {
+                    const modPerms = {};
+                    mod.perms.forEach(perm => {
+                        const cb = document.querySelector(
+                            `#permissionGrid input[data-module="${mod.id}"][data-perm="${perm}"]`);
+                        modPerms[perm] = cb ? cb.checked : false;
+                    });
+                    perms[mod.id] = modPerms;
+                });
+                return perms;
+            }
+
+            // ─── ROLE MODAL ────────────────────────────────────────────────
+
+            function openAddRoleModal() {
+                document.getElementById('editRoleId').value = '';
+                document.getElementById('roleModalTitle').textContent = '➕ Add Role';
+                document.getElementById('roleName').value = '';
+                document.getElementById('roleDescription').value = '';
+                const emptyPerms = buildDefaultPermissions();
+                renderPermissionGrid(emptyPerms);
+                document.getElementById('roleModal').classList.add('flex');
+                document.getElementById('roleModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('roleName').focus(), 100);
+            }
+
+            function editRole(id) {
+                const role = roles.find(r => r.id === id);
+                if (!role) return;
+                document.getElementById('editRoleId').value = id;
+                document.getElementById('roleModalTitle').textContent = '✏️ Edit Role';
+                document.getElementById('roleName').value = role.name;
+                document.getElementById('roleDescription').value = role.description || '';
+                renderPermissionGrid(role.permissions);
+                document.getElementById('roleModal').classList.add('flex');
+                document.getElementById('roleModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeRoleModal() {
+                document.getElementById('roleModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function saveRole(e) {
+                e.preventDefault();
+                const id = document.getElementById('editRoleId').value;
+                const name = document.getElementById('roleName').value.trim();
+                const description = document.getElementById('roleDescription').value.trim();
+                if (!name) {
+                    showToast('⚠️', 'Role name is required');
+                    return;
+                }
+                // Check duplicate name
+                const duplicate = roles.find(r => r.name.toLowerCase() === name.toLowerCase() && r.id != id);
+                if (duplicate) {
+                    showToast('⚠️', 'A role with this name already exists');
+                    return;
+                }
+                const permissions = getPermissionsFromGrid();
+
+                if (id) {
+                    // Edit
+                    const role = roles.find(r => r.id === parseInt(id));
+                    if (role) {
+                        role.name = name;
+                        role.description = description;
+                        role.permissions = permissions;
+                        showToast('✅', `Role "${name}" updated successfully!`);
+                    }
+                } else {
+                    // Add
+                    const newId = Math.max(...roles.map(r => r.id), 0) + 1;
+                    roles.push({
+                        id: newId,
+                        name,
+                        description,
+                        permissions
+                    });
+                    showToast('✅', `Role "${name}" added successfully!`);
+                }
+                closeRoleModal();
+                filterRoles();
+                populateRoleFilter();
+                updateStats();
+            }
+
+            function deleteRole(id) {
+                const role = roles.find(r => r.id === id);
+                if (!role) return;
+                // Check if role is assigned to any user
+                const usersWithRole = users.filter(u => u.role === role.name);
+                if (usersWithRole.length > 0) {
+                    showToast('⚠️',
+                        `Cannot delete role "${role.name}" because it is assigned to ${usersWithRole.length} user(s).`);
+                    return;
+                }
+                deleteTargetId = id;
+                document.getElementById('deleteRoleName').textContent = role.name;
+                document.getElementById('deleteModal').classList.add('flex');
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                deleteTargetId = null;
+            }
+
+            function confirmDeleteRole() {
+                if (deleteTargetId === null) return;
+                const idx = roles.findIndex(r => r.id === deleteTargetId);
+                if (idx > -1) {
+                    const name = roles[idx].name;
+                    roles.splice(idx, 1);
+                    showToast('🗑️', `Role "${name}" deleted successfully!`);
+                }
+                closeDeleteModal();
+                filterRoles();
+                populateRoleFilter();
+                updateStats();
+            }
+
+            // ─── ASSIGN ROLE MODAL ────────────────────────────────────────
+
+            function openAssignRoleModal(userId) {
+                const user = users.find(u => u.id === userId);
+                if (!user) return;
+                assignTargetUserId = userId;
+                document.getElementById('assignUserName').textContent = user.name;
+                const select = document.getElementById('assignRoleSelect');
+                select.innerHTML = '';
+                roles.forEach(r => {
+                    const opt = document.createElement('option');
+                    opt.value = r.name;
+                    opt.textContent = r.name;
+                    if (r.name === user.role) opt.selected = true;
+                    select.appendChild(opt);
+                });
+                document.getElementById('assignRoleModal').classList.add('flex');
+                document.getElementById('assignRoleModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeAssignRoleModal() {
+                document.getElementById('assignRoleModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                assignTargetUserId = null;
+            }
+
+            function saveAssignRole() {
+                if (assignTargetUserId === null) return;
+                const user = users.find(u => u.id === assignTargetUserId);
+                if (!user) return;
+                const newRole = document.getElementById('assignRoleSelect').value;
+                if (!newRole) {
+                    showToast('⚠️', 'Please select a role');
+                    return;
+                }
+                user.role = newRole;
+                closeAssignRoleModal();
+                renderUsers();
+                updateStats();
+                showToast('✅', `Role assigned to ${user.name}`);
+            }
+
+            // ─── TOGGLE USER STATUS ──────────────────────────────────────
+
+            function toggleUserStatus(userId) {
+                const user = users.find(u => u.id === userId);
+                if (!user) return;
+                const newStatus = user.status === 'active' ? 'blocked' : 'active';
+                const action = newStatus === 'active' ? 'unblocked' : 'blocked';
+                if (!confirm(`Are you sure you want to ${action} ${user.name}?`)) return;
+                user.status = newStatus;
+                renderUsers();
+                updateStats();
+                showToast('🔄', `${user.name} ${action} successfully`);
+            }
+
+            // ─── STATS ──────────────────────────────────────────────────────
+
+            function updateStats() {
+                document.getElementById('statTotalRoles').textContent = roles.length;
+                document.getElementById('statTotalUsers').textContent = users.length;
+                const activeUsers = users.filter(u => u.status === 'active').length;
+                document.getElementById('statActiveUsers').textContent = activeUsers;
+                // Count total permissions (sum of all roles' permissions)
+                let totalPerms = 0;
+                roles.forEach(r => {
+                    totalPerms += countPermissions(r.permissions);
+                });
+                document.getElementById('statPermissions').textContent = totalPerms;
+            }
+
+            // ─── TABS ──────────────────────────────────────────────────────
+
+            function switchTab(tab) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+                document.getElementById(`tab-${tab}`).classList.add('active');
+
+                if (tab === 'users') {
+                    populateRoleFilter();
+                    filterUsers();
+                } else {
+                    filterRoles();
+                }
+            }
+
+            // ─── REFRESH ──────────────────────────────────────────────────
+
+            function refreshData() {
+                filterRoles();
+                filterUsers();
+                populateRoleFilter();
+                showToast('🔄', 'Data refreshed');
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeRoleModal();
+                    closeAssignRoleModal();
+                    closeDeleteModal();
+                }
+            });
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+
+            window.filterRoles = filterRoles;
+            window.clearRoleFilters = clearRoleFilters;
+            window.changeRolePageSize = changeRolePageSize;
+            window.filterUsers = filterUsers;
+            window.clearUserFilters = clearUserFilters;
+            window.changeUserPageSize = changeUserPageSize;
+            window.openAddRoleModal = openAddRoleModal;
+            window.editRole = editRole;
+            window.closeRoleModal = closeRoleModal;
+            window.saveRole = saveRole;
+            window.deleteRole = deleteRole;
+            window.closeDeleteModal = closeDeleteModal;
+            window.confirmDeleteRole = confirmDeleteRole;
+            window.openAssignRoleModal = openAssignRoleModal;
+            window.closeAssignRoleModal = closeAssignRoleModal;
+            window.saveAssignRole = saveAssignRole;
+            window.toggleUserStatus = toggleUserStatus;
+            window.switchTab = switchTab;
+            window.refreshData = refreshData;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.showToast = showToast;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+
+            filterRoles();
+            populateRoleFilter();
+            filterUsers();
+            updateStats();
+            showToast('✅', 'Role Management loaded successfully');
+
+        })();
+    </script>
+</body>
+</html>
