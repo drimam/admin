@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Feedback & Tickets</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .ticket-row {
+            transition: all 0.15s ease;
+        }
+        .ticket-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge .dot.green {
+            background: #10B981;
+        }
+        .status-badge .dot.blue {
+            background: #3B82F6;
+        }
+        .status-badge .dot.yellow {
+            background: #F59E0B;
+        }
+        .status-badge .dot.red {
+            background: #EF4444;
+        }
+        .status-badge .dot.purple {
+            background: #8B5CF6;
+        }
+        .status-badge .dot.gray {
+            background: #9CA3AF;
+        }
+
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1px 10px;
+            border-radius: 16px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .priority-badge.low {
+            background: #ECFDF5;
+            color: #065F46;
+        }
+        .priority-badge.medium {
+            background: #FFFBEB;
+            color: #92400E;
+        }
+        .priority-badge.high {
+            background: #FEF2F2;
+            color: #991B1B;
+        }
+        .priority-badge.urgent {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .action-icon-btn {
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+        .action-icon-btn.green:hover {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+        .action-icon-btn.purple:hover {
+            color: #7C3AED;
+            background: #F5F3FF;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .detail-field {
+            margin-bottom: 14px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-field input,
+        .detail-field select,
+        .detail-field textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .detail-field input:focus,
+        .detail-field select:focus,
+        .detail-field textarea:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+        .detail-field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .detail-field .value-box {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        @media (max-width: 767px) {
+            .ticket-table td,
+            .ticket-table th {
+                padding: 4px 6px !important;
+                font-size: 10px !important;
+            }
+            .action-icon-btn {
+                font-size: 11px !important;
+                padding: 1px 4px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .status-badge,
+            .priority-badge {
+                font-size: 9px;
+                padding: 1px 8px;
+            }
+            .detail-field .value-box {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ticket-table td,
+            .ticket-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 0 3px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 55px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .status-badge,
+            .priority-badge {
+                font-size: 8px;
+                padding: 1px 6px;
+            }
+            .detail-field .value-box {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4px !important;
+            }
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom-color: #4F46E5;
+            background: #f8fafc;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .user-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .stat-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .stat-value-sm {
+            font-size: 15px;
+        }
+        @media (min-width: 768px) {
+            .stat-value-sm {
+                font-size: 17px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .stat-value-sm {
+                font-size: 20px;
+            }
+        }
+        .stat-label-one {
+            font-size: 9px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (min-width: 768px) {
+            .stat-label-one {
+                font-size: 10px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .stat-label-one {
+                font-size: 11px;
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        .ticket-meta {
+            font-size: 10px;
+            color: #94a3b8;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 8px;
+        }
+        .ticket-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .reply-item {
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 8px;
+        }
+        .reply-item .reply-author {
+            font-weight: 600;
+            font-size: 12px;
+            color: #0f172a;
+        }
+        .reply-item .reply-time {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+        .reply-item .reply-content {
+            font-size: 13px;
+            color: #334155;
+            margin-top: 4px;
+        }
+        .reply-item.admin-reply {
+            background: #EEF2FF;
+            border-color: #C7D2FE;
+        }
+        .reply-item.admin-reply .reply-author {
+            color: #4338CA;
+        }
+
+        .ticket-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+        }
+        @media (max-width: 640px) {
+            .ticket-detail-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            transition: transform 0.1s;
+            margin-left: 2px;
+        }
+        .whatsapp-link:hover {
+            transform: scale(1.15);
+        }
+        .whatsapp-link svg {
+            width: 16px;
+            height: 16px;
+            fill: #25D366;
+        }
+        .phone-with-wa {
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <!-- Active: Feedback & Tickets -->
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a></div></div>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>Role Management</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">💬 Feedback & Tickets</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">💬 Tickets</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+                <button onclick="openCreateTicketModal()" class="flex items-center gap-1 sm:gap-2 bg-primary text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-primaryDark transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span class="hidden xs:inline">New Ticket</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── STATS ─── -->
+            <div class="stats-grid">
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-blue-50 text-blue-600">📋</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Tickets</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 stat-value-sm" id="statTotal">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-yellow-50 text-yellow-600">🔄</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Open</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-yellow-600 stat-value-sm" id="statOpen">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-purple-50 text-purple-600">⏳</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">In Progress</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-purple-600 stat-value-sm" id="statInProgress">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Resolved</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-green-600 stat-value-sm" id="statResolved">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TABS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
+                <div class="flex flex-wrap gap-1 border-b border-gray-200">
+                    <button class="tab-btn active" data-tab="all" onclick="switchTab('all')">📋 All Tickets</button>
+                    <button class="tab-btn" data-tab="open" onclick="switchTab('open')">🔄 Open</button>
+                    <button class="tab-btn" data-tab="progress" onclick="switchTab('progress')">⏳ In Progress</button>
+                    <button class="tab-btn" data-tab="resolved" onclick="switchTab('resolved')">✅ Resolved</button>
+                    <button class="tab-btn" data-tab="closed" onclick="switchTab('closed')">🔒 Closed</button>
+                </div>
+            </div>
+
+            <!-- ─── TAB CONTENT ─── -->
+            <div id="tab-all" class="tab-content active">
+                <!-- Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[120px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchTickets" placeholder="Subject, User, ID..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterTickets()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Priority:</label>
+                            <select id="priorityFilter" onchange="filterTickets()" class="text-xs sm:text-sm">
+                                <option value="all">All</option>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearTicketFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterTickets()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                    <div id="activeTicketFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <!-- Tickets Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Tickets List</span>
+                            <span id="ticketResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="ticketPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeTicketPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="ticket-table w-full text-xs sm:text-sm" id="ticketsTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Ticket</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Subject</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Priority</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Status</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Date</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ticketsTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="ticketPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="ticketPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ─── TICKET DETAIL MODAL ─── -->
+    <div id="ticketDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeTicketDetailModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-3 sm:mx-4 max-h-[95vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl z-10">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="ticketDetailTitle">📋 Ticket Details</h3>
+                <button onclick="closeTicketDetailModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6" id="ticketDetailContent">
+                <!-- populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── REPLY MODAL ─── -->
+    <div id="replyModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeReplyModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">💬 Reply to Ticket</h3>
+                <button onclick="closeReplyModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-3">Replying to ticket: <span id="replyTicketSubject" class="font-semibold text-gray-800">—</span></p>
+                <div class="detail-field">
+                    <label>Your Reply</label>
+                    <textarea id="replyContent" placeholder="Type your reply here..." rows="4"></textarea>
+                </div>
+                <div class="detail-field">
+                    <label>Update Status</label>
+                    <select id="replyStatus">
+                        <option value="open">Open</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="saveReply()" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💬 Send Reply</button>
+                    <button onclick="closeReplyModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── CREATE TICKET MODAL ─── -->
+    <div id="createTicketModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeCreateTicketModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">➕ Create New Ticket</h3>
+                <button onclick="closeCreateTicketModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <form id="createTicketForm" onsubmit="saveNewTicket(event)">
+                    <div class="detail-field">
+                        <label>User *</label>
+                        <select id="ticketUser" required>
+                            <option value="">Select User</option>
+                        </select>
+                    </div>
+                    <div class="detail-field">
+                        <label>Subject *</label>
+                        <input type="text" id="ticketSubject" placeholder="Brief subject..." required />
+                    </div>
+                    <div class="detail-field">
+                        <label>Message *</label>
+                        <textarea id="ticketMessage" placeholder="Describe the issue or feedback..." rows="4" required></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="detail-field">
+                            <label>Priority</label>
+                            <select id="ticketPriority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="detail-field">
+                            <label>Type</label>
+                            <select id="ticketType">
+                                <option value="feedback">Feedback</option>
+                                <option value="issue">Issue</option>
+                                <option value="feature">Feature Request</option>
+                                <option value="complaint">Complaint</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Create Ticket</button>
+                        <button type="button" onclick="closeCreateTicketModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── DELETE CONFIRM MODAL ─── -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="p-4 sm:p-6 text-center">
+                <div class="text-5xl mb-3">🗑️</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2">Delete Ticket</h3>
+                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete ticket <span id="deleteTicketId" class="font-semibold text-gray-800">—</span>? This action cannot be undone.</p>
+                <div class="flex gap-3">
+                    <button onclick="confirmDeleteTicket()" class="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors">Delete</button>
+                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── DATA ──────────────────────────────────────────────────────
+
+            const usersList = [
+                { id: 1, name: 'Damodar Bhattarai', email: 'damodar@example.com' },
+                { id: 2, name: 'Sita Sharma', email: 'sita@example.com' },
+                { id: 3, name: 'Ramesh Adhikari', email: 'ramesh@example.com' },
+                { id: 4, name: 'Priya Gurung', email: 'priya@example.com' },
+                { id: 5, name: 'Bikash Thapa', email: 'bikash@example.com' },
+                { id: 6, name: 'Anita Rai', email: 'anita@example.com' },
+                { id: 7, name: 'Kiran Bhandari', email: 'kiran@example.com' },
+                { id: 8, name: 'Maya Devi', email: 'maya@example.com' },
+            ];
+
+            let tickets = [{
+                id: 1,
+                userId: 1,
+                user: 'Damodar Bhattarai',
+                subject: 'Order not delivered - MW202600003',
+                message: 'I placed an order for Wireless Bluetooth Earphones on 06 May 2026. The tracking shows delivered but I haven\'t received it. Please check and update.',
+                priority: 'high',
+                status: 'open',
+                type: 'issue',
+                createdAt: '2026-08-08 10:30 AM',
+                replies: [
+                    { author: 'Admin', content: 'We are checking with the delivery partner. Will update you shortly.', createdAt: '2026-08-08 11:15 AM',
+                        isAdmin: true },
+                ]
+            }, {
+                id: 2,
+                userId: 2,
+                user: 'Sita Sharma',
+                subject: 'Great service!',
+                message: 'I received my order on time. The product quality is excellent. Thank you for the amazing service.',
+                priority: 'low',
+                status: 'resolved',
+                type: 'feedback',
+                createdAt: '2026-08-07 02:45 PM',
+                replies: [
+                    { author: 'Admin', content: 'Thank you for your kind words! We appreciate your feedback.', createdAt: '2026-08-07 03:00 PM',
+                        isAdmin: true },
+                ]
+            }, {
+                id: 3,
+                userId: 3,
+                user: 'Ramesh Adhikari',
+                subject: 'Wrong product received',
+                message: 'I ordered Samsung Galaxy Watch 6 but received a different model. Please arrange for return and replacement.',
+                priority: 'urgent',
+                status: 'in_progress',
+                type: 'complaint',
+                createdAt: '2026-08-06 09:20 AM',
+                replies: [
+                    { author: 'Admin', content: 'We apologize for the inconvenience. Our team is reviewing this and will get back to you within 24 hours.',
+                        createdAt: '2026-08-06 10:00 AM', isAdmin: true },
+                    { author: 'Ramesh Adhikari', content: 'Please expedite this as I need the watch urgently.',
+                        createdAt: '2026-08-06 11:30 AM', isAdmin: false },
+                ]
+            }, {
+                id: 4,
+                userId: 5,
+                user: 'Bikash Thapa',
+                subject: 'Feature request: Dark mode',
+                message: 'It would be great if you could add dark mode to the website. I use it at night and the bright screen hurts my eyes.',
+                priority: 'low',
+                status: 'open',
+                type: 'feature',
+                createdAt: '2026-08-05 06:00 PM',
+                replies: []
+            }, {
+                id: 5,
+                userId: 8,
+                user: 'Maya Devi',
+                subject: 'Payment issue - Fonepay not working',
+                message: 'I tried to make a payment using Fonepay but it keeps failing. I have sufficient balance. Please help.',
+                priority: 'high',
+                status: 'in_progress',
+                type: 'issue',
+                createdAt: '2026-08-04 08:15 AM',
+                replies: [
+                    { author: 'Admin', content: 'We are checking with Fonepay team. Meanwhile, please try using another payment method.',
+                        createdAt: '2026-08-04 09:30 AM', isAdmin: true },
+                ]
+            }, {
+                id: 6,
+                userId: 4,
+                user: 'Priya Gurung',
+                subject: 'Refund pending for order MW202600045',
+                message: 'I requested a refund for my order MW202600045 on 03 Aug. It has been 3 days but I haven\'t received the refund yet.',
+                priority: 'medium',
+                status: 'open',
+                type: 'issue',
+                createdAt: '2026-08-03 11:00 AM',
+                replies: []
+            }, {
+                id: 7,
+                userId: 6,
+                user: 'Anita Rai',
+                subject: 'Appreciation for quick delivery',
+                message: 'I ordered a Yoga Mat and it arrived within 2 days. The packaging was excellent. Keep up the good work!',
+                priority: 'low',
+                status: 'closed',
+                type: 'feedback',
+                createdAt: '2026-08-02 04:30 PM',
+                replies: [
+                    { author: 'Admin', content: 'Thank you for your feedback! We are happy to serve you.',
+                        createdAt: '2026-08-02 05:00 PM', isAdmin: true },
+                ]
+            }];
+
+            // ─── STAFF USERS (for assignment) ─────────────────────────────
+            const staffUsers = [
+                { id: 1, name: 'Admin User', role: 'Admin' },
+                { id: 2, name: 'Support Team 1', role: 'Support' },
+                { id: 3, name: 'Support Team 2', role: 'Support' },
+                { id: 4, name: 'Manager', role: 'Manager' },
+            ];
+
+            // ─── STATE ──────────────────────────────────────────────────────
+
+            let filteredTickets = [...tickets];
+            let currentPage = 1;
+            let pageSize = 50;
+            let deleteTargetId = null;
+            let replyTargetId = null;
+            let currentTab = 'all';
+
+            // ─── HELPERS ────────────────────────────────────────────────────
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function getInitials(name) {
+                return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+            }
+
+            function getAvatarColor(name) {
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                let hash = 0;
+                for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
+                return colors[hash];
+            }
+
+            function getStatusBadge(status) {
+                const map = {
+                    'open': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow', label: 'Open' },
+                    'in_progress': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue', label: 'In Progress' },
+                    'resolved': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green', label: 'Resolved' },
+                    'closed': { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'gray', label: 'Closed' },
+                };
+                const m = map[status] || map.open;
+                return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
+            }
+
+            function getPriorityBadge(priority) {
+                const map = {
+                    'low': { label: 'Low', cls: 'low' },
+                    'medium': { label: 'Medium', cls: 'medium' },
+                    'high': { label: 'High', cls: 'high' },
+                    'urgent': { label: 'Urgent', cls: 'urgent' },
+                };
+                const m = map[priority] || map.medium;
+                return `<span class="priority-badge ${m.cls}">${m.label}</span>`;
+            }
+
+            function getTypeLabel(type) {
+                const map = {
+                    'feedback': '💬 Feedback',
+                    'issue': '⚠️ Issue',
+                    'feature': '💡 Feature',
+                    'complaint': '📢 Complaint',
+                };
+                return map[type] || type;
+            }
+
+            function getStatusFilter(status) {
+                if (status === 'all') return null;
+                return status;
+            }
+
+            function getPriorityFilter(priority) {
+                if (priority === 'all') return null;
+                return priority;
+            }
+
+            function formatDate(dateStr) {
+                return dateStr;
+            }
+
+            // ─── FILTER TICKETS ────────────────────────────────────────────
+
+            function filterTickets() {
+                const search = document.getElementById('searchTickets').value.toLowerCase().trim();
+                const priority = document.getElementById('priorityFilter').value;
+                const status = currentTab === 'all' ? null : currentTab;
+
+                let filtered = [...tickets];
+
+                if (search) {
+                    filtered = filtered.filter(t =>
+                        t.subject.toLowerCase().includes(search) ||
+                        t.user.toLowerCase().includes(search) ||
+                        t.id.toString().includes(search) ||
+                        t.message.toLowerCase().includes(search)
+                    );
+                }
+
+                if (status && status !== 'all') {
+                    filtered = filtered.filter(t => t.status === status);
+                }
+
+                if (priority !== 'all') {
+                    filtered = filtered.filter(t => t.priority === priority);
+                }
+
+                filteredTickets = filtered;
+                currentPage = 1;
+                renderTickets();
+                updateActiveTicketFilters();
+            }
+
+            function clearTicketFilters() {
+                document.getElementById('searchTickets').value = '';
+                document.getElementById('priorityFilter').value = 'all';
+                filterTickets();
+            }
+
+            function updateActiveTicketFilters() {
+                const container = document.getElementById('activeTicketFilters');
+                let html = '';
+                const search = document.getElementById('searchTickets').value.trim();
+                const priority = document.getElementById('priorityFilter').value;
+                const status = currentTab !== 'all' ? currentTab : null;
+
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchTickets').value='';filterTickets();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (status) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status.replace('_',' ')} <button onclick="switchTab('all')" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (priority !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">Priority: ${priority} <button onclick="document.getElementById('priorityFilter').value='all';filterTickets();" class="hover:text-red-500 ml-1">×</button></span>`;
+                container.innerHTML = html || '';
+            }
+
+            // ─── RENDER TICKETS ────────────────────────────────────────────
+
+            function renderTickets() {
+                const start = (currentPage - 1) * pageSize;
+                const end = Math.min(start + pageSize, filteredTickets.length);
+                const pageData = filteredTickets.slice(start, end);
+                const tbody = document.getElementById('ticketsTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-400 text-sm">No tickets found</td></tr>`;
+                    document.getElementById('ticketResultCount').textContent = 'Showing 0 entries';
+                    updatePagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(ticket => {
+                    const color = getAvatarColor(ticket.user);
+                    const initials = getInitials(ticket.user);
+                    const statusBadge = getStatusBadge(ticket.status);
+                    const priorityBadge = getPriorityBadge(ticket.priority);
+                    const typeLabel = getTypeLabel(ticket.type);
+                    const replyCount = ticket.replies ? ticket.replies.length : 0;
+
+                    return `
+                        <tr class="ticket-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-mono text-primary font-semibold text-xs">#${String(ticket.id).padStart(3,'0')}</span>
+                                    <span class="text-[10px] text-gray-400">${typeLabel}</span>
+                                    ${replyCount > 0 ? `<span class="text-[10px] text-blue-500">(${replyCount} replies)</span>` : ''}
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="user-avatar-sm" style="background:${color};width:22px;height:22px;font-size:8px;">${initials}</div>
+                                    <span>${escapeHtml(ticket.user)}</span>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm max-w-[150px] truncate" title="${escapeHtml(ticket.subject)}">
+                                <span class="font-medium">${escapeHtml(ticket.subject)}</span>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-center">${priorityBadge}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center">${statusBadge}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${ticket.createdAt}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                                <button onclick="openTicketDetailModal(${ticket.id})" class="action-icon-btn primary" title="View">👁️</button>
+                                <button onclick="openReplyModal(${ticket.id})" class="action-icon-btn green" title="Reply">💬</button>
+                                <button onclick="deleteTicket(${ticket.id})" class="action-icon-btn danger" title="Delete">🗑️</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+                document.getElementById('ticketResultCount').textContent =
+                    `Showing ${pageData.length} of ${filteredTickets.length} entries`;
+                updatePagination();
+                updateStats();
+            }
+
+            function updatePagination() {
+                const totalPages = Math.ceil(filteredTickets.length / pageSize) || 1;
+                document.getElementById('ticketPaginationInfo').textContent =
+                    `Page ${currentPage} of ${totalPages} (${filteredTickets.length} entries)`;
+                const btnContainer = document.getElementById('ticketPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === currentPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { currentPage = i;
+                        renderTickets(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function changeTicketPageSize() {
+                pageSize = parseInt(document.getElementById('ticketPageSize').value, 10);
+                currentPage = 1;
+                renderTickets();
+            }
+
+            // ─── STATS ──────────────────────────────────────────────────────
+
+            function updateStats() {
+                const total = tickets.length;
+                const open = tickets.filter(t => t.status === 'open').length;
+                const inProgress = tickets.filter(t => t.status === 'in_progress').length;
+                const resolved = tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length;
+
+                document.getElementById('statTotal').textContent = total;
+                document.getElementById('statOpen').textContent = open;
+                document.getElementById('statInProgress').textContent = inProgress;
+                document.getElementById('statResolved').textContent = resolved;
+            }
+
+            // ─── TABS ──────────────────────────────────────────────────────
+
+            function switchTab(tab) {
+                currentTab = tab;
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+                document.getElementById('tab-all').classList.add('active');
+
+                filterTickets();
+            }
+
+            // ─── TICKET DETAIL MODAL ──────────────────────────────────────
+
+            function openTicketDetailModal(id) {
+                const ticket = tickets.find(t => t.id === id);
+                if (!ticket) return;
+
+                const statusBadge = getStatusBadge(ticket.status);
+                const priorityBadge = getPriorityBadge(ticket.priority);
+                const typeLabel = getTypeLabel(ticket.type);
+                const color = getAvatarColor(ticket.user);
+                const initials = getInitials(ticket.user);
+
+                let repliesHtml = '';
+                if (ticket.replies && ticket.replies.length > 0) {
+                    repliesHtml = ticket.replies.map(r => `
+                        <div class="reply-item ${r.isAdmin ? 'admin-reply' : ''}">
+                            <div class="flex items-center justify-between">
+                                <span class="reply-author">${r.isAdmin ? '🛡️ Admin' : escapeHtml(r.author)}</span>
+                                <span class="reply-time">${r.createdAt}</span>
+                            </div>
+                            <div class="reply-content">${escapeHtml(r.content)}</div>
+                        </div>
+                    `).join('');
+                } else {
+                    repliesHtml = '<p class="text-sm text-gray-400">No replies yet.</p>';
+                }
+
+                document.getElementById('ticketDetailTitle').textContent = `📋 Ticket #${String(ticket.id).padStart(3,'0')}`;
+
+                document.getElementById('ticketDetailContent').innerHTML = `
+                    <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="user-avatar-sm" style="background:${color};width:36px;height:36px;font-size:14px;">${initials}</div>
+                            <div>
+                                <div class="font-semibold text-gray-800">${escapeHtml(ticket.user)}</div>
+                                <div class="text-sm text-gray-500">${escapeHtml(ticket.subject)}</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            ${statusBadge}
+                            ${priorityBadge}
+                            <span class="text-xs text-gray-400">${typeLabel}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+                        <p class="text-sm text-gray-700">${escapeHtml(ticket.message)}</p>
+                        <p class="text-xs text-gray-400 mt-2">Created: ${ticket.createdAt}</p>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="text-sm font-semibold text-gray-700">💬 Replies (${ticket.replies ? ticket.replies.length : 0})</h4>
+                            <button onclick="closeTicketDetailModal();openReplyModal(${ticket.id})" class="btn-primary-sm text-xs">Reply</button>
+                        </div>
+                        <div class="space-y-2">${repliesHtml}</div>
+                    </div>
+
+                    <div class="flex gap-3 mt-5 pt-4 border-t border-gray-200">
+                        <button onclick="closeTicketDetailModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+                        <button onclick="closeTicketDetailModal();openReplyModal(${ticket.id})" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💬 Reply</button>
+                        ${ticket.status !== 'closed' ? `<button onclick="resolveTicket(${ticket.id})" class="flex-1 bg-green-600 text-white py-2.5 rounded-xl font-semibold hover:bg-green-700 transition-colors">✅ Resolve</button>` : ''}
+                    </div>
+                `;
+
+                document.getElementById('ticketDetailModal').classList.add('flex');
+                document.getElementById('ticketDetailModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeTicketDetailModal() {
+                document.getElementById('ticketDetailModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            // ─── REPLY MODAL ──────────────────────────────────────────────
+
+            function openReplyModal(id) {
+                const ticket = tickets.find(t => t.id === id);
+                if (!ticket) return;
+                replyTargetId = id;
+                document.getElementById('replyTicketSubject').textContent = ticket.subject;
+                document.getElementById('replyContent').value = '';
+                document.getElementById('replyStatus').value = ticket.status;
+                document.getElementById('replyModal').classList.add('flex');
+                document.getElementById('replyModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('replyContent').focus(), 100);
+            }
+
+            function closeReplyModal() {
+                document.getElementById('replyModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                replyTargetId = null;
+            }
+
+            function saveReply() {
+                if (replyTargetId === null) return;
+                const ticket = tickets.find(t => t.id === replyTargetId);
+                if (!ticket) return;
+
+                const content = document.getElementById('replyContent').value.trim();
+                const status = document.getElementById('replyStatus').value;
+
+                if (!content) {
+                    showToast('⚠️', 'Please enter a reply');
+                    return;
+                }
+
+                if (!ticket.replies) ticket.replies = [];
+                ticket.replies.push({
+                    author: 'Admin',
+                    content: content,
+                    createdAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    isAdmin: true
+                });
+
+                ticket.status = status;
+
+                closeReplyModal();
+                renderTickets();
+                updateStats();
+                showToast('✅', 'Reply sent successfully!');
+            }
+
+            // ─── RESOLVE TICKET ────────────────────────────────────────────
+
+            function resolveTicket(id) {
+                const ticket = tickets.find(t => t.id === id);
+                if (!ticket) return;
+                if (!confirm(`Resolve ticket #${String(id).padStart(3,'0')}?`)) return;
+                ticket.status = 'resolved';
+                if (!ticket.replies) ticket.replies = [];
+                ticket.replies.push({
+                    author: 'Admin',
+                    content: 'This ticket has been resolved. Thank you for your patience.',
+                    createdAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    isAdmin: true
+                });
+                closeTicketDetailModal();
+                renderTickets();
+                updateStats();
+                showToast('✅', 'Ticket resolved successfully!');
+            }
+
+            // ─── CREATE TICKET ─────────────────────────────────────────────
+
+            function openCreateTicketModal() {
+                const select = document.getElementById('ticketUser');
+                select.innerHTML = '<option value="">Select User</option>';
+                usersList.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.id;
+                    opt.textContent = u.name;
+                    select.appendChild(opt);
+                });
+                document.getElementById('ticketSubject').value = '';
+                document.getElementById('ticketMessage').value = '';
+                document.getElementById('ticketPriority').value = 'medium';
+                document.getElementById('ticketType').value = 'feedback';
+                document.getElementById('createTicketModal').classList.add('flex');
+                document.getElementById('createTicketModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCreateTicketModal() {
+                document.getElementById('createTicketModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function saveNewTicket(e) {
+                e.preventDefault();
+                const userId = parseInt(document.getElementById('ticketUser').value);
+                const subject = document.getElementById('ticketSubject').value.trim();
+                const message = document.getElementById('ticketMessage').value.trim();
+                const priority = document.getElementById('ticketPriority').value;
+                const type = document.getElementById('ticketType').value;
+
+                if (!userId || !subject || !message) {
+                    showToast('⚠️', 'Please fill in all required fields');
+                    return;
+                }
+
+                const user = usersList.find(u => u.id === userId);
+                if (!user) {
+                    showToast('❌', 'User not found');
+                    return;
+                }
+
+                const newId = Math.max(...tickets.map(t => t.id), 0) + 1;
+                tickets.push({
+                    id: newId,
+                    userId: userId,
+                    user: user.name,
+                    subject: subject,
+                    message: message,
+                    priority: priority,
+                    status: 'open',
+                    type: type,
+                    createdAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    replies: []
+                });
+
+                closeCreateTicketModal();
+                filterTickets();
+                updateStats();
+                showToast('✅', 'Ticket created successfully!');
+            }
+
+            // ─── DELETE TICKET ─────────────────────────────────────────────
+
+            function deleteTicket(id) {
+                const ticket = tickets.find(t => t.id === id);
+                if (!ticket) return;
+                deleteTargetId = id;
+                document.getElementById('deleteTicketId').textContent = `#${String(id).padStart(3,'0')} - ${ticket.subject}`;
+                document.getElementById('deleteModal').classList.add('flex');
+                document.getElementById('deleteModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDeleteModal() {
+                document.getElementById('deleteModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                deleteTargetId = null;
+            }
+
+            function confirmDeleteTicket() {
+                if (deleteTargetId === null) return;
+                const idx = tickets.findIndex(t => t.id === deleteTargetId);
+                if (idx > -1) {
+                    const subject = tickets[idx].subject;
+                    tickets.splice(idx, 1);
+                    showToast('🗑️', `Ticket "${subject}" deleted successfully!`);
+                }
+                closeDeleteModal();
+                filterTickets();
+                updateStats();
+            }
+
+            // ─── REFRESH ──────────────────────────────────────────────────
+
+            function refreshData() {
+                filterTickets();
+                updateStats();
+                showToast('🔄', 'Data refreshed');
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeTicketDetailModal();
+                    closeReplyModal();
+                    closeCreateTicketModal();
+                    closeDeleteModal();
+                }
+            });
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+
+            window.filterTickets = filterTickets;
+            window.clearTicketFilters = clearTicketFilters;
+            window.changeTicketPageSize = changeTicketPageSize;
+            window.switchTab = switchTab;
+            window.openTicketDetailModal = openTicketDetailModal;
+            window.closeTicketDetailModal = closeTicketDetailModal;
+            window.openReplyModal = openReplyModal;
+            window.closeReplyModal = closeReplyModal;
+            window.saveReply = saveReply;
+            window.resolveTicket = resolveTicket;
+            window.openCreateTicketModal = openCreateTicketModal;
+            window.closeCreateTicketModal = closeCreateTicketModal;
+            window.saveNewTicket = saveNewTicket;
+            window.deleteTicket = deleteTicket;
+            window.closeDeleteModal = closeDeleteModal;
+            window.confirmDeleteTicket = confirmDeleteTicket;
+            window.refreshData = refreshData;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.showToast = showToast;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+
+            filterTickets();
+            updateStats();
+            showToast('✅', 'Feedback & Tickets loaded successfully');
+
+        })();
+    </script>
+</body>
+</html>
