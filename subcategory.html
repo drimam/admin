@@ -69,6 +69,7 @@
         .table-container {
             overflow-x: auto;
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
         .table-container::-webkit-scrollbar {
             height: 6px;
@@ -164,49 +165,128 @@
             display: flex;
             flex-wrap: wrap;
             gap: 2px;
-            max-width: 280px;
+            min-width: 100px;
         }
         .keyword-container .keyword-chip {
             margin: 1px 1px;
         }
 
-        @media (max-width: 767px) {
-            .keyword-container {
-                max-width: 160px;
+        .compact-number {
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .compact-number .pct {
+            font-size: 9px;
+            color: #94a3b8;
+        }
+
+        /* ─── RESPONSIVE TABLE ─── */
+        @media (max-width: 1024px) {
+            .subcategory-table td,
+            .subcategory-table th {
+                padding: 4px 6px !important;
+                font-size: 10px !important;
+            }
+            .action-icon-btn {
+                font-size: 12px !important;
+                padding: 1px 4px !important;
             }
             .keyword-chip {
                 font-size: 9px;
                 padding: 1px 8px;
-                max-width: 80px;
+                max-width: 90px;
             }
-            .subcategory-table td,
-            .subcategory-table th {
-                padding: 4px 6px !important;
-                font-size: 11px !important;
+            .compact-number {
+                font-size: 10px;
             }
-            .action-btns .action-icon-btn {
-                font-size: 12px !important;
-                padding: 1px 4px !important;
+            .compact-number .pct {
+                font-size: 8px;
             }
         }
 
-        @media (max-width: 480px) {
-            .keyword-container {
-                max-width: 120px;
+        @media (max-width: 768px) {
+            .subcategory-table td,
+            .subcategory-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 1px 3px !important;
             }
             .keyword-chip {
                 font-size: 8px;
                 padding: 1px 6px;
-                max-width: 60px;
+                max-width: 70px;
             }
+            .compact-number {
+                font-size: 9px;
+            }
+            .compact-number .pct {
+                font-size: 7px;
+            }
+            .keyword-container {
+                min-width: 60px;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 80px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .filter-section .filter-group label {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 480px) {
             .subcategory-table td,
             .subcategory-table th {
-                padding: 3px 4px !important;
-                font-size: 10px !important;
+                padding: 2px 3px !important;
+                font-size: 8px !important;
             }
-            .action-btns .action-icon-btn {
-                font-size: 10px !important;
-                padding: 1px 3px !important;
+            .action-icon-btn {
+                font-size: 9px !important;
+                padding: 0 2px !important;
+            }
+            .keyword-chip {
+                font-size: 7px;
+                padding: 1px 4px;
+                max-width: 50px;
+            }
+            .compact-number {
+                font-size: 8px;
+            }
+            .compact-number .pct {
+                font-size: 6px;
+            }
+            .keyword-container {
+                min-width: 40px;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 60px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .filter-section .filter-group label {
+                font-size: 8px;
+            }
+            #pageSizeSelect {
+                font-size: 9px !important;
+                padding: 2px 4px !important;
             }
         }
 
@@ -246,18 +326,18 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         .filter-section .filter-group {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
         .filter-section .filter-group input,
         .filter-section .filter-group select {
             font-size: 13px;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
             outline: none;
@@ -273,7 +353,7 @@
             background: transparent;
             border: 1px solid #d1d5db;
             color: #475569;
-            padding: 4px 12px;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 13px;
             font-weight: 500;
@@ -288,7 +368,7 @@
             background: #4F46E5;
             color: #fff;
             border: none;
-            padding: 4px 16px;
+            padding: 6px 16px;
             border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
@@ -337,6 +417,97 @@
             font-size: 10px;
             color: #94a3b8;
             margin-top: 2px;
+        }
+        .keyword-preview {
+            min-height: 28px;
+        }
+        .keyword-preview .keyword-chip {
+            font-size: 11px;
+            padding: 2px 12px;
+            margin: 2px 2px;
+        }
+        .detail-row-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 16px;
+        }
+        .detail-row-grid .detail-field {
+            margin-bottom: 0;
+        }
+        @media (max-width: 480px) {
+            .detail-row-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        /* ─── TABLE FIXED LAYOUT ─── */
+        .subcategory-table {
+            table-layout: fixed;
+            width: 100%;
+            min-width: 780px;
+        }
+        .subcategory-table .col-action { width: 60px; }
+        .subcategory-table .col-name { width: 110px; }
+        .subcategory-table .col-category { width: 100px; }
+        .subcategory-table .col-keywords { width: 180px; }
+        .subcategory-table .col-hsn { width: 70px; }
+        .subcategory-table .col-import { width: 60px; }
+        .subcategory-table .col-discount { width: 55px; }
+        .subcategory-table .col-minwt { width: 55px; }
+        .subcategory-table .col-maxwt { width: 55px; }
+        .subcategory-table .col-excise { width: 55px; }
+        .subcategory-table .col-vat { width: 55px; }
+
+        @media (max-width: 1024px) {
+            .subcategory-table {
+                min-width: 700px;
+            }
+            .subcategory-table .col-name { width: 90px; }
+            .subcategory-table .col-category { width: 80px; }
+            .subcategory-table .col-keywords { width: 150px; }
+            .subcategory-table .col-hsn { width: 60px; }
+            .subcategory-table .col-import { width: 50px; }
+            .subcategory-table .col-discount { width: 45px; }
+            .subcategory-table .col-minwt { width: 45px; }
+            .subcategory-table .col-maxwt { width: 45px; }
+            .subcategory-table .col-excise { width: 45px; }
+            .subcategory-table .col-vat { width: 45px; }
+            .subcategory-table .col-action { width: 50px; }
+        }
+
+        @media (max-width: 768px) {
+            .subcategory-table {
+                min-width: 620px;
+            }
+            .subcategory-table .col-name { width: 70px; }
+            .subcategory-table .col-category { width: 60px; }
+            .subcategory-table .col-keywords { width: 120px; }
+            .subcategory-table .col-hsn { width: 50px; }
+            .subcategory-table .col-import { width: 40px; }
+            .subcategory-table .col-discount { width: 38px; }
+            .subcategory-table .col-minwt { width: 38px; }
+            .subcategory-table .col-maxwt { width: 38px; }
+            .subcategory-table .col-excise { width: 38px; }
+            .subcategory-table .col-vat { width: 38px; }
+            .subcategory-table .col-action { width: 42px; }
+        }
+
+        @media (max-width: 480px) {
+            .subcategory-table {
+                min-width: 520px;
+            }
+            .subcategory-table .col-name { width: 55px; }
+            .subcategory-table .col-category { width: 50px; }
+            .subcategory-table .col-keywords { width: 90px; }
+            .subcategory-table .col-hsn { width: 42px; }
+            .subcategory-table .col-import { width: 35px; }
+            .subcategory-table .col-discount { width: 32px; }
+            .subcategory-table .col-minwt { width: 32px; }
+            .subcategory-table .col-maxwt { width: 32px; }
+            .subcategory-table .col-excise { width: 32px; }
+            .subcategory-table .col-vat { width: 32px; }
+            .subcategory-table .col-action { width: 36px; }
         }
     </style>
 </head>
@@ -413,9 +584,9 @@
             <!-- ─── FILTERS ─── -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                 <div class="filter-section">
-                    <div class="filter-group flex-1 min-w-[140px]">
+                    <div class="filter-group flex-1 min-w-[120px]">
                         <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
-                        <input type="text" id="searchInput" placeholder="SubCategory, Category, HSN..." class="flex-1 min-w-[100px] text-xs sm:text-sm" oninput="filterSubCategories()" />
+                        <input type="text" id="searchInput" placeholder="SubCategory, Category, HSN..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterSubCategories()" />
                     </div>
                     <div class="filter-group">
                         <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Category:</label>
@@ -426,6 +597,8 @@
                             <option value="Fashion">Fashion</option>
                             <option value="Home & Living">Home & Living</option>
                             <option value="Sports & Fitness">Sports & Fitness</option>
+                            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                            <option value="Automotive">Automotive</option>
                         </select>
                     </div>
                     <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
@@ -456,16 +629,22 @@
                     </div>
                 </div>
 
-                <!-- DESKTOP TABLE -->
+                <!-- TABLE (responsive with fixed columns) -->
                 <div class="table-container">
                     <table class="subcategory-table w-full text-xs sm:text-sm" id="subcategoryTable">
                         <thead>
                             <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-center whitespace-nowrap w-[60px]">Action</th>
-                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">SubCategory</th>
-                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">Category</th>
-                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap w-[100px]">HSN Code</th>
-                                <th class="px-2 sm:px-3 py-2 sm:py-3 text-left whitespace-nowrap">Keywords</th>
+                                <th class="col-action px-1 py-1 sm:py-2 text-center whitespace-nowrap">Action</th>
+                                <th class="col-name px-1 py-1 sm:py-2 text-left whitespace-nowrap">SubCategory</th>
+                                <th class="col-category px-1 py-1 sm:py-2 text-left whitespace-nowrap">Category</th>
+                                <th class="col-keywords px-1 py-1 sm:py-2 text-left whitespace-nowrap">Keywords</th>
+                                <th class="col-hsn px-1 py-1 sm:py-2 text-left whitespace-nowrap">HSN</th>
+                                <th class="col-import px-1 py-1 sm:py-2 text-center whitespace-nowrap">Import</th>
+                                <th class="col-discount px-1 py-1 sm:py-2 text-center whitespace-nowrap">Disc</th>
+                                <th class="col-minwt px-1 py-1 sm:py-2 text-center whitespace-nowrap">Min Wt</th>
+                                <th class="col-maxwt px-1 py-1 sm:py-2 text-center whitespace-nowrap">Max Wt</th>
+                                <th class="col-excise px-1 py-1 sm:py-2 text-center whitespace-nowrap">Excise</th>
+                                <th class="col-vat px-1 py-1 sm:py-2 text-center whitespace-nowrap">VAT</th>
                             </tr>
                         </thead>
                         <tbody id="subcategoryTableBody"></tbody>
@@ -484,38 +663,72 @@
     <!-- ─── ADD / EDIT SUB CATEGORY MODAL ─── -->
     <div id="subCategoryModal" class="fixed inset-0 z-50 hidden items-center justify-center user-detail-modal">
         <div class="modal-backdrop absolute inset-0" onclick="closeSubCategoryModal()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10">
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10">
             <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
                 <h3 class="text-base sm:text-lg font-bold text-gray-800" id="modalTitle">➕ Add Sub Category</h3>
                 <button onclick="closeSubCategoryModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 sm:p-6">
                 <form id="subCategoryForm" onsubmit="saveSubCategory(event)">
-                    <div class="detail-field">
-                        <label>SubCategory Name *</label>
-                        <input type="text" id="editSubCategory" placeholder="e.g. Daily Consumables" required />
-                    </div>
-                    <div class="detail-field">
-                        <label>Category *</label>
-                        <select id="editCategory" required>
-                            <option value="">Select Category</option>
-                            <option value="Food & FMCG Products">Food & FMCG Products</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Fashion">Fashion</option>
-                            <option value="Home & Living">Home & Living</option>
-                            <option value="Sports & Fitness">Sports & Fitness</option>
-                            <option value="Beauty & Personal Care">Beauty & Personal Care</option>
-                            <option value="Automotive">Automotive</option>
-                        </select>
-                    </div>
-                    <div class="detail-field">
-                        <label>HSN Code</label>
-                        <input type="text" id="editHsn" placeholder="e.g. 0713" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="detail-field">
+                            <label>SubCategory Name *</label>
+                            <input type="text" id="editSubCategory" placeholder="e.g. Daily Consumables" required />
+                        </div>
+                        <div class="detail-field">
+                            <label>Category *</label>
+                            <select id="editCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Food & FMCG Products">Food & FMCG Products</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Fashion">Fashion</option>
+                                <option value="Home & Living">Home & Living</option>
+                                <option value="Sports & Fitness">Sports & Fitness</option>
+                                <option value="Beauty & Personal Care">Beauty & Personal Care</option>
+                                <option value="Automotive">Automotive</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="detail-field">
                         <label>Keywords</label>
-                        <textarea id="editKeywords" placeholder="Enter keywords separated by commas&#10;e.g. rice, wheat, flour, dal"></textarea>
+                        <textarea id="editKeywords" placeholder="Enter keywords separated by commas&#10;e.g. rice, wheat, flour, dal" oninput="updateKeywordPreview()"></textarea>
                         <div class="hint">Separate keywords with commas. They will appear as tags.</div>
+                        <div id="keywordPreview" class="flex flex-wrap gap-1 mt-2 keyword-preview"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="detail-field">
+                            <label>HSN Code</label>
+                            <input type="text" id="editHsn" placeholder="e.g. 0713" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Import Duty %</label>
+                            <input type="number" id="editImportDuty" placeholder="15" step="0.01" min="0" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="detail-field">
+                            <label>Discount %</label>
+                            <input type="number" id="editDiscount" placeholder="0" step="0.01" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Min. Wt kg</label>
+                            <input type="number" id="editMinWeight" placeholder="0.10" step="0.01" min="0" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="detail-field">
+                            <label>Max. Wt kg</label>
+                            <input type="number" id="editMaxWeight" placeholder="2.00" step="0.01" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Excise Duty %</label>
+                            <input type="number" id="editExciseDuty" placeholder="0" step="0.01" min="0" />
+                        </div>
+                    </div>
+                    <div class="detail-field">
+                        <label>VAT 13% (Fixed)</label>
+                        <input type="number" id="editVat" placeholder="13" step="0.01" min="0" value="13" />
+                        <div class="hint">Standard VAT rate is 13%</div>
                     </div>
                     <div class="flex gap-3 mt-4">
                         <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save</button>
@@ -576,6 +789,12 @@
                 name: 'Daily Consumables',
                 category: 'Food & FMCG Products',
                 hsn: '0713',
+                importDuty: 15.00,
+                discount: 2.58,
+                minWeight: 0.50,
+                maxWeight: 2.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['rice', 'chawal', 'aata', 'atta', 'wheat flour', 'maida', 'sooji', 'semolina', 'besan',
                     'gram flour', 'corn flour', 'maida flour', 'dal', 'macaroon dal', 'moong dal', 'urad dal',
                     'chana dal', 'amhar dal', 'toor dal', 'rajma', 'kidney beans', 'peas', 'matar', 'soybeans',
@@ -592,6 +811,12 @@
                 name: 'Beverages',
                 category: 'Food & FMCG Products',
                 hsn: '2202',
+                importDuty: 10.00,
+                discount: 1.50,
+                minWeight: 0.10,
+                maxWeight: 1.50,
+                exciseDuty: 2.50,
+                vat: 13.00,
                 keywords: ['tea', 'chai', 'coffee', 'juice', 'soft drink', 'energy drink', 'water', 'mineral water',
                     'coconut water', 'milk', 'shake', 'smoothie'
                 ]
@@ -600,6 +825,12 @@
                 name: 'Smartphones',
                 category: 'Electronics',
                 hsn: '8517',
+                importDuty: 20.00,
+                discount: 5.00,
+                minWeight: 0.20,
+                maxWeight: 0.80,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['mobile', 'phone', 'smartphone', 'android', 'iOS', '5G', '4G', 'touchscreen', 'camera',
                     'battery', 'charger', 'earphone'
                 ]
@@ -608,6 +839,12 @@
                 name: 'Laptops',
                 category: 'Electronics',
                 hsn: '8471',
+                importDuty: 18.00,
+                discount: 4.00,
+                minWeight: 1.00,
+                maxWeight: 3.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['laptop', 'notebook', 'macbook', 'windows', 'gaming', 'ultrabook', 'processor', 'RAM',
                     'SSD', 'HDD', 'graphics', 'display'
                 ]
@@ -616,6 +853,12 @@
                 name: 'Men Apparel',
                 category: 'Fashion',
                 hsn: '6203',
+                importDuty: 12.00,
+                discount: 3.50,
+                minWeight: 0.20,
+                maxWeight: 1.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['shirt', 'pant', 'trouser', 'jeans', 'jacket', 'blazer', 'suit', 't-shirt', 'hoodie',
                     'sweater', 'cardigan', 'kurta', 'dhoti'
                 ]
@@ -624,6 +867,12 @@
                 name: 'Women Apparel',
                 category: 'Fashion',
                 hsn: '6204',
+                importDuty: 12.00,
+                discount: 4.00,
+                minWeight: 0.15,
+                maxWeight: 1.20,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['dress', 'saree', 'lehenga', 'kurta', 'dupatta', 'top', 'blouse', 'skirt', 'trouser',
                     'jeans', 'jacket', 'shawl', 'stole'
                 ]
@@ -632,6 +881,12 @@
                 name: 'Furniture',
                 category: 'Home & Living',
                 hsn: '9403',
+                importDuty: 8.00,
+                discount: 2.00,
+                minWeight: 5.00,
+                maxWeight: 50.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['sofa', 'bed', 'table', 'chair', 'dining', 'wardrobe', 'cabinet', 'shelf', 'desk',
                     'stool', 'recliner', 'ottoman'
                 ]
@@ -640,6 +895,12 @@
                 name: 'Kitchen Appliances',
                 category: 'Home & Living',
                 hsn: '8509',
+                importDuty: 14.00,
+                discount: 3.00,
+                minWeight: 0.50,
+                maxWeight: 8.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['blender', 'mixer', 'grinder', 'juicer', 'toaster', 'oven', 'microwave', 'kettle',
                     'cooker', 'fryer', 'sandwich maker', 'coffee machine'
                 ]
@@ -648,6 +909,12 @@
                 name: 'Fitness Equipment',
                 category: 'Sports & Fitness',
                 hsn: '9506',
+                importDuty: 10.00,
+                discount: 2.50,
+                minWeight: 1.00,
+                maxWeight: 30.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['treadmill', 'exercise bike', 'weights', 'dumbbell', 'barbell', 'bench', 'yoga mat',
                     'resistance band', 'jump rope', 'kettlebell', 'pull up bar'
                 ]
@@ -656,6 +923,12 @@
                 name: 'Skincare',
                 category: 'Beauty & Personal Care',
                 hsn: '3304',
+                importDuty: 16.00,
+                discount: 5.00,
+                minWeight: 0.05,
+                maxWeight: 0.50,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['face cream', 'moisturizer', 'sunscreen', 'serum', 'toner', 'face wash', 'scrub',
                     'mask', 'eye cream', 'lip balm', 'anti-aging'
                 ]
@@ -664,6 +937,12 @@
                 name: 'Car Accessories',
                 category: 'Automotive',
                 hsn: '8708',
+                importDuty: 12.00,
+                discount: 3.00,
+                minWeight: 0.10,
+                maxWeight: 5.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['seat cover', 'steering wheel cover', 'floor mat', 'car perfume', 'phone holder',
                     'charger', 'dash cam', 'GPS', 'car cover', 'cleaning kit'
                 ]
@@ -672,6 +951,12 @@
                 name: 'Bike Accessories',
                 category: 'Automotive',
                 hsn: '8714',
+                importDuty: 12.00,
+                discount: 3.00,
+                minWeight: 0.05,
+                maxWeight: 2.00,
+                exciseDuty: 0.00,
+                vat: 13.00,
                 keywords: ['helmet', 'gloves', 'bike cover', 'chain lube', 'mirror', 'handle grip', 'tail bag',
                     'phone mount', 'bike cleaner', 'brake pad'
                 ]
@@ -683,6 +968,30 @@
             let pageSize = 50;
             let editingId = null;
             let deleteTargetId = null;
+            let currentSubCategoryName = '';
+
+            // ─── KEYWORD PREVIEW IN MODAL ──────────────────────────────────
+            function updateKeywordPreview() {
+                const textarea = document.getElementById('editKeywords');
+                const preview = document.getElementById('keywordPreview');
+                if (!textarea || !preview) return;
+                const val = textarea.value.trim();
+                const keywords = val ? val.split(',').map(k => k.trim()).filter(k => k) : [];
+                if (keywords.length === 0) {
+                    preview.innerHTML = '<span class="text-gray-400 text-xs">No keywords added yet</span>';
+                } else {
+                    preview.innerHTML = keywords.map(k =>
+                        `<span class="keyword-chip" style="font-size:11px;padding:2px 10px;">${escapeHtml(k)}</span>`
+                    ).join('');
+                }
+            }
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
 
             // ─── RENDER ─────────────────────────────────────────────────────
             function renderTable() {
@@ -693,26 +1002,32 @@
 
                 if (pageData.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No sub-categories found</td></tr>`;
+                        `<tr><td colspan="11" class="px-4 py-8 text-center text-gray-400 text-sm">No sub-categories found</td></tr>`;
                     document.getElementById('resultCount').textContent = 'Showing 0 entries';
                     updatePagination();
                     return;
                 }
 
                 tbody.innerHTML = pageData.map(item => {
-                    const keywordsHtml = renderKeywords(item.keywords);
+                    const keywordsHtml = renderKeywords(item.keywords, item.name);
                     return `
                         <tr class="subcategory-row border-b border-gray-100">
-                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-center action-btns whitespace-nowrap">
+                            <td class="col-action px-1 py-1 text-center action-btns whitespace-nowrap">
                                 <button onclick="editSubCategory(${item.id})" class="action-icon-btn primary" title="Edit">✏️</button>
                                 <button onclick="deleteSubCategory(${item.id})" class="action-icon-btn danger" title="Delete">🗑️</button>
                             </td>
-                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">${item.name}</td>
-                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category}</td>
-                            <td class="px-2 sm:px-3 py-1.5 sm:py-2 font-mono text-gray-500 text-xs sm:text-sm">${item.hsn || '—'}</td>
-                            <td class="px-2 sm:px-3 py-1.5 sm:py-2">
+                            <td class="col-name px-1 py-1 text-gray-800 font-medium text-xs sm:text-sm whitespace-nowrap truncate" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</td>
+                            <td class="col-category px-1 py-1 text-gray-600 text-xs sm:text-sm whitespace-nowrap truncate" title="${escapeHtml(item.category)}">${escapeHtml(item.category)}</td>
+                            <td class="col-keywords px-1 py-1">
                                 <div class="keyword-container">${keywordsHtml}</div>
                             </td>
+                            <td class="col-hsn px-1 py-1 font-mono text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.hsn ? escapeHtml(item.hsn) : '—'}</td>
+                            <td class="col-import px-1 py-1 text-center compact-number">${item.importDuty !== undefined ? item.importDuty.toFixed(1) + '<span class="pct">%</span>' : '—'}</td>
+                            <td class="col-discount px-1 py-1 text-center compact-number">${item.discount !== undefined ? item.discount.toFixed(1) + '<span class="pct">%</span>' : '—'}</td>
+                            <td class="col-minwt px-1 py-1 text-center compact-number">${item.minWeight !== undefined ? item.minWeight.toFixed(2) : '—'}</td>
+                            <td class="col-maxwt px-1 py-1 text-center compact-number">${item.maxWeight !== undefined ? item.maxWeight.toFixed(2) : '—'}</td>
+                            <td class="col-excise px-1 py-1 text-center compact-number">${item.exciseDuty !== undefined ? item.exciseDuty.toFixed(1) + '<span class="pct">%</span>' : '—'}</td>
+                            <td class="col-vat px-1 py-1 text-center compact-number">${item.vat !== undefined ? item.vat.toFixed(1) + '<span class="pct">%</span>' : '13.0 %'}</td>
                         </tr>
                     `;
                 }).join('');
@@ -721,29 +1036,32 @@
                 updatePagination();
             }
 
-            function renderKeywords(keywords) {
+            function renderKeywords(keywords, name) {
                 if (!keywords || keywords.length === 0) {
                     return '<span class="text-gray-400 text-xs">—</span>';
                 }
-                const display = keywords.slice(0, 6);
-                const remaining = keywords.length - 6;
+                const display = keywords.slice(0, 5);
+                const remaining = keywords.length - 5;
                 let html = display.map(k =>
                     `<span class="keyword-chip">${escapeHtml(k)}</span>`
                 ).join('');
                 if (remaining > 0) {
-                    html +=
-                        `<span class="keyword-chip" style="background:#4F46E5;color:#fff;border-color:#4F46E5;cursor:pointer;" onclick="showAllKeywords(${escapeHtml(JSON.stringify(keywords))}, '${escapeHtml(currentSubCategoryName || '')}')">+${remaining} more</span>`;
+                    const keywordsJson = encodeURIComponent(JSON.stringify(keywords));
+                    const nameEncoded = encodeURIComponent(name || '');
+                    html += `<span class="keyword-chip" style="background:#4F46E5;color:#fff;border-color:#4F46E5;cursor:pointer;" onclick="showAllKeywords(decodeURIComponent('${keywordsJson}'), decodeURIComponent('${nameEncoded}'))">+${remaining}</span>`;
                 }
                 return html;
             }
 
-            let currentSubCategoryName = '';
-
-            function showAllKeywords(keywords, name) {
-                currentSubCategoryName = name;
+            function showAllKeywords(keywordsData, name) {
+                let keywords = keywordsData;
+                if (typeof keywordsData === 'string') {
+                    try { keywords = JSON.parse(keywordsData); } catch(e) { keywords = []; }
+                }
+                if (!Array.isArray(keywords)) keywords = [];
                 document.getElementById('keywordSubCategory').textContent = name || '—';
                 const container = document.getElementById('keywordListContainer');
-                if (!keywords || keywords.length === 0) {
+                if (keywords.length === 0) {
                     container.innerHTML = '<span class="text-gray-400 text-sm">No keywords</span>';
                 } else {
                     container.innerHTML = keywords.map(k =>
@@ -758,13 +1076,6 @@
             function closeKeywordDetailModal() {
                 document.getElementById('keywordDetailModal').classList.add('hidden');
                 document.body.style.overflow = '';
-            }
-
-            function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
             }
 
             // ─── PAGINATION ────────────────────────────────────────────────
@@ -830,9 +1141,9 @@
                 const search = document.getElementById('searchInput').value.trim();
                 const category = document.getElementById('categoryFilter').value;
                 if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${search} <button onclick="document.getElementById('searchInput').value='';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchInput').value='';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
                 if (category !== 'all') html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">📁 ${category} <button onclick="document.getElementById('categoryFilter').value='all';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">📁 ${escapeHtml(category)} <button onclick="document.getElementById('categoryFilter').value='all';filterSubCategories();" class="hover:text-red-500 ml-1">×</button></span>`;
                 container.innerHTML = html || '';
             }
 
@@ -843,8 +1154,15 @@
                 document.getElementById('subCategoryForm').reset();
                 document.getElementById('editSubCategory').value = '';
                 document.getElementById('editCategory').value = '';
-                document.getElementById('editHsn').value = '';
                 document.getElementById('editKeywords').value = '';
+                document.getElementById('editHsn').value = '';
+                document.getElementById('editImportDuty').value = '';
+                document.getElementById('editDiscount').value = '';
+                document.getElementById('editMinWeight').value = '';
+                document.getElementById('editMaxWeight').value = '';
+                document.getElementById('editExciseDuty').value = '';
+                document.getElementById('editVat').value = '13';
+                updateKeywordPreview();
                 document.getElementById('subCategoryModal').classList.add('flex');
                 document.getElementById('subCategoryModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -856,10 +1174,17 @@
                 if (!item) return;
                 editingId = id;
                 document.getElementById('modalTitle').textContent = '✏️ Edit Sub Category';
-                document.getElementById('editSubCategory').value = item.name;
-                document.getElementById('editCategory').value = item.category;
-                document.getElementById('editHsn').value = item.hsn || '';
+                document.getElementById('editSubCategory').value = item.name || '';
+                document.getElementById('editCategory').value = item.category || '';
                 document.getElementById('editKeywords').value = (item.keywords || []).join(', ');
+                document.getElementById('editHsn').value = item.hsn || '';
+                document.getElementById('editImportDuty').value = item.importDuty !== undefined ? item.importDuty : '';
+                document.getElementById('editDiscount').value = item.discount !== undefined ? item.discount : '';
+                document.getElementById('editMinWeight').value = item.minWeight !== undefined ? item.minWeight : '';
+                document.getElementById('editMaxWeight').value = item.maxWeight !== undefined ? item.maxWeight : '';
+                document.getElementById('editExciseDuty').value = item.exciseDuty !== undefined ? item.exciseDuty : '';
+                document.getElementById('editVat').value = item.vat !== undefined ? item.vat : '13';
+                updateKeywordPreview();
                 document.getElementById('subCategoryModal').classList.add('flex');
                 document.getElementById('subCategoryModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -876,8 +1201,14 @@
                 e.preventDefault();
                 const name = document.getElementById('editSubCategory').value.trim();
                 const category = document.getElementById('editCategory').value;
-                const hsn = document.getElementById('editHsn').value.trim();
                 const keywordsStr = document.getElementById('editKeywords').value.trim();
+                const hsn = document.getElementById('editHsn').value.trim();
+                const importDuty = parseFloat(document.getElementById('editImportDuty').value) || 0;
+                const discount = parseFloat(document.getElementById('editDiscount').value) || 0;
+                const minWeight = parseFloat(document.getElementById('editMinWeight').value) || 0;
+                const maxWeight = parseFloat(document.getElementById('editMaxWeight').value) || 0;
+                const exciseDuty = parseFloat(document.getElementById('editExciseDuty').value) || 0;
+                const vat = parseFloat(document.getElementById('editVat').value) || 13;
 
                 if (!name || !category) {
                     showToast('⚠️', 'Please fill in all required fields');
@@ -891,8 +1222,14 @@
                     if (item) {
                         item.name = name;
                         item.category = category;
-                        item.hsn = hsn || '';
                         item.keywords = keywords;
+                        item.hsn = hsn || '';
+                        item.importDuty = importDuty;
+                        item.discount = discount;
+                        item.minWeight = minWeight;
+                        item.maxWeight = maxWeight;
+                        item.exciseDuty = exciseDuty;
+                        item.vat = vat;
                         showToast('✅', `SubCategory "${name}" updated successfully!`);
                     }
                 } else {
@@ -901,8 +1238,14 @@
                         id: newId,
                         name,
                         category,
+                        keywords,
                         hsn: hsn || '',
-                        keywords
+                        importDuty,
+                        discount,
+                        minWeight,
+                        maxWeight,
+                        exciseDuty,
+                        vat
                     });
                     showToast('✅', `SubCategory "${name}" added successfully!`);
                 }
@@ -1007,6 +1350,7 @@
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
             window.showToast = showToast;
+            window.updateKeywordPreview = updateKeywordPreview;
 
             // ─── INIT ──────────────────────────────────────────────────────
             filteredData = [...subCategories];
