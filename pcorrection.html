@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Price Corrections</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .correction-row {
+            transition: all 0.15s ease;
+        }
+        .correction-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge .dot.green {
+            background: #10B981;
+        }
+        .status-badge .dot.blue {
+            background: #3B82F6;
+        }
+        .status-badge .dot.yellow {
+            background: #F59E0B;
+        }
+        .status-badge .dot.red {
+            background: #EF4444;
+        }
+        .status-badge .dot.purple {
+            background: #8B5CF6;
+        }
+        .status-badge .dot.gray {
+            background: #9CA3AF;
+        }
+
+        .action-icon-btn {
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+        .action-icon-btn.green:hover {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+        .action-icon-btn.purple:hover {
+            color: #7C3AED;
+            background: #F5F3FF;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
+
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
+
+        .detail-field {
+            margin-bottom: 14px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-field .value-box {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #0f172a;
+        }
+        .detail-field input,
+        .detail-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .detail-field input:focus,
+        .detail-field select:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+        }
+        .review-grid .detail-field {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 767px) {
+            .review-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .corrections-table td,
+            .corrections-table th {
+                padding: 4px 6px !important;
+                font-size: 10px !important;
+            }
+            .action-icon-btn {
+                font-size: 11px !important;
+                padding: 1px 4px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .status-badge {
+                font-size: 9px;
+                padding: 1px 8px;
+            }
+            .detail-field .value-box {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .corrections-table td,
+            .corrections-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 0 3px !important;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 55px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .status-badge {
+                font-size: 8px;
+                padding: 1px 6px;
+            }
+            .detail-field .value-box {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+            .review-grid {
+                gap: 8px;
+            }
+        }
+
+        /* Tabs */
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom-color: #4F46E5;
+            background: #f8fafc;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Product link */
+        .product-link {
+            color: #4F46E5;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .product-link:hover {
+            color: #3730A3;
+        }
+
+        .user-clickable {
+            color: #1d4ed8;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .user-clickable:hover {
+            text-decoration: underline;
+        }
+
+        .compact-number {
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .price-diff {
+            font-weight: 600;
+        }
+        .price-diff.increase {
+            color: #EF4444;
+        }
+        .price-diff.decrease {
+            color: #10B981;
+        }
+        .price-diff.same {
+            color: #6B7280;
+        }
+
+        .review-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
+        }
+        .review-card .review-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .review-card .review-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .grand-total-box {
+            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 2px solid #C7D2FE;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .grand-total-box .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4338CA;
+        }
+        .grand-total-box .amount {
+            font-size: 24px;
+            font-weight: 800;
+            color: #3730A3;
+        }
+
+        @media (max-width: 480px) {
+            .grand-total-box .amount {
+                font-size: 18px;
+            }
+            .grand-total-box .label {
+                font-size: 12px;
+            }
+            .review-card .review-value {
+                font-size: 12px;
+            }
+        }
+
+        .btn-approve {
+            background: #10B981;
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-approve:hover {
+            background: #059669;
+        }
+        .btn-approve-correction {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-approve-correction:hover {
+            background: #4338CA;
+        }
+        .btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-cancel:hover {
+            background: #e2e8f0;
+        }
+        .btn-danger-sm {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-danger-sm:hover {
+            background: #FEE2E2;
+        }
+
+        .history-filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .history-filter-section .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .history-filter-section .filter-group input,
+        .history-filter-section .filter-group select {
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            outline: none;
+            background: #fff;
+        }
+        .history-filter-section .filter-group input:focus,
+        .history-filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+        }
+
+        @media (max-width: 480px) {
+            .history-filter-section .filter-group input,
+            .history-filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 50px;
+            }
+            .history-filter-section .filter-group label {
+                font-size: 9px;
+            }
+        }
+
+        /* ─── PRODUCT IMAGE HOVER ─── */
+        .product-img-wrapper {
+            position: relative;
+            display: inline-block;
+            overflow: visible !important;
+            vertical-align: middle;
+            margin-right: 8px;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+        }
+        .product-img-wrapper .product-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s;
+            aspect-ratio: 1 / 1;
+            background: #f1f5f9;
+        }
+        .product-img-wrapper:hover .product-thumb {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+        .product-img-zoom {
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.9);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            background: #fff;
+            border: 3px solid #4F46E5;
+            aspect-ratio: 1 / 1;
+        }
+        .product-img-wrapper:hover .product-img-zoom {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+        @media (max-width: 767px) {
+            .product-img-wrapper {
+                width: 38px;
+                height: 38px;
+            }
+            .product-img-wrapper .product-thumb {
+                width: 38px;
+                height: 38px;
+            }
+            .product-img-zoom {
+                left: 50%;
+                top: auto;
+                bottom: calc(100% + 8px);
+                transform: translateX(-50%) scale(0.9);
+                width: 140px;
+                height: 140px;
+            }
+            .product-img-wrapper:hover .product-img-zoom {
+                transform: translateX(-50%) scale(1);
+            }
+        }
+        @media (max-width: 480px) {
+            .product-img-wrapper {
+                width: 32px;
+                height: 32px;
+            }
+            .product-img-wrapper .product-thumb {
+                width: 32px;
+                height: 32px;
+            }
+            .product-img-zoom {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            transition: transform 0.1s;
+            margin-left: 2px;
+        }
+        .whatsapp-link:hover {
+            transform: scale(1.15);
+        }
+        .whatsapp-link svg {
+            width: 16px;
+            height: 16px;
+            fill: #25D366;
+        }
+        .phone-with-wa {
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .item-cell {
+            display: flex;
+            align-items: center;
+        }
+        .item-cell .item-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .item-cell .item-info .item-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        .item-cell .item-info .item-name a {
+            color: #4F46E5;
+            text-decoration: underline;
+        }
+        .item-cell .item-info .item-name a:hover {
+            color: #3730A3;
+        }
+
+        @media (max-width: 480px) {
+            .item-cell .item-info .item-name {
+                font-size: 11px;
+            }
+        }
+
+        /* ─── COST BREAKDOWN ─── */
+        .cost-breakdown {
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+        }
+        .cost-breakdown .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .cost-breakdown .cost-row:last-child {
+            border-bottom: none;
+        }
+        .cost-breakdown .cost-row .lbl {
+            color: #64748b;
+        }
+        .cost-breakdown .cost-row .val {
+            font-weight: 500;
+            color: #0f172a;
+        }
+        .cost-breakdown .cost-row.total-row {
+            font-weight: 700;
+            font-size: 15px;
+            border-top: 2px solid #dce3ef;
+            padding-top: 6px;
+            margin-top: 2px;
+        }
+        .cost-breakdown .cost-row.total-row .lbl {
+            color: #4338CA;
+        }
+        .cost-breakdown .cost-row.total-row .val {
+            color: #3730A3;
+        }
+        .cost-breakdown .cost-row.highlight {
+            background: #f1f5f9;
+            border-radius: 4px;
+            padding: 4px 8px;
+            margin: 2px 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- ─── SIDEBAR OVERLAY ─── -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <!-- Active: Price Corrections -->
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">12</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <!-- Top Bar -->
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">🛒 Cart Price Corrections</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">🛒 Corrections</span>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- ─── TABS ─── -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
+                <div class="flex flex-wrap gap-1 border-b border-gray-200">
+                    <button class="tab-btn active" data-tab="pending" onclick="switchTab('pending')">📋 Pending Requests</button>
+                    <button class="tab-btn" data-tab="history" onclick="switchTab('history')">📜 Correction History</button>
+                </div>
+            </div>
+
+            <!-- ─── TAB: PENDING REQUESTS ─── -->
+            <div id="tab-pending" class="tab-content active">
+                <!-- Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[120px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchPending" placeholder="Product, User..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterPending()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                            <select id="statusPendingFilter" onchange="filterPending()" class="text-xs sm:text-sm">
+                                <option value="all">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="reviewed">Reviewed</option>
+                                <option value="approved">Approved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearPendingFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterPending()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                    <div id="activePendingFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <!-- Pending Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Pending Correction Requests</span>
+                            <span id="pendingResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="pendingPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changePendingPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="corrections-table w-full text-xs sm:text-sm" id="pendingTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Item</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Requested</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Price INR</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Weight</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Category</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sub-category</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="pendingPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="pendingPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TAB: HISTORY ─── -->
+            <div id="tab-history" class="tab-content">
+                <!-- History Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="history-filter-section">
+                        <div class="filter-group flex-1 min-w-[100px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchHistory" placeholder="User, Product, ID..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterHistory()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                            <select id="statusHistoryFilter" onchange="filterHistory()" class="text-xs sm:text-sm">
+                                <option value="all">All</option>
+                                <option value="booked">Booked</option>
+                                <option value="cart">In Cart</option>
+                                <option value="removed">Removed</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">From:</label>
+                            <input type="date" id="historyDateFrom" class="text-xs sm:text-sm" onchange="filterHistory()" />
+                            <span class="text-gray-400 text-xs">–</span>
+                            <input type="date" id="historyDateTo" class="text-xs sm:text-sm" onchange="filterHistory()" />
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearHistoryFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterHistory()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                    <div id="activeHistoryFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <!-- History Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Price Correction History</span>
+                            <span id="historyResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="historyPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeHistoryPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="corrections-table w-full text-xs sm:text-sm" id="historyTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Mobile</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Product</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Prev Price</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">New Price</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Diff</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Status</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Requested</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sent</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Booked</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="historyPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="historyPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ─── REVIEW MODAL ─── -->
+    <div id="reviewModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeReviewModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-3 sm:mx-4 max-h-[95vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl z-10">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="reviewModalTitle">📋 Cart Price Correction Review</h3>
+                <button onclick="closeReviewModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6" id="reviewModalContent">
+                <!-- populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── TOAST ─── -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ─── DATA ──────────────────────────────────────────────────────
+
+            // Helper to generate product image URL
+            function getProductImage(productName) {
+                const seed = productName.replace(/\s/g, '').toLowerCase();
+                return `https://picsum.photos/seed/${seed}/200/200`;
+            }
+
+            // Pending correction requests
+            let pendingRequests = [{
+                id: 1,
+                productName: 'Raiyani Fashion Anarkali Gown',
+                productLink: 'https://example.com/product/raiyani-gown',
+                productImage: getProductImage('Raiyani Fashion Anarkali Gown'),
+                user: 'Amazon MeroWish',
+                userId: 101,
+                mobile: '+977-980-123-4567',
+                requestedAt: '10 Aug 2026, 12:04 AM',
+                sentAt: '10 Aug 2026, 01:30 AM',
+                priceINR: 344.00,
+                weight: 344.00,
+                category: '',
+                subCategory: '',
+                status: 'pending',
+                width: 32,
+                height: 100,
+                length: 0,
+                quantity: 1,
+                previousSubCategory: '-',
+                previousWeight: '344.00 kg - 32.00 W x 100.00 H x 0.00 L'
+            }, {
+                id: 2,
+                productName: 'Samsung Galaxy S24 Ultra',
+                productLink: 'https://example.com/product/galaxy-s24',
+                productImage: getProductImage('Samsung Galaxy S24 Ultra'),
+                user: 'TechBuyer Nepal',
+                userId: 102,
+                mobile: '+977-981-234-5678',
+                requestedAt: '09 Aug 2026, 03:45 PM',
+                sentAt: '09 Aug 2026, 05:20 PM',
+                priceINR: 1250.00,
+                weight: 0.80,
+                category: 'Electronics',
+                subCategory: 'Smartphones',
+                status: 'pending',
+                width: 8,
+                height: 16,
+                length: 1,
+                quantity: 1,
+                previousSubCategory: '-',
+                previousWeight: '0.80 kg - 8.00 W x 16.00 H x 1.00 L'
+            }, {
+                id: 3,
+                productName: 'Nike Air Max Sneakers',
+                productLink: 'https://example.com/product/nike-airmax',
+                productImage: getProductImage('Nike Air Max Sneakers'),
+                user: 'FitFoot Nepal',
+                userId: 103,
+                mobile: '+977-982-345-6789',
+                requestedAt: '08 Aug 2026, 09:20 AM',
+                sentAt: '08 Aug 2026, 10:45 AM',
+                priceINR: 890.00,
+                weight: 1.20,
+                category: 'Fashion',
+                subCategory: 'Men Apparel',
+                status: 'reviewed',
+                width: 25,
+                height: 10,
+                length: 35,
+                quantity: 2,
+                previousSubCategory: '-',
+                previousWeight: '1.20 kg - 25.00 W x 10.00 H x 35.00 L'
+            }, {
+                id: 4,
+                productName: 'Dell XPS 16 Laptop',
+                productLink: 'https://example.com/product/dell-xps16',
+                productImage: getProductImage('Dell XPS 16 Laptop'),
+                user: 'OfficeTech Pte Ltd',
+                userId: 104,
+                mobile: '+977-983-456-7890',
+                requestedAt: '07 Aug 2026, 11:30 PM',
+                sentAt: '08 Aug 2026, 12:15 AM',
+                priceINR: 2150.00,
+                weight: 2.50,
+                category: 'Electronics',
+                subCategory: 'Laptops',
+                status: 'pending',
+                width: 36,
+                height: 24,
+                length: 2,
+                quantity: 1,
+                previousSubCategory: '-',
+                previousWeight: '2.50 kg - 36.00 W x 24.00 H x 2.00 L'
+            }, {
+                id: 5,
+                productName: 'Organic Turmeric Powder (500g)',
+                productLink: 'https://example.com/product/turmeric',
+                productImage: getProductImage('Organic Turmeric Powder'),
+                user: 'SpiceStore Nepal',
+                userId: 105,
+                mobile: '+977-984-567-8901',
+                requestedAt: '06 Aug 2026, 04:15 PM',
+                sentAt: '06 Aug 2026, 04:40 PM',
+                priceINR: 120.00,
+                weight: 0.50,
+                category: 'Food & FMCG Products',
+                subCategory: 'Daily Consumables',
+                status: 'pending',
+                width: 10,
+                height: 15,
+                length: 5,
+                quantity: 3,
+                previousSubCategory: '-',
+                previousWeight: '0.50 kg - 10.00 W x 15.00 H x 5.00 L'
+            }];
+
+            // ─── HISTORY DATA with dates ─────────────────────────────────
+            let historyRecords = [{
+                id: 1,
+                userId: 101,
+                user: 'Amazon MeroWish',
+                mobile: '+977-980-123-4567',
+                productName: 'Raiyani Fashion Anarkali Gown',
+                productLink: 'https://example.com/product/raiyani-gown',
+                productImage: getProductImage('Raiyani Fashion Anarkali Gown'),
+                previousPrice: 344.00,
+                newPrice: 299.00,
+                status: 'booked',
+                requestedDate: '10 Aug 2026, 12:04 AM',
+                sentDate: '10 Aug 2026, 01:30 AM',
+                bookedDate: '10 Aug 2026, 02:45 AM',
+                category: 'Fashion',
+                subCategory: 'Women Apparel',
+                weight: 344.00,
+                width: 32,
+                height: 100,
+                length: 0,
+                quantity: 1
+            }, {
+                id: 2,
+                userId: 106,
+                user: 'Gita Shrestha',
+                mobile: '+977-985-678-9012',
+                productName: 'Sony WH-1000XM5 Headphones',
+                productLink: 'https://example.com/product/sony-xm5',
+                productImage: getProductImage('Sony WH-1000XM5'),
+                previousPrice: 450.00,
+                newPrice: 425.00,
+                status: 'cart',
+                requestedDate: '09 Aug 2026, 02:10 PM',
+                sentDate: '09 Aug 2026, 02:45 PM',
+                bookedDate: '—',
+                category: 'Electronics',
+                subCategory: 'Audio',
+                weight: 0.30,
+                width: 20,
+                height: 25,
+                length: 8,
+                quantity: 1
+            }, {
+                id: 3,
+                userId: 107,
+                user: 'Rajesh Thapa',
+                mobile: '+977-986-789-0123',
+                productName: 'Leather Jacket Premium',
+                productLink: 'https://example.com/product/leather-jacket',
+                productImage: getProductImage('Leather Jacket Premium'),
+                previousPrice: 220.00,
+                newPrice: 198.00,
+                status: 'removed',
+                requestedDate: '08 Aug 2026, 07:45 AM',
+                sentDate: '08 Aug 2026, 08:10 AM',
+                bookedDate: '—',
+                category: 'Fashion',
+                subCategory: 'Men Apparel',
+                weight: 1.50,
+                width: 45,
+                height: 60,
+                length: 5,
+                quantity: 1
+            }, {
+                id: 4,
+                userId: 108,
+                user: 'Nisha Koirala',
+                mobile: '+977-987-890-1234',
+                productName: 'Apple iPad Air M2',
+                productLink: 'https://example.com/product/ipad-air-m2',
+                productImage: getProductImage('Apple iPad Air M2'),
+                previousPrice: 980.00,
+                newPrice: 950.00,
+                status: 'booked',
+                requestedDate: '07 Aug 2026, 05:30 PM',
+                sentDate: '07 Aug 2026, 06:00 PM',
+                bookedDate: '07 Aug 2026, 08:15 PM',
+                category: 'Electronics',
+                subCategory: 'Tablets',
+                weight: 0.50,
+                width: 25,
+                height: 35,
+                length: 1,
+                quantity: 1
+            }, {
+                id: 5,
+                userId: 109,
+                user: 'Bikram Dhimal',
+                mobile: '+977-988-901-2345',
+                productName: 'Fitbit Versa 4 Smartwatch',
+                productLink: 'https://example.com/product/fitbit-versa4',
+                productImage: getProductImage('Fitbit Versa 4'),
+                previousPrice: 320.00,
+                newPrice: 299.00,
+                status: 'cart',
+                requestedDate: '06 Aug 2026, 10:20 AM',
+                sentDate: '06 Aug 2026, 10:45 AM',
+                bookedDate: '—',
+                category: 'Electronics',
+                subCategory: 'Wearables',
+                weight: 0.15,
+                width: 15,
+                height: 20,
+                length: 2,
+                quantity: 2
+            }];
+
+            // ─── STATE ──────────────────────────────────────────────────────
+            let pendingFiltered = [...pendingRequests];
+            let pendingPage = 1;
+            let pendingSize = 50;
+
+            let historyFiltered = [...historyRecords];
+            let historyPage = 1;
+            let historySize = 50;
+
+            let selectedRequestId = null;
+
+            // ─── HELPERS ────────────────────────────────────────────────────
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function getStatusBadge(status) {
+                const map = {
+                    'pending': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow', label: 'Pending' },
+                    'reviewed': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue', label: 'Reviewed' },
+                    'approved': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green', label: 'Approved' },
+                    'rejected': { bg: 'bg-red-100', text: 'text-red-700', dot: 'red', label: 'Rejected' },
+                    'booked': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple', label: 'Booked' },
+                    'cart': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue', label: 'In Cart' },
+                    'removed': { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'gray', label: 'Removed' },
+                };
+                const m = map[status] || map.pending;
+                return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
+            }
+
+            function getDiff(prev, curr) {
+                const diff = curr - prev;
+                if (diff === 0) return '<span class="price-diff same">±0.00</span>';
+                if (diff > 0) return `<span class="price-diff increase">+${diff.toFixed(2)}</span>`;
+                return `<span class="price-diff decrease">${diff.toFixed(2)}</span>`;
+            }
+
+            function getWhatsAppLink(phone) {
+                const digits = phone.replace(/[^0-9]/g, '');
+                return `https://wa.me/${digits}`;
+            }
+
+            function getWhatsAppIcon() {
+                return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+            }
+
+            // ─── PRODUCT IMAGE HTML ──────────────────────────────────────
+            function productImageHtml(item, size) {
+                const thumbSize = size || 48;
+                return `
+                    <div class="product-img-wrapper" style="display:inline-block;vertical-align:middle;margin-right:8px;width:${thumbSize}px;height:${thumbSize}px;">
+                        <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="product-thumb" style="width:${thumbSize}px;height:${thumbSize}px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22${thumbSize}%22 height=%22${thumbSize}%22><rect fill=%22%23f1f5f9%22 width=%22${thumbSize}%22 height=%22${thumbSize}%22 rx=%228%22/><text x=%22${thumbSize/2}%22 y=%22${thumbSize/2+5}%22 text-anchor=%22middle%22 font-size=%22${thumbSize/2}%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                        <img src="${item.productImage}" alt="Zoom" class="product-img-zoom" style="width:180px;height:180px;object-fit:cover;border-radius:12px;border:3px solid #4F46E5;" loading="lazy" onerror="this.style.display='none'">
+                    </div>
+                `;
+            }
+
+            // ─── FILTER PENDING ────────────────────────────────────────────
+            function filterPending() {
+                const search = document.getElementById('searchPending').value.toLowerCase().trim();
+                const status = document.getElementById('statusPendingFilter').value;
+
+                let filtered = [...pendingRequests];
+
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.user.toLowerCase().includes(search) ||
+                        item.id.toString().includes(search)
+                    );
+                }
+
+                if (status !== 'all') {
+                    filtered = filtered.filter(item => item.status === status);
+                }
+
+                pendingFiltered = filtered;
+                pendingPage = 1;
+                renderPendingTable();
+                updateActivePendingFilters();
+            }
+
+            function clearPendingFilters() {
+                document.getElementById('searchPending').value = '';
+                document.getElementById('statusPendingFilter').value = 'all';
+                filterPending();
+            }
+
+            function updateActivePendingFilters() {
+                const container = document.getElementById('activePendingFilters');
+                let html = '';
+                const search = document.getElementById('searchPending').value.trim();
+                const status = document.getElementById('statusPendingFilter').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchPending').value='';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (status !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusPendingFilter').value='all';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
+                container.innerHTML = html || '';
+            }
+
+            function changePendingPageSize() {
+                pendingSize = parseInt(document.getElementById('pendingPageSize').value, 10);
+                pendingPage = 1;
+                renderPendingTable();
+            }
+
+            // ─── RENDER PENDING ────────────────────────────────────────────
+            function renderPendingTable() {
+                const start = (pendingPage - 1) * pendingSize;
+                const end = Math.min(start + pendingSize, pendingFiltered.length);
+                const pageData = pendingFiltered.slice(start, end);
+                const tbody = document.getElementById('pendingTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="8" class="px-4 py-8 text-center text-gray-400 text-sm">No pending correction requests found</td></tr>`;
+                    document.getElementById('pendingResultCount').textContent = 'Showing 0 entries';
+                    updatePendingPagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(item => `
+                    <tr class="correction-row border-b border-gray-100">
+                        <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
+                            <div class="item-cell">
+                                ${productImageHtml(item)}
+                                <div class="item-info">
+                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                            <div class="phone-with-wa text-[10px] text-gray-400">
+                                ${item.mobile}
+                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                            </div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedAt}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                            ${item.status === 'pending' ? `
+                                <button onclick="openReviewModal(${item.id})" class="btn-approve-correction" style="padding:4px 14px;font-size:11px;border-radius:6px;">Review</button>
+                            ` : getStatusBadge(item.status)}
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('pendingResultCount').textContent =
+                    `Showing ${pageData.length} of ${pendingFiltered.length} entries`;
+                updatePendingPagination();
+            }
+
+            function updatePendingPagination() {
+                const totalPages = Math.ceil(pendingFiltered.length / pendingSize) || 1;
+                document.getElementById('pendingPaginationInfo').textContent =
+                    `Page ${pendingPage} of ${totalPages} (${pendingFiltered.length} entries)`;
+                const btnContainer = document.getElementById('pendingPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === pendingPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { pendingPage = i;
+                        renderPendingTable(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            // ─── HISTORY FILTERS ──────────────────────────────────────────
+            function filterHistory() {
+                const search = document.getElementById('searchHistory').value.toLowerCase().trim();
+                const status = document.getElementById('statusHistoryFilter').value;
+                const dateFrom = document.getElementById('historyDateFrom').value;
+                const dateTo = document.getElementById('historyDateTo').value;
+
+                let filtered = [...historyRecords];
+
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.user.toLowerCase().includes(search) ||
+                        item.productName.toLowerCase().includes(search) ||
+                        item.id.toString().includes(search) ||
+                        item.userId.toString().includes(search)
+                    );
+                }
+
+                if (status !== 'all') {
+                    filtered = filtered.filter(item => item.status === status);
+                }
+
+                if (dateFrom) {
+                    filtered = filtered.filter(item => {
+                        const d = new Date(item.requestedDate);
+                        return d >= new Date(dateFrom);
+                    });
+                }
+
+                if (dateTo) {
+                    filtered = filtered.filter(item => {
+                        const d = new Date(item.requestedDate);
+                        return d <= new Date(dateTo + 'T23:59:59');
+                    });
+                }
+
+                historyFiltered = filtered;
+                historyPage = 1;
+                renderHistoryTable();
+                updateActiveHistoryFilters();
+            }
+
+            function clearHistoryFilters() {
+                document.getElementById('searchHistory').value = '';
+                document.getElementById('statusHistoryFilter').value = 'all';
+                document.getElementById('historyDateFrom').value = '';
+                document.getElementById('historyDateTo').value = '';
+                filterHistory();
+            }
+
+            function updateActiveHistoryFilters() {
+                const container = document.getElementById('activeHistoryFilters');
+                let html = '';
+                const search = document.getElementById('searchHistory').value.trim();
+                const status = document.getElementById('statusHistoryFilter').value;
+                const dateFrom = document.getElementById('historyDateFrom').value;
+                const dateTo = document.getElementById('historyDateTo').value;
+
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchHistory').value='';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (status !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusHistoryFilter').value='all';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (dateFrom || dateTo) {
+                    let dateStr = '';
+                    if (dateFrom && dateTo) dateStr = `${dateFrom} → ${dateTo}`;
+                    else if (dateFrom) dateStr = `From ${dateFrom}`;
+                    else dateStr = `Until ${dateTo}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${dateStr} <button onclick="document.getElementById('historyDateFrom').value='';document.getElementById('historyDateTo').value='';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            function changeHistoryPageSize() {
+                historySize = parseInt(document.getElementById('historyPageSize').value, 10);
+                historyPage = 1;
+                renderHistoryTable();
+            }
+
+            // ─── RENDER HISTORY ────────────────────────────────────────────
+            function renderHistoryTable() {
+                const start = (historyPage - 1) * historySize;
+                const end = Math.min(start + historySize, historyFiltered.length);
+                const pageData = historyFiltered.slice(start, end);
+                const tbody = document.getElementById('historyTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No history records found</td></tr>`;
+                    document.getElementById('historyResultCount').textContent = 'Showing 0 entries';
+                    updateHistoryPagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(item => `
+                    <tr class="correction-row border-b border-gray-100">
+                        <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
+                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)} (ID: ${item.userId})')">${escapeHtml(item.user)}</span>
+                            <div class="text-[8px] sm:text-[10px] text-gray-400">ID: ${item.userId}</div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                            <span class="phone-with-wa">
+                                ${item.mobile}
+                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                            </span>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-800 text-xs sm:text-sm">
+                            <div class="item-cell">
+                                ${productImageHtml(item, 38)}
+                                <div class="item-info">
+                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.previousPrice.toFixed(2)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.newPrice.toFixed(2)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center text-xs sm:text-sm">${getDiff(item.previousPrice, item.newPrice)}</td>
+                        <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedDate}</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.sentDate || '—'}</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.bookedDate || '—'}</td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('historyResultCount').textContent =
+                    `Showing ${pageData.length} of ${historyFiltered.length} entries`;
+                updateHistoryPagination();
+            }
+
+            function updateHistoryPagination() {
+                const totalPages = Math.ceil(historyFiltered.length / historySize) || 1;
+                document.getElementById('historyPaginationInfo').textContent =
+                    `Page ${historyPage} of ${totalPages} (${historyFiltered.length} entries)`;
+                const btnContainer = document.getElementById('historyPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === historyPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { historyPage = i;
+                        renderHistoryTable(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            // ─── REVIEW MODAL ─────────────────────────────────────────────
+            function openReviewModal(id) {
+                const request = pendingRequests.find(r => r.id === id);
+                if (!request) return;
+                selectedRequestId = id;
+
+                const categoryOptions = [
+                    'Select category',
+                    'Food & FMCG Products',
+                    'Electronics',
+                    'Fashion',
+                    'Home & Living',
+                    'Sports & Fitness',
+                    'Beauty & Personal Care',
+                    'Automotive'
+                ].map(cat => `<option value="${cat}" ${cat === request.category ? 'selected' : ''}>${cat}</option>`).join('');
+
+                const subCategoryOptions = [
+                    '-',
+                    'Daily Consumables',
+                    'Beverages',
+                    'Smartphones',
+                    'Laptops',
+                    'Men Apparel',
+                    'Women Apparel',
+                    'Furniture',
+                    'Kitchen Appliances',
+                    'Fitness Equipment',
+                    'Skincare',
+                    'Car Accessories',
+                    'Bike Accessories'
+                ].map(sub => `<option value="${sub}" ${sub === request.subCategory ? 'selected' : ''}>${sub}</option>`).join('');
+
+                // Calculate cost breakdown
+                const price = request.priceINR;
+                const qty = request.quantity || 1;
+                const weight = request.weight || 0;
+                const width = request.width || 0;
+                const height = request.height || 0;
+                const length = request.length || 0;
+                const volumetric = (width * height * length) / 5000;
+                const maxWeight = Math.max(weight, volumetric);
+                const chargeable = maxWeight * qty;
+                const baseCost = price * qty;
+                const importDuty = baseCost * 0.15;
+                const vat = (baseCost + importDuty) * 0.13;
+                const shipping = chargeable * 50;
+                const total = baseCost + importDuty + vat + shipping;
+
+                document.getElementById('reviewModalTitle').textContent =
+                    `📋 Cart Price Correction Review - ${escapeHtml(request.productName)}`;
+
+                document.getElementById('reviewModalContent').innerHTML = `
+                    <div class="mb-4">
+                        <h4 class="text-lg font-bold text-gray-800">${escapeHtml(request.productName)}</h4>
+                        <p class="text-sm text-gray-500">
+                            ${escapeHtml(request.user)} - Requested ${request.requestedAt}
+                            <a href="${request.productLink}" target="_blank" class="product-link ml-2" style="font-size:12px;">🔗 View Product</a>
+                        </p>
+                    </div>
+
+                    <div class="review-card mb-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <span class="status-badge bg-yellow-100 text-yellow-700"><span class="dot yellow"></span>Pending</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="text-xs text-gray-500">Item | Previous Price INR ${request.priceINR.toFixed(2)}</span>
+                                <span class="text-xs text-gray-500">| Previous Sub-category ${request.previousSubCategory}</span>
+                                <span class="text-xs text-gray-500">| Previous Weight and Dimensions ${request.previousWeight}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-field">
+                        <label>Item details</label>
+                    </div>
+
+                    <div class="review-grid">
+                        <div class="detail-field">
+                            <label>Category</label>
+                            <select id="reviewCategory">${categoryOptions}</select>
+                        </div>
+                        <div class="detail-field">
+                            <label>Sub-category</label>
+                            <select id="reviewSubCategory">${subCategoryOptions}</select>
+                        </div>
+                        <div class="detail-field">
+                            <label>Estimated Cost</label>
+                            <div class="value-box">Default rates (no matching sub-category)</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Quantity</label>
+                            <input type="number" id="reviewQuantity" value="${request.quantity}" min="1" />
+                        </div>
+                    </div>
+
+                    <div class="review-grid mt-2">
+                        <div class="detail-field">
+                            <label>Price INR</label>
+                            <input type="number" id="reviewPrice" value="${request.priceINR}" step="0.01" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Actual Weight (kg)</label>
+                            <input type="number" id="reviewWeight" value="${request.weight}" step="0.01" min="0" />
+                        </div>
+                    </div>
+
+                    <div class="review-grid mt-2">
+                        <div class="detail-field">
+                            <label>Width (optional)</label>
+                            <input type="number" id="reviewWidth" value="${request.width || 0}" step="0.1" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Height (optional)</label>
+                            <input type="number" id="reviewHeight" value="${request.height || 0}" step="0.1" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Length (optional)</label>
+                            <input type="number" id="reviewLength" value="${request.length || 0}" step="0.1" min="0" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Volumetric Weight (kg)</label>
+                            <div class="value-box" id="reviewVolumetricWeight">0.000 kg</div>
+                        </div>
+                    </div>
+
+                    <div class="review-grid mt-2">
+                        <div class="detail-field">
+                            <label>Maximum Weight (kg)</label>
+                            <div class="value-box" id="reviewMaxWeight">${request.weight.toFixed(2)} kg</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Chargeable Weight (total) (kg)</label>
+                            <div class="value-box" id="reviewChargeableWeight">${request.weight.toFixed(2)} kg</div>
+                        </div>
+                    </div>
+
+                    <!-- ─── COST BREAKDOWN ─── -->
+                    <div class="detail-field mt-3">
+                        <label>Cost Breakdown</label>
+                        <div class="cost-breakdown" id="costBreakdownContainer">
+                            <div class="cost-row"><span class="lbl">Base Price (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${baseCost.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${importDuty.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">VAT (13%)</span><span class="val">NPR ${vat.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">Shipping (${chargeable.toFixed(2)} kg × 50)</span><span class="val">NPR ${shipping.toFixed(2)}</span></div>
+                            <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val" id="costBreakdownTotal">NPR ${total.toFixed(2)}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="grand-total-box mt-2">
+                        <span class="label">GRAND TOTAL</span>
+                        <span class="amount" id="reviewGrandTotal">NPR ${total.toFixed(2)}</span>
+                    </div>
+
+                    <div class="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray-200">
+                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
+                        <button onclick="approveCorrection()" class="btn-approve flex-1 sm:flex-none">Approve</button>
+                        <button onclick="approveAndCorrect()" class="btn-approve-correction flex-1 sm:flex-none">Approve &amp; Correct</button>
+                    </div>
+                `;
+
+                // Calculate volumetric weight on input change
+                const inputs = ['reviewWeight', 'reviewWidth', 'reviewHeight', 'reviewLength', 'reviewPrice', 'reviewQuantity'];
+                inputs.forEach(id => {
+                    document.getElementById(id)?.addEventListener('input', updateReviewCalculations);
+                });
+                document.getElementById('reviewCategory')?.addEventListener('change', updateReviewCalculations);
+                document.getElementById('reviewSubCategory')?.addEventListener('change', updateReviewCalculations);
+
+                updateReviewCalculations();
+
+                document.getElementById('reviewModal').classList.add('flex');
+                document.getElementById('reviewModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function updateReviewCalculations() {
+                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
+                const width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
+                const height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
+                const length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
+                const price = parseFloat(document.getElementById('reviewPrice')?.value) || 0;
+                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
+
+                // Volumetric weight: (W x H x L) / 5000 (standard formula)
+                const volumetric = (width * height * length) / 5000;
+                const maxWeight = Math.max(weight, volumetric);
+                const chargeable = maxWeight * qty;
+
+                document.getElementById('reviewVolumetricWeight').textContent = volumetric.toFixed(3) + ' kg';
+                document.getElementById('reviewMaxWeight').textContent = maxWeight.toFixed(2) + ' kg';
+                document.getElementById('reviewChargeableWeight').textContent = chargeable.toFixed(2) + ' kg';
+
+                // Estimate cost calculation
+                const baseCost = price * qty;
+                const importDuty = baseCost * 0.15;
+                const vat = (baseCost + importDuty) * 0.13;
+                const shipping = chargeable * 50;
+                const total = baseCost + importDuty + vat + shipping;
+
+                document.getElementById('reviewGrandTotal').textContent = `NPR ${total.toFixed(2)}`;
+
+                // Update cost breakdown
+                const container = document.getElementById('costBreakdownContainer');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="cost-row"><span class="lbl">Base Price (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${baseCost.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${importDuty.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">VAT (13%)</span><span class="val">NPR ${vat.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">Shipping (${chargeable.toFixed(2)} kg × 50)</span><span class="val">NPR ${shipping.toFixed(2)}</span></div>
+                        <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val" id="costBreakdownTotal">NPR ${total.toFixed(2)}</span></div>
+                    `;
+                }
+            }
+
+            function closeReviewModal() {
+                document.getElementById('reviewModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                selectedRequestId = null;
+            }
+
+            function approveCorrection() {
+                if (selectedRequestId === null) return;
+                const request = pendingRequests.find(r => r.id === selectedRequestId);
+                if (!request) return;
+                request.status = 'approved';
+                // Add to history
+                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || request.priceINR;
+                historyRecords.push({
+                    id: historyRecords.length + 1,
+                    userId: request.userId || 999,
+                    user: request.user,
+                    mobile: request.mobile || '+977-XXX-XXXX',
+                    productName: request.productName,
+                    productLink: request.productLink,
+                    productImage: request.productImage || getProductImage(request.productName),
+                    previousPrice: request.priceINR,
+                    newPrice: newPrice,
+                    status: 'booked',
+                    requestedDate: request.requestedAt,
+                    sentDate: request.sentAt || request.requestedAt,
+                    bookedDate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    category: document.getElementById('reviewCategory')?.value || '',
+                    subCategory: document.getElementById('reviewSubCategory')?.value || '',
+                    weight: parseFloat(document.getElementById('reviewWeight')?.value) || 0,
+                    width: parseFloat(document.getElementById('reviewWidth')?.value) || 0,
+                    height: parseFloat(document.getElementById('reviewHeight')?.value) || 0,
+                    length: parseFloat(document.getElementById('reviewLength')?.value) || 0,
+                    quantity: parseInt(document.getElementById('reviewQuantity')?.value) || 1
+                });
+                closeReviewModal();
+                filterPending();
+                filterHistory();
+                showToast('✅', 'Correction approved successfully!');
+            }
+
+            function approveAndCorrect() {
+                if (selectedRequestId === null) return;
+                const request = pendingRequests.find(r => r.id === selectedRequestId);
+                if (!request) return;
+                request.status = 'approved';
+
+                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || request.priceINR;
+                const category = document.getElementById('reviewCategory')?.value || '';
+                const subCategory = document.getElementById('reviewSubCategory')?.value || '';
+                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
+                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
+
+                // Update request with new data
+                request.priceINR = newPrice;
+                request.category = category;
+                request.subCategory = subCategory;
+                request.weight = weight;
+                request.quantity = qty;
+                request.width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
+                request.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
+                request.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
+
+                // Add to history
+                historyRecords.push({
+                    id: historyRecords.length + 1,
+                    userId: request.userId || 999,
+                    user: request.user,
+                    mobile: request.mobile || '+977-XXX-XXXX',
+                    productName: request.productName,
+                    productLink: request.productLink,
+                    productImage: request.productImage || getProductImage(request.productName),
+                    previousPrice: request.priceINR,
+                    newPrice: newPrice,
+                    status: 'booked',
+                    requestedDate: request.requestedAt,
+                    sentDate: request.sentAt || request.requestedAt,
+                    bookedDate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    category: category,
+                    subCategory: subCategory,
+                    weight: weight,
+                    width: request.width,
+                    height: request.height,
+                    length: request.length,
+                    quantity: qty
+                });
+
+                closeReviewModal();
+                filterPending();
+                filterHistory();
+                showToast('✅', 'Correction approved and applied successfully!');
+            }
+
+            // ─── TABS ──────────────────────────────────────────────────────
+            function switchTab(tab) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
+                document.getElementById(`tab-${tab}`).classList.add('active');
+
+                if (tab === 'history') {
+                    filterHistory();
+                } else {
+                    filterPending();
+                }
+            }
+
+            // ─── REFRESH ──────────────────────────────────────────────────
+            function refreshData() {
+                filterPending();
+                filterHistory();
+                showToast('🔄', 'Data refreshed');
+            }
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR ────────────────────────────────────────────────────
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            }
+
+            function toggleSidebarSection(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeReviewModal();
+                }
+            });
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            window.filterPending = filterPending;
+            window.clearPendingFilters = clearPendingFilters;
+            window.changePendingPageSize = changePendingPageSize;
+            window.filterHistory = filterHistory;
+            window.clearHistoryFilters = clearHistoryFilters;
+            window.changeHistoryPageSize = changeHistoryPageSize;
+            window.openReviewModal = openReviewModal;
+            window.closeReviewModal = closeReviewModal;
+            window.approveCorrection = approveCorrection;
+            window.approveAndCorrect = approveAndCorrect;
+            window.switchTab = switchTab;
+            window.refreshData = refreshData;
+            window.toggleSidebar = toggleSidebar;
+            window.toggleSidebarSection = toggleSidebarSection;
+            window.showToast = showToast;
+            window.updateReviewCalculations = updateReviewCalculations;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+            filterPending();
+            filterHistory();
+
+            showToast('✅', 'Price Corrections loaded successfully');
+
+        })();
+    </script>
+</body>
+</html>
