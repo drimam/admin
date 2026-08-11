@@ -1480,6 +1480,167 @@
             border-radius: 12px;
             margin-left: 4px;
         }
+
+        /* ─── MANUAL CONFIRM MODAL ────────────────────────────────────── */
+        .manual-confirm-modal .field input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .manual-confirm-modal .field input[type="number"]:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        }
+        .manual-confirm-modal .field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #3d4f6f;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .manual-confirm-modal .checkbox-wrap-custom {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+        }
+        .manual-confirm-modal .checkbox-wrap-custom input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+        }
+        .manual-confirm-modal .checkbox-wrap-custom label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        .manual-confirm-modal .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+            color: #475569;
+        }
+        .manual-confirm-modal .info-row .label {
+            font-weight: 500;
+        }
+        .manual-confirm-modal .info-row .value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .manual-confirm-modal .btn-row-manual {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .manual-confirm-modal .btn-row-manual button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .manual-confirm-modal .btn-row-manual .btn-save-manual {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .manual-confirm-modal .btn-row-manual .btn-save-manual:hover {
+            background: #4338CA;
+        }
+        .manual-confirm-modal .btn-row-manual .btn-close-manual {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .manual-confirm-modal .btn-row-manual .btn-close-manual:hover {
+            background: #e2e8f0;
+        }
+        .manual-confirm-modal .amount-prefix {
+            position: relative;
+        }
+        .manual-confirm-modal .amount-prefix .prefix {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 600;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .manual-confirm-modal .amount-prefix input {
+            padding-left: 48px !important;
+        }
+        .manual-confirm-modal .full-amount-hint {
+            font-size: 12px;
+            color: #10B981;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* ─── MANUAL CONFIRM BUTTON ──────────────────────────────────── */
+        .manual-confirm-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #F3E8FF;
+            color: #6D28D9;
+            border: 1px solid #C4B5FD;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            min-height: 22px;
+        }
+        .manual-confirm-btn:hover {
+            background: #E9D5FF;
+            border-color: #A78BFA;
+            transform: scale(1.02);
+        }
+        .manual-confirm-btn:active {
+            transform: scale(0.97);
+        }
+        .manual-confirm-btn .icon-svg-small {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+        .manual-confirm-btn-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #F3E8FF;
+            color: #6D28D9;
+            border: 1px solid #C4B5FD;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+            min-height: 30px;
+        }
+        .manual-confirm-btn-mobile:hover {
+            background: #E9D5FF;
+            border-color: #A78BFA;
+        }
+        .manual-confirm-btn-mobile .icon-svg-small {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -1963,6 +2124,56 @@
         </div>
     </div>
 
+    <!-- ─── MANUAL CONFIRM MODAL ──────────────────────────────────────── -->
+    <div id="manualConfirmModal" class="fixed inset-0 z-50 hidden items-center justify-center manual-confirm-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeManualConfirmModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">✅ Manual Payment Confirmation</h3>
+                <button onclick="closeManualConfirmModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-3">Confirm payment for order <span id="manualOrderId" class="font-semibold text-primary">#</span></p>
+
+                <div class="space-y-4">
+                    <!-- Order Info -->
+                    <div class="bg-gray-50 rounded-xl p-3 space-y-1">
+                        <div class="info-row"><span class="label">Order ID</span><span class="value" id="manualOrderIdDisplay">—</span></div>
+                        <div class="info-row"><span class="label">Product</span><span class="value" id="manualProductName">—</span></div>
+                        <div class="info-row"><span class="label">Total Amount (after discount)</span><span class="value" id="manualTotalAmount">—</span></div>
+                        <div class="info-row"><span class="label">Current Advance</span><span class="value" id="manualCurrentAdvance">—</span></div>
+                    </div>
+
+                    <!-- Advance Amount Input -->
+                    <div class="field">
+                        <label for="manualAdvanceInput">Advance Amount (NPR)</label>
+                        <div class="amount-prefix mt-1">
+                            <span class="prefix">NPR</span>
+                            <input type="number" id="manualAdvanceInput" placeholder="0.00" step="0.01" min="0" class="w-full" />
+                        </div>
+                        <div class="full-amount-hint" id="manualFullHint">💡 Check "Full Payment" below to auto-fill the full amount.</div>
+                    </div>
+
+                    <!-- Full Payment Checkbox -->
+                    <div class="checkbox-wrap-custom">
+                        <input type="checkbox" id="manualFullPaymentCheck" onchange="toggleManualFullPayment()" />
+                        <label for="manualFullPaymentCheck">✅ Full Payment Received</label>
+                    </div>
+
+                    <!-- Info: when checked, show the amount that will be set -->
+                    <div id="manualFullPaymentInfo" class="text-xs text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg hidden">
+                        🔹 Full amount <strong id="manualFullAmountDisplay">NPR 0.00</strong> will be set as advance.
+                    </div>
+                </div>
+
+                <div class="btn-row-manual">
+                    <button class="btn-save-manual" onclick="saveManualConfirm()">💾 Save</button>
+                    <button class="btn-close-manual" onclick="closeManualConfirmModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
             <span id="toastIcon">✅</span>
@@ -2262,6 +2473,9 @@
             let pendingCancelOrderId = null;
             let selectedOrders = new Set();
             let statsCollapsed = true;
+
+            // ─── MANUAL CONFIRM STATE ─────────────────────────────────────
+            let manualConfirmOrderId = null;
 
             // ─── LOGISTIC PARTNERS SETTINGS ──────────────────────────────
             const PARTNER_KEY = 'MeroWish_logistic_partners';
@@ -2810,6 +3024,138 @@
                 });
             }
 
+            // ─── MANUAL CONFIRM FUNCTIONS ─────────────────────────────────
+            window.openManualConfirm = function(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) { showToast('❌', 'Order not found'); return; }
+                manualConfirmOrderId = orderId;
+
+                // Populate modal
+                document.getElementById('manualOrderId').textContent = `#${orderId}`;
+                document.getElementById('manualOrderIdDisplay').textContent = orderId;
+                document.getElementById('manualProductName').textContent = order.productName;
+                document.getElementById('manualTotalAmount').textContent = order.totalAmount;
+                document.getElementById('manualCurrentAdvance').textContent = order.paymentSummary.advance || 'NPR 0.00';
+
+                // Reset fields
+                const input = document.getElementById('manualAdvanceInput');
+                input.value = '';
+                input.placeholder = '0.00';
+                const fullCheck = document.getElementById('manualFullPaymentCheck');
+                fullCheck.checked = false;
+                document.getElementById('manualFullPaymentInfo').classList.add('hidden');
+                document.getElementById('manualFullAmountDisplay').textContent = '';
+
+                document.getElementById('manualConfirmModal').classList.add('flex');
+                document.getElementById('manualConfirmModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                // Focus input after a tiny delay
+                setTimeout(() => input.focus(), 100);
+            };
+
+            window.toggleManualFullPayment = function() {
+                const fullCheck = document.getElementById('manualFullPaymentCheck');
+                const input = document.getElementById('manualAdvanceInput');
+                const infoEl = document.getElementById('manualFullPaymentInfo');
+                const amountDisplay = document.getElementById('manualFullAmountDisplay');
+
+                if (fullCheck.checked) {
+                    // Get total amount after discount (remove NPR and commas)
+                    const totalRaw = document.getElementById('manualTotalAmount').textContent;
+                    const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
+                    input.value = totalNum.toFixed(2);
+                    amountDisplay.textContent = `NPR ${totalNum.toFixed(2)}`;
+                    infoEl.classList.remove('hidden');
+                    input.disabled = true;
+                } else {
+                    input.value = '';
+                    input.disabled = false;
+                    infoEl.classList.add('hidden');
+                    input.focus();
+                }
+            };
+
+            window.saveManualConfirm = function() {
+                if (!manualConfirmOrderId) { showToast('❌', 'No order selected'); return; }
+                const order = ordersData.find(o => o.id === manualConfirmOrderId);
+                if (!order) { showToast('❌', 'Order not found'); return; }
+
+                const input = document.getElementById('manualAdvanceInput');
+                const fullCheck = document.getElementById('manualFullPaymentCheck');
+                let advanceAmount = parseFloat(input.value) || 0;
+
+                if (advanceAmount < 0) { showToast('⚠️', 'Advance amount cannot be negative'); return; }
+
+                // If full payment is checked but user cleared the input, fallback to total
+                if (fullCheck.checked) {
+                    const totalRaw = document.getElementById('manualTotalAmount').textContent;
+                    const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
+                    if (advanceAmount === 0) advanceAmount = totalNum;
+                }
+
+                if (advanceAmount === 0 && !fullCheck.checked) {
+                    if (!confirm('Advance amount is 0. Are you sure you want to proceed?')) return;
+                }
+
+                // Update the order's advance
+                order.paymentSummary.advance = `NPR ${advanceAmount.toFixed(2)}`;
+                order.paymentSummary.total = order.totalAmount; // ensure total is consistent
+
+                // If full payment, also update status to Payment Received if not already
+                if (fullCheck.checked) {
+                    if (order.status !== 'Payment Received' && order.status !== 'Delivered' && order.status !==
+                        'Shipped') {
+                        order.status = 'Payment Received';
+                        order.currentStageIndex = statusToIndexMap['Order Approved'] || 3;
+                        order.orderStage = 'Payment Received';
+                    }
+                    // Also update the payment received datetime
+                    order.paymentReceivedDateTime = new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                } else {
+                    // Partial advance: update lastUpdate
+                    order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    // If advance > 0 and status is Order Created or similar, move to Payment Received
+                    if (advanceAmount > 0 && ['Order Created', 'Quotation Received', 'Quotation Sent (Buy For Me)']
+                        .includes(order.status)) {
+                        order.status = 'Payment Received';
+                        order.currentStageIndex = statusToIndexMap['Order Approved'] || 3;
+                        order.orderStage = 'Payment Received';
+                        order.paymentReceivedDateTime = new Date().toLocaleString('en-GB', { day: '2-digit',
+                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    }
+                }
+
+                // Add a comment trail
+                const commentNote = fullCheck.checked ?
+                    `✅ Full payment confirmed manually (NPR ${advanceAmount.toFixed(2)})` :
+                    `💰 Advance of NPR ${advanceAmount.toFixed(2)} confirmed manually`;
+                order.comment = order.comment ?
+                    `${order.comment} | ${commentNote} (${new Date().toLocaleString()})` :
+                    `${commentNote} (${new Date().toLocaleString()})`;
+
+                closeManualConfirmModal();
+                updateStats();
+                filterOrders();
+                showToast('✅', `Payment confirmed for ${manualConfirmOrderId} (Advance: NPR ${advanceAmount.toFixed(2)})`);
+                manualConfirmOrderId = null;
+            };
+
+            window.closeManualConfirmModal = function() {
+                document.getElementById('manualConfirmModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                manualConfirmOrderId = null;
+                // Reset checkbox and input
+                document.getElementById('manualFullPaymentCheck').checked = false;
+                document.getElementById('manualAdvanceInput').value = '';
+                document.getElementById('manualAdvanceInput').disabled = false;
+                document.getElementById('manualFullPaymentInfo').classList.add('hidden');
+            };
+
             // ─── RENDER ──────────────────────────────────────────────────────
             function renderPaginatedOrders() {
                 const start = (currentPage - 1) * pageSize;
@@ -2876,6 +3222,14 @@
                         </div>
                     `;
 
+                    // ─── MANUAL CONFIRM BUTTON (Desktop) ──────────────────
+                    const manualConfirmBtn = `
+                        <button onclick="openManualConfirm('${order.id}')" class="manual-confirm-btn" title="Manual Payment Confirmation">
+                            <svg class="icon-svg-small" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Confirm
+                        </button>
+                    `;
+
                     const row = document.createElement('tr');
                     row.className = 'order-row border-b border-gray-100';
                     row.innerHTML = `
@@ -2922,7 +3276,6 @@
                             <div><span class="font-semibold">Order:</span> ${order.dateTime}</div>
                             <div><span class="font-semibold">Payment:</span> ${order.paymentReceivedDateTime || '—'}</div>
                             <div><span class="font-semibold">ETA:</span> ${order.etaDeliveryDate || '—'}</div>
-                            <!-- ─── NEW: Last Update & Order Stage ─── -->
                             <div class="date-col-last-update"><span class="font-semibold">Last Update:</span> ${order.lastUpdate || '—'}</div>
                             <div class="date-col-last-update"><span class="font-semibold">Stage:</span> <span class="stage-tag">${order.orderStage || order.status}</span></div>
                         </td>
@@ -2949,7 +3302,8 @@
                             </div>
                         </td>
                         <td class="px-3 py-3 text-right whitespace-nowrap">
-                            <div class="font-bold text-gray-800">${order.totalAmount}</div>
+                            ${manualConfirmBtn}
+                            <div class="font-bold text-gray-800 mt-1">${order.totalAmount}</div>
                             <div class="text-[10px] text-gray-400">Gross: ${order.paymentSummary.gross}</div>
                             <div class="text-[10px] text-green-600">Disc: ${order.paymentSummary.discount}</div>
                             ${verifyButton}
@@ -3004,6 +3358,14 @@
 
                     const userNameHtml =
                         `<span class="user-clickable" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</span>`;
+
+                    // ─── MANUAL CONFIRM BUTTON (Mobile) ──────────────────
+                    const manualConfirmBtnMobile = `
+                        <button onclick="openManualConfirm('${order.id}')" class="manual-confirm-btn-mobile" title="Manual Payment Confirmation">
+                            <svg class="icon-svg-small" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Confirm
+                        </button>
+                    `;
 
                     const card = document.createElement('div');
                     card.className = 'order-card';
@@ -3075,7 +3437,10 @@
                             </div>
                             <div class="card-row">
                                 <span class="label">💵 Total</span>
-                                <span class="value font-bold text-primary">${order.totalAmount}</span>
+                                <span class="value font-bold text-primary flex items-center gap-2 flex-wrap">
+                                    ${order.totalAmount}
+                                    ${manualConfirmBtnMobile}
+                                </span>
                             </div>
                         </div>
                         <div class="card-actions">
@@ -3540,6 +3905,7 @@
                     closePriceCorrections();
                     closeBulkLabelModal();
                     closeSettingsModal();
+                    closeManualConfirmModal();
                 }
             });
 
@@ -3593,6 +3959,11 @@
             window.closeSettingsModal = closeSettingsModal;
             window.saveSettings = saveSettings;
             window.removePartner = removePartner;
+            // Manual Confirm
+            window.openManualConfirm = openManualConfirm;
+            window.closeManualConfirmModal = closeManualConfirmModal;
+            window.saveManualConfirm = saveManualConfirm;
+            window.toggleManualFullPayment = toggleManualFullPayment;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
