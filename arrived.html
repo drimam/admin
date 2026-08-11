@@ -56,16 +56,18 @@
         @keyframes toastIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes toastOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
 
-        .modal-backdrop { background: rgba(15,23,42,0.6); backdrop-filter: blur(4px); }
+        .modal-backdrop { background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px); }
 
         .sidebar-section-header { cursor: pointer; user-select: none; transition: all 0.2s; }
-        .sidebar-section-header:hover { background: rgba(255,255,255,0.04); }
+        .sidebar-section-header:hover { background: rgba(255, 255, 255, 0.04); }
         .sidebar-section-content { overflow: hidden; transition: max-height 0.35s ease; }
 
         .scan-row { transition: all 0.15s ease; }
         .scan-row:hover { background: #f8fafc; box-shadow: inset 3px 0 0 #4F46E5; }
 
-        .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 12px; border-radius: 20px;
+            font-size: 11px; font-weight: 600; }
         .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
         .status-badge .dot.green { background: #10B981; }
         .status-badge .dot.blue { background: #3B82F6; }
@@ -76,7 +78,8 @@
         .status-badge .dot.orange { background: #F97316; }
         .status-badge .dot.teal { background: #14B8A6; }
 
-        .action-icon-btn { padding: 2px 8px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.15s; font-size: 14px; line-height: 1; background: transparent; color: #64748b; }
+        .action-icon-btn { padding: 2px 8px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.15s;
+            font-size: 14px; line-height: 1; background: transparent; color: #64748b; }
         .action-icon-btn:hover { background: #f1f5f9; transform: scale(1.1); }
         .action-icon-btn.primary:hover { color: #4F46E5; background: #EEF2FF; }
         .action-icon-btn.danger:hover { color: #DC2626; background: #FEF2F2; }
@@ -86,40 +89,56 @@
 
         .filter-section { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
         .filter-section .filter-group { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-        .filter-section .filter-group input, .filter-section .filter-group select { font-size: 13px; padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 8px; outline: none; background: #fff; }
-        .filter-section .filter-group input:focus, .filter-section .filter-group select:focus { border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79,70,229,0.15); }
+        .filter-section .filter-group input,
+        .filter-section .filter-group select { font-size: 13px; padding: 6px 10px; border: 1px solid #d1d5db;
+            border-radius: 8px; outline: none; background: #fff; }
+        .filter-section .filter-group input:focus,
+        .filter-section .filter-group select:focus { border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15); }
 
-        .filter-actions .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+        .filter-actions .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; padding: 6px 12px;
+            border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
         .filter-actions .btn-outline:hover { background: #f1f5f9; border-color: #cbd5e1; }
-        .filter-actions .btn-primary-sm { background: #4F46E5; color: #fff; border: none; padding: 6px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+        .filter-actions .btn-primary-sm { background: #4F46E5; color: #fff; border: none; padding: 6px 16px; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
         .filter-actions .btn-primary-sm:hover { background: #4338CA; }
 
         .detail-field { margin-bottom: 14px; }
-        .detail-field label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 3px; }
-        .detail-field input, .detail-field select { width: 100%; padding: 8px 12px; border: 1.5px solid #dce3ef; border-radius: 10px; font-size: 13px; background: #fafcff; transition: 0.2s; outline: none; }
-        .detail-field input:focus, .detail-field select:focus { border-color: #2a6df4; box-shadow: 0 0 0 4px rgba(42,109,244,0.08); }
-        .detail-field .value-box { padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 14px; color: #0f172a; }
+        .detail-field label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;
+            letter-spacing: 0.3px; display: block; margin-bottom: 3px; }
+        .detail-field input,
+        .detail-field select { width: 100%; padding: 8px 12px; border: 1.5px solid #dce3ef; border-radius: 10px;
+            font-size: 13px; background: #fafcff; transition: 0.2s; outline: none; }
+        .detail-field input:focus,
+        .detail-field select:focus { border-color: #2a6df4; box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08); }
+        .detail-field .value-box { padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;
+            font-size: 14px; color: #0f172a; }
 
         @media (max-width: 767px) {
-            .scan-table td, .scan-table th { padding: 4px 6px !important; font-size: 10px !important; }
+            .scan-table td,
+            .scan-table th { padding: 4px 6px !important; font-size: 10px !important; }
             .action-icon-btn { font-size: 11px !important; padding: 1px 4px !important; }
-            .filter-section .filter-group input, .filter-section .filter-group select { font-size: 11px; padding: 4px 8px; min-width: 70px; }
-            .filter-actions .btn-outline, .filter-actions .btn-primary-sm { font-size: 11px; padding: 4px 10px; }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select { font-size: 11px; padding: 4px 8px; min-width: 70px; }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm { font-size: 11px; padding: 4px 10px; }
             .status-badge { font-size: 9px; padding: 1px 8px; }
             .detail-field .value-box { font-size: 12px; padding: 6px 10px; }
-            .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 6px !important; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
             .export-columns-grid { grid-template-columns: 1fr 1fr !important; }
             .desktop-table { display: none !important; }
             .mobile-cards { display: block !important; }
         }
         @media (max-width: 480px) {
-            .scan-table td, .scan-table th { padding: 3px 4px !important; font-size: 9px !important; }
+            .scan-table td,
+            .scan-table th { padding: 3px 4px !important; font-size: 9px !important; }
             .action-icon-btn { font-size: 10px !important; padding: 0 3px !important; }
-            .filter-section .filter-group input, .filter-section .filter-group select { font-size: 10px; padding: 3px 6px; min-width: 55px; }
-            .filter-actions .btn-outline, .filter-actions .btn-primary-sm { font-size: 10px; padding: 3px 8px; }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select { font-size: 10px; padding: 3px 6px; min-width: 55px; }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm { font-size: 10px; padding: 3px 8px; }
             .status-badge { font-size: 8px; padding: 1px 6px; }
             .detail-field .value-box { font-size: 11px; padding: 5px 8px; }
-            .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 4px !important; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px !important; }
             .export-columns-grid { grid-template-columns: 1fr !important; }
         }
         @media (min-width: 768px) {
@@ -127,7 +146,9 @@
             .mobile-cards { display: none !important; }
         }
 
-        .tab-btn { padding: 8px 20px; border-radius: 10px 10px 0 0; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; background: transparent; color: #64748b; border-bottom: 3px solid transparent; }
+        .tab-btn { padding: 8px 20px; border-radius: 10px 10px 0 0; font-size: 13px; font-weight: 600; border: none;
+            cursor: pointer; transition: all 0.2s; background: transparent; color: #64748b;
+            border-bottom: 3px solid transparent; }
         .tab-btn.active { color: #4F46E5; border-bottom-color: #4F46E5; background: #f8fafc; }
         .tab-btn:hover:not(.active) { background: #f1f5f9; color: #475569; }
         @media (max-width: 480px) { .tab-btn { font-size: 10px; padding: 4px 10px; } }
@@ -135,20 +156,23 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        .user-avatar-sm { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 10px; color: #fff; flex-shrink: 0; }
+        .user-avatar-sm { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; font-weight: 700; font-size: 10px; color: #fff; flex-shrink: 0; }
 
         .stat-card { transition: all 0.2s ease; cursor: default; }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
-        .stat-card .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06); }
+        .stat-card .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center;
+            justify-content: center; font-size: 16px; flex-shrink: 0; }
         .stat-value-sm { font-size: 15px; }
         @media (min-width:768px) { .stat-value-sm { font-size: 17px; } }
         @media (min-width:1024px) { .stat-value-sm { font-size: 20px; } }
-        .stat-label-one { font-size: 9px; letter-spacing: 0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stat-label-one { font-size: 9px; letter-spacing: 0.2px; white-space: nowrap; overflow: hidden;
+            text-overflow: ellipsis; }
         @media (min-width:768px) { .stat-label-one { font-size: 10px; } }
         @media (min-width:1024px) { .stat-label-one { font-size: 11px; } }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
-        @media (max-width:640px) { .stats-grid { grid-template-columns: repeat(2,1fr); gap: 6px; } }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        @media (max-width:640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
 
         .product-link { color: #4F46E5; text-decoration: underline; cursor: pointer; font-weight: 500; }
         .product-link:hover { color: #3730A3; }
@@ -156,26 +180,37 @@
         .user-clickable:hover { text-decoration: underline; }
 
         .scan-input-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .scan-input-wrapper input { flex: 1; padding: 10px 16px; border: 2px solid #dce3ef; border-radius: 12px; font-size: 16px; outline: none; background: #fafcff; transition: 0.2s; letter-spacing: 1px; font-family: monospace; min-width: 120px; }
-        .scan-input-wrapper input:focus { border-color: #4F46E5; box-shadow: 0 0 0 4px rgba(79,70,229,0.1); }
-        .scan-input-wrapper .scan-btn { padding: 10px 20px; background: #4F46E5; color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+        .scan-input-wrapper input { flex: 1; padding: 10px 16px; border: 2px solid #dce3ef; border-radius: 12px;
+            font-size: 16px; outline: none; background: #fafcff; transition: 0.2s; letter-spacing: 1px;
+            font-family: monospace; min-width: 120px; }
+        .scan-input-wrapper input:focus { border-color: #4F46E5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .scan-input-wrapper .scan-btn { padding: 10px 20px; background: #4F46E5; color: #fff; border: none;
+            border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
         .scan-input-wrapper .scan-btn:hover { background: #4338CA; }
-        .scan-input-wrapper .barcode-btn { padding: 10px 14px; background: #10B981; color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-size: 14px; }
+        .scan-input-wrapper .barcode-btn { padding: 10px 14px; background: #10B981; color: #fff; border: none;
+            border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-size: 14px; }
         .scan-input-wrapper .barcode-btn:hover { background: #059669; }
         @media (max-width:480px) {
             .scan-input-wrapper input { font-size: 14px; padding: 8px 12px; }
-            .scan-input-wrapper .scan-btn, .scan-input-wrapper .barcode-btn { padding: 8px 14px; font-size: 13px; }
+            .scan-input-wrapper .scan-btn,
+            .scan-input-wrapper .barcode-btn { padding: 8px 14px; font-size: 13px; }
         }
 
-        .product-img-wrapper { position: relative; display: inline-block; vertical-align: middle; margin-right: 6px; width: 42px; height: 42px; flex-shrink: 0; }
-        .product-img-wrapper .product-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; border: 1.5px solid #e2e8f0; transition: all 0.2s; aspect-ratio: 1/1; background: #f1f5f9; }
-        .product-img-wrapper:hover .product-thumb { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
-        .product-img-zoom { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%) scale(0.9); z-index: 9999; pointer-events: none; opacity: 0; transition: all 0.25s cubic-bezier(0.4,0,0.2,1); border-radius: 10px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); width: 140px; height: 140px; object-fit: cover; background: #fff; border: 3px solid #4F46E5; aspect-ratio: 1/1; }
+        .product-img-wrapper { position: relative; display: inline-block; vertical-align: middle; margin-right: 6px;
+            width: 42px; height: 42px; flex-shrink: 0; }
+        .product-img-wrapper .product-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover;
+            border: 1.5px solid #e2e8f0; transition: all 0.2s; aspect-ratio: 1/1; background: #f1f5f9; }
+        .product-img-wrapper:hover .product-thumb { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+        .product-img-zoom { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%) scale(0.9);
+            z-index: 9999; pointer-events: none; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35); width: 140px; height: 140px;
+            object-fit: cover; background: #fff; border: 3px solid #4F46E5; aspect-ratio: 1/1; }
         .product-img-wrapper:hover .product-img-zoom { opacity: 1; transform: translateY(-50%) scale(1); }
         @media (max-width:767px) {
             .product-img-wrapper { width: 34px; height: 34px; }
             .product-img-wrapper .product-thumb { width: 34px; height: 34px; }
-            .product-img-zoom { left: 50%; top: auto; bottom: calc(100% + 8px); transform: translateX(-50%) scale(0.9); width: 120px; height: 120px; }
+            .product-img-zoom { left: 50%; top: auto; bottom: calc(100% + 8px); transform: translateX(-50%) scale(0.9);
+                width: 120px; height: 120px; }
             .product-img-wrapper:hover .product-img-zoom { transform: translateX(-50%) scale(1); }
         }
         @media (max-width:480px) {
@@ -184,22 +219,66 @@
             .product-img-zoom { width: 100px; height: 100px; }
         }
 
-        .product-cell { display: flex; align-items: center; }
-        .product-cell .product-info { display: flex; flex-direction: column; min-width: 0; }
-        .product-cell .product-info .product-name { font-weight: 500; font-size: 12px; line-height: 1.3; }
+        .product-cell { display: flex; align-items: flex-start; gap: 6px; }
+        .product-cell .product-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+        .product-cell .product-info .product-name { font-weight: 500; font-size: 12px; line-height: 1.3; display: flex;
+            align-items: center; flex-wrap: wrap; gap: 4px; }
         .product-cell .product-info .product-name a { color: #4F46E5; text-decoration: underline; }
         .product-cell .product-info .product-name a:hover { color: #3730A3; }
-        .product-cell .product-info .product-meta { font-size: 10px; color: #94a3b8; display: flex; flex-direction: column; line-height: 1.4; }
+        .product-cell .product-info .product-meta { font-size: 10px; color: #94a3b8; display: flex; flex-direction: column;
+            line-height: 1.4; }
         .product-cell .product-info .product-meta .warehouse-id { font-weight: 600; color: #475569; }
         .product-cell .product-info .product-meta .order-id { font-weight: 600; color: #8B5CF6; }
+        /* ─── COMMENT LINE ─── */
+        .product-cell .product-info .product-comment {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #f8fafc;
+            padding: 2px 8px 2px 6px;
+            border-radius: 12px;
+            border: 1px solid #eef2f6;
+            transition: all 0.15s;
+            max-width: 100%;
+        }
+        .product-cell .product-info .product-comment:hover {
+            background: #eef2f6;
+            border-color: #cbd5e1;
+        }
+        .product-cell .product-info .product-comment .comment-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 130px;
+            font-style: italic;
+            color: #334155;
+        }
+        .product-cell .product-info .product-comment .comment-empty {
+            color: #cbd5e1;
+            font-style: italic;
+            font-size: 9px;
+        }
+        .product-cell .product-info .product-comment .comment-edit-icon {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
 
         .tracking-cell { font-family: monospace; font-weight: 600; color: #4F46E5; white-space: nowrap; overflow: visible; }
 
-        .export-columns-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px 12px; }
-        .export-columns-grid label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569; cursor: pointer; }
-        .export-columns-grid label input[type="checkbox"] { width: 14px; height: 14px; accent-color: #4F46E5; cursor: pointer; }
+        .export-columns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; }
+        .export-columns-grid label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569;
+            cursor: pointer; }
+        .export-columns-grid label input[type="checkbox"] { width: 14px; height: 14px; accent-color: #4F46E5;
+            cursor: pointer; }
 
-        .btn-sm { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+        .btn-sm { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; border: none; cursor: pointer;
+            transition: all 0.15s; white-space: nowrap; }
         .btn-sm-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; }
         .btn-sm-outline:hover { background: #f1f5f9; border-color: #cbd5e1; }
         .btn-sm-primary { background: #4F46E5; color: #fff; }
@@ -214,20 +293,26 @@
         .user-card {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             border: 1px solid #f1f5f9;
             transition: all 0.15s;
             overflow: hidden;
             margin-bottom: 12px;
         }
-        .user-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
-        .user-card .card-header { padding: 12px 14px 8px 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; gap: 6px; }
+        .user-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); }
+        .user-card .card-header { padding: 12px 14px 8px 14px; display: flex; flex-wrap: wrap; align-items: center;
+            justify-content: space-between; border-bottom: 1px solid #f1f5f9; gap: 6px; }
         .user-card .card-body { padding: 10px 14px 12px 14px; display: flex; flex-direction: column; gap: 6px; }
         .user-card .card-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2px 10px; }
-        .user-card .card-row .label { font-size: 10px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; min-width: 60px; }
+        .user-card .card-row .label { font-size: 10px; font-weight: 600; color: #94a3b8; text-transform: uppercase;
+            letter-spacing: 0.3px; min-width: 60px; }
         .user-card .card-row .value { font-size: 12px; color: #1e293b; font-weight: 500; flex: 1; word-break: break-word; }
-        .user-card .card-actions { padding: 8px 14px 12px 14px; border-top: 1px solid #f1f5f9; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-        .user-card .card-actions .action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; font-size: 12px; font-weight: 500; transition: all 0.15s; cursor: pointer; min-height: 32px; gap: 4px; flex: 1 1 auto; }
+        .user-card .card-actions { padding: 8px 14px 12px 14px; border-top: 1px solid #f1f5f9; display: flex;
+            flex-wrap: wrap; gap: 6px; align-items: center; }
+        .user-card .card-actions .action-btn { display: inline-flex; align-items: center; justify-content: center;
+            padding: 6px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
+            font-size: 12px; font-weight: 500; transition: all 0.15s; cursor: pointer; min-height: 32px; gap: 4px;
+            flex: 1 1 auto; }
         .user-card .card-actions .action-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
         .user-card .card-actions .action-btn.primary-btn { background: #4F46E5; border-color: #4F46E5; color: #fff; }
         .user-card .card-actions .action-btn.primary-btn:hover { background: #4338CA; }
@@ -240,17 +325,28 @@
         .user-card .product-img-wrapper { width: 36px; height: 36px; }
         .user-card .product-img-wrapper .product-thumb { width: 36px; height: 36px; }
         .user-card .tracking-cell { font-size: 11px; }
+        .user-card .product-comment { font-size: 10px; cursor: pointer; background: #f8fafc; padding: 2px 10px 2px 8px;
+            border-radius: 12px; border: 1px solid #eef2f6; display: inline-flex; align-items: center; gap: 4px;
+            max-width: 100%; }
+        .user-card .product-comment:hover { background: #eef2f6; border-color: #cbd5e1; }
+        .user-card .product-comment .comment-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            max-width: 140px; font-style: italic; color: #334155; }
+        .user-card .product-comment .comment-empty { color: #cbd5e1; font-style: italic; font-size: 9px; }
 
-        #scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; }
+        #scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px;
+            border: 1px solid #e2e8f0; }
         #scanner-container #reader { width: 100%; max-width: 400px; margin: 0 auto; }
-        #scanner-container .scanner-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-        .scanner-btn { padding: 8px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; }
+        #scanner-container .scanner-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px;
+            flex-wrap: wrap; }
+        .scanner-btn { padding: 8px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;
+            transition: all 0.15s; }
         .scanner-btn.start { background: #10B981; color: #fff; }
         .scanner-btn.start:hover { background: #059669; }
         .scanner-btn.stop { background: #EF4444; color: #fff; }
         .scanner-btn.stop:hover { background: #DC2626; }
 
-        #receive-scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; }
+        #receive-scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px;
+            border: 1px solid #e2e8f0; }
         #receive-scanner-container #reader-receive { width: 100%; max-width: 400px; margin: 0 auto; }
 
         .mobile-cards { display: none; }
@@ -268,14 +364,15 @@
             table-layout: fixed;
             width: 100%;
         }
-        .scan-table th, .scan-table td {
+        .scan-table th,
+        .scan-table td {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             padding: 6px 8px;
         }
         .scan-table .col-tracking { width: 14%; }
-        .scan-table .col-product { width: 22%; }
+        .scan-table .col-product { width: 28%; }
         .scan-table .col-user { width: 14%; }
         .scan-table .col-qty { width: 6%; }
         .scan-table .col-hsn { width: 8%; }
@@ -285,7 +382,6 @@
         .scan-table .col-date { width: 7%; }
         .scan-table .col-action { width: 8%; }
 
-        /* Tracking cell full visibility */
         .tracking-cell {
             overflow: visible !important;
             text-overflow: clip !important;
@@ -295,7 +391,7 @@
 
         @media (max-width: 767px) {
             .scan-table .col-tracking { width: 18%; }
-            .scan-table .col-product { width: 18%; }
+            .scan-table .col-product { width: 22%; }
             .scan-table .col-user { width: 12%; }
             .scan-table .col-qty { width: 6%; }
             .scan-table .col-hsn { width: 8%; }
@@ -304,7 +400,8 @@
             .scan-table .col-status { width: 8%; }
             .scan-table .col-date { width: 6%; }
             .scan-table .col-action { width: 6%; }
-            .scan-table th, .scan-table td {
+            .scan-table th,
+            .scan-table td {
                 padding: 4px 6px;
                 font-size: 10px;
             }
@@ -312,7 +409,7 @@
         }
         @media (max-width: 480px) {
             .scan-table .col-tracking { width: 16%; }
-            .scan-table .col-product { width: 16%; }
+            .scan-table .col-product { width: 20%; }
             .scan-table .col-user { width: 10%; }
             .scan-table .col-qty { width: 5%; }
             .scan-table .col-hsn { width: 7%; }
@@ -321,11 +418,63 @@
             .scan-table .col-status { width: 7%; }
             .scan-table .col-date { width: 5%; }
             .scan-table .col-action { width: 5%; }
-            .scan-table th, .scan-table td {
+            .scan-table th,
+            .scan-table td {
                 padding: 3px 4px;
                 font-size: 9px;
             }
             .tracking-cell { font-size: 9px; }
+        }
+
+        /* ─── COMMENT MODAL (read-only) ─── */
+        #commentModal .modal-content {
+            max-width: 560px;
+        }
+        #commentModal .comment-product-img {
+            width: 64px;
+            height: 64px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+            flex-shrink: 0;
+            background: #f1f5f9;
+        }
+        #commentModal .comment-product-detail {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px 0 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 14px;
+        }
+        #commentModal .comment-product-detail .detail-text { flex: 1; min-width: 0; }
+        #commentModal .comment-product-detail .detail-text .name { font-weight: 600; font-size: 15px; color: #0f172a; }
+        #commentModal .comment-product-detail .detail-text .name a { color: #4F46E5; text-decoration: underline; }
+        #commentModal .comment-product-detail .detail-text .name a:hover { color: #3730A3; }
+        #commentModal .comment-product-detail .detail-text .meta { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        #commentModal .comment-product-detail .detail-text .meta span { margin-right: 12px; }
+        #commentModal .comment-display {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #0f172a;
+            min-height: 80px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 8px 0 4px 0;
+        }
+        #commentModal .comment-display .empty-note {
+            color: #cbd5e1;
+            font-style: italic;
+        }
+
+        @media (max-width: 480px) {
+            #commentModal .comment-product-img { width: 48px; height: 48px; }
+            #commentModal .comment-product-detail .detail-text .name { font-size: 13px; }
+            #commentModal .comment-product-detail .detail-text .meta { font-size: 10px; }
+            #commentModal .comment-display { font-size: 13px; padding: 10px 12px; min-height: 60px; }
         }
     </style>
 </head>
@@ -757,6 +906,28 @@
         </div>
     </div>
 
+    <!-- ─── COMMENT MODAL (read-only) ─── -->
+    <div id="commentModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeCommentModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2"><span>💬</span> Comment</h3>
+                <button onclick="closeCommentModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="comment-product-detail" id="commentProductDetail">
+                    <!-- populated by JS -->
+                </div>
+                <div class="comment-display" id="commentDisplay">
+                    <!-- populated by JS -->
+                </div>
+                <div class="flex justify-end mt-5 pt-3 border-t border-gray-200">
+                    <button onclick="closeCommentModal()" class="bg-gray-200 text-gray-700 px-6 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ─── TOAST ─── -->
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
@@ -786,7 +957,7 @@
             }
 
             function getAvatarColor(name) {
-                const colors = ['#4F46E5','#10B981','#F59E0B','#EF4444','#8B5CF6','#EC4899','#14B8A6','#F97316'];
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
                 let hash = 0;
                 for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
                 return colors[hash];
@@ -804,56 +975,95 @@
             }
 
             function formatDate(dateStr) { return dateStr; }
-            function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+            function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
             function productImageHtml(item, size) {
                 const s = size || 36;
                 return `
-                    <div class="product-img-wrapper" style="display:inline-block;vertical-align:middle;margin-right:6px;width:${s}px;height:${s}px;">
-                        <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="product-thumb" style="width:${s}px;height:${s}px;border-radius:6px;object-fit:cover;border:1.5px solid #e2e8f0;" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22${s}%22 height=%22${s}%22><rect fill=%22%23f1f5f9%22 width=%22${s}%22 height=%22${s}%22 rx=%228%22/><text x=%22${s/2}%22 y=%22${s/2+5}%22 text-anchor=%22middle%22 font-size=%22${s/2}%22 fill=%22%2394a3b8%22>📦</text></svg>'">
-                        <img src="${item.productImage}" alt="Zoom" class="product-img-zoom" style="width:130px;height:130px;object-fit:cover;border-radius:10px;border:3px solid #4F46E5;" loading="lazy" onerror="this.style.display='none'">
-                    </div>
-                `;
+                        <div class="product-img-wrapper" style="display:inline-block;vertical-align:middle;margin-right:6px;width:${s}px;height:${s}px;">
+                            <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="product-thumb" style="width:${s}px;height:${s}px;border-radius:6px;object-fit:cover;border:1.5px solid #e2e8f0;" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22${s}%22 height=%22${s}%22><rect fill=%22%23f1f5f9%22 width=%22${s}%22 height=%22${s}%22 rx=%228%22/><text x=%22${s/2}%22 y=%22${s/2+5}%22 text-anchor=%22middle%22 font-size=%22${s/2}%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                            <img src="${item.productImage}" alt="Zoom" class="product-img-zoom" style="width:130px;height:130px;object-fit:cover;border-radius:10px;border:3px solid #4F46E5;" loading="lazy" onerror="this.style.display='none'">
+                        </div>
+                    `;
             }
 
-            function productCellHtml(item) {
+            // ─── COMMENT LINE (clickable, read-only) ──────────────────────
+            function commentLineHtml(item, context) {
+                const comment = item.comment || '';
+                const tracking = item.trackingNumber;
+                if (comment) {
+                    return `<div class="product-comment" onclick="openCommentModal('${tracking}','${context}')" title="Click to view full comment">
+                                <span class="comment-text">💬 ${escapeHtml(comment)}</span>
+                                <span class="comment-edit-icon">👁️</span>
+                            </div>`;
+                } else {
+                    return `<div class="product-comment" onclick="openCommentModal('${tracking}','${context}')" title="No comment yet">
+                                <span class="comment-empty">💬 No comment</span>
+                                <span class="comment-edit-icon">👁️</span>
+                            </div>`;
+                }
+            }
+
+            function productCellHtml(item, context) {
                 return `
-                    <div class="product-cell">
-                        ${productImageHtml(item, 36)}
-                        <div class="product-info">
-                            <div class="product-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
-                            <div class="product-meta">
-                                <span class="warehouse-id">🏭 ${item.warehouseId}</span>
-                                <span class="order-id">📋 Order ID : ${item.orderId || 'N/A'}</span>
+                        <div class="product-cell">
+                            ${productImageHtml(item, 36)}
+                            <div class="product-info">
+                                <div class="product-name">
+                                    <a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a>
+                                </div>
+                                <div class="product-meta">
+                                    <span class="warehouse-id">🏭 ${item.warehouseId}</span>
+                                    <span class="order-id">📋 Order ID : ${item.orderId || 'N/A'}</span>
+                                </div>
+                                ${commentLineHtml(item, context)}
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
             }
 
             function userCellHtml(username, userId) {
                 const color = getAvatarColor(username);
                 const initials = getInitials(username);
                 return `
-                    <div class="flex items-center gap-1.5">
-                        <div class="user-avatar-sm" style="background:${color};width:20px;height:20px;font-size:8px;">${initials}</div>
-                        <span class="user-clickable" onclick="showToast('👤','${escapeHtml(username)} (ID: ${userId})')">${escapeHtml(username)}</span>
-                    </div>
-                `;
+                        <div class="flex items-center gap-1.5">
+                            <div class="user-avatar-sm" style="background:${color};width:20px;height:20px;font-size:8px;">${initials}</div>
+                            <span class="user-clickable" onclick="showToast('👤','${escapeHtml(username)} (ID: ${userId})')">${escapeHtml(username)}</span>
+                        </div>
+                    `;
             }
 
             // ─── DATA ──────────────────────────────────────────────────────
 
             const INITIAL_SHIPMENTS = [
-                { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage('Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518', subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage('Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302', subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage('Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517', subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage('Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202', subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage('USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544', subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage('Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302', subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage('Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471', subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage('Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion', quantity: 1, inrPrice: 580.00, status: 'shipped' },
-                { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage('Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506', subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage(
+                        'Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518',
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage(
+                        'Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302',
+                    subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage(
+                        'Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517',
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage(
+                        'Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202',
+                    subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage(
+                        'USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544',
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage(
+                        'Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302',
+                    subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage(
+                        'Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471',
+                    subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage(
+                        'Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion',
+                    quantity: 1, inrPrice: 580.00, status: 'shipped', comment: '' },
+                { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage(
+                        'Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506',
+                    subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped', comment: '' },
             ];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -863,10 +1073,18 @@
             let dispatchedItems = [];
             let scannedLogs = [];
 
-            let shippedPage = 1, shippedSize = 50, shippedFiltered = [];
-            let stockPage = 1, stockSize = 50, stockFiltered = [];
-            let dispatchedPage = 1, dispatchedSize = 50, dispatchedFiltered = [];
-            let scanPage = 1, scanSize = 50, scanFiltered = [];
+            let shippedPage = 1,
+                shippedSize = 50,
+                shippedFiltered = [];
+            let stockPage = 1,
+                stockSize = 50,
+                stockFiltered = [];
+            let dispatchedPage = 1,
+                dispatchedSize = 50,
+                dispatchedFiltered = [];
+            let scanPage = 1,
+                scanSize = 50,
+                scanFiltered = [];
 
             let currentTab = 'scan';
             let exportTarget = 'shipped';
@@ -874,6 +1092,11 @@
 
             let html5QrCode = null;
             let html5QrCodeReceive = null;
+
+            // ─── COMMENT STATE ─────────────────────────────────────────────
+            let commentContext = '';
+            let commentTracking = '';
+            let commentItem = null;
 
             const COLUMN_DEFS = {
                 shipped: [
@@ -930,6 +1153,59 @@
                 ],
             };
 
+            // ─── COMMENT MODAL (read-only) ───────────────────────────────────
+
+            function openCommentModal(tracking, context) {
+                commentTracking = tracking;
+                commentContext = context;
+
+                let item = null;
+                let list = [];
+                if (context === 'shipped') { list = shippedItems; } else if (context === 'stock') { list = stockItems; } else if (
+                    context === 'dispatched') { list = dispatchedItems; } else if (context === 'scan') { list = scannedLogs; }
+                item = list.find(i => i.trackingNumber === tracking);
+                if (!item) { showToast('⚠️', 'Item not found'); return; }
+                commentItem = item;
+
+                const detailContainer = document.getElementById('commentProductDetail');
+                detailContainer.innerHTML = `
+                        <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="comment-product-img" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect fill=%22%23f1f5f9%22 width=%2264%22 height=%2264%22 rx=%228%22/><text x=%2232%22 y=%2237%22 text-anchor=%22middle%22 font-size=%2232%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                        <div class="detail-text">
+                            <div class="name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
+                            <div class="meta">
+                                <span>🏭 ${item.warehouseId}</span>
+                                <span>📋 ${item.orderId || 'N/A'}</span>
+                                <span>🔢 ${item.trackingNumber}</span>
+                            </div>
+                            <div class="meta" style="margin-top:2px;color:#475569;">
+                                <span>📦 QTY: ${item.quantity}</span>
+                                <span>💰 ₹ ${item.inrPrice.toFixed(2)}</span>
+                                <span>📂 ${item.subCategory}</span>
+                            </div>
+                        </div>
+                    `;
+
+                const display = document.getElementById('commentDisplay');
+                const commentText = item.comment || '';
+                if (commentText) {
+                    display.innerHTML = `<div>${escapeHtml(commentText)}</div>`;
+                } else {
+                    display.innerHTML = `<div class="empty-note">No comment available for this item.</div>`;
+                }
+
+                document.getElementById('commentModal').classList.add('flex');
+                document.getElementById('commentModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeCommentModal() {
+                document.getElementById('commentModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                commentItem = null;
+                commentTracking = '';
+                commentContext = '';
+            }
+
             // ─── SCAN FUNCTIONS ─────────────────────────────────────────────
 
             function processStockScan() {
@@ -937,10 +1213,12 @@
                 const tracking = input.value.trim();
                 if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
                 const idx = shippedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
-                if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); input.value = ''; input.focus(); return; }
+                if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); input.value = '';
+                    input.focus(); return; }
                 const item = shippedItems[idx];
                 shippedItems.splice(idx, 1);
-                const arrived = { ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                const arrived = { ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
                 stockItems.push(arrived);
                 renderAll();
                 showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH`);
@@ -958,7 +1236,8 @@
                 if (idx === -1) { showToast('❌', 'Shipment not found in India WH stock'); return; }
                 const item = stockItems[idx];
                 stockItems.splice(idx, 1);
-                const dispatched = { ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                const dispatched = { ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
                 dispatchedItems.push(dispatched);
                 renderAll();
                 showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
@@ -969,10 +1248,12 @@
                 const tracking = input.value.trim();
                 if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
                 const idx = dispatchedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
-                if (idx === -1) { showToast('❌', `No dispatched shipment found for tracking: ${tracking}`); input.value = ''; input.focus(); return; }
+                if (idx === -1) { showToast('❌', `No dispatched shipment found for tracking: ${tracking}`); input.value = '';
+                    input.focus(); return; }
                 const item = dispatchedItems[idx];
                 dispatchedItems.splice(idx, 1);
-                const received = { ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                const received = { ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
                 scannedLogs.push(received);
                 renderAll();
                 showToast('✅', `Shipment ${tracking} RECEIVED at Nepal WH`);
@@ -1003,32 +1284,27 @@
 
                 try {
                     html5QrCode = new Html5Qrcode("reader");
-                    html5QrCode.start(
-                        { facingMode: "environment" },
-                        {
-                            fps: 15,
-                            qrbox: { width: 250, height: 250 },
-                            aspectRatio: 1.0,
-                            formatsToSupport: [
-                                Html5QrcodeSupportedFormats.QR_CODE,
-                                Html5QrcodeSupportedFormats.CODE_128,
-                                Html5QrcodeSupportedFormats.CODE_39,
-                                Html5QrcodeSupportedFormats.EAN_13,
-                                Html5QrcodeSupportedFormats.EAN_8,
-                                Html5QrcodeSupportedFormats.UPC_A,
-                                Html5QrcodeSupportedFormats.UPC_E,
-                                Html5QrcodeSupportedFormats.ISBN,
-                                Html5QrcodeSupportedFormats.ISSN,
-                                Html5QrcodeSupportedFormats.CODE_93,
-                                Html5QrcodeSupportedFormats.PDF_417
-                            ]
-                        },
-                        function(decodedText) {
-                            document.getElementById('stockBarcodeInput').value = decodedText;
-                            processStockScan();
-                        },
-                        function(errorMessage) { /* ignore */ }
-                    ).catch(function(err) {
+                    html5QrCode.start({ facingMode: "environment" }, {
+                        fps: 15,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.0,
+                        formatsToSupport: [
+                            Html5QrcodeSupportedFormats.QR_CODE,
+                            Html5QrcodeSupportedFormats.CODE_128,
+                            Html5QrcodeSupportedFormats.CODE_39,
+                            Html5QrcodeSupportedFormats.EAN_13,
+                            Html5QrcodeSupportedFormats.EAN_8,
+                            Html5QrcodeSupportedFormats.UPC_A,
+                            Html5QrcodeSupportedFormats.UPC_E,
+                            Html5QrcodeSupportedFormats.ISBN,
+                            Html5QrcodeSupportedFormats.ISSN,
+                            Html5QrcodeSupportedFormats.CODE_93,
+                            Html5QrcodeSupportedFormats.PDF_417
+                        ]
+                    }, function(decodedText) {
+                        document.getElementById('stockBarcodeInput').value = decodedText;
+                        processStockScan();
+                    }, function(errorMessage) { /* ignore */ }).catch(function(err) {
                         showToast('⚠️', 'Camera access denied or not available: ' + err);
                         container.style.display = 'none';
                     });
@@ -1066,32 +1342,27 @@
 
                 try {
                     html5QrCodeReceive = new Html5Qrcode("reader-receive");
-                    html5QrCodeReceive.start(
-                        { facingMode: "environment" },
-                        {
-                            fps: 15,
-                            qrbox: { width: 250, height: 250 },
-                            aspectRatio: 1.0,
-                            formatsToSupport: [
-                                Html5QrcodeSupportedFormats.QR_CODE,
-                                Html5QrcodeSupportedFormats.CODE_128,
-                                Html5QrcodeSupportedFormats.CODE_39,
-                                Html5QrcodeSupportedFormats.EAN_13,
-                                Html5QrcodeSupportedFormats.EAN_8,
-                                Html5QrcodeSupportedFormats.UPC_A,
-                                Html5QrcodeSupportedFormats.UPC_E,
-                                Html5QrcodeSupportedFormats.ISBN,
-                                Html5QrcodeSupportedFormats.ISSN,
-                                Html5QrcodeSupportedFormats.CODE_93,
-                                Html5QrcodeSupportedFormats.PDF_417
-                            ]
-                        },
-                        function(decodedText) {
-                            document.getElementById('barcodeInput').value = decodedText;
-                            processScan();
-                        },
-                        function(errorMessage) { /* ignore */ }
-                    ).catch(function(err) {
+                    html5QrCodeReceive.start({ facingMode: "environment" }, {
+                        fps: 15,
+                        qrbox: { width: 250, height: 250 },
+                        aspectRatio: 1.0,
+                        formatsToSupport: [
+                            Html5QrcodeSupportedFormats.QR_CODE,
+                            Html5QrcodeSupportedFormats.CODE_128,
+                            Html5QrcodeSupportedFormats.CODE_39,
+                            Html5QrcodeSupportedFormats.EAN_13,
+                            Html5QrcodeSupportedFormats.EAN_8,
+                            Html5QrcodeSupportedFormats.UPC_A,
+                            Html5QrcodeSupportedFormats.UPC_E,
+                            Html5QrcodeSupportedFormats.ISBN,
+                            Html5QrcodeSupportedFormats.ISSN,
+                            Html5QrcodeSupportedFormats.CODE_93,
+                            Html5QrcodeSupportedFormats.PDF_417
+                        ]
+                    }, function(decodedText) {
+                        document.getElementById('barcodeInput').value = decodedText;
+                        processScan();
+                    }, function(errorMessage) { /* ignore */ }).catch(function(err) {
                         showToast('⚠️', 'Camera access denied or not available: ' + err);
                         container.style.display = 'none';
                     });
@@ -1127,55 +1398,53 @@
                 else if (currentTab === 'scan') renderScanTableAndCards();
             }
 
-            function generateCards(data, statusKey, actionButtons) {
+            function generateCards(data, statusKey, actionButtons, context) {
                 if (!data || data.length === 0) return '<div class="text-center text-gray-400 py-4">No items found</div>';
                 return data.map(item => {
                     const statusBadge = getStatusBadge(item[statusKey] || item.status);
-                    const color = getAvatarColor(item.username);
-                    const initials = getInitials(item.username);
                     return `
-                        <div class="user-card">
-                            <div class="card-header">
-                                <div class="flex items-center gap-2">
-                                    <span class="tracking-cell text-sm">${item.trackingNumber}</span>
-                                    ${statusBadge}
+                            <div class="user-card">
+                                <div class="card-header">
+                                    <div class="flex items-center gap-2">
+                                        <span class="tracking-cell text-sm">${item.trackingNumber}</span>
+                                        ${statusBadge}
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card-row">
+                                        <span class="label">Product</span>
+                                        <span class="value">${productCellHtml(item, context)}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">User</span>
+                                        <span class="value">${userCellHtml(item.username, item.userId)}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">QTY</span>
+                                        <span class="value">${item.quantity}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">HSN</span>
+                                        <span class="value">${item.hsn}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">Sub-Cat</span>
+                                        <span class="value">${item.subCategory}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">INR Price</span>
+                                        <span class="value">₹ ${item.inrPrice.toFixed(2)}</span>
+                                    </div>
+                                    <div class="card-row">
+                                        <span class="label">Date</span>
+                                        <span class="value">${item.shippedDate || item.receivedAt || item.dispatchedAt || item.arrivedAt || ''}</span>
+                                    </div>
+                                </div>
+                                <div class="card-actions">
+                                    ${actionButtons(item)}
                                 </div>
                             </div>
-                            <div class="card-body">
-                                <div class="card-row">
-                                    <span class="label">Product</span>
-                                    <span class="value">${productCellHtml(item)}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">User</span>
-                                    <span class="value">${userCellHtml(item.username, item.userId)}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">QTY</span>
-                                    <span class="value">${item.quantity}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">HSN</span>
-                                    <span class="value">${item.hsn}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">Sub-Cat</span>
-                                    <span class="value">${item.subCategory}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">INR Price</span>
-                                    <span class="value">₹ ${item.inrPrice.toFixed(2)}</span>
-                                </div>
-                                <div class="card-row">
-                                    <span class="label">Date</span>
-                                    <span class="value">${item.shippedDate || item.receivedAt || item.dispatchedAt || item.arrivedAt || ''}</span>
-                                </div>
-                            </div>
-                            <div class="card-actions">
-                                ${actionButtons(item)}
-                            </div>
-                        </div>
-                    `;
+                        `;
                 }).join('');
             }
 
@@ -1254,23 +1523,23 @@
                     document.getElementById('shippedResultCount').textContent = '0 entries';
                 } else {
                     tbody.innerHTML = pageData.map(item => `
-                        <tr class="scan-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
-                        </tr>
-                    `).join('');
+                            <tr class="scan-row border-b border-gray-100">
+                                <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                                <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'shipped')}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                                <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
+                            </tr>
+                        `).join('');
                     document.getElementById('shippedResultCount').textContent =
                         `Showing ${pageData.length} of ${shippedFiltered.length} entries`;
                 }
                 const cardsContainer = document.getElementById('shippedCardsContainer');
-                cardsContainer.innerHTML = generateCards(pageData, 'status', shippedActionButtons);
+                cardsContainer.innerHTML = generateCards(pageData, 'status', shippedActionButtons, 'shipped');
                 updateShippedPagination();
             }
 
@@ -1291,7 +1560,8 @@
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === shippedPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { shippedPage = i; renderShippedTableAndCards(); };
+                    btn.onclick = () => { shippedPage = i;
+                        renderShippedTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
@@ -1361,25 +1631,25 @@
                     document.getElementById('stockResultCount').textContent = '0 entries';
                 } else {
                     tbody.innerHTML = pageData.map(item => `
-                        <tr class="scan-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center">
-                                <button onclick="dispatchShipment('${item.trackingNumber}')" class="btn-sm btn-sm-disptach" style="font-size:10px;padding:2px 8px;">📤 Dispatch</button>
-                            </td>
-                        </tr>
-                    `).join('');
+                            <tr class="scan-row border-b border-gray-100">
+                                <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                                <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'stock')}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                                <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center">
+                                    <button onclick="dispatchShipment('${item.trackingNumber}')" class="btn-sm btn-sm-disptach" style="font-size:10px;padding:2px 8px;">📤 Dispatch</button>
+                                </td>
+                            </tr>
+                        `).join('');
                     document.getElementById('stockResultCount').textContent =
                         `Showing ${pageData.length} of ${stockFiltered.length} entries`;
                 }
                 const cardsContainer = document.getElementById('stockCardsContainer');
-                cardsContainer.innerHTML = generateCards(pageData, 'status', stockActionButtons);
+                cardsContainer.innerHTML = generateCards(pageData, 'status', stockActionButtons, 'stock');
                 updateStockPagination();
             }
 
@@ -1395,7 +1665,8 @@
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === stockPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { stockPage = i; renderStockTableAndCards(); };
+                    btn.onclick = () => { stockPage = i;
+                        renderStockTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
@@ -1465,23 +1736,23 @@
                     document.getElementById('dispatchedResultCount').textContent = '0 entries';
                 } else {
                     tbody.innerHTML = pageData.map(item => `
-                        <tr class="scan-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
-                        </tr>
-                    `).join('');
+                            <tr class="scan-row border-b border-gray-100">
+                                <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                                <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'dispatched')}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                                <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
+                            </tr>
+                        `).join('');
                     document.getElementById('dispatchedResultCount').textContent =
                         `Showing ${pageData.length} of ${dispatchedFiltered.length} entries`;
                 }
                 const cardsContainer = document.getElementById('dispatchedCardsContainer');
-                cardsContainer.innerHTML = generateCards(pageData, 'status', dispatchedActionButtons);
+                cardsContainer.innerHTML = generateCards(pageData, 'status', dispatchedActionButtons, 'dispatched');
                 updateDispatchedPagination();
             }
 
@@ -1502,7 +1773,8 @@
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === dispatchedPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { dispatchedPage = i; renderDispatchedTableAndCards(); };
+                    btn.onclick = () => { dispatchedPage = i;
+                        renderDispatchedTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
@@ -1516,7 +1788,7 @@
             // ─── SCAN HISTORY ─────────────────────────────────────────────
 
             function renderScanTableAndCards() {
-                scanFiltered = [...scannedLogs].sort((a,b) => new Date(b.receivedAt) - new Date(a.receivedAt));
+                scanFiltered = [...scannedLogs].sort((a, b) => new Date(b.receivedAt) - new Date(a.receivedAt));
                 const start = (scanPage - 1) * scanSize;
                 const end = Math.min(start + scanSize, scanFiltered.length);
                 const pageData = scanFiltered.slice(start, end);
@@ -1527,22 +1799,22 @@
                     document.getElementById('scanHistoryCount').textContent = '0 entries';
                 } else {
                     tbody.innerHTML = pageData.map(item => `
-                        <tr class="scan-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.status)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.receivedAt}</td>
-                        </tr>
-                    `).join('');
+                            <tr class="scan-row border-b border-gray-100">
+                                <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                                <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'scan')}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                                <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.status)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.receivedAt}</td>
+                            </tr>
+                        `).join('');
                     document.getElementById('scanHistoryCount').textContent = `${scannedLogs.length} entries`;
                 }
                 const cardsContainer = document.getElementById('scanCardsContainer');
-                cardsContainer.innerHTML = generateCards(pageData, 'status', scanActionButtons);
+                cardsContainer.innerHTML = generateCards(pageData, 'status', scanActionButtons, 'scan');
                 updateScanPagination();
             }
 
@@ -1558,7 +1830,8 @@
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === scanPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { scanPage = i; renderScanTableAndCards(); };
+                    btn.onclick = () => { scanPage = i;
+                        renderScanTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
@@ -1655,7 +1928,7 @@
                             val = map[val] || val;
                         }
                         if (c.key === 'productName' || c.key === 'username') {
-                            val = `"${String(val).replace(/"/g,'""')}"`;
+                            val = `"${String(val).replace(/"/g, '""')}"`;
                         }
                         return val;
                     });
@@ -1665,7 +1938,7 @@
                     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = `export_${exportTarget}_${new Date().toISOString().slice(0,10)}.csv`;
+                    a.download = `export_${exportTarget}_${new Date().toISOString().slice(0, 10)}.csv`;
                     a.click();
                     showToast('✅', 'Excel exported successfully!');
                 } else {
@@ -1690,29 +1963,29 @@
                     };
                     const title = titleMap[exportTarget] || exportTarget;
                     const printContent = `
-                        <html><head><title>${title} Report</title>
-                        <style>
-                            body { font-family: Arial, sans-serif; padding: 30px; }
-                            h1 { color: #4F46E5; }
-                            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                            th { background: #f1f5f9; text-align: left; padding: 6px 8px; border: 1px solid #ddd; font-size: 11px; }
-                            td { padding: 4px 8px; border: 1px solid #ddd; font-size: 11px; }
-                            .header { display: flex; justify-content: space-between; align-items: center; }
-                            .footer { margin-top: 20px; text-align: center; color: #94a3b8; font-size: 10px; }
-                        </style>
-                        </head>
-                        <body>
-                            <div class="header"><h1>📊 ${title} Report</h1><p>Generated: ${printDate}</p></div>
-                            <p>Total Items: ${data.length}</p>
-                            <table>
-                                <thead><tr>${selected.map(c => `<th>${c.label}</th>`).join('')}</tr></thead>
-                                <tbody>${tableHtml}</tbody>
-                            </table>
-                            <div class="footer">MeroWish Admin - ${title} Report</div>
-                            <script>window.onload=function(){window.print();}<\/script>
-                        </body>
-                        </html>
-                    `;
+                            <html><head><title>${title} Report</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; padding: 30px; }
+                                h1 { color: #4F46E5; }
+                                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                                th { background: #f1f5f9; text-align: left; padding: 6px 8px; border: 1px solid #ddd; font-size: 11px; }
+                                td { padding: 4px 8px; border: 1px solid #ddd; font-size: 11px; }
+                                .header { display: flex; justify-content: space-between; align-items: center; }
+                                .footer { margin-top: 20px; text-align: center; color: #94a3b8; font-size: 10px; }
+                            </style>
+                            </head>
+                            <body>
+                                <div class="header"><h1>📊 ${title} Report</h1><p>Generated: ${printDate}</p></div>
+                                <p>Total Items: ${data.length}</p>
+                                <table>
+                                    <thead><tr>${selected.map(c => `<th>${c.label}</th>`).join('')}</tr></thead>
+                                    <tbody>${tableHtml}</tbody>
+                                </table>
+                                <div class="footer">MeroWish Admin - ${title} Report</div>
+                                <script>window.onload=function(){window.print();}<\/script>
+                            </body>
+                            </html>
+                        `;
                     const win = window.open('', '_blank', 'width=900,height=700');
                     win.document.write(printContent);
                     win.document.close();
@@ -1737,7 +2010,8 @@
                 document.getElementById('toastMessage').textContent = msg;
                 t.classList.remove('hidden');
                 t.classList.add('toast');
-                setTimeout(() => { t.classList.add('hidden'); t.classList.remove('toast'); }, 2800);
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
             }
 
             // ─── SIDEBAR ────────────────────────────────────────────────────
@@ -1771,8 +2045,11 @@
                     e.preventDefault();
                     processScan();
                 }
-                if (e.key === 'Escape') { closeExportModal(); }
+                if (e.key === 'Escape') { closeExportModal();
+                    closeCommentModal(); }
             });
+
+            // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
 
             window.processStockScan = processStockScan;
             window.processStockScanManual = processStockScanManual;
@@ -1802,6 +2079,8 @@
             window.stopScanner = stopScanner;
             window.startReceiveScanner = startReceiveScanner;
             window.stopReceiveScanner = stopReceiveScanner;
+            window.openCommentModal = openCommentModal;
+            window.closeCommentModal = closeCommentModal;
 
             // ─── INIT ──────────────────────────────────────────────────────
 
@@ -1811,7 +2090,9 @@
                 if (idx > -1) {
                     const item = shippedItems[idx];
                     shippedItems.splice(idx, 1);
-                    stockItems.push({ ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+                    stockItems.push({ ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
+                            '' });
                 }
             });
             const demoDispatch = ['TRK-2026-001236', 'TRK-2026-001237'];
@@ -1820,7 +2101,9 @@
                 if (idx > -1) {
                     const item = stockItems[idx];
                     stockItems.splice(idx, 1);
-                    dispatchedItems.push({ ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+                    dispatchedItems.push({ ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
+                            '' });
                 }
             });
             const demoReceive = ['TRK-2026-001238'];
@@ -1829,8 +2112,24 @@
                 if (idx > -1) {
                     const item = dispatchedItems[idx];
                     dispatchedItems.splice(idx, 1);
-                    scannedLogs.push({ ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+                    scannedLogs.push({ ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
+                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
+                            '' });
                 }
+            });
+
+            // Seed a few comments for demo
+            const demoComments = [
+                { tracking: 'TRK-2026-001234', comment: 'High priority order - expedite processing' },
+                { tracking: 'TRK-2026-001235', comment: 'Fragile items - handle with care' },
+                { tracking: 'TRK-2026-001236', comment: 'Customer requested gift wrapping' },
+            ];
+            demoComments.forEach(dc => {
+                const target = stockItems.find(s => s.trackingNumber === dc.tracking) ||
+                    dispatchedItems.find(s => s.trackingNumber === dc.tracking) ||
+                    scannedLogs.find(s => s.trackingNumber === dc.tracking) ||
+                    shippedItems.find(s => s.trackingNumber === dc.tracking);
+                if (target) target.comment = dc.comment;
             });
 
             renderAll();
