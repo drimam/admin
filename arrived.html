@@ -6,6 +6,8 @@
     <title>MeroWish | Warehouse Receiving</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js">
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -72,6 +74,7 @@
         .status-badge .dot.purple { background: #8B5CF6; }
         .status-badge .dot.gray { background: #9CA3AF; }
         .status-badge .dot.orange { background: #F97316; }
+        .status-badge .dot.teal { background: #14B8A6; }
 
         .action-icon-btn { padding: 2px 8px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.15s; font-size: 14px; line-height: 1; background: transparent; color: #64748b; }
         .action-icon-btn:hover { background: #f1f5f9; transform: scale(1.1); }
@@ -106,6 +109,8 @@
             .detail-field .value-box { font-size: 12px; padding: 6px 10px; }
             .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 6px !important; }
             .export-columns-grid { grid-template-columns: 1fr 1fr !important; }
+            .desktop-table { display: none !important; }
+            .mobile-cards { display: block !important; }
         }
         @media (max-width: 480px) {
             .scan-table td, .scan-table th { padding: 3px 4px !important; font-size: 9px !important; }
@@ -116,6 +121,10 @@
             .detail-field .value-box { font-size: 11px; padding: 5px 8px; }
             .stats-grid { grid-template-columns: repeat(2,1fr) !important; gap: 4px !important; }
             .export-columns-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (min-width: 768px) {
+            .desktop-table { display: table !important; }
+            .mobile-cards { display: none !important; }
         }
 
         .tab-btn { padding: 8px 20px; border-radius: 10px 10px 0 0; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; background: transparent; color: #64748b; border-bottom: 3px solid transparent; }
@@ -146,14 +155,16 @@
         .user-clickable { color: #1d4ed8; cursor: pointer; font-weight: 500; }
         .user-clickable:hover { text-decoration: underline; }
 
-        .scan-input-wrapper { display: flex; align-items: center; gap: 10px; }
-        .scan-input-wrapper input { flex: 1; padding: 10px 16px; border: 2px solid #dce3ef; border-radius: 12px; font-size: 16px; outline: none; background: #fafcff; transition: 0.2s; letter-spacing: 1px; font-family: monospace; }
+        .scan-input-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .scan-input-wrapper input { flex: 1; padding: 10px 16px; border: 2px solid #dce3ef; border-radius: 12px; font-size: 16px; outline: none; background: #fafcff; transition: 0.2s; letter-spacing: 1px; font-family: monospace; min-width: 120px; }
         .scan-input-wrapper input:focus { border-color: #4F46E5; box-shadow: 0 0 0 4px rgba(79,70,229,0.1); }
-        .scan-input-wrapper .scan-btn { padding: 10px 24px; background: #4F46E5; color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
+        .scan-input-wrapper .scan-btn { padding: 10px 20px; background: #4F46E5; color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
         .scan-input-wrapper .scan-btn:hover { background: #4338CA; }
+        .scan-input-wrapper .barcode-btn { padding: 10px 14px; background: #10B981; color: #fff; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-size: 14px; }
+        .scan-input-wrapper .barcode-btn:hover { background: #059669; }
         @media (max-width:480px) {
             .scan-input-wrapper input { font-size: 14px; padding: 8px 12px; }
-            .scan-input-wrapper .scan-btn { padding: 8px 16px; font-size: 13px; }
+            .scan-input-wrapper .scan-btn, .scan-input-wrapper .barcode-btn { padding: 8px 14px; font-size: 13px; }
         }
 
         .product-img-wrapper { position: relative; display: inline-block; vertical-align: middle; margin-right: 6px; width: 42px; height: 42px; flex-shrink: 0; }
@@ -188,13 +199,105 @@
         .export-columns-grid label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569; cursor: pointer; }
         .export-columns-grid label input[type="checkbox"] { width: 14px; height: 14px; accent-color: #4F46E5; cursor: pointer; }
 
-        .btn-sm { padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; }
+        .btn-sm { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
         .btn-sm-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; }
         .btn-sm-outline:hover { background: #f1f5f9; border-color: #cbd5e1; }
         .btn-sm-primary { background: #4F46E5; color: #fff; }
         .btn-sm-primary:hover { background: #4338CA; }
         .btn-sm-success { background: #10B981; color: #fff; }
         .btn-sm-success:hover { background: #059669; }
+        .btn-sm-arrive { background: #14B8A6; color: #fff; }
+        .btn-sm-arrive:hover { background: #0D9488; }
+        .btn-sm-disptach { background: #F97316; color: #fff; }
+        .btn-sm-disptach:hover { background: #EA580C; }
+
+        /* Mobile Cards */
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
+            transition: all 0.15s;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .user-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .user-card .card-header { padding: 12px 14px 8px 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; border-bottom: 1px solid #f1f5f9; gap: 6px; }
+        .user-card .card-body { padding: 10px 14px 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+        .user-card .card-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2px 10px; }
+        .user-card .card-row .label { font-size: 10px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.3px; min-width: 60px; }
+        .user-card .card-row .value { font-size: 12px; color: #1e293b; font-weight: 500; flex: 1; word-break: break-word; }
+        .user-card .card-actions { padding: 8px 14px 12px 14px; border-top: 1px solid #f1f5f9; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+        .user-card .card-actions .action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 6px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; font-size: 12px; font-weight: 500; transition: all 0.15s; cursor: pointer; min-height: 32px; gap: 4px; flex: 1 1 auto; }
+        .user-card .card-actions .action-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
+        .user-card .card-actions .action-btn.primary-btn { background: #4F46E5; border-color: #4F46E5; color: #fff; }
+        .user-card .card-actions .action-btn.primary-btn:hover { background: #4338CA; }
+        .user-card .card-actions .action-btn.success-btn { background: #10B981; border-color: #10B981; color: #fff; }
+        .user-card .card-actions .action-btn.success-btn:hover { background: #059669; }
+        .user-card .card-actions .action-btn.orange-btn { background: #F97316; border-color: #F97316; color: #fff; }
+        .user-card .card-actions .action-btn.orange-btn:hover { background: #EA580C; }
+        .user-card .card-actions .action-btn.danger-btn { background: #FEF2F2; border-color: #FECACA; color: #DC2626; }
+        .user-card .card-actions .action-btn.danger-btn:hover { background: #FEE2E2; }
+        .user-card .product-img-wrapper { width: 36px; height: 36px; }
+        .user-card .product-img-wrapper .product-thumb { width: 36px; height: 36px; }
+        .user-card .tracking-cell { font-size: 11px; }
+
+        #scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; }
+        #scanner-container #reader { width: 100%; max-width: 400px; margin: 0 auto; }
+        #scanner-container .scanner-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+        .scanner-btn { padding: 8px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; transition: all 0.15s; }
+        .scanner-btn.start { background: #10B981; color: #fff; }
+        .scanner-btn.start:hover { background: #059669; }
+        .scanner-btn.stop { background: #EF4444; color: #fff; }
+        .scanner-btn.stop:hover { background: #DC2626; }
+
+        #receive-scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; }
+        #receive-scanner-container #reader-receive { width: 100%; max-width: 400px; margin: 0 auto; }
+
+        .mobile-cards { display: none; }
+        @media (max-width: 767px) {
+            .mobile-cards { display: block; }
+        }
+
+        .scanner-status { font-size: 12px; padding: 4px 12px; border-radius: 6px; display: inline-block; }
+        .scanner-status.scanning { background: #FEF3C7; color: #92400E; }
+        .scanner-status.ready { background: #D1FAE5; color: #065F46; }
+        .scanner-status.error { background: #FEE2E2; color: #991B1B; }
+
+        /* ─── FIXED TABLE LAYOUT ─── */
+        .scan-table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        .scan-table th, .scan-table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding: 6px 8px;
+        }
+        .scan-table .col-tracking { width: 12%; }
+        .scan-table .col-product { width: 22%; }
+        .scan-table .col-user { width: 14%; }
+        .scan-table .col-qty { width: 6%; }
+        .scan-table .col-hsn { width: 8%; }
+        .scan-table .col-subcat { width: 12%; }
+        .scan-table .col-price { width: 9%; }
+        .scan-table .col-status { width: 9%; }
+        .scan-table .col-date { width: 8%; }
+        .scan-table .col-action { width: 8%; }
+
+        @media (max-width: 767px) {
+            .scan-table th, .scan-table td {
+                padding: 4px 6px;
+                font-size: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .scan-table th, .scan-table td {
+                padding: 3px 4px;
+                font-size: 9px;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -266,16 +369,25 @@
             <div class="stats-grid">
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-teal-50 text-teal-600">🚚</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Shipped by Seller</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-teal-600 stat-value-sm" id="statShipped">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
                         <div class="stat-icon bg-yellow-50 text-yellow-600">📦</div>
                         <div>
-                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">WH Stock</p>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">India WH Stock</p>
                             <p class="text-base sm:text-lg lg:text-xl font-bold text-yellow-600 stat-value-sm" id="statStock">0</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-orange-50 text-orange-600">🚚</div>
+                        <div class="stat-icon bg-orange-50 text-orange-600">📤</div>
                         <div>
                             <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Dispatched</p>
                             <p class="text-base sm:text-lg lg:text-xl font-bold text-orange-600 stat-value-sm" id="statDispatched">0</p>
@@ -291,54 +403,51 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
-                    <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-purple-50 text-purple-600">🏷️</div>
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Pkgs</p>
-                            <p class="text-base sm:text-lg lg:text-xl font-bold text-purple-600 stat-value-sm" id="statTotalPackages">0</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- ─── TABS ─── -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
                 <div class="flex flex-wrap gap-1 border-b border-gray-200">
+                    <button class="tab-btn" data-tab="shipped" onclick="switchTab('shipped')">🚚 Shipped by Seller</button>
+                    <button class="tab-btn" data-tab="stock" onclick="switchTab('stock')">📦 India WH Stock</button>
+                    <button class="tab-btn" data-tab="dispatched" onclick="switchTab('dispatched')">📤 Dispatched by India WH</button>
                     <button class="tab-btn active" data-tab="scan" onclick="switchTab('scan')">📷 Scan & Receive</button>
-                    <button class="tab-btn" data-tab="dispatched" onclick="switchTab('dispatched')">🚚 Dispatched by India WH</button>
-                    <button class="tab-btn" data-tab="stock" onclick="switchTab('stock')">📊 India WH Stock</button>
                 </div>
             </div>
 
-            <!-- ─── TAB: SCAN & RECEIVE ─── -->
-            <div id="tab-scan" class="tab-content active">
-                <!-- Scan Input -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
-                        <div class="flex-1 w-full scan-input-wrapper">
-                            <input type="text" id="barcodeInput" placeholder="Scan or enter Tracking Number..." autofocus />
-                            <button onclick="processScan()" class="scan-btn">🔍 Scan</button>
+            <!-- ─── TAB: SHIPPED BY SELLER ─── -->
+            <div id="tab-shipped" class="tab-content">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[100px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="shippedSearch" placeholder="Product, Tracking..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterShipped()" />
                         </div>
-                        <div class="flex items-center gap-3 flex-wrap">
-                            <span class="text-xs text-gray-500">Press <kbd class="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs font-mono">Enter</kbd> to scan</span>
-                            <span id="scanStatus" class="text-xs text-green-600 hidden">✅ Scanned!</span>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">From:</label>
+                            <input type="date" id="shippedDateFrom" class="text-xs sm:text-sm" onchange="filterShipped()" />
+                            <span class="text-gray-400 text-xs">–</span>
+                            <input type="date" id="shippedDateTo" class="text-xs sm:text-sm" onchange="filterShipped()" />
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearShippedFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterShipped()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                            <button onclick="openExportModal('shipped')" class="btn-outline text-xs sm:text-sm">📤 Export</button>
                         </div>
                     </div>
-                    <div id="scanResultContainer" class="mt-3 hidden"></div>
+                    <div id="activeShippedFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
                 </div>
 
-                <!-- Received Shipments -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
-                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Received Shipments</span>
-                            <span id="scanHistoryCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Shipped by Seller</span>
+                            <span id="shippedResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
                                 <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
-                                <select id="scanHistorySize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeScanHistorySize()">
+                                <select id="shippedPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeShippedPageSize()">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50" selected>50</option>
@@ -348,35 +457,115 @@
                         </div>
                     </div>
 
-                    <div class="table-container">
-                        <table class="scan-table w-full text-xs sm:text-sm" id="scanHistoryTable">
+                    <!-- Desktop Table -->
+                    <div class="desktop-table table-container">
+                        <table class="scan-table w-full text-xs sm:text-sm" id="shippedTable">
+                            <colgroup>
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-status"><col class="col-date">
+                            </colgroup>
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Tracking</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Product</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">QTY</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">HSN</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sub-Category</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">INR Price</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Status</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Received</th>
+                                    <th class="text-left">Tracking</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">User</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-left">HSN</th>
+                                    <th class="text-left">Sub-Category</th>
+                                    <th class="text-center">INR Price</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Shipped Date</th>
                                 </tr>
                             </thead>
-                            <tbody id="scanHistoryBody"></tbody>
+                            <tbody id="shippedTableBody"></tbody>
                         </table>
                     </div>
 
+                    <!-- Mobile Cards -->
+                    <div class="mobile-cards" id="shippedCardsContainer"></div>
+
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
-                        <div class="text-gray-500" id="scanHistoryPaginationInfo">Page 1 of 1</div>
-                        <div class="flex gap-1" id="scanHistoryPaginationButtons"></div>
+                        <div class="text-gray-500" id="shippedPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="shippedPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TAB: INDIA WH STOCK ─── -->
+            <div id="tab-stock" class="tab-content">
+                <!-- Scan Input with Barcode Scanner -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
+                        <div class="flex-1 w-full scan-input-wrapper">
+                            <input type="text" id="stockBarcodeInput" placeholder="Scan Tracking to mark Arrived at India WH..." />
+                            <button onclick="processStockScan()" class="scan-btn">📦 Arrive</button>
+                            <button onclick="startScanner()" class="barcode-btn">📷 Scanner</button>
+                        </div>
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <span id="stockScanStatus" class="text-xs text-green-600 hidden">✅ Arrived!</span>
+                        </div>
+                    </div>
+                    <div id="scanner-container" style="display:none;">
+                        <div id="reader"></div>
+                        <div class="scanner-controls">
+                            <button class="scanner-btn stop" onclick="stopScanner()">⏹ Stop Scanner</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-4">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">India WH Stock (Arrived)</span>
+                            <span id="stockResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="stockPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeStockPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Table -->
+                    <div class="desktop-table table-container">
+                        <table class="scan-table w-full text-xs sm:text-sm" id="stockTable">
+                            <colgroup>
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-status"><col class="col-action">
+                            </colgroup>
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="text-left">Tracking</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">User</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-left">HSN</th>
+                                    <th class="text-left">Sub-Category</th>
+                                    <th class="text-center">INR Price</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile Cards -->
+                    <div class="mobile-cards" id="stockCardsContainer"></div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="stockPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="stockPaginationButtons"></div>
                     </div>
                 </div>
             </div>
 
             <!-- ─── TAB: DISPATCHED BY INDIA WH ─── -->
             <div id="tab-dispatched" class="tab-content">
-                <!-- Filters -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                     <div class="filter-section">
                         <div class="filter-group flex-1 min-w-[100px]">
@@ -398,7 +587,6 @@
                     <div id="activeDispatchedFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
                 </div>
 
-                <!-- Dispatched Table -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
@@ -418,24 +606,31 @@
                         </div>
                     </div>
 
-                    <div class="table-container">
+                    <!-- Desktop Table -->
+                    <div class="desktop-table table-container">
                         <table class="scan-table w-full text-xs sm:text-sm" id="dispatchedTable">
+                            <colgroup>
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-status"><col class="col-date">
+                            </colgroup>
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Tracking</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Product</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">QTY</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">HSN</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sub-Category</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">INR Price</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Status</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Dispatched</th>
+                                    <th class="text-left">Tracking</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">User</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-left">HSN</th>
+                                    <th class="text-left">Sub-Category</th>
+                                    <th class="text-center">INR Price</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Dispatched</th>
                                 </tr>
                             </thead>
                             <tbody id="dispatchedTableBody"></tbody>
                         </table>
                     </div>
+
+                    <!-- Mobile Cards -->
+                    <div class="mobile-cards" id="dispatchedCardsContainer"></div>
 
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
                         <div class="text-gray-500" id="dispatchedPaginationInfo">Page 1 of 1</div>
@@ -444,41 +639,38 @@
                 </div>
             </div>
 
-            <!-- ─── TAB: INDIA WH STOCK ─── -->
-            <div id="tab-stock" class="tab-content">
-                <!-- Filters -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
-                    <div class="filter-section">
-                        <div class="filter-group flex-1 min-w-[100px]">
-                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
-                            <input type="text" id="stockSearch" placeholder="Product, Tracking..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterStock()" />
+            <!-- ─── TAB: SCAN & RECEIVE ─── -->
+            <div id="tab-scan" class="tab-content active">
+                <!-- Scan Input -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
+                        <div class="flex-1 w-full scan-input-wrapper">
+                            <input type="text" id="barcodeInput" placeholder="Scan Tracking to mark Received at Nepal WH..." />
+                            <button onclick="processScan()" class="scan-btn">✅ Receive</button>
+                            <button onclick="startReceiveScanner()" class="barcode-btn">📷 Scanner</button>
                         </div>
-                        <div class="filter-group">
-                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">From:</label>
-                            <input type="date" id="stockDateFrom" class="text-xs sm:text-sm" onchange="filterStock()" />
-                            <span class="text-gray-400 text-xs">–</span>
-                            <input type="date" id="stockDateTo" class="text-xs sm:text-sm" onchange="filterStock()" />
-                        </div>
-                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
-                            <button onclick="clearStockFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
-                            <button onclick="filterStock()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
-                            <button onclick="openExportModal('stock')" class="btn-outline text-xs sm:text-sm">📤 Export</button>
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <span id="scanStatus" class="text-xs text-green-600 hidden">✅ Received!</span>
                         </div>
                     </div>
-                    <div id="activeStockFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                    <div id="receive-scanner-container" style="display:none;">
+                        <div id="reader-receive"></div>
+                        <div class="scanner-controls">
+                            <button class="scanner-btn stop" onclick="stopReceiveScanner()">⏹ Stop Scanner</button>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Stock Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mt-4">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
-                            <span class="text-xs sm:text-sm font-semibold text-gray-700">India WH Stock</span>
-                            <span id="stockResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Received Shipments</span>
+                            <span id="scanHistoryCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
                                 <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
-                                <select id="stockPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeStockPageSize()">
+                                <select id="scanHistorySize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeScanHistorySize()">
                                     <option value="10">10</option>
                                     <option value="25">25</option>
                                     <option value="50" selected>50</option>
@@ -488,28 +680,35 @@
                         </div>
                     </div>
 
-                    <div class="table-container">
-                        <table class="scan-table w-full text-xs sm:text-sm" id="stockTable">
+                    <!-- Desktop Table -->
+                    <div class="desktop-table table-container">
+                        <table class="scan-table w-full text-xs sm:text-sm" id="scanHistoryTable">
+                            <colgroup>
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-status"><col class="col-date">
+                            </colgroup>
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Tracking</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Product</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">QTY</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">HSN</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sub-Category</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">INR Price</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Status</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Action</th>
+                                    <th class="text-left">Tracking</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">User</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-left">HSN</th>
+                                    <th class="text-left">Sub-Category</th>
+                                    <th class="text-center">INR Price</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-left">Received</th>
                                 </tr>
                             </thead>
-                            <tbody id="stockTableBody"></tbody>
+                            <tbody id="scanHistoryBody"></tbody>
                         </table>
                     </div>
 
+                    <!-- Mobile Cards -->
+                    <div class="mobile-cards" id="scanCardsContainer"></div>
+
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
-                        <div class="text-gray-500" id="stockPaginationInfo">Page 1 of 1</div>
-                        <div class="flex gap-1" id="stockPaginationButtons"></div>
+                        <div class="text-gray-500" id="scanHistoryPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="scanHistoryPaginationButtons"></div>
                     </div>
                 </div>
             </div>
@@ -577,11 +776,12 @@
 
             function getStatusBadge(status) {
                 const map = {
-                    'pending': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow', label: 'Pending' },
+                    'shipped': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'teal', label: 'Shipped' },
+                    'arrived': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow', label: 'Arrived' },
                     'dispatched': { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'orange', label: 'Dispatched' },
                     'received': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green', label: 'Received' },
                 };
-                const m = map[status] || map.pending;
+                const m = map[status] || map.shipped;
                 return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
             }
 
@@ -626,37 +826,53 @@
 
             // ─── DATA ──────────────────────────────────────────────────────
 
-            // Initial stock (pending at India WH)
-            const INITIAL_STOCK = [
-                { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', dispatchedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage('Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518', subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', dispatchedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage('Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302', subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', dispatchedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage('Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517', subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', dispatchedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage('Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202', subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', dispatchedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage('USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544', subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', dispatchedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage('Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302', subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', dispatchedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage('Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471', subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', dispatchedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage('Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion', quantity: 1, inrPrice: 580.00, status: 'pending' },
-                { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', dispatchedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage('Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506', subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'pending' },
+            const INITIAL_SHIPMENTS = [
+                { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage('Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518', subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage('Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302', subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage('Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517', subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage('Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202', subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage('USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544', subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage('Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302', subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage('Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471', subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage('Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion', quantity: 1, inrPrice: 580.00, status: 'shipped' },
+                { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage('Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506', subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped' },
             ];
 
             // ─── STATE ──────────────────────────────────────────────────────
 
-            let stockItems = [...INITIAL_STOCK];      // pending at India WH
-            let dispatchedItems = [];                 // dispatched by India WH (in transit)
-            let scannedLogs = [];                     // received at Nepal WH
+            let shippedItems = [...INITIAL_SHIPMENTS];
+            let stockItems = [];
+            let dispatchedItems = [];
+            let scannedLogs = [];
 
-            // Pagination state
-            let scanPage = 1, scanSize = 50, scanFiltered = [];
-            let dispatchedPage = 1, dispatchedSize = 50, dispatchedFiltered = [];
+            let shippedPage = 1, shippedSize = 50, shippedFiltered = [];
             let stockPage = 1, stockSize = 50, stockFiltered = [];
+            let dispatchedPage = 1, dispatchedSize = 50, dispatchedFiltered = [];
+            let scanPage = 1, scanSize = 50, scanFiltered = [];
 
             let currentTab = 'scan';
-            let exportTarget = 'stock';
+            let exportTarget = 'shipped';
             let exportColumns = {};
+
+            let html5QrCode = null;
+            let html5QrCodeReceive = null;
 
             // ─── COLUMN DEFINITIONS ────────────────────────────────────────
 
             const COLUMN_DEFS = {
+                shipped: [
+                    { key: 'trackingNumber', label: 'Tracking Number' },
+                    { key: 'productName', label: 'Product Name' },
+                    { key: 'username', label: 'User' },
+                    { key: 'quantity', label: 'Quantity' },
+                    { key: 'hsn', label: 'HSN Code' },
+                    { key: 'subCategory', label: 'Sub-Category' },
+                    { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'status', label: 'Status' },
+                    { key: 'shippedDate', label: 'Shipped Date' },
+                    { key: 'warehouseId', label: 'Warehouse ID' },
+                    { key: 'orderId', label: 'Order ID' },
+                ],
                 stock: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
                     { key: 'productName', label: 'Product Name' },
@@ -666,7 +882,7 @@
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
                     { key: 'status', label: 'Status' },
-                    { key: 'dispatchedDate', label: 'Dispatched Date' },
+                    { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                 ],
@@ -679,7 +895,7 @@
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
                     { key: 'status', label: 'Status' },
-                    { key: 'dispatchedDate', label: 'Dispatched Date' },
+                    { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                 ],
@@ -692,158 +908,486 @@
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
                     { key: 'status', label: 'Status' },
-                    { key: 'receivedAt', label: 'Received At' },
+                    { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
-                ]
+                ],
             };
 
-            // ─── SCAN FUNCTION ─────────────────────────────────────────────
+            // ─── SCAN FUNCTIONS ─────────────────────────────────────────────
+
+            function processStockScan() {
+                const input = document.getElementById('stockBarcodeInput');
+                const tracking = input.value.trim();
+                if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
+                const idx = shippedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
+                if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); input.value = ''; input.focus(); return; }
+                const item = shippedItems[idx];
+                shippedItems.splice(idx, 1);
+                const arrived = { ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                stockItems.push(arrived);
+                renderAll();
+                showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH`);
+                input.value = '';
+                input.focus();
+                const statusEl = document.getElementById('stockScanStatus');
+                statusEl.classList.remove('hidden');
+                statusEl.textContent = `✅ ${tracking} arrived!`;
+                setTimeout(() => { statusEl.classList.add('hidden'); }, 3000);
+                stopScanner();
+            }
+
+            function dispatchShipment(tracking) {
+                const idx = stockItems.findIndex(s => s.trackingNumber === tracking);
+                if (idx === -1) { showToast('❌', 'Shipment not found in India WH stock'); return; }
+                const item = stockItems[idx];
+                stockItems.splice(idx, 1);
+                const dispatched = { ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                dispatchedItems.push(dispatched);
+                renderAll();
+                showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
+            }
 
             function processScan() {
                 const input = document.getElementById('barcodeInput');
                 const tracking = input.value.trim();
-
-                if (!tracking) {
-                    showToast('⚠️', 'Please enter a tracking number');
-                    return;
-                }
-
-                // Find in dispatched items (in transit)
+                if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
                 const idx = dispatchedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
-                if (idx === -1) {
-                    showToast('❌', `No dispatched shipment found for tracking: ${tracking}`);
-                    input.value = '';
-                    input.focus();
-                    return;
-                }
-
-                const shipment = dispatchedItems[idx];
+                if (idx === -1) { showToast('❌', `No dispatched shipment found for tracking: ${tracking}`); input.value = ''; input.focus(); return; }
+                const item = dispatchedItems[idx];
                 dispatchedItems.splice(idx, 1);
-
-                // Add to received logs
-                const log = {
-                    id: generateId(),
-                    trackingNumber: shipment.trackingNumber,
-                    warehouseId: shipment.warehouseId,
-                    orderId: shipment.orderId,
-                    dispatchedDate: shipment.dispatchedDate,
-                    productName: shipment.productName,
-                    productLink: shipment.productLink,
-                    productImage: shipment.productImage,
-                    username: shipment.username,
-                    userId: shipment.userId,
-                    hsn: shipment.hsn,
-                    subCategory: shipment.subCategory,
-                    quantity: shipment.quantity,
-                    inrPrice: shipment.inrPrice,
-                    status: 'received',
-                    receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                };
-                scannedLogs.push(log);
-
+                const received = { ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) };
+                scannedLogs.push(received);
                 renderAll();
-                showToast('✅', `Shipment ${tracking} received successfully!`);
-
+                showToast('✅', `Shipment ${tracking} RECEIVED at Nepal WH`);
                 input.value = '';
                 input.focus();
-
                 const statusEl = document.getElementById('scanStatus');
                 statusEl.classList.remove('hidden');
                 statusEl.textContent = `✅ ${tracking} received!`;
                 setTimeout(() => { statusEl.classList.add('hidden'); }, 3000);
+                stopReceiveScanner();
             }
 
-            // ─── DISPATCH ACTION ──────────────────────────────────────────
+            // ─── BARCODE SCANNER ───────────────────────────────────────────
 
-            function dispatchShipment(tracking) {
-                const idx = stockItems.findIndex(s => s.trackingNumber === tracking);
-                if (idx === -1) {
-                    showToast('❌', 'Shipment not found in stock');
+            function startScanner() {
+                const container = document.getElementById('scanner-container');
+                container.style.display = 'block';
+
+                if (typeof Html5Qrcode === 'undefined') {
+                    showToast('⚠️', 'Scanner library not loaded. Please refresh and try again.');
                     return;
                 }
-                const item = stockItems[idx];
-                stockItems.splice(idx, 1);
 
-                // Add to dispatched
-                const dispatched = {
-                    ...item,
-                    status: 'dispatched',
-                    dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                };
-                dispatchedItems.push(dispatched);
+                if (html5QrCode) {
+                    html5QrCode.clear();
+                    html5QrCode = null;
+                }
 
-                renderAll();
-                showToast('🚚', `Shipment ${tracking} dispatched from India WH`);
+                try {
+                    html5QrCode = new Html5Qrcode("reader");
+                    html5QrCode.start(
+                        { facingMode: "environment" },
+                        {
+                            fps: 15,
+                            qrbox: { width: 250, height: 250 },
+                            aspectRatio: 1.0,
+                            formatsToSupport: [
+                                Html5QrcodeSupportedFormats.QR_CODE,
+                                Html5QrcodeSupportedFormats.CODE_128,
+                                Html5QrcodeSupportedFormats.CODE_39,
+                                Html5QrcodeSupportedFormats.EAN_13,
+                                Html5QrcodeSupportedFormats.EAN_8,
+                                Html5QrcodeSupportedFormats.UPC_A,
+                                Html5QrcodeSupportedFormats.UPC_E,
+                                Html5QrcodeSupportedFormats.ISBN,
+                                Html5QrcodeSupportedFormats.ISSN,
+                                Html5QrcodeSupportedFormats.CODE_93,
+                                Html5QrcodeSupportedFormats.PDF_417
+                            ]
+                        },
+                        function(decodedText) {
+                            document.getElementById('stockBarcodeInput').value = decodedText;
+                            processStockScan();
+                        },
+                        function(errorMessage) { /* ignore */ }
+                    ).catch(function(err) {
+                        showToast('⚠️', 'Camera access denied or not available: ' + err);
+                        container.style.display = 'none';
+                    });
+                } catch (e) {
+                    showToast('⚠️', 'Error starting scanner: ' + e.message);
+                    container.style.display = 'none';
+                }
+            }
+
+            function stopScanner() {
+                if (html5QrCode) {
+                    html5QrCode.stop().then(function() {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                        document.getElementById('scanner-container').style.display = 'none';
+                    }).catch(function(err) {});
+                } else {
+                    document.getElementById('scanner-container').style.display = 'none';
+                }
+            }
+
+            function startReceiveScanner() {
+                const container = document.getElementById('receive-scanner-container');
+                container.style.display = 'block';
+
+                if (typeof Html5Qrcode === 'undefined') {
+                    showToast('⚠️', 'Scanner library not loaded. Please refresh and try again.');
+                    return;
+                }
+
+                if (html5QrCodeReceive) {
+                    html5QrCodeReceive.clear();
+                    html5QrCodeReceive = null;
+                }
+
+                try {
+                    html5QrCodeReceive = new Html5Qrcode("reader-receive");
+                    html5QrCodeReceive.start(
+                        { facingMode: "environment" },
+                        {
+                            fps: 15,
+                            qrbox: { width: 250, height: 250 },
+                            aspectRatio: 1.0,
+                            formatsToSupport: [
+                                Html5QrcodeSupportedFormats.QR_CODE,
+                                Html5QrcodeSupportedFormats.CODE_128,
+                                Html5QrcodeSupportedFormats.CODE_39,
+                                Html5QrcodeSupportedFormats.EAN_13,
+                                Html5QrcodeSupportedFormats.EAN_8,
+                                Html5QrcodeSupportedFormats.UPC_A,
+                                Html5QrcodeSupportedFormats.UPC_E,
+                                Html5QrcodeSupportedFormats.ISBN,
+                                Html5QrcodeSupportedFormats.ISSN,
+                                Html5QrcodeSupportedFormats.CODE_93,
+                                Html5QrcodeSupportedFormats.PDF_417
+                            ]
+                        },
+                        function(decodedText) {
+                            document.getElementById('barcodeInput').value = decodedText;
+                            processScan();
+                        },
+                        function(errorMessage) { /* ignore */ }
+                    ).catch(function(err) {
+                        showToast('⚠️', 'Camera access denied or not available: ' + err);
+                        container.style.display = 'none';
+                    });
+                } catch (e) {
+                    showToast('⚠️', 'Error starting scanner: ' + e.message);
+                    container.style.display = 'none';
+                }
+            }
+
+            function stopReceiveScanner() {
+                if (html5QrCodeReceive) {
+                    html5QrCodeReceive.stop().then(function() {
+                        html5QrCodeReceive.clear();
+                        html5QrCodeReceive = null;
+                        document.getElementById('receive-scanner-container').style.display = 'none';
+                    }).catch(function(err) {});
+                } else {
+                    document.getElementById('receive-scanner-container').style.display = 'none';
+                }
             }
 
             // ─── RENDER FUNCTIONS ─────────────────────────────────────────
 
             function renderAll() {
-                renderScanHistory();
-                renderDispatchedTable();
-                renderStockTable();
+                renderShippedTableAndCards();
+                renderStockTableAndCards();
+                renderDispatchedTableAndCards();
+                renderScanTableAndCards();
                 updateStats();
-                // Re-apply filters
-                if (currentTab === 'scan') { renderScanHistory(); }
-                else if (currentTab === 'dispatched') { filterDispatched(); }
-                else if (currentTab === 'stock') { filterStock(); }
+                if (currentTab === 'shipped') filterShipped();
+                else if (currentTab === 'stock') filterStock();
+                else if (currentTab === 'dispatched') filterDispatched();
+                else if (currentTab === 'scan') renderScanTableAndCards();
             }
 
-            // ─── SCAN HISTORY ─────────────────────────────────────────────
+            function generateCards(data, statusKey, actionButtons) {
+                if (!data || data.length === 0) return '<div class="text-center text-gray-400 py-4">No items found</div>';
+                return data.map(item => {
+                    const statusBadge = getStatusBadge(item[statusKey] || item.status);
+                    const color = getAvatarColor(item.username);
+                    const initials = getInitials(item.username);
+                    return `
+                        <div class="user-card">
+                            <div class="card-header">
+                                <div class="flex items-center gap-2">
+                                    <span class="tracking-cell text-sm">${item.trackingNumber}</span>
+                                    ${statusBadge}
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-row">
+                                    <span class="label">Product</span>
+                                    <span class="value">${productCellHtml(item)}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">User</span>
+                                    <span class="value">${userCellHtml(item.username, item.userId)}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">QTY</span>
+                                    <span class="value">${item.quantity}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">HSN</span>
+                                    <span class="value">${item.hsn}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">Sub-Cat</span>
+                                    <span class="value">${item.subCategory}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">INR Price</span>
+                                    <span class="value">₹ ${item.inrPrice.toFixed(2)}</span>
+                                </div>
+                                <div class="card-row">
+                                    <span class="label">Date</span>
+                                    <span class="value">${item.shippedDate || item.receivedAt || item.dispatchedAt || item.arrivedAt || ''}</span>
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                ${actionButtons(item)}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
 
-            function renderScanHistory() {
-                scanFiltered = [...scannedLogs].sort((a,b) => new Date(b.receivedAt) - new Date(a.receivedAt));
-                const start = (scanPage - 1) * scanSize;
-                const end = Math.min(start + scanSize, scanFiltered.length);
-                const pageData = scanFiltered.slice(start, end);
-                const tbody = document.getElementById('scanHistoryBody');
+            function shippedActionButtons(item) {
+                return `<button onclick="processStockScanManual('${item.trackingNumber}')" class="action-btn success-btn btn-sm" style="font-size:10px;padding:2px 8px;">📦 Arrive</button>`;
+            }
 
-                if (pageData.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No received shipments yet</td></tr>`;
-                    document.getElementById('scanHistoryCount').textContent = '0 entries';
-                    updateScanPagination();
-                    return;
+            function stockActionButtons(item) {
+                return `<button onclick="dispatchShipment('${item.trackingNumber}')" class="action-btn orange-btn btn-sm" style="font-size:10px;padding:2px 8px;">📤 Dispatch</button>`;
+            }
+
+            function dispatchedActionButtons(item) {
+                return `<button onclick="manualReceive('${item.trackingNumber}')" class="action-btn primary-btn btn-sm" style="font-size:10px;padding:2px 8px;">📥 Receive</button>`;
+            }
+
+            function scanActionButtons(item) {
+                return `<button class="action-btn success-btn btn-sm" style="font-size:10px;padding:2px 8px;">✅ Received</button>`;
+            }
+
+            // ─── SHIPPED ────────────────────────────────────────────────────
+
+            function filterShipped() {
+                const search = document.getElementById('shippedSearch').value.toLowerCase().trim();
+                const from = document.getElementById('shippedDateFrom').value;
+                const to = document.getElementById('shippedDateTo').value;
+                let filtered = [...shippedItems];
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.trackingNumber.toLowerCase().includes(search) ||
+                        item.username.toLowerCase().includes(search)
+                    );
                 }
-
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="scan-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                        <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                        <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.status)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.receivedAt}</td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('scanHistoryCount').textContent = `${scannedLogs.length} entries`;
-                updateScanPagination();
+                if (from) { filtered = filtered.filter(item => new Date(item.shippedDate) >= new Date(from)); }
+                if (to) { filtered = filtered.filter(item => new Date(item.shippedDate) <= new Date(to + 'T23:59:59')); }
+                shippedFiltered = filtered;
+                shippedPage = 1;
+                renderShippedTableAndCards();
+                updateActiveShippedFilters();
             }
 
-            function updateScanPagination() {
-                const total = Math.ceil(scanFiltered.length / scanSize) || 1;
-                document.getElementById('scanHistoryPaginationInfo').textContent = `Page ${scanPage} of ${total} (${scanFiltered.length} entries)`;
-                const btns = document.getElementById('scanHistoryPaginationButtons');
+            function clearShippedFilters() {
+                document.getElementById('shippedSearch').value = '';
+                document.getElementById('shippedDateFrom').value = '';
+                document.getElementById('shippedDateTo').value = '';
+                filterShipped();
+            }
+
+            function updateActiveShippedFilters() {
+                const container = document.getElementById('activeShippedFilters');
+                let html = '';
+                const search = document.getElementById('shippedSearch').value.trim();
+                const from = document.getElementById('shippedDateFrom').value;
+                const to = document.getElementById('shippedDateTo').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('shippedSearch').value='';filterShipped();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (from || to) {
+                    let ds = '';
+                    if (from && to) ds = `${from} → ${to}`;
+                    else if (from) ds = `From ${from}`;
+                    else ds = `Until ${to}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${ds} <button onclick="document.getElementById('shippedDateFrom').value='';document.getElementById('shippedDateTo').value='';filterShipped();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            function renderShippedTableAndCards() {
+                const start = (shippedPage - 1) * shippedSize;
+                const end = Math.min(start + shippedSize, shippedFiltered.length);
+                const pageData = shippedFiltered.slice(start, end);
+                const tbody = document.getElementById('shippedTableBody');
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No shipments from seller</td></tr>`;
+                    document.getElementById('shippedResultCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="scan-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('shippedResultCount').textContent =
+                        `Showing ${pageData.length} of ${shippedFiltered.length} entries`;
+                }
+                const cardsContainer = document.getElementById('shippedCardsContainer');
+                cardsContainer.innerHTML = generateCards(pageData, 'status', shippedActionButtons);
+                updateShippedPagination();
+            }
+
+            function processStockScanManual(tracking) {
+                document.getElementById('stockBarcodeInput').value = tracking;
+                processStockScan();
+            }
+
+            function updateShippedPagination() {
+                const total = Math.ceil(shippedFiltered.length / shippedSize) || 1;
+                document.getElementById('shippedPaginationInfo').textContent =
+                    `Page ${shippedPage} of ${total} (${shippedFiltered.length} entries)`;
+                const btns = document.getElementById('shippedPaginationButtons');
                 btns.innerHTML = '';
                 if (total <= 1) return;
                 for (let i = 1; i <= total; i++) {
                     const btn = document.createElement('button');
                     btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === scanPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === shippedPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { scanPage = i; renderScanHistory(); };
+                    btn.onclick = () => { shippedPage = i; renderShippedTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
 
-            function changeScanHistorySize() {
-                scanSize = parseInt(document.getElementById('scanHistorySize').value, 10);
-                scanPage = 1;
-                renderScanHistory();
+            function changeShippedPageSize() {
+                shippedSize = parseInt(document.getElementById('shippedPageSize').value, 10);
+                shippedPage = 1;
+                renderShippedTableAndCards();
+            }
+
+            // ─── STOCK ─────────────────────────────────────────────────────
+
+            function filterStock() {
+                const search = document.getElementById('stockSearch')?.value.toLowerCase().trim() || '';
+                const from = document.getElementById('stockDateFrom')?.value || '';
+                const to = document.getElementById('stockDateTo')?.value || '';
+                let filtered = [...stockItems];
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.trackingNumber.toLowerCase().includes(search) ||
+                        item.username.toLowerCase().includes(search)
+                    );
+                }
+                if (from) { filtered = filtered.filter(item => new Date(item.shippedDate) >= new Date(from)); }
+                if (to) { filtered = filtered.filter(item => new Date(item.shippedDate) <= new Date(to + 'T23:59:59')); }
+                stockFiltered = filtered;
+                stockPage = 1;
+                renderStockTableAndCards();
+                updateActiveStockFilters();
+            }
+
+            function clearStockFilters() {
+                document.getElementById('stockSearch').value = '';
+                document.getElementById('stockDateFrom').value = '';
+                document.getElementById('stockDateTo').value = '';
+                filterStock();
+            }
+
+            function updateActiveStockFilters() {
+                const container = document.getElementById('activeStockFilters');
+                let html = '';
+                const search = document.getElementById('stockSearch')?.value.trim() || '';
+                const from = document.getElementById('stockDateFrom')?.value || '';
+                const to = document.getElementById('stockDateTo')?.value || '';
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('stockSearch').value='';filterStock();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (from || to) {
+                    let ds = '';
+                    if (from && to) ds = `${from} → ${to}`;
+                    else if (from) ds = `From ${from}`;
+                    else ds = `Until ${to}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${ds} <button onclick="document.getElementById('stockDateFrom').value='';document.getElementById('stockDateTo').value='';filterStock();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            function renderStockTableAndCards() {
+                const start = (stockPage - 1) * stockSize;
+                const end = Math.min(start + stockSize, stockFiltered.length);
+                const pageData = stockFiltered.slice(start, end);
+                const tbody = document.getElementById('stockTableBody');
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No items in India WH Stock</td></tr>`;
+                    document.getElementById('stockResultCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="scan-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center">
+                                <button onclick="dispatchShipment('${item.trackingNumber}')" class="btn-sm btn-sm-disptach" style="font-size:10px;padding:2px 8px;">📤 Dispatch</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('stockResultCount').textContent =
+                        `Showing ${pageData.length} of ${stockFiltered.length} entries`;
+                }
+                const cardsContainer = document.getElementById('stockCardsContainer');
+                cardsContainer.innerHTML = generateCards(pageData, 'status', stockActionButtons);
+                updateStockPagination();
+            }
+
+            function updateStockPagination() {
+                const total = Math.ceil(stockFiltered.length / stockSize) || 1;
+                document.getElementById('stockPaginationInfo').textContent =
+                    `Page ${stockPage} of ${total} (${stockFiltered.length} entries)`;
+                const btns = document.getElementById('stockPaginationButtons');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === stockPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { stockPage = i; renderStockTableAndCards(); };
+                    btns.appendChild(btn);
+                }
+            }
+
+            function changeStockPageSize() {
+                stockSize = parseInt(document.getElementById('stockPageSize').value, 10);
+                stockPage = 1;
+                renderStockTableAndCards();
             }
 
             // ─── DISPATCHED ───────────────────────────────────────────────
@@ -852,7 +1396,6 @@
                 const search = document.getElementById('dispatchedSearch').value.toLowerCase().trim();
                 const from = document.getElementById('dispatchedDateFrom').value;
                 const to = document.getElementById('dispatchedDateTo').value;
-
                 let filtered = [...dispatchedItems];
                 if (search) {
                     filtered = filtered.filter(item =>
@@ -861,15 +1404,11 @@
                         item.username.toLowerCase().includes(search)
                     );
                 }
-                if (from) {
-                    filtered = filtered.filter(item => new Date(item.dispatchedDate) >= new Date(from));
-                }
-                if (to) {
-                    filtered = filtered.filter(item => new Date(item.dispatchedDate) <= new Date(to + 'T23:59:59'));
-                }
+                if (from) { filtered = filtered.filter(item => new Date(item.shippedDate) >= new Date(from)); }
+                if (to) { filtered = filtered.filter(item => new Date(item.shippedDate) <= new Date(to + 'T23:59:59')); }
                 dispatchedFiltered = filtered;
                 dispatchedPage = 1;
-                renderDispatchedTable();
+                renderDispatchedTableAndCards();
                 updateActiveDispatchedFilters();
             }
 
@@ -899,37 +1438,40 @@
                 container.innerHTML = html || '';
             }
 
-            function renderDispatchedTable() {
+            function renderDispatchedTableAndCards() {
                 const start = (dispatchedPage - 1) * dispatchedSize;
                 const end = Math.min(start + dispatchedSize, dispatchedFiltered.length);
                 const pageData = dispatchedFiltered.slice(start, end);
                 const tbody = document.getElementById('dispatchedTableBody');
-
                 if (pageData.length === 0) {
                     tbody.innerHTML =
                         `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No dispatched shipments</td></tr>`;
                     document.getElementById('dispatchedResultCount').textContent = '0 entries';
-                    updateDispatchedPagination();
-                    return;
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="scan-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('dispatchedResultCount').textContent =
+                        `Showing ${pageData.length} of ${dispatchedFiltered.length} entries`;
                 }
-
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="scan-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                        <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                        <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.dispatchedDate}</td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('dispatchedResultCount').textContent =
-                    `Showing ${pageData.length} of ${dispatchedFiltered.length} entries`;
+                const cardsContainer = document.getElementById('dispatchedCardsContainer');
+                cardsContainer.innerHTML = generateCards(pageData, 'status', dispatchedActionButtons);
                 updateDispatchedPagination();
+            }
+
+            function manualReceive(tracking) {
+                document.getElementById('barcodeInput').value = tracking;
+                processScan();
             }
 
             function updateDispatchedPagination() {
@@ -944,7 +1486,7 @@
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === dispatchedPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { dispatchedPage = i; renderDispatchedTable(); };
+                    btn.onclick = () => { dispatchedPage = i; renderDispatchedTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
@@ -952,135 +1494,72 @@
             function changeDispatchedPageSize() {
                 dispatchedSize = parseInt(document.getElementById('dispatchedPageSize').value, 10);
                 dispatchedPage = 1;
-                renderDispatchedTable();
+                renderDispatchedTableAndCards();
             }
 
-            // ─── STOCK ─────────────────────────────────────────────────────
+            // ─── SCAN HISTORY ─────────────────────────────────────────────
 
-            function filterStock() {
-                const search = document.getElementById('stockSearch').value.toLowerCase().trim();
-                const from = document.getElementById('stockDateFrom').value;
-                const to = document.getElementById('stockDateTo').value;
-
-                let filtered = [...stockItems];
-                if (search) {
-                    filtered = filtered.filter(item =>
-                        item.productName.toLowerCase().includes(search) ||
-                        item.trackingNumber.toLowerCase().includes(search) ||
-                        item.username.toLowerCase().includes(search)
-                    );
-                }
-                if (from) {
-                    filtered = filtered.filter(item => new Date(item.dispatchedDate) >= new Date(from));
-                }
-                if (to) {
-                    filtered = filtered.filter(item => new Date(item.dispatchedDate) <= new Date(to + 'T23:59:59'));
-                }
-                stockFiltered = filtered;
-                stockPage = 1;
-                renderStockTable();
-                updateActiveStockFilters();
-            }
-
-            function clearStockFilters() {
-                document.getElementById('stockSearch').value = '';
-                document.getElementById('stockDateFrom').value = '';
-                document.getElementById('stockDateTo').value = '';
-                filterStock();
-            }
-
-            function updateActiveStockFilters() {
-                const container = document.getElementById('activeStockFilters');
-                let html = '';
-                const search = document.getElementById('stockSearch').value.trim();
-                const from = document.getElementById('stockDateFrom').value;
-                const to = document.getElementById('stockDateTo').value;
-                if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('stockSearch').value='';filterStock();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (from || to) {
-                    let ds = '';
-                    if (from && to) ds = `${from} → ${to}`;
-                    else if (from) ds = `From ${from}`;
-                    else ds = `Until ${to}`;
-                    html +=
-                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${ds} <button onclick="document.getElementById('stockDateFrom').value='';document.getElementById('stockDateTo').value='';filterStock();" class="hover:text-red-500 ml-1">×</button></span>`;
-                }
-                container.innerHTML = html || '';
-            }
-
-            function renderStockTable() {
-                const start = (stockPage - 1) * stockSize;
-                const end = Math.min(start + stockSize, stockFiltered.length);
-                const pageData = stockFiltered.slice(start, end);
-                const tbody = document.getElementById('stockTableBody');
-
+            function renderScanTableAndCards() {
+                scanFiltered = [...scannedLogs].sort((a,b) => new Date(b.receivedAt) - new Date(a.receivedAt));
+                const start = (scanPage - 1) * scanSize;
+                const end = Math.min(start + scanSize, scanFiltered.length);
+                const pageData = scanFiltered.slice(start, end);
+                const tbody = document.getElementById('scanHistoryBody');
                 if (pageData.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No stock items found</td></tr>`;
-                    document.getElementById('stockResultCount').textContent = '0 entries';
-                    updateStockPagination();
-                    return;
+                        `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No received shipments yet</td></tr>`;
+                    document.getElementById('scanHistoryCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="scan-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                            <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.status)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.receivedAt}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('scanHistoryCount').textContent = `${scannedLogs.length} entries`;
                 }
-
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="scan-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
-                        <td class="px-2 py-1 sm:py-2">${productCellHtml(item)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
-                        <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center">
-                            <button onclick="dispatchShipment('${item.trackingNumber}')" class="btn-sm btn-sm-success">🚚 Dispatch</button>
-                        </td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('stockResultCount').textContent =
-                    `Showing ${pageData.length} of ${stockFiltered.length} entries`;
-                updateStockPagination();
+                const cardsContainer = document.getElementById('scanCardsContainer');
+                cardsContainer.innerHTML = generateCards(pageData, 'status', scanActionButtons);
+                updateScanPagination();
             }
 
-            function updateStockPagination() {
-                const total = Math.ceil(stockFiltered.length / stockSize) || 1;
-                document.getElementById('stockPaginationInfo').textContent =
-                    `Page ${stockPage} of ${total} (${stockFiltered.length} entries)`;
-                const btns = document.getElementById('stockPaginationButtons');
+            function updateScanPagination() {
+                const total = Math.ceil(scanFiltered.length / scanSize) || 1;
+                document.getElementById('scanHistoryPaginationInfo').textContent =
+                    `Page ${scanPage} of ${total} (${scanFiltered.length} entries)`;
+                const btns = document.getElementById('scanHistoryPaginationButtons');
                 btns.innerHTML = '';
                 if (total <= 1) return;
                 for (let i = 1; i <= total; i++) {
                     const btn = document.createElement('button');
                     btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === stockPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === scanPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
-                    btn.onclick = () => { stockPage = i; renderStockTable(); };
+                    btn.onclick = () => { scanPage = i; renderScanTableAndCards(); };
                     btns.appendChild(btn);
                 }
             }
 
-            function changeStockPageSize() {
-                stockSize = parseInt(document.getElementById('stockPageSize').value, 10);
-                stockPage = 1;
-                renderStockTable();
+            function changeScanHistorySize() {
+                scanSize = parseInt(document.getElementById('scanHistorySize').value, 10);
+                scanPage = 1;
+                renderScanTableAndCards();
             }
 
             // ─── STATS ─────────────────────────────────────────────────────
 
             function updateStats() {
-                const stockCount = stockItems.length;
-                const dispatchedCount = dispatchedItems.length;
-                const receivedCount = scannedLogs.length;
-                let totalPkgs = 0;
-                stockItems.forEach(i => totalPkgs += i.quantity);
-                dispatchedItems.forEach(i => totalPkgs += i.quantity);
-                scannedLogs.forEach(i => totalPkgs += i.quantity);
-
-                document.getElementById('statStock').textContent = stockCount;
-                document.getElementById('statDispatched').textContent = dispatchedCount;
-                document.getElementById('statReceived').textContent = receivedCount;
-                document.getElementById('statTotalPackages').textContent = totalPkgs;
+                document.getElementById('statShipped').textContent = shippedItems.length;
+                document.getElementById('statStock').textContent = stockItems.length;
+                document.getElementById('statDispatched').textContent = dispatchedItems.length;
+                document.getElementById('statReceived').textContent = scannedLogs.length;
             }
 
             // ─── TABS ──────────────────────────────────────────────────────
@@ -1093,24 +1572,29 @@
                 document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
                 document.getElementById(`tab-${tab}`).classList.add('active');
 
-                if (tab === 'scan') { renderScanHistory(); setTimeout(() => document.getElementById('barcodeInput').focus(), 100); }
-                else if (tab === 'dispatched') { filterDispatched(); }
-                else if (tab === 'stock') { filterStock(); }
+                if (tab === 'shipped') { filterShipped();
+                    setTimeout(() => document.getElementById('shippedSearch')?.focus(), 100); } else if (tab === 'stock') {
+                    filterStock();
+                    setTimeout(() => document.getElementById('stockBarcodeInput')?.focus(), 100); } else if (tab ===
+                    'dispatched') { filterDispatched(); } else if (tab === 'scan') { renderScanTableAndCards();
+                    setTimeout(() => document.getElementById('barcodeInput')?.focus(), 100); }
             }
 
             // ─── EXPORT ────────────────────────────────────────────────────
 
             function openExportModal(target) {
                 exportTarget = target;
-                const tabNames = { stock: 'India WH Stock', dispatched: 'Dispatched by India WH', scan: 'Scan & Receive' };
+                const tabNames = {
+                    shipped: 'Shipped by Seller',
+                    stock: 'India WH Stock',
+                    dispatched: 'Dispatched by India WH',
+                    scan: 'Scan & Receive'
+                };
                 document.getElementById('exportTabName').textContent = tabNames[target] || target;
-
                 const container = document.getElementById('exportColumnsContainer');
-                const cols = COLUMN_DEFS[target] || COLUMN_DEFS.stock;
-                // Set all checked by default
+                const cols = COLUMN_DEFS[target] || COLUMN_DEFS.shipped;
                 exportColumns = {};
                 cols.forEach(c => { exportColumns[c.key] = true; });
-
                 container.innerHTML = cols.map(c =>
                     `<label><input type="checkbox" checked data-key="${c.key}" onchange="toggleExportColumn('${c.key}')" /> ${c.label}</label>`
                 ).join('');
@@ -1131,7 +1615,8 @@
 
             function getExportData(target) {
                 let data = [];
-                if (target === 'stock') data = stockFiltered;
+                if (target === 'shipped') data = shippedFiltered;
+                else if (target === 'stock') data = stockFiltered;
                 else if (target === 'dispatched') data = dispatchedFiltered;
                 else if (target === 'scan') data = scanFiltered;
                 return data;
@@ -1139,26 +1624,18 @@
 
             function exportWithColumns(format) {
                 const data = getExportData(exportTarget);
-                if (!data || data.length === 0) {
-                    showToast('⚠️', 'No data to export');
-                    return;
-                }
-
-                const cols = COLUMN_DEFS[exportTarget] || COLUMN_DEFS.stock;
+                if (!data || data.length === 0) { showToast('⚠️', 'No data to export'); return; }
+                const cols = COLUMN_DEFS[exportTarget] || COLUMN_DEFS.shipped;
                 const selected = cols.filter(c => exportColumns[c.key]);
-                if (selected.length === 0) {
-                    showToast('⚠️', 'Please select at least one column');
-                    return;
-                }
-
-                // Build CSV
+                if (selected.length === 0) { showToast('⚠️', 'Please select at least one column'); return; }
                 const headers = selected.map(c => c.label);
                 let csv = headers.join(',') + '\n';
                 data.forEach(item => {
                     const row = selected.map(c => {
                         let val = item[c.key] !== undefined ? item[c.key] : '';
                         if (c.key === 'status') {
-                            const map = { pending: 'Pending', dispatched: 'Dispatched', received: 'Received' };
+                            const map = { shipped: 'Shipped', arrived: 'Arrived', dispatched: 'Dispatched',
+                                received: 'Received' };
                             val = map[val] || val;
                         }
                         if (c.key === 'productName' || c.key === 'username') {
@@ -1168,33 +1645,34 @@
                     });
                     csv += row.join(',') + '\n';
                 });
-
                 if (format === 'excel') {
                     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download =
-                    `export_${exportTarget}_${new Date().toISOString().slice(0,10)}.csv`;
+                    a.download = `export_${exportTarget}_${new Date().toISOString().slice(0,10)}.csv`;
                     a.click();
                     showToast('✅', 'Excel exported successfully!');
                 } else {
-                    // PDF using print window
                     const printDate = new Date().toLocaleString();
                     const tableHtml = data.map(item => {
                         const cells = selected.map(c => {
                             let val = item[c.key] !== undefined ? item[c.key] : '';
                             if (c.key === 'status') {
-                                const map = { pending: 'Pending', dispatched: 'Dispatched', received: 'Received' };
+                                const map = { shipped: 'Shipped', arrived: 'Arrived', dispatched: 'Dispatched',
+                                    received: 'Received' };
                                 val = map[val] || val;
                             }
                             return `<td style="padding:4px 8px;border:1px solid #ddd;text-align:left;font-size:11px;">${val}</td>`;
                         }).join('');
                         return `<tr>${cells}</tr>`;
                     }).join('');
-
-                    const titleMap = { stock: 'India WH Stock', dispatched: 'Dispatched by India WH', scan: 'Scan & Receive' };
+                    const titleMap = {
+                        shipped: 'Shipped by Seller',
+                        stock: 'India WH Stock',
+                        dispatched: 'Dispatched by India WH',
+                        scan: 'Scan & Receive'
+                    };
                     const title = titleMap[exportTarget] || exportTarget;
-
                     const printContent = `
                         <html><head><title>${title} Report</title>
                         <style>
@@ -1231,7 +1709,7 @@
 
             function refreshData() {
                 renderAll();
-                document.getElementById('barcodeInput').focus();
+                document.getElementById('barcodeInput')?.focus();
                 showToast('🔄', 'Data refreshed');
             }
 
@@ -1269,6 +1747,10 @@
 
             document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
             document.addEventListener('keydown', e => {
+                if (e.key === 'Enter' && document.activeElement === document.getElementById('stockBarcodeInput')) {
+                    e.preventDefault();
+                    processStockScan();
+                }
                 if (e.key === 'Enter' && document.activeElement === document.getElementById('barcodeInput')) {
                     e.preventDefault();
                     processScan();
@@ -1278,9 +1760,15 @@
 
             // ─── EXPOSE GLOBALS ────────────────────────────────────────────
 
+            window.processStockScan = processStockScan;
+            window.processStockScanManual = processStockScanManual;
             window.processScan = processScan;
             window.dispatchShipment = dispatchShipment;
+            window.manualReceive = manualReceive;
             window.switchTab = switchTab;
+            window.filterShipped = filterShipped;
+            window.clearShippedFilters = clearShippedFilters;
+            window.changeShippedPageSize = changeShippedPageSize;
             window.filterStock = filterStock;
             window.clearStockFilters = clearStockFilters;
             window.changeStockPageSize = changeStockPageSize;
@@ -1296,11 +1784,24 @@
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
             window.showToast = showToast;
+            window.startScanner = startScanner;
+            window.stopScanner = stopScanner;
+            window.startReceiveScanner = startReceiveScanner;
+            window.stopReceiveScanner = stopReceiveScanner;
 
             // ─── INIT ──────────────────────────────────────────────────────
 
-            // Move some items to dispatched for demo
-            const demoDispatch = ['TRK-2026-001234', 'TRK-2026-001235'];
+            // Demo data movement
+            const demoArrive = ['TRK-2026-001234', 'TRK-2026-001235'];
+            demoArrive.forEach(tracking => {
+                const idx = shippedItems.findIndex(s => s.trackingNumber === tracking);
+                if (idx > -1) {
+                    const item = shippedItems[idx];
+                    shippedItems.splice(idx, 1);
+                    stockItems.push({ ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
+                }
+            });
+            const demoDispatch = ['TRK-2026-001236', 'TRK-2026-001237'];
             demoDispatch.forEach(tracking => {
                 const idx = stockItems.findIndex(s => s.trackingNumber === tracking);
                 if (idx > -1) {
@@ -1309,24 +1810,18 @@
                     dispatchedItems.push({ ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
                 }
             });
-
-            // Move one to received for demo
-            const demoReceive = ['TRK-2026-001236'];
+            const demoReceive = ['TRK-2026-001238'];
             demoReceive.forEach(tracking => {
                 const idx = dispatchedItems.findIndex(s => s.trackingNumber === tracking);
                 if (idx > -1) {
                     const item = dispatchedItems[idx];
                     dispatchedItems.splice(idx, 1);
-                    scannedLogs.push({
-                        ...item,
-                        status: 'received',
-                        receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                    });
+                    scannedLogs.push({ ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) });
                 }
             });
 
             renderAll();
-            document.getElementById('barcodeInput').focus();
+            switchTab('shipped');
             showToast('✅', 'Warehouse Receiving loaded successfully');
 
         })();
