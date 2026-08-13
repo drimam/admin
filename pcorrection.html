@@ -162,6 +162,9 @@
         .status-badge .dot.gray {
             background: #9CA3AF;
         }
+        .status-badge .dot.indigo {
+            background: #4F46E5;
+        }
 
         .action-icon-btn {
             padding: 2px 8px;
@@ -552,6 +555,19 @@
         .btn-danger-sm:hover {
             background: #FEE2E2;
         }
+        .btn-update-cart {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-update-cart:hover {
+            background: #4338CA;
+        }
 
         .history-filter-section {
             display: flex;
@@ -768,6 +784,62 @@
             padding: 4px 8px;
             margin: 2px 0;
         }
+
+        /* Live cart status badges */
+        .status-badge .dot.teal {
+            background: #14B8A6;
+        }
+        .status-badge .dot.orange {
+            background: #F97316;
+        }
+        .status-badge .dot.pink {
+            background: #EC4899;
+        }
+
+        .btn-view-cart {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-view-cart:hover {
+            background: #4338CA;
+        }
+
+        .btn-remove-cart {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-remove-cart:hover {
+            background: #FEE2E2;
+        }
+
+        .btn-review-cart {
+            background: #F59E0B;
+            color: #fff;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-review-cart:hover {
+            background: #D97706;
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -838,6 +910,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
                 <div class="flex flex-wrap gap-1 border-b border-gray-200">
                     <button class="tab-btn active" data-tab="pending" onclick="switchTab('pending')">📋 Pending Requests</button>
+                    <button class="tab-btn" data-tab="livecart" onclick="switchTab('livecart')">🛒 Live Cart</button>
                     <button class="tab-btn" data-tab="history" onclick="switchTab('history')">📜 Correction History</button>
                 </div>
             </div>
@@ -910,6 +983,79 @@
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
                         <div class="text-gray-500" id="pendingPaginationInfo">Page 1 of 1</div>
                         <div class="flex gap-1" id="pendingPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── TAB: LIVE CART ─── -->
+            <div id="tab-livecart" class="tab-content">
+                <!-- Filters -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[120px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="searchLiveCart" placeholder="Product, User..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterLiveCart()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                            <select id="statusLiveCartFilter" onchange="filterLiveCart()" class="text-xs sm:text-sm">
+                                <option value="all">All</option>
+                                <option value="active">Active</option>
+                                <option value="abandoned">Abandoned</option>
+                                <option value="checkout">Checkout</option>
+                            </select>
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearLiveCartFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterLiveCart()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                        </div>
+                    </div>
+                    <div id="activeLiveCartFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <!-- Live Cart Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">🛒 Live Cart Items</span>
+                            <span id="liveCartResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="liveCartPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeLiveCartPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="corrections-table w-full text-xs sm:text-sm" id="liveCartTable">
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Item</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Added</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Price INR</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Qty</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Weight</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Category</th>
+                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Sub-category</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Status</th>
+                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="liveCartTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="liveCartPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="liveCartPaginationButtons"></div>
                     </div>
                 </div>
             </div>
@@ -1005,6 +1151,9 @@
                 <button onclick="closeReviewModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 sm:p-6" id="reviewModalContent">
+                <!-- populated by JS -->
+            </div>
+            <div class="sticky bottom-0 bg-white border-t border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-wrap justify-end gap-3 rounded-b-2xl" id="reviewModalActions">
                 <!-- populated by JS -->
             </div>
         </div>
@@ -1138,6 +1287,161 @@
                 previousWeight: '0.50 kg - 10.00 W x 15.00 H x 5.00 L'
             }];
 
+            // ─── LIVE CART DATA ───────────────────────────────────────────
+            let liveCartItems = [{
+                id: 101,
+                productName: 'Apple iPhone 15 Pro Max',
+                productLink: 'https://example.com/product/iphone15promax',
+                productImage: getProductImage('Apple iPhone 15 Pro Max'),
+                user: 'Sita Gurung',
+                userId: 201,
+                mobile: '+977-980-111-2222',
+                addedAt: '12 Aug 2026, 08:15 AM',
+                priceINR: 1499.00,
+                quantity: 1,
+                weight: 0.75,
+                category: 'Electronics',
+                subCategory: 'Smartphones',
+                status: 'active',
+                width: 8,
+                height: 16,
+                length: 1,
+                cartStatus: 'active'
+            }, {
+                id: 102,
+                productName: 'Sony Bravia 55" 4K TV',
+                productLink: 'https://example.com/product/sony-bravia-55',
+                productImage: getProductImage('Sony Bravia 55 4K TV'),
+                user: 'Hari Shrestha',
+                userId: 202,
+                mobile: '+977-981-333-4444',
+                addedAt: '11 Aug 2026, 02:30 PM',
+                priceINR: 899.00,
+                quantity: 1,
+                weight: 18.50,
+                category: 'Electronics',
+                subCategory: 'TV & Audio',
+                status: 'active',
+                width: 130,
+                height: 75,
+                length: 10,
+                cartStatus: 'active'
+            }, {
+                id: 103,
+                productName: 'Puma Running Shoes Men',
+                productLink: 'https://example.com/product/puma-running',
+                productImage: getProductImage('Puma Running Shoes Men'),
+                user: 'Ram Thapa',
+                userId: 203,
+                mobile: '+977-982-555-6666',
+                addedAt: '10 Aug 2026, 11:45 AM',
+                priceINR: 120.00,
+                quantity: 2,
+                weight: 0.90,
+                category: 'Fashion',
+                subCategory: 'Men Apparel',
+                status: 'active',
+                width: 25,
+                height: 10,
+                length: 35,
+                cartStatus: 'active'
+            }, {
+                id: 104,
+                productName: 'Dyson V15 Vacuum Cleaner',
+                productLink: 'https://example.com/product/dyson-v15',
+                productImage: getProductImage('Dyson V15 Vacuum Cleaner'),
+                user: 'Gita Adhikari',
+                userId: 204,
+                mobile: '+977-983-777-8888',
+                addedAt: '09 Aug 2026, 06:20 PM',
+                priceINR: 699.00,
+                quantity: 1,
+                weight: 3.20,
+                category: 'Home & Living',
+                subCategory: 'Kitchen Appliances',
+                status: 'abandoned',
+                width: 30,
+                height: 60,
+                length: 20,
+                cartStatus: 'abandoned'
+            }, {
+                id: 105,
+                productName: 'L\'Oreal Paris Skincare Set',
+                productLink: 'https://example.com/product/loreal-skincare',
+                productImage: getProductImage('L\'Oreal Paris Skincare Set'),
+                user: 'Nisha Poudel',
+                userId: 205,
+                mobile: '+977-984-999-0000',
+                addedAt: '08 Aug 2026, 09:10 AM',
+                priceINR: 85.00,
+                quantity: 3,
+                weight: 0.60,
+                category: 'Beauty & Personal Care',
+                subCategory: 'Skincare',
+                status: 'checkout',
+                width: 15,
+                height: 20,
+                length: 10,
+                cartStatus: 'checkout'
+            }, {
+                id: 106,
+                productName: 'Bosch Cordless Drill Set',
+                productLink: 'https://example.com/product/bosch-drill',
+                productImage: getProductImage('Bosch Cordless Drill Set'),
+                user: 'Krishna Rai',
+                userId: 206,
+                mobile: '+977-985-121-2121',
+                addedAt: '07 Aug 2026, 03:55 PM',
+                priceINR: 250.00,
+                quantity: 1,
+                weight: 2.80,
+                category: 'Automotive',
+                subCategory: 'Tools',
+                status: 'active',
+                width: 35,
+                height: 25,
+                length: 12,
+                cartStatus: 'active'
+            }, {
+                id: 107,
+                productName: 'Nike Pro Training Gym Bag',
+                productLink: 'https://example.com/product/nike-gym-bag',
+                productImage: getProductImage('Nike Pro Training Gym Bag'),
+                user: 'Sujan KC',
+                userId: 207,
+                mobile: '+977-986-343-4343',
+                addedAt: '06 Aug 2026, 07:30 AM',
+                priceINR: 65.00,
+                quantity: 2,
+                weight: 1.20,
+                category: 'Sports & Fitness',
+                subCategory: 'Fitness Equipment',
+                status: 'abandoned',
+                width: 50,
+                height: 30,
+                length: 20,
+                cartStatus: 'abandoned'
+            }, {
+                id: 108,
+                productName: 'Samsung 980 Pro SSD 1TB',
+                productLink: 'https://example.com/product/samsung-ssd',
+                productImage: getProductImage('Samsung 980 Pro SSD 1TB'),
+                user: 'Anita Sharma',
+                userId: 208,
+                mobile: '+977-987-565-6565',
+                addedAt: '05 Aug 2026, 10:00 AM',
+                priceINR: 180.00,
+                quantity: 1,
+                weight: 0.05,
+                category: 'Electronics',
+                subCategory: 'Computer Accessories',
+                status: 'checkout',
+                width: 5,
+                height: 10,
+                length: 1,
+                cartStatus: 'checkout'
+            }];
+
             // ─── HISTORY DATA with dates ─────────────────────────────────
             let historyRecords = [{
                 id: 1,
@@ -1251,11 +1555,16 @@
             let pendingPage = 1;
             let pendingSize = 50;
 
+            let liveCartFiltered = [...liveCartItems];
+            let liveCartPage = 1;
+            let liveCartSize = 50;
+
             let historyFiltered = [...historyRecords];
             let historyPage = 1;
             let historySize = 50;
 
             let selectedRequestId = null;
+            let currentReviewMode = 'pending'; // 'pending' or 'livecart'
 
             // ─── HELPERS ────────────────────────────────────────────────────
             function escapeHtml(text) {
@@ -1274,6 +1583,9 @@
                     'booked': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple', label: 'Booked' },
                     'cart': { bg: 'bg-blue-100', text: 'text-blue-700', dot: 'blue', label: 'In Cart' },
                     'removed': { bg: 'bg-gray-100', text: 'text-gray-700', dot: 'gray', label: 'Removed' },
+                    'active': { bg: 'bg-emerald-100', text: 'text-emerald-700', dot: 'green', label: 'Active' },
+                    'abandoned': { bg: 'bg-amber-100', text: 'text-amber-700', dot: 'orange', label: 'Abandoned' },
+                    'checkout': { bg: 'bg-indigo-100', text: 'text-indigo-700', dot: 'indigo', label: 'Checkout' },
                 };
                 const m = map[status] || map.pending;
                 return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
@@ -1394,7 +1706,7 @@
                         <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
                         <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
                             ${item.status === 'pending' ? `
-                                <button onclick="openReviewModal(${item.id})" class="btn-approve-correction" style="padding:4px 14px;font-size:11px;border-radius:6px;">Review</button>
+                                <button onclick="openReviewModal(${item.id}, 'pending')" class="btn-approve-correction" style="padding:4px 14px;font-size:11px;border-radius:6px;">Review</button>
                             ` : getStatusBadge(item.status)}
                         </td>
                     </tr>
@@ -1420,6 +1732,134 @@
                     btn.onclick = () => { pendingPage = i;
                         renderPendingTable(); };
                     btnContainer.appendChild(btn);
+                }
+            }
+
+            // ─── FILTER LIVE CART ──────────────────────────────────────────
+            function filterLiveCart() {
+                const search = document.getElementById('searchLiveCart').value.toLowerCase().trim();
+                const status = document.getElementById('statusLiveCartFilter').value;
+
+                let filtered = [...liveCartItems];
+
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.user.toLowerCase().includes(search) ||
+                        item.id.toString().includes(search)
+                    );
+                }
+
+                if (status !== 'all') {
+                    filtered = filtered.filter(item => item.cartStatus === status);
+                }
+
+                liveCartFiltered = filtered;
+                liveCartPage = 1;
+                renderLiveCartTable();
+                updateActiveLiveCartFilters();
+            }
+
+            function clearLiveCartFilters() {
+                document.getElementById('searchLiveCart').value = '';
+                document.getElementById('statusLiveCartFilter').value = 'all';
+                filterLiveCart();
+            }
+
+            function updateActiveLiveCartFilters() {
+                const container = document.getElementById('activeLiveCartFilters');
+                let html = '';
+                const search = document.getElementById('searchLiveCart').value.trim();
+                const status = document.getElementById('statusLiveCartFilter').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchLiveCart').value='';filterLiveCart();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (status !== 'all') html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusLiveCartFilter').value='all';filterLiveCart();" class="hover:text-red-500 ml-1">×</button></span>`;
+                container.innerHTML = html || '';
+            }
+
+            function changeLiveCartPageSize() {
+                liveCartSize = parseInt(document.getElementById('liveCartPageSize').value, 10);
+                liveCartPage = 1;
+                renderLiveCartTable();
+            }
+
+            // ─── RENDER LIVE CART ──────────────────────────────────────────
+            function renderLiveCartTable() {
+                const start = (liveCartPage - 1) * liveCartSize;
+                const end = Math.min(start + liveCartSize, liveCartFiltered.length);
+                const pageData = liveCartFiltered.slice(start, end);
+                const tbody = document.getElementById('liveCartTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No live cart items found</td></tr>`;
+                    document.getElementById('liveCartResultCount').textContent = 'Showing 0 entries';
+                    updateLiveCartPagination();
+                    return;
+                }
+
+                tbody.innerHTML = pageData.map(item => `
+                    <tr class="correction-row border-b border-gray-100">
+                        <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
+                            <div class="item-cell">
+                                ${productImageHtml(item)}
+                                <div class="item-info">
+                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                            <div class="phone-with-wa text-[10px] text-gray-400">
+                                ${item.mobile}
+                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                            </div>
+                        </td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.addedAt}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm font-medium">${item.quantity}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
+                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.cartStatus)}</td>
+                        <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                            <button onclick="openReviewModal(${item.id}, 'livecart')" class="btn-review-cart">Review</button>
+                            <button onclick="removeFromLiveCart(${item.id})" class="btn-remove-cart ml-1">Remove</button>
+                        </td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('liveCartResultCount').textContent =
+                    `Showing ${pageData.length} of ${liveCartFiltered.length} entries`;
+                updateLiveCartPagination();
+            }
+
+            function updateLiveCartPagination() {
+                const totalPages = Math.ceil(liveCartFiltered.length / liveCartSize) || 1;
+                document.getElementById('liveCartPaginationInfo').textContent =
+                    `Page ${liveCartPage} of ${totalPages} (${liveCartFiltered.length} entries)`;
+                const btnContainer = document.getElementById('liveCartPaginationButtons');
+                btnContainer.innerHTML = '';
+                if (totalPages <= 1) return;
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === liveCartPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { liveCartPage = i;
+                        renderLiveCartTable(); };
+                    btnContainer.appendChild(btn);
+                }
+            }
+
+            function removeFromLiveCart(id) {
+                const item = liveCartItems.find(i => i.id === id);
+                if (!item) return;
+                if (confirm(`Remove "${item.productName}" from live cart?`)) {
+                    liveCartItems = liveCartItems.filter(i => i.id !== id);
+                    filterLiveCart();
+                    showToast('🗑️', `Removed "${item.productName}" from live cart`);
                 }
             }
 
@@ -1571,9 +2011,15 @@
             }
 
             // ─── REVIEW MODAL ─────────────────────────────────────────────
-            function openReviewModal(id) {
-                const request = pendingRequests.find(r => r.id === id);
-                if (!request) return;
+            function openReviewModal(id, mode) {
+                currentReviewMode = mode;
+                let item;
+                if (mode === 'pending') {
+                    item = pendingRequests.find(r => r.id === id);
+                } else {
+                    item = liveCartItems.find(r => r.id === id);
+                }
+                if (!item) return;
                 selectedRequestId = id;
 
                 const categoryOptions = [
@@ -1585,7 +2031,7 @@
                     'Sports & Fitness',
                     'Beauty & Personal Care',
                     'Automotive'
-                ].map(cat => `<option value="${cat}" ${cat === request.category ? 'selected' : ''}>${cat}</option>`).join('');
+                ].map(cat => `<option value="${cat}" ${cat === item.category ? 'selected' : ''}>${cat}</option>`).join('');
 
                 const subCategoryOptions = [
                     '-',
@@ -1601,15 +2047,15 @@
                     'Skincare',
                     'Car Accessories',
                     'Bike Accessories'
-                ].map(sub => `<option value="${sub}" ${sub === request.subCategory ? 'selected' : ''}>${sub}</option>`).join('');
+                ].map(sub => `<option value="${sub}" ${sub === item.subCategory ? 'selected' : ''}>${sub}</option>`).join('');
 
                 // Calculate cost breakdown
-                const price = request.priceINR;
-                const qty = request.quantity || 1;
-                const weight = request.weight || 0;
-                const width = request.width || 0;
-                const height = request.height || 0;
-                const length = request.length || 0;
+                const price = item.priceINR;
+                const qty = item.quantity || 1;
+                const weight = item.weight || 0;
+                const width = item.width || 0;
+                const height = item.height || 0;
+                const length = item.length || 0;
                 const volumetric = (width * height * length) / 5000;
                 const maxWeight = Math.max(weight, volumetric);
                 const chargeable = maxWeight * qty;
@@ -1619,27 +2065,31 @@
                 const shipping = chargeable * 50;
                 const total = baseCost + importDuty + vat + shipping;
 
-                document.getElementById('reviewModalTitle').textContent =
-                    `📋 Cart Price Correction Review - ${escapeHtml(request.productName)}`;
+                const title = mode === 'pending' ?
+                    `📋 Cart Price Correction Review - ${escapeHtml(item.productName)}` :
+                    `🛒 Live Cart Review - ${escapeHtml(item.productName)}`;
 
-                document.getElementById('reviewModalContent').innerHTML = `
+                document.getElementById('reviewModalTitle').textContent = title;
+
+                const content = document.getElementById('reviewModalContent');
+                content.innerHTML = `
                     <div class="mb-4">
-                        <h4 class="text-lg font-bold text-gray-800">${escapeHtml(request.productName)}</h4>
+                        <h4 class="text-lg font-bold text-gray-800">${escapeHtml(item.productName)}</h4>
                         <p class="text-sm text-gray-500">
-                            ${escapeHtml(request.user)} - Requested ${request.requestedAt}
-                            <a href="${request.productLink}" target="_blank" class="product-link ml-2" style="font-size:12px;">🔗 View Product</a>
+                            ${escapeHtml(item.user)} - ${mode === 'pending' ? 'Requested ' + item.requestedAt : 'Added ' + item.addedAt}
+                            <a href="${item.productLink}" target="_blank" class="product-link ml-2" style="font-size:12px;">🔗 View Product</a>
                         </p>
                     </div>
 
                     <div class="review-card mb-4">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div>
-                                <span class="status-badge bg-yellow-100 text-yellow-700"><span class="dot yellow"></span>Pending</span>
+                                <span class="status-badge ${mode === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'}"><span class="dot ${mode === 'pending' ? 'yellow' : 'blue'}"></span>${mode === 'pending' ? 'Pending' : 'Live Cart'}</span>
                             </div>
                             <div class="flex flex-wrap gap-2">
-                                <span class="text-xs text-gray-500">Item | Previous Price INR ${request.priceINR.toFixed(2)}</span>
-                                <span class="text-xs text-gray-500">| Previous Sub-category ${request.previousSubCategory}</span>
-                                <span class="text-xs text-gray-500">| Previous Weight and Dimensions ${request.previousWeight}</span>
+                                <span class="text-xs text-gray-500">Item | Price INR ${item.priceINR.toFixed(2)}</span>
+                                <span class="text-xs text-gray-500">| Sub-category ${item.subCategory || '—'}</span>
+                                <span class="text-xs text-gray-500">| Weight ${item.weight.toFixed(2)} kg</span>
                             </div>
                         </div>
                     </div>
@@ -1663,33 +2113,33 @@
                         </div>
                         <div class="detail-field">
                             <label>Quantity</label>
-                            <input type="number" id="reviewQuantity" value="${request.quantity}" min="1" />
+                            <input type="number" id="reviewQuantity" value="${item.quantity}" min="1" />
                         </div>
                     </div>
 
                     <div class="review-grid mt-2">
                         <div class="detail-field">
                             <label>Price INR</label>
-                            <input type="number" id="reviewPrice" value="${request.priceINR}" step="0.01" min="0" />
+                            <input type="number" id="reviewPrice" value="${item.priceINR}" step="0.01" min="0" />
                         </div>
                         <div class="detail-field">
                             <label>Actual Weight (kg)</label>
-                            <input type="number" id="reviewWeight" value="${request.weight}" step="0.01" min="0" />
+                            <input type="number" id="reviewWeight" value="${item.weight}" step="0.01" min="0" />
                         </div>
                     </div>
 
                     <div class="review-grid mt-2">
                         <div class="detail-field">
                             <label>Width (optional)</label>
-                            <input type="number" id="reviewWidth" value="${request.width || 0}" step="0.1" min="0" />
+                            <input type="number" id="reviewWidth" value="${item.width || 0}" step="0.1" min="0" />
                         </div>
                         <div class="detail-field">
                             <label>Height (optional)</label>
-                            <input type="number" id="reviewHeight" value="${request.height || 0}" step="0.1" min="0" />
+                            <input type="number" id="reviewHeight" value="${item.height || 0}" step="0.1" min="0" />
                         </div>
                         <div class="detail-field">
                             <label>Length (optional)</label>
-                            <input type="number" id="reviewLength" value="${request.length || 0}" step="0.1" min="0" />
+                            <input type="number" id="reviewLength" value="${item.length || 0}" step="0.1" min="0" />
                         </div>
                         <div class="detail-field">
                             <label>Volumetric Weight (kg)</label>
@@ -1700,11 +2150,11 @@
                     <div class="review-grid mt-2">
                         <div class="detail-field">
                             <label>Maximum Weight (kg)</label>
-                            <div class="value-box" id="reviewMaxWeight">${request.weight.toFixed(2)} kg</div>
+                            <div class="value-box" id="reviewMaxWeight">${item.weight.toFixed(2)} kg</div>
                         </div>
                         <div class="detail-field">
                             <label>Chargeable Weight (total) (kg)</label>
-                            <div class="value-box" id="reviewChargeableWeight">${request.weight.toFixed(2)} kg</div>
+                            <div class="value-box" id="reviewChargeableWeight">${item.weight.toFixed(2)} kg</div>
                         </div>
                     </div>
 
@@ -1724,12 +2174,6 @@
                         <span class="label">GRAND TOTAL</span>
                         <span class="amount" id="reviewGrandTotal">NPR ${total.toFixed(2)}</span>
                     </div>
-
-                    <div class="flex flex-wrap gap-3 mt-5 pt-4 border-t border-gray-200">
-                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
-                        <button onclick="approveCorrection()" class="btn-approve flex-1 sm:flex-none">Approve</button>
-                        <button onclick="approveAndCorrect()" class="btn-approve-correction flex-1 sm:flex-none">Approve &amp; Correct</button>
-                    </div>
                 `;
 
                 // Calculate volumetric weight on input change
@@ -1741,6 +2185,21 @@
                 document.getElementById('reviewSubCategory')?.addEventListener('change', updateReviewCalculations);
 
                 updateReviewCalculations();
+
+                // Set modal actions based on mode
+                const actionsDiv = document.getElementById('reviewModalActions');
+                if (mode === 'pending') {
+                    actionsDiv.innerHTML = `
+                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
+                        <button onclick="approveCorrection()" class="btn-approve flex-1 sm:flex-none">Approve</button>
+                        <button onclick="approveAndCorrect()" class="btn-approve-correction flex-1 sm:flex-none">Approve &amp; Correct</button>
+                    `;
+                } else {
+                    actionsDiv.innerHTML = `
+                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
+                        <button onclick="updateLiveCartItem()" class="btn-update-cart flex-1 sm:flex-none">Update Cart Item</button>
+                    `;
+                }
 
                 document.getElementById('reviewModal').classList.add('flex');
                 document.getElementById('reviewModal').classList.remove('hidden');
@@ -1755,7 +2214,6 @@
                 const price = parseFloat(document.getElementById('reviewPrice')?.value) || 0;
                 const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
 
-                // Volumetric weight: (W x H x L) / 5000 (standard formula)
                 const volumetric = (width * height * length) / 5000;
                 const maxWeight = Math.max(weight, volumetric);
                 const chargeable = maxWeight * qty;
@@ -1764,7 +2222,6 @@
                 document.getElementById('reviewMaxWeight').textContent = maxWeight.toFixed(2) + ' kg';
                 document.getElementById('reviewChargeableWeight').textContent = chargeable.toFixed(2) + ' kg';
 
-                // Estimate cost calculation
                 const baseCost = price * qty;
                 const importDuty = baseCost * 0.15;
                 const vat = (baseCost + importDuty) * 0.13;
@@ -1773,7 +2230,6 @@
 
                 document.getElementById('reviewGrandTotal').textContent = `NPR ${total.toFixed(2)}`;
 
-                // Update cost breakdown
                 const container = document.getElementById('costBreakdownContainer');
                 if (container) {
                     container.innerHTML = `
@@ -1793,11 +2249,10 @@
             }
 
             function approveCorrection() {
-                if (selectedRequestId === null) return;
+                if (selectedRequestId === null || currentReviewMode !== 'pending') return;
                 const request = pendingRequests.find(r => r.id === selectedRequestId);
                 if (!request) return;
                 request.status = 'approved';
-                // Add to history
                 const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || request.priceINR;
                 historyRecords.push({
                     id: historyRecords.length + 1,
@@ -1829,7 +2284,7 @@
             }
 
             function approveAndCorrect() {
-                if (selectedRequestId === null) return;
+                if (selectedRequestId === null || currentReviewMode !== 'pending') return;
                 const request = pendingRequests.find(r => r.id === selectedRequestId);
                 if (!request) return;
                 request.status = 'approved';
@@ -1840,7 +2295,6 @@
                 const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
                 const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
 
-                // Update request with new data
                 request.priceINR = newPrice;
                 request.category = category;
                 request.subCategory = subCategory;
@@ -1850,7 +2304,6 @@
                 request.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
                 request.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
 
-                // Add to history
                 historyRecords.push({
                     id: historyRecords.length + 1,
                     userId: request.userId || 999,
@@ -1881,6 +2334,33 @@
                 showToast('✅', 'Correction approved and applied successfully!');
             }
 
+            // ─── UPDATE LIVE CART ITEM ─────────────────────────────────────
+            function updateLiveCartItem() {
+                if (selectedRequestId === null || currentReviewMode !== 'livecart') return;
+                const item = liveCartItems.find(r => r.id === selectedRequestId);
+                if (!item) return;
+
+                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || item.priceINR;
+                const category = document.getElementById('reviewCategory')?.value || '';
+                const subCategory = document.getElementById('reviewSubCategory')?.value || '';
+                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
+                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
+
+                // Update item
+                item.priceINR = newPrice;
+                item.category = category;
+                item.subCategory = subCategory;
+                item.weight = weight;
+                item.quantity = qty;
+                item.width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
+                item.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
+                item.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
+
+                closeReviewModal();
+                filterLiveCart();
+                showToast('✅', `Updated "${item.productName}" in live cart`);
+            }
+
             // ─── TABS ──────────────────────────────────────────────────────
             function switchTab(tab) {
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -1891,6 +2371,8 @@
 
                 if (tab === 'history') {
                     filterHistory();
+                } else if (tab === 'livecart') {
+                    filterLiveCart();
                 } else {
                     filterPending();
                 }
@@ -1899,6 +2381,7 @@
             // ─── REFRESH ──────────────────────────────────────────────────
             function refreshData() {
                 filterPending();
+                filterLiveCart();
                 filterHistory();
                 showToast('🔄', 'Data refreshed');
             }
@@ -1945,6 +2428,10 @@
             window.filterPending = filterPending;
             window.clearPendingFilters = clearPendingFilters;
             window.changePendingPageSize = changePendingPageSize;
+            window.filterLiveCart = filterLiveCart;
+            window.clearLiveCartFilters = clearLiveCartFilters;
+            window.changeLiveCartPageSize = changeLiveCartPageSize;
+            window.removeFromLiveCart = removeFromLiveCart;
             window.filterHistory = filterHistory;
             window.clearHistoryFilters = clearHistoryFilters;
             window.changeHistoryPageSize = changeHistoryPageSize;
@@ -1952,6 +2439,7 @@
             window.closeReviewModal = closeReviewModal;
             window.approveCorrection = approveCorrection;
             window.approveAndCorrect = approveAndCorrect;
+            window.updateLiveCartItem = updateLiveCartItem;
             window.switchTab = switchTab;
             window.refreshData = refreshData;
             window.toggleSidebar = toggleSidebar;
@@ -1961,6 +2449,7 @@
 
             // ─── INIT ──────────────────────────────────────────────────────
             filterPending();
+            filterLiveCart();
             filterHistory();
 
             showToast('✅', 'Price Corrections loaded successfully');
