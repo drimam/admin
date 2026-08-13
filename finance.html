@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>MeroWish | Finance Management</title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        primaryDark: '#3730A3',
+                        sidebar: '#1E293B',
+                        sidebarHover: '#334155',
+                        sidebarActive: '#4F46E5',
+                        success: '#10B981',
+                        warning: '#F59E0B',
+                        danger: '#EF4444',
+                        info: '#3B82F6',
+                        darkBg: '#0F172A',
+                        cardBg: '#FFFFFF',
+                        borderLight: '#E2E8F0',
+                    },
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-in': 'fadeIn 0.2s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
+                                opacity: '1' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
+
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        .stat-card {
+            transition: all 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .finance-row:hover {
+            background: #f8fafc;
+        }
+        .finance-row .total-row {
+            background: #f1f5f9;
+            font-weight: 600;
+        }
+
+        @media print {
+            .sidebar,
+            .top-bar,
+            .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                width: 100% !important;
+            }
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        .order-link {
+            color: #4F46E5;
+            cursor: pointer;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .order-link:hover {
+            color: #3730A3;
+        }
+
+        .period-btn {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .period-btn:hover {
+            background: #e2e8f0;
+        }
+        .period-btn.active {
+            background: #4F46E5;
+            color: #fff;
+            border-color: #4F46E5;
+        }
+
+        .period-cell {
+            line-height: 1.3;
+        }
+        .period-cell .eng {
+            font-weight: 600;
+            color: #1e293b;
+            display: block;
+        }
+        .period-cell .nep {
+            font-size: 10px;
+            color: #64748b;
+            display: block;
+            margin-top: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .stat-card .stat-value {
+                font-size: 1rem !important;
+            }
+            .stat-card .stat-label {
+                font-size: 8px !important;
+            }
+            .period-btn {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+            .table-container {
+                font-size: 11px;
+            }
+            .table-container th,
+            .table-container td {
+                padding: 4px 6px !important;
+            }
+        }
+        @media (max-width: 480px) {
+            .stat-card .stat-value {
+                font-size: 0.85rem !important;
+            }
+            .period-btn {
+                font-size: 9px;
+                padding: 1px 6px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                </div>
+                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+            </div>
+            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+        </div>
+        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <div class="mt-1"><a href="manage.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 2c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4zm0 1c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/></svg>Finance<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">12</span></div></div>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        </nav>
+        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
+                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
+                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800">💰 Finance Management</h1>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="exportFinanceExcel()" class="flex items-center gap-1 sm:gap-2 bg-green-600 text-white px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-green-700 transition-colors no-print">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span class="hidden xs:inline">Export Excel</span>
+                </button>
+                <button onclick="refreshFinance()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors no-print">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span class="hidden xs:inline">Refresh</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+
+            <!-- Summary Cards Row 1 -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3" id="summaryCards">
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Total Revenue</p>
+                    <p class="text-lg sm:text-2xl font-bold text-gray-800 mt-0.5 stat-value" id="totalRevenue">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Advance Collection</p>
+                    <p class="text-lg sm:text-2xl font-bold text-primary mt-0.5 stat-value" id="totalAdvance">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Due COD</p>
+                    <p class="text-lg sm:text-2xl font-bold text-orange-600 mt-0.5 stat-value" id="totalCod">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Import Duty + VAT</p>
+                    <p class="text-lg sm:text-2xl font-bold text-purple-600 mt-0.5 stat-value" id="totalImportVat">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Service Fees</p>
+                    <p class="text-lg sm:text-2xl font-bold text-cyan-600 mt-0.5 stat-value" id="totalService">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Shipping Fees</p>
+                    <p class="text-lg sm:text-2xl font-bold text-teal-600 mt-0.5 stat-value" id="totalShipping">NPR 0</p>
+                </div>
+            </div>
+
+            <!-- Summary Cards Row 2 – Payment Gateways -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3" id="gatewayCards">
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Esewa</p>
+                    <p class="text-lg sm:text-2xl font-bold text-indigo-600 mt-0.5 stat-value" id="totalEsewa">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">Khalti</p>
+                    <p class="text-lg sm:text-2xl font-bold text-pink-600 mt-0.5 stat-value" id="totalKhalti">NPR 0</p>
+                </div>
+                <div class="bg-white rounded-xl p-3 sm:p-4 shadow-sm border border-gray-100 stat-card">
+                    <p class="text-[10px] sm:text-xs text-gray-500 font-medium uppercase tracking-wider stat-label">FonePay QR</p>
+                    <p class="text-lg sm:text-2xl font-bold text-emerald-600 mt-0.5 stat-value" id="totalFonePay">NPR 0</p>
+                </div>
+            </div>
+
+            <!-- Filters & Period -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <label class="text-xs font-semibold text-gray-500">Date Range:</label>
+                    <input type="date" id="dateFrom" class="text-xs border border-gray-300 rounded px-2 py-1" value="2026-01-01" />
+                    <span class="text-gray-400">to</span>
+                    <input type="date" id="dateTo" class="text-xs border border-gray-300 rounded px-2 py-1" value="2026-12-31" />
+                    <button onclick="applyDateFilter()" class="bg-primary text-white px-3 py-1 rounded text-xs font-semibold hover:bg-primaryDark">Apply</button>
+                </div>
+                <div class="flex items-center gap-1 ml-auto no-print">
+                    <span class="text-xs font-semibold text-gray-500 mr-1">View:</span>
+                    <button class="period-btn active" data-period="daily" onclick="setPeriod('daily')">Daily</button>
+                    <button class="period-btn" data-period="weekly" onclick="setPeriod('weekly')">Weekly</button>
+                    <button class="period-btn" data-period="monthly" onclick="setPeriod('monthly')">Monthly</button>
+                    <button class="period-btn" data-period="trimester" onclick="setPeriod('trimester')">Trimester</button>
+                </div>
+            </div>
+
+            <!-- Finance Table -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="px-4 py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50">
+                    <div><span class="text-sm font-semibold text-gray-700" id="tableTitle">Monthly Financial Summary</span></div>
+                </div>
+                <div class="table-container">
+                    <table class="w-full text-sm" id="financeTable">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 text-xs font-semibold uppercase tracking-wider">
+                                <th class="px-3 py-3 text-left whitespace-nowrap">Period</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Orders</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Total Revenue</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">25% Advance</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">75% COD</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Import Duty</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">VAT</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Service Charges</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Discounts</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Refunds</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Shipping Fees</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Net Revenue</th>
+                                <th class="px-3 py-3 text-right whitespace-nowrap">Net Loss</th>
+                                <th class="px-3 py-3 text-center whitespace-nowrap">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financeTableBody"></tbody>
+                        <tfoot id="financeTableFoot" class="bg-gray-50 font-semibold"></tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Additional info -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-xs text-gray-500">
+                <p class="font-semibold text-gray-700">📌 Note:</p>
+                <ul class="list-disc list-inside space-y-1 mt-1">
+                    <li><span class="font-medium">25% Advance</span> – collected upfront.</li>
+                    <li><span class="font-medium">75% COD</span> – collected on delivery.</li>
+                    <li><span class="font-medium">Import Duty, VAT, Service Charges</span> – per order.</li>
+                    <li><span class="font-medium">Discounts</span> – applied to orders.</li>
+                    <li><span class="font-medium">Refunds</span> – returned to customers.</li>
+                    <li><span class="font-medium">Shipping Fees</span> – logistics cost.</li>
+                    <li><span class="font-medium">Net Revenue</span> = Total Revenue - (Import Duty + VAT + Service Charges + Discounts + Refunds + Shipping Fees).</li>
+                    <li><span class="font-medium">Net Loss</span> = negative Net Revenue (if any).</li>
+                    <li>Click on order count to see order IDs for that period.</li>
+                    <li>Click "Refund" to add additional refund amount (accumulates).</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- ─── MODALS ──────────────────────────────────────────────────────── -->
+
+    <!-- Orders List Modal -->
+    <div id="ordersModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeOrdersModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl mx-3 sm:mx-4 max-h-[85vh] overflow-y-auto animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">📦 Orders for <span id="ordersModalPeriod">—</span></h3>
+                <button onclick="closeOrdersModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6" id="ordersModalContent">
+                <p class="text-sm text-gray-500">Loading orders...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refund Update Modal -->
+    <div id="refundModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeRefundModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">💸 Manual Refund Update</h3>
+                <button onclick="closeRefundModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-3">Add refund amount for <span id="refundPeriodLabel" class="font-semibold text-primary">—</span></p>
+                <p class="text-xs text-gray-400 mb-2">Current refund: <span id="refundCurrentAmount">NPR 0</span></p>
+                <div class="mb-4">
+                    <label class="text-xs font-semibold text-gray-500 uppercase block mb-1">Additional Refund (NPR)</label>
+                    <input type="number" id="refundAmountInput" step="0.01" min="0" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/20 outline-none text-sm" placeholder="0.00" />
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="saveRefundUpdate()" class="flex-1 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Add</button>
+                    <button onclick="closeRefundModal()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
+        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+            <span id="toastIcon">✅</span>
+            <span id="toastMessage">Action completed!</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ─── CONSTANTS ─────────────────────────────────────────────────
+            const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const NEPALI_MONTHS = ['Poush', 'Magh', 'Falgun', 'Chaitra', 'Baishakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra',
+                'Ashwin', 'Kartik', 'Mangsir'
+            ];
+
+            function getNepaliYearMonth(engYear, engMonthIndex) {
+                let nepaliYear = engYear - 57;
+                if (engMonthIndex < 3) nepaliYear -= 1;
+                const nepaliMonth = NEPALI_MONTHS[engMonthIndex];
+                return { year: nepaliYear, month: nepaliMonth };
+            }
+
+            // ─── DATA GENERATION ───────────────────────────────────────────
+            function generateMonthlyData(year) {
+                const data = [];
+                for (let i = 0; i < 12; i++) {
+                    const month = i + 1;
+                    const orders = Math.floor(Math.random() * 150) + 30;
+                    const avgOrderVal = (Math.random() * 3000 + 500);
+                    const totalRevenue = orders * avgOrderVal;
+                    const advance = totalRevenue * 0.25;
+                    const cod = totalRevenue * 0.75;
+                    const importDuty = totalRevenue * (0.08 + Math.random() * 0.04);
+                    const vat = (totalRevenue + importDuty) * 0.13;
+                    const serviceCharges = totalRevenue * (0.03 + Math.random() * 0.02);
+                    const discounts = totalRevenue * (0.02 + Math.random() * 0.03);
+                    const refunds = totalRevenue * (Math.random() * 0.03);
+                    const shippingFees = orders * (80 + Math.random() * 40);
+                    const netRevenue = totalRevenue - importDuty - vat - serviceCharges - discounts - refunds - shippingFees;
+
+                    // Payment gateways: split advance among Esewa, Khalti, FonePay
+                    const ese = advance * (0.4 + Math.random() * 0.3);
+                    const khalti = advance * (0.2 + Math.random() * 0.2);
+                    const fonepay = advance - ese - khalti;
+
+                    data.push({
+                        month: MONTHS[i],
+                        monthIndex: i,
+                        year: year,
+                        orders: Math.round(orders),
+                        totalRevenue: Math.round(totalRevenue),
+                        advance: Math.round(advance),
+                        cod: Math.round(cod),
+                        importDuty: Math.round(importDuty),
+                        vat: Math.round(vat),
+                        serviceCharges: Math.round(serviceCharges),
+                        discounts: Math.round(discounts),
+                        refunds: Math.round(refunds),
+                        shippingFees: Math.round(shippingFees),
+                        netRevenue: Math.round(netRevenue),
+                        ese: Math.round(ese),
+                        khalti: Math.round(khalti),
+                        fonepay: Math.round(fonepay),
+                        orderIds: Array.from({ length: Math.round(orders) }, (_, idx) =>
+                            `MW${year}${String(month).padStart(2, '0')}${String(idx+1).padStart(4, '0')}`
+                        )
+                    });
+                }
+                return data;
+            }
+
+            // Generate data for 2025 and 2026
+            const financeDataAll = [
+                ...generateMonthlyData(2025),
+                ...generateMonthlyData(2026)
+            ];
+
+            // Store original data to allow refund updates
+            let financeData = financeDataAll.map(row => ({ ...row }));
+
+            // ─── STATE ──────────────────────────────────────────────────────
+            let currentPeriod = 'monthly';
+            let dateFrom = new Date(2026, 0, 1);
+            let dateTo = new Date(2026, 11, 31);
+            let filteredData = [];
+
+            // ─── DATE FILTER ──────────────────────────────────────────────
+            function applyDateFilter() {
+                const fromVal = document.getElementById('dateFrom').value;
+                const toVal = document.getElementById('dateTo').value;
+                if (fromVal) dateFrom = new Date(fromVal);
+                else dateFrom = new Date(2026, 0, 1);
+                if (toVal) dateTo = new Date(toVal);
+                else dateTo = new Date(2026, 11, 31);
+                if (dateFrom > dateTo) {
+                    [dateFrom, dateTo] = [dateTo, dateFrom];
+                }
+                refreshView();
+            }
+
+            // ─── PERIOD SWITCH ─────────────────────────────────────────────
+            function setPeriod(period) {
+                currentPeriod = period;
+                document.querySelectorAll('.period-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.period === period);
+                });
+                refreshView();
+            }
+
+            // ─── REFRESH VIEW ──────────────────────────────────────────────
+            function refreshView() {
+                const fromYear = dateFrom.getFullYear();
+                const fromMonth = dateFrom.getMonth();
+                const toYear = dateTo.getFullYear();
+                const toMonth = dateTo.getMonth();
+
+                let filtered = financeData.filter(row => {
+                    const rowDate = new Date(row.year, row.monthIndex, 1);
+                    return rowDate >= new Date(fromYear, fromMonth, 1) && rowDate <= new Date(toYear, toMonth, 1);
+                });
+
+                let groupedData = [];
+                if (currentPeriod === 'daily') {
+                    // For daily, use first month in range
+                    if (filtered.length === 0) {
+                        groupedData = [];
+                    } else {
+                        const monthData = filtered[0];
+                        const daysInMonth = new Date(monthData.year, monthData.monthIndex + 1, 0).getDate();
+                        const dailyRevenue = monthData.totalRevenue / daysInMonth;
+                        const dailyAdvance = monthData.advance / daysInMonth;
+                        const dailyCod = monthData.cod / daysInMonth;
+                        const dailyImport = monthData.importDuty / daysInMonth;
+                        const dailyVat = monthData.vat / daysInMonth;
+                        const dailyService = monthData.serviceCharges / daysInMonth;
+                        const dailyDiscounts = monthData.discounts / daysInMonth;
+                        const dailyRefunds = monthData.refunds / daysInMonth;
+                        const dailyShipping = monthData.shippingFees / daysInMonth;
+                        const dailyNet = monthData.netRevenue / daysInMonth;
+                        const dailyOrders = Math.round(monthData.orders / daysInMonth);
+                        const dailyEse = monthData.ese / daysInMonth;
+                        const dailyKhalti = monthData.khalti / daysInMonth;
+                        const dailyFonepay = monthData.fonepay / daysInMonth;
+
+                        for (let d = 1; d <= daysInMonth; d++) {
+                            const dateObj = new Date(monthData.year, monthData.monthIndex, d);
+                            const engLabel = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short',
+                                year: 'numeric' });
+                            const nep = getNepaliYearMonth(monthData.year, monthData.monthIndex);
+                            const nepLabel = `${nep.month} ${nep.year}`;
+                            groupedData.push({
+                                label: engLabel,
+                                nepLabel: nepLabel,
+                                orders: Math.max(1, dailyOrders + Math.floor(Math.random() * 3 - 1)),
+                                totalRevenue: Math.round(dailyRevenue + (Math.random() - 0.5) * 100),
+                                advance: Math.round(dailyAdvance + (Math.random() - 0.5) * 20),
+                                cod: Math.round(dailyCod + (Math.random() - 0.5) * 30),
+                                importDuty: Math.round(dailyImport + (Math.random() - 0.5) * 10),
+                                vat: Math.round(dailyVat + (Math.random() - 0.5) * 10),
+                                serviceCharges: Math.round(dailyService + (Math.random() - 0.5) * 5),
+                                discounts: Math.round(dailyDiscounts + (Math.random() - 0.5) * 5),
+                                refunds: Math.round(dailyRefunds + (Math.random() - 0.5) * 5),
+                                shippingFees: Math.round(dailyShipping + (Math.random() - 0.5) * 10),
+                                netRevenue: Math.round(dailyNet + (Math.random() - 0.5) * 20),
+                                ese: Math.round(dailyEse + (Math.random() - 0.5) * 5),
+                                khalti: Math.round(dailyKhalti + (Math.random() - 0.5) * 5),
+                                fonepay: Math.round(dailyFonepay + (Math.random() - 0.5) * 5),
+                                orderIds: monthData.orderIds.slice(0, dailyOrders),
+                                monthIndex: monthData.monthIndex,
+                                year: monthData.year
+                            });
+                        }
+                    }
+                } else if (currentPeriod === 'weekly') {
+                    const weekMap = {};
+                    filtered.forEach(row => {
+                        const dateObj = new Date(row.year, row.monthIndex, 1);
+                        const weekNumber = getWeekNumber(dateObj);
+                        const key = `${row.year}-W${weekNumber}`;
+                        if (!weekMap[key]) {
+                            // Get the Monday of that week
+                            const firstDay = new Date(row.year, row.monthIndex, 1);
+                            const dayOfWeek = firstDay.getDay(); // 0=Sun
+                            const diff = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+                            const monday = new Date(firstDay);
+                            monday.setDate(firstDay.getDate() - diff);
+                            const nep = getNepaliYearMonth(monday.getFullYear(), monday.getMonth());
+                            weekMap[key] = {
+                                label: `Week ${weekNumber}, ${row.year}`,
+                                nepLabel: `${nep.month} ${nep.year}`,
+                                orders: 0,
+                                totalRevenue: 0,
+                                advance: 0,
+                                cod: 0,
+                                importDuty: 0,
+                                vat: 0,
+                                serviceCharges: 0,
+                                discounts: 0,
+                                refunds: 0,
+                                shippingFees: 0,
+                                netRevenue: 0,
+                                ese: 0,
+                                khalti: 0,
+                                fonepay: 0,
+                                orderIds: []
+                            };
+                        }
+                        const w = weekMap[key];
+                        w.orders += row.orders;
+                        w.totalRevenue += row.totalRevenue;
+                        w.advance += row.advance;
+                        w.cod += row.cod;
+                        w.importDuty += row.importDuty;
+                        w.vat += row.vat;
+                        w.serviceCharges += row.serviceCharges;
+                        w.discounts += row.discounts;
+                        w.refunds += row.refunds;
+                        w.shippingFees += row.shippingFees;
+                        w.netRevenue += row.netRevenue;
+                        w.ese += row.ese;
+                        w.khalti += row.khalti;
+                        w.fonepay += row.fonepay;
+                        w.orderIds = w.orderIds.concat(row.orderIds);
+                    });
+                    groupedData = Object.values(weekMap);
+                } else if (currentPeriod === 'monthly') {
+                    groupedData = filtered.map(row => {
+                        const nep = getNepaliYearMonth(row.year, row.monthIndex);
+                        return {
+                            ...row,
+                            label: `${row.month} ${row.year}`,
+                            nepLabel: `${nep.month} ${nep.year}`,
+                        };
+                    });
+                } else if (currentPeriod === 'trimester') {
+                    const quarterMap = {};
+                    filtered.forEach(row => {
+                        const quarter = Math.floor(row.monthIndex / 3) + 1;
+                        const key = `${row.year}-Q${quarter}`;
+                        if (!quarterMap[key]) {
+                            // Get first month of quarter
+                            const firstMonth = (quarter - 1) * 3;
+                            const nep = getNepaliYearMonth(row.year, firstMonth);
+                            quarterMap[key] = {
+                                label: `Q${quarter} ${row.year}`,
+                                nepLabel: `${nep.month} ${nep.year}`,
+                                orders: 0,
+                                totalRevenue: 0,
+                                advance: 0,
+                                cod: 0,
+                                importDuty: 0,
+                                vat: 0,
+                                serviceCharges: 0,
+                                discounts: 0,
+                                refunds: 0,
+                                shippingFees: 0,
+                                netRevenue: 0,
+                                ese: 0,
+                                khalti: 0,
+                                fonepay: 0,
+                                orderIds: []
+                            };
+                        }
+                        const q = quarterMap[key];
+                        q.orders += row.orders;
+                        q.totalRevenue += row.totalRevenue;
+                        q.advance += row.advance;
+                        q.cod += row.cod;
+                        q.importDuty += row.importDuty;
+                        q.vat += row.vat;
+                        q.serviceCharges += row.serviceCharges;
+                        q.discounts += row.discounts;
+                        q.refunds += row.refunds;
+                        q.shippingFees += row.shippingFees;
+                        q.netRevenue += row.netRevenue;
+                        q.ese += row.ese;
+                        q.khalti += row.khalti;
+                        q.fonepay += row.fonepay;
+                        q.orderIds = q.orderIds.concat(row.orderIds);
+                    });
+                    groupedData = Object.values(quarterMap);
+                }
+
+                filteredData = groupedData;
+                renderTable(groupedData);
+                updateSummary(groupedData);
+                document.getElementById('tableTitle').textContent =
+                    `${currentPeriod.charAt(0).toUpperCase()+currentPeriod.slice(1)} Financial Summary`;
+            }
+
+            // Helper: get week number
+            function getWeekNumber(date) {
+                const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                d.setHours(0, 0, 0, 0);
+                d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+                const week1 = new Date(d.getFullYear(), 0, 4);
+                return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+            }
+
+            // ─── RENDER TABLE ──────────────────────────────────────────────
+            function renderTable(data) {
+                const tbody = document.getElementById('financeTableBody');
+                const tfoot = document.getElementById('financeTableFoot');
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="14" class="px-6 py-12 text-center text-gray-400">No data for the selected filters.</td></tr>`;
+                    tfoot.innerHTML = '';
+                    return;
+                }
+
+                let totals = {
+                    orders: 0,
+                    totalRevenue: 0,
+                    advance: 0,
+                    cod: 0,
+                    importDuty: 0,
+                    vat: 0,
+                    serviceCharges: 0,
+                    discounts: 0,
+                    refunds: 0,
+                    shippingFees: 0,
+                    netRevenue: 0,
+                    netLoss: 0,
+                    ese: 0,
+                    khalti: 0,
+                    fonepay: 0
+                };
+
+                data.forEach((row, idx) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'finance-row border-b border-gray-100';
+
+                    // Period cell: English on first line, Nepali on second
+                    const periodHtml = `<span class="period-cell"><span class="eng">${row.label}</span><span class="nep">${row.nepLabel || ''}</span></span>`;
+
+                    // Order count clickable
+                    const orderLink =
+                        `<span class="order-link" onclick="showOrders('${row.label.replace(/'/g, "\\'")}', ${idx})">${row.orders}</span>`;
+
+                    // Net loss
+                    const netLoss = row.netRevenue < 0 ? Math.abs(row.netRevenue) : 0;
+
+                    tr.innerHTML = `
+                        <td class="px-3 py-2.5 font-medium text-gray-700">${periodHtml}</td>
+                        <td class="px-3 py-2.5 text-right">${orderLink}</td>
+                        <td class="px-3 py-2.5 text-right font-medium">NPR ${row.totalRevenue.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.advance.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.cod.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.importDuty.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.vat.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.serviceCharges.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.discounts.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.refunds.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right">NPR ${row.shippingFees.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right font-semibold text-primary">NPR ${row.netRevenue.toLocaleString()}</td>
+                        <td class="px-3 py-2.5 text-right font-semibold text-red-600">${netLoss > 0 ? 'NPR '+netLoss.toLocaleString() : '—'}</td>
+                        <td class="px-3 py-2.5 text-center">
+                            <button onclick="openRefundModal('${row.label.replace(/'/g, "\\'")}', ${idx})" class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded hover:bg-yellow-200">Refund</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+
+                    // Accumulate totals
+                    totals.orders += row.orders;
+                    totals.totalRevenue += row.totalRevenue;
+                    totals.advance += row.advance;
+                    totals.cod += row.cod;
+                    totals.importDuty += row.importDuty;
+                    totals.vat += row.vat;
+                    totals.serviceCharges += row.serviceCharges;
+                    totals.discounts += row.discounts;
+                    totals.refunds += row.refunds;
+                    totals.shippingFees += row.shippingFees;
+                    totals.netRevenue += row.netRevenue;
+                    totals.netLoss += netLoss;
+                    totals.ese += row.ese || 0;
+                    totals.khalti += row.khalti || 0;
+                    totals.fonepay += row.fonepay || 0;
+                });
+
+                // Footer
+                tfoot.innerHTML = `
+                    <tr class="border-t-2 border-gray-300 bg-gray-50">
+                        <td class="px-3 py-3 text-left font-bold text-gray-700">TOTAL</td>
+                        <td class="px-3 py-3 text-right font-bold">${totals.orders}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.totalRevenue.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.advance.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.cod.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.importDuty.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.vat.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.serviceCharges.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.discounts.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.refunds.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold">NPR ${totals.shippingFees.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold text-primary">NPR ${totals.netRevenue.toLocaleString()}</td>
+                        <td class="px-3 py-3 text-right font-bold text-red-600">${totals.netLoss > 0 ? 'NPR '+totals.netLoss.toLocaleString() : '—'}</td>
+                        <td class="px-3 py-3"></td>
+                    </tr>
+                `;
+            }
+
+            // ─── UPDATE SUMMARY CARDS ────────────────────────────────────
+            function updateSummary(data) {
+                let totalRev = 0,
+                    totalAdv = 0,
+                    totalCod = 0,
+                    totalImportVat = 0,
+                    totalService = 0,
+                    totalShipping = 0,
+                    totalEse = 0,
+                    totalKhalti = 0,
+                    totalFonepay = 0;
+
+                data.forEach(row => {
+                    totalRev += row.totalRevenue;
+                    totalAdv += row.advance;
+                    totalCod += row.cod;
+                    totalImportVat += row.importDuty + row.vat;
+                    totalService += row.serviceCharges;
+                    totalShipping += row.shippingFees;
+                    totalEse += row.ese || 0;
+                    totalKhalti += row.khalti || 0;
+                    totalFonepay += row.fonepay || 0;
+                });
+
+                document.getElementById('totalRevenue').textContent = `NPR ${totalRev.toLocaleString()}`;
+                document.getElementById('totalAdvance').textContent = `NPR ${totalAdv.toLocaleString()}`;
+                document.getElementById('totalCod').textContent = `NPR ${totalCod.toLocaleString()}`;
+                document.getElementById('totalImportVat').textContent = `NPR ${totalImportVat.toLocaleString()}`;
+                document.getElementById('totalService').textContent = `NPR ${totalService.toLocaleString()}`;
+                document.getElementById('totalShipping').textContent = `NPR ${totalShipping.toLocaleString()}`;
+                document.getElementById('totalEsewa').textContent = `NPR ${totalEse.toLocaleString()}`;
+                document.getElementById('totalKhalti').textContent = `NPR ${totalKhalti.toLocaleString()}`;
+                document.getElementById('totalFonePay').textContent = `NPR ${totalFonepay.toLocaleString()}`;
+            }
+
+            // ─── ORDERS MODAL ─────────────────────────────────────────────
+            window.showOrders = function(label, index) {
+                const row = filteredData[index];
+                if (!row) {
+                    showToast('⚠️', 'No orders for this period');
+                    return;
+                }
+                document.getElementById('ordersModalPeriod').textContent = label;
+                const container = document.getElementById('ordersModalContent');
+                const orderIds = row.orderIds || [];
+                if (orderIds.length === 0) {
+                    container.innerHTML = `<p class="text-sm text-gray-500">No orders found for this period.</p>`;
+                } else {
+                    let html = `<div class="grid grid-cols-2 sm:grid-cols-3 gap-2">`;
+                    orderIds.slice(0, 50).forEach(id => {
+                        html += `<div class="bg-gray-50 p-2 rounded text-xs font-mono">${id}</div>`;
+                    });
+                    if (orderIds.length > 50) {
+                        html += `<div class="col-span-full text-gray-400 text-xs">... and ${orderIds.length - 50} more</div>`;
+                    }
+                    html += `</div>`;
+                    container.innerHTML = html;
+                }
+                document.getElementById('ordersModal').classList.add('flex');
+                document.getElementById('ordersModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeOrdersModal = function() {
+                document.getElementById('ordersModal').classList.add('hidden');
+                document.body.style.overflow = '';
+            };
+
+            // ─── REFUND MODAL ─────────────────────────────────────────────
+            let refundTargetIndex = null;
+
+            window.openRefundModal = function(label, index) {
+                refundTargetIndex = index;
+                const row = filteredData[index];
+                document.getElementById('refundPeriodLabel').textContent = label;
+                document.getElementById('refundCurrentAmount').textContent = `NPR ${(row.refunds || 0).toLocaleString()}`;
+                document.getElementById('refundAmountInput').value = '';
+                document.getElementById('refundModal').classList.add('flex');
+                document.getElementById('refundModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('refundAmountInput').focus(), 100);
+            };
+
+            window.closeRefundModal = function() {
+                document.getElementById('refundModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                refundTargetIndex = null;
+            };
+
+            window.saveRefundUpdate = function() {
+                if (refundTargetIndex === null || refundTargetIndex >= filteredData.length) {
+                    showToast('⚠️', 'Invalid selection');
+                    return;
+                }
+                const amount = parseFloat(document.getElementById('refundAmountInput').value);
+                if (isNaN(amount) || amount < 0) {
+                    showToast('⚠️', 'Please enter a valid refund amount (>=0)');
+                    return;
+                }
+
+                const row = filteredData[refundTargetIndex];
+                // Find original data
+                let target = null;
+                if (currentPeriod === 'monthly') {
+                    target = financeData.find(d => d.year === row.year && d.monthIndex === row.monthIndex);
+                } else {
+                    // For aggregated, find first match by label
+                    target = financeData.find(d => `${d.month} ${d.year}` === row.label);
+                }
+                if (!target) {
+                    // Fallback: pick first month if any
+                    const firstMonth = financeData.find(d => d.orderIds && d.orderIds.length > 0);
+                    if (firstMonth) target = firstMonth;
+                }
+                if (!target) {
+                    showToast('❌', 'Could not locate the original month data');
+                    return;
+                }
+
+                // Add to existing refund (not replace)
+                const newRefund = target.refunds + amount;
+                target.refunds = newRefund;
+                // Recalculate net revenue
+                target.netRevenue = target.totalRevenue - target.importDuty - target.vat - target.serviceCharges -
+                    target.discounts - target.refunds - target.shippingFees;
+
+                // Update filtered row
+                row.refunds = newRefund;
+                row.netRevenue = target.netRevenue;
+
+                // Re-render
+                refreshView();
+                closeRefundModal();
+                showToast('✅', `Added refund of NPR ${amount.toLocaleString()}. Total refund: NPR ${newRefund.toLocaleString()}`);
+            };
+
+            // ─── EXPORT EXCEL ──────────────────────────────────────────────
+            window.exportFinanceExcel = function() {
+                const data = filteredData;
+                if (data.length === 0) {
+                    showToast('⚠️', 'No data to export');
+                    return;
+                }
+                let csv =
+                    'Period,Orders,Total Revenue,25% Advance,75% COD,Import Duty,VAT,Service Charges,Discounts,Refunds,Shipping Fees,Net Revenue,Net Loss,Esewa,Khalti,FonePay QR\n';
+                data.forEach(row => {
+                    const netLoss = row.netRevenue < 0 ? Math.abs(row.netRevenue) : 0;
+                    const label = row.label + (row.nepLabel ? ` (${row.nepLabel})` : '');
+                    csv +=
+                        `${label},${row.orders},${row.totalRevenue},${row.advance},${row.cod},${row.importDuty},${row.vat},${row.serviceCharges},${row.discounts},${row.refunds},${row.shippingFees},${row.netRevenue},${netLoss},${row.ese||0},${row.khalti||0},${row.fonepay||0}\n`;
+                });
+                // Totals
+                const totals = data.reduce((acc, r) => {
+                    acc.orders += r.orders;
+                    acc.totalRevenue += r.totalRevenue;
+                    acc.advance += r.advance;
+                    acc.cod += r.cod;
+                    acc.importDuty += r.importDuty;
+                    acc.vat += r.vat;
+                    acc.serviceCharges += r.serviceCharges;
+                    acc.discounts += r.discounts;
+                    acc.refunds += r.refunds;
+                    acc.shippingFees += r.shippingFees;
+                    acc.netRevenue += r.netRevenue;
+                    acc.netLoss += (r.netRevenue < 0 ? Math.abs(r.netRevenue) : 0);
+                    acc.ese += r.ese || 0;
+                    acc.khalti += r.khalti || 0;
+                    acc.fonepay += r.fonepay || 0;
+                    return acc;
+                }, { orders: 0, totalRevenue: 0, advance: 0, cod: 0, importDuty: 0, vat: 0, serviceCharges: 0,
+                    discounts: 0, refunds: 0, shippingFees: 0, netRevenue: 0, netLoss: 0, ese: 0, khalti: 0,
+                    fonepay: 0 });
+                csv +=
+                    `TOTAL,${totals.orders},${totals.totalRevenue},${totals.advance},${totals.cod},${totals.importDuty},${totals.vat},${totals.serviceCharges},${totals.discounts},${totals.refunds},${totals.shippingFees},${totals.netRevenue},${totals.netLoss},${totals.ese},${totals.khalti},${totals.fonepay}\n`;
+
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `finance_report_${new Date().toISOString().slice(0,10)}.csv`;
+                link.click();
+                showToast('✅', 'Finance report exported!');
+            };
+
+            // ─── REFRESH ────────────────────────────────────────────────────
+            window.refreshFinance = function() {
+                refreshView();
+                showToast('🔄', 'Data refreshed');
+            };
+
+            // ─── TOAST ──────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 2800);
+            }
+
+            // ─── SIDEBAR TOGGLE ─────────────────────────────────────────────
+            window.toggleSidebar = function() {
+                document.getElementById('sidebar').classList.toggle('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+            };
+
+            window.toggleSidebarSection = function(header) {
+                const content = header.nextElementSibling;
+                const arrow = header.querySelector('svg:last-child');
+                if (content.classList.contains('max-h-0')) {
+                    content.classList.remove('max-h-0');
+                    content.classList.add('max-h-[200px]');
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    content.classList.add('max-h-0');
+                    content.classList.remove('max-h-[200px]');
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            };
+
+            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            window.applyDateFilter = applyDateFilter;
+            window.setPeriod = setPeriod;
+            window.exportFinanceExcel = window.exportFinanceExcel;
+            window.refreshFinance = window.refreshFinance;
+            window.showOrders = window.showOrders;
+            window.closeOrdersModal = window.closeOrdersModal;
+            window.openRefundModal = window.openRefundModal;
+            window.closeRefundModal = window.closeRefundModal;
+            window.saveRefundUpdate = window.saveRefundUpdate;
+
+            // ─── INIT ──────────────────────────────────────────────────────
+            document.getElementById('dateFrom').value = '2026-01-01';
+            document.getElementById('dateTo').value = '2026-12-31';
+            setPeriod('monthly');
+
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
+
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape') {
+                    closeOrdersModal();
+                    closeRefundModal();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
