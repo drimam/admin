@@ -1334,7 +1334,6 @@
             color: #1e3a8a;
         }
 
-        /* ─── SETTINGS MODAL STYLES ─── */
         .settings-modal .partner-checkbox {
             display: flex;
             align-items: center;
@@ -1481,7 +1480,6 @@
             margin-left: 4px;
         }
 
-        /* ─── MANUAL CONFIRM MODAL ────────────────────────────────────── */
         .manual-confirm-modal .field input[type="number"] {
             width: 100%;
             padding: 10px 14px;
@@ -1586,7 +1584,6 @@
             margin-top: 2px;
         }
 
-        /* ─── MANUAL CONFIRM BUTTON ──────────────────────────────────── */
         .manual-confirm-btn {
             display: inline-flex;
             align-items: center;
@@ -1640,6 +1637,163 @@
             width: 14px;
             height: 14px;
             flex-shrink: 0;
+        }
+
+        /* ─── ORDERED MODAL STYLES ──────────────────────────────────────── */
+        .ordered-modal .payment-type-group {
+            display: flex;
+            gap: 20px;
+            padding: 6px 0 10px 0;
+        }
+        .ordered-modal .payment-type-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            padding: 6px 14px 6px 10px;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.15s;
+            flex: 1;
+            justify-content: center;
+        }
+        .ordered-modal .payment-type-group label:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .ordered-modal .payment-type-group label.active-prepaid {
+            border-color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .ordered-modal .payment-type-group label.active-cod {
+            border-color: #F59E0B;
+            background: #FFFBEB;
+        }
+        .ordered-modal .payment-type-group input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .ordered-modal .ordered-fields {
+            padding: 12px 0 4px 0;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 4px;
+        }
+        .ordered-modal .ordered-fields .field-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #3d4f6f;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .ordered-modal .ordered-fields input[type="number"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .ordered-modal .ordered-fields input[type="number"]:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
+        }
+        .ordered-modal .ordered-fields .prepaid-check-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        .ordered-modal .ordered-fields .prepaid-check-wrap input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+        }
+        .ordered-modal .ordered-fields .prepaid-check-wrap label {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        .ordered-modal .btn-row-ordered {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+        .ordered-modal .btn-row-ordered button {
+            flex: 1;
+            padding: 11px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .ordered-modal .btn-row-ordered .btn-save-ordered {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .ordered-modal .btn-row-ordered .btn-save-ordered:hover {
+            background: #4338CA;
+        }
+        .ordered-modal .btn-row-ordered .btn-close-ordered {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .ordered-modal .btn-row-ordered .btn-close-ordered:hover {
+            background: #e2e8f0;
+        }
+        .ordered-modal .order-info-summary {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #475569;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 4px 10px;
+        }
+        .ordered-modal .order-info-summary .label {
+            font-weight: 500;
+        }
+        .ordered-modal .order-info-summary .value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .ordered-modal .inr-hint {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        @media (max-width: 480px) {
+            .ordered-modal .payment-type-group label {
+                font-size: 13px;
+                padding: 5px 8px 5px 6px;
+            }
+            .ordered-modal .payment-type-group {
+                gap: 10px;
+            }
+            .ordered-modal .order-info-summary {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .ordered-modal .btn-row-ordered button {
+                font-size: 13px;
+                padding: 9px;
+            }
         }
     </style>
 </head>
@@ -2134,17 +2288,13 @@
             </div>
             <div class="p-4 sm:p-6">
                 <p class="text-sm text-gray-500 mb-3">Confirm payment for order <span id="manualOrderId" class="font-semibold text-primary">#</span></p>
-
                 <div class="space-y-4">
-                    <!-- Order Info -->
                     <div class="bg-gray-50 rounded-xl p-3 space-y-1">
                         <div class="info-row"><span class="label">Order ID</span><span class="value" id="manualOrderIdDisplay">—</span></div>
                         <div class="info-row"><span class="label">Product</span><span class="value" id="manualProductName">—</span></div>
                         <div class="info-row"><span class="label">Total Amount (after discount)</span><span class="value" id="manualTotalAmount">—</span></div>
                         <div class="info-row"><span class="label">Current Advance</span><span class="value" id="manualCurrentAdvance">—</span></div>
                     </div>
-
-                    <!-- Advance Amount Input -->
                     <div class="field">
                         <label for="manualAdvanceInput">Advance Amount (NPR)</label>
                         <div class="amount-prefix mt-1">
@@ -2153,22 +2303,74 @@
                         </div>
                         <div class="full-amount-hint" id="manualFullHint">💡 Check "Full Payment" below to auto-fill the full amount.</div>
                     </div>
-
-                    <!-- Full Payment Checkbox -->
                     <div class="checkbox-wrap-custom">
                         <input type="checkbox" id="manualFullPaymentCheck" onchange="toggleManualFullPayment()" />
                         <label for="manualFullPaymentCheck">✅ Full Payment Received</label>
                     </div>
-
-                    <!-- Info: when checked, show the amount that will be set -->
                     <div id="manualFullPaymentInfo" class="text-xs text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg hidden">
                         🔹 Full amount <strong id="manualFullAmountDisplay">NPR 0.00</strong> will be set as advance.
                     </div>
                 </div>
-
                 <div class="btn-row-manual">
                     <button class="btn-save-manual" onclick="saveManualConfirm()">💾 Save</button>
                     <button class="btn-close-manual" onclick="closeManualConfirmModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ORDERED CONFIRM MODAL (NEW) ────────────────────────────────── -->
+    <div id="orderedModal" class="fixed inset-0 z-50 hidden items-center justify-center ordered-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeOrderedModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">📋 Order Placed Confirmation</h3>
+                <button onclick="closeOrderedModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-500 mb-2">Confirm order placement for <span id="orderedOrderId" class="font-semibold text-primary">#</span></p>
+
+                <!-- Order info summary -->
+                <div class="order-info-summary">
+                    <span><span class="label">Product:</span> <span class="value" id="orderedProductName">—</span></span>
+                    <span><span class="label">QTY:</span> <span class="value" id="orderedQty">—</span></span>
+                    <span><span class="label">Total:</span> <span class="value" id="orderedTotalAmount">—</span></span>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Payment Type -->
+                    <div>
+                        <label class="text-xs font-semibold text-gray-500 uppercase block mb-1">Payment Type</label>
+                        <div class="payment-type-group" id="orderedPaymentTypeGroup">
+                            <label class="active-prepaid" id="orderedLabelPrepaid">
+                                <input type="radio" name="orderedPaymentType" value="PREPAID" checked onchange="toggleOrderedPaymentType()" />
+                                💳 PREPAID
+                            </label>
+                            <label id="orderedLabelCod">
+                                <input type="radio" name="orderedPaymentType" value="COD" onchange="toggleOrderedPaymentType()" />
+                                📦 COD
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic fields -->
+                    <div class="ordered-fields" id="orderedFieldsContainer">
+                        <!-- PREPAID fields (checkbox removed) -->
+                        <div id="orderedPrepaidFields">
+                            <p class="text-xs text-gray-400 mt-1">Prepaid Order Placed at Seller Website</p>
+                        </div>
+                        <!-- COD fields -->
+                        <div id="orderedCodFields" class="hidden">
+                            <label class="field-label">INR Amount to Collect</label>
+                            <input type="number" id="orderedInrAmount" placeholder="Enter INR amount" step="0.01" min="0" />
+                            <p class="inr-hint">This amount will be recorded as the invoice value in INR.</p>
+                        </div>
+                    </div>
+
+                    <div class="btn-row-ordered">
+                        <button class="btn-save-ordered" onclick="saveOrderedConfirmation()">💾 Save</button>
+                        <button class="btn-close-ordered" onclick="closeOrderedModal()">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2477,6 +2679,9 @@
             // ─── MANUAL CONFIRM STATE ─────────────────────────────────────
             let manualConfirmOrderId = null;
 
+            // ─── ORDERED MODAL STATE ──────────────────────────────────────
+            let orderedModalOrderId = null;
+
             // ─── LOGISTIC PARTNERS SETTINGS ──────────────────────────────
             const PARTNER_KEY = 'MeroWish_logistic_partners';
             const ALL_PARTNERS = ['ExpoExpress', 'Pathao', 'Daraz Dex'];
@@ -2608,34 +2813,178 @@
                 showToast('✅', `Order ${orderId} updated to ${newStatus}`);
             };
 
-            // ─── ORDERED BUTTON FUNCTION ──────────────────────────────────
+            // ─── ORDERED BUTTON FUNCTION (MODIFIED) ───────────────────────
             window.setOrdered = function(orderId) {
+                // Open the modal instead of directly updating
+                openOrderedModal(orderId);
+            };
+
+            // ─── ORDERED MODAL FUNCTIONS ──────────────────────────────────
+            function openOrderedModal(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) {
                     showToast('❌', 'Order not found');
                     return;
                 }
-                if (order.status === 'Order Approved') {
-                    showToast('ℹ️', `Order ${orderId} is already in Assign Pending`);
-                    return;
-                }
+
+                // Check terminal states
                 const terminal = ['Delivered', 'Order Cancelled', 'Failed Delivery', 'Returned'];
                 if (terminal.includes(order.status)) {
                     if (!confirm(
                             `Order ${orderId} is currently "${order.status}". Moving it to "Order Approved" will remove it from its current state. Continue?`
-                            )) {
+                        )) {
                         return;
                     }
                 }
-                order.status = 'Order Approved';
-                order.currentStageIndex = 3;
-                order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
-                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                order.orderStage = 'Assign Pending';
+
+                orderedModalOrderId = orderId;
+
+                // Populate order info
+                document.getElementById('orderedOrderId').textContent = `#${orderId}`;
+                document.getElementById('orderedProductName').textContent = order.productName;
+                document.getElementById('orderedQty').textContent = order.qty;
+                document.getElementById('orderedTotalAmount').textContent = order.totalAmount;
+
+                // Reset form: default to PREPAID
+                const prepaidRadio = document.querySelector('input[name="orderedPaymentType"][value="PREPAID"]');
+                const codRadio = document.querySelector('input[name="orderedPaymentType"][value="COD"]');
+                if (prepaidRadio) prepaidRadio.checked = true;
+                if (codRadio) codRadio.checked = false;
+
+                document.getElementById('orderedInrAmount').value = '';
+
+                // Update UI labels
+                const labelPrepaid = document.getElementById('orderedLabelPrepaid');
+                const labelCod = document.getElementById('orderedLabelCod');
+                if (labelPrepaid) { labelPrepaid.classList.add('active-prepaid');
+                    labelPrepaid.classList.remove('active-cod'); }
+                if (labelCod) { labelCod.classList.add('active-cod');
+                    labelCod.classList.remove('active-prepaid'); }
+
+                toggleOrderedPaymentType();
+
+                document.getElementById('orderedModal').classList.add('flex');
+                document.getElementById('orderedModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+
+                // Focus first input
+                setTimeout(() => {
+                    const inp = document.getElementById('orderedInrAmount');
+                    if (inp && !inp.closest('.hidden')) inp.focus();
+                }, 150);
+            }
+
+            function closeOrderedModal() {
+                document.getElementById('orderedModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                orderedModalOrderId = null;
+            }
+
+            function toggleOrderedPaymentType() {
+                const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
+                if (!selected) return;
+                const isPrepaid = selected.value === 'PREPAID';
+
+                const prepaidFields = document.getElementById('orderedPrepaidFields');
+                const codFields = document.getElementById('orderedCodFields');
+                const labelPrepaid = document.getElementById('orderedLabelPrepaid');
+                const labelCod = document.getElementById('orderedLabelCod');
+
+                if (isPrepaid) {
+                    prepaidFields.classList.remove('hidden');
+                    codFields.classList.add('hidden');
+                    if (labelPrepaid) { labelPrepaid.classList.add('active-prepaid');
+                        labelPrepaid.classList.remove('active-cod'); }
+                    if (labelCod) { labelCod.classList.add('active-cod');
+                        labelCod.classList.remove('active-prepaid'); }
+                } else {
+                    prepaidFields.classList.add('hidden');
+                    codFields.classList.remove('hidden');
+                    if (labelCod) { labelCod.classList.add('active-cod');
+                        labelCod.classList.remove('active-prepaid'); }
+                    if (labelPrepaid) { labelPrepaid.classList.add('active-prepaid');
+                        labelPrepaid.classList.remove('active-cod'); }
+                }
+            }
+
+            function saveOrderedConfirmation() {
+                if (!orderedModalOrderId) {
+                    showToast('❌', 'No order selected');
+                    return;
+                }
+                const order = ordersData.find(o => o.id === orderedModalOrderId);
+                if (!order) {
+                    showToast('❌', 'Order not found');
+                    return;
+                }
+
+                const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
+                if (!selected) {
+                    showToast('⚠️', 'Please select a payment type');
+                    return;
+                }
+                const isPrepaid = selected.value === 'PREPAID';
+
+                // ─── PREPAID ──────────────────────────────────────────────
+                if (isPrepaid) {
+                    // No checkbox needed – just proceed
+
+                    // Update order
+                    order.status = 'Order Approved';
+                    order.currentStageIndex = 3;
+                    order.orderStage = 'Assign Pending';
+
+                    // Update payment summary for PREPAID
+                    const totalAmount = parseFloat(order.totalAmount.replace(/[^0-9.]/g, '')) || 0;
+                    order.paymentSummary.advance = `NPR ${totalAmount.toFixed(2)}`;
+                    order.paymentSummary.cod = 'NPR 0.00';
+                    order.paymentSummary.gateway = 'Prepaid (Online)';
+                    order.paymentSummary.invoiceValue = order.paymentSummary.invoiceValue || 'INR 0.00';
+                    order.paymentReceivedDateTime = new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    order.comment = order.comment ?
+                        `${order.comment} | Order placed as PREPAID (${new Date().toLocaleString()})` :
+                        `Order placed as PREPAID (${new Date().toLocaleString()})`;
+                    order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                    showToast('✅', `Order ${orderedModalOrderId} marked as PREPAID (Order Approved)`);
+
+                } else {
+                    // ─── COD ──────────────────────────────────────────────
+                    const inrAmount = parseFloat(document.getElementById('orderedInrAmount').value);
+                    if (!inrAmount || inrAmount <= 0) {
+                        showToast('⚠️', 'Please enter a valid INR amount for COD');
+                        return;
+                    }
+
+                    // Update order
+                    order.status = 'Order Approved';
+                    order.currentStageIndex = 3;
+                    order.orderStage = 'Assign Pending';
+
+                    // Update payment summary for COD
+                    const totalAmount = parseFloat(order.totalAmount.replace(/[^0-9.]/g, '')) || 0;
+                    order.paymentSummary.advance = 'NPR 0.00';
+                    order.paymentSummary.cod = `NPR ${totalAmount.toFixed(2)}`;
+                    order.paymentSummary.invoiceValue = `INR ${inrAmount.toFixed(2)}`;
+                    order.paymentSummary.gateway = 'COD (Cash on Delivery)';
+                    order.paymentSummary.inrAmount = inrAmount;
+                    order.paymentReceivedDateTime = new Date().toLocaleString('en-GB', { day: '2-digit',
+                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                    order.comment = order.comment ?
+                        `${order.comment} | Order placed as COD (INR ${inrAmount.toFixed(2)}) (${new Date().toLocaleString()})` :
+                        `Order placed as COD (INR ${inrAmount.toFixed(2)}) (${new Date().toLocaleString()})`;
+                    order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+                    showToast('✅', `Order ${orderedModalOrderId} marked as COD (Order Approved)`);
+                }
+
+                closeOrderedModal();
                 updateStats();
                 filterOrders();
-                showToast('✅', `Order ${orderId} moved to Ordered (Assign Pending)`);
-            };
+            }
 
             // ─── HELPERS ────────────────────────────────────────────────────
             function getUserTier(userName) {
@@ -3030,14 +3379,12 @@
                 if (!order) { showToast('❌', 'Order not found'); return; }
                 manualConfirmOrderId = orderId;
 
-                // Populate modal
                 document.getElementById('manualOrderId').textContent = `#${orderId}`;
                 document.getElementById('manualOrderIdDisplay').textContent = orderId;
                 document.getElementById('manualProductName').textContent = order.productName;
                 document.getElementById('manualTotalAmount').textContent = order.totalAmount;
                 document.getElementById('manualCurrentAdvance').textContent = order.paymentSummary.advance || 'NPR 0.00';
 
-                // Reset fields
                 const input = document.getElementById('manualAdvanceInput');
                 input.value = '';
                 input.placeholder = '0.00';
@@ -3050,7 +3397,6 @@
                 document.getElementById('manualConfirmModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
 
-                // Focus input after a tiny delay
                 setTimeout(() => input.focus(), 100);
             };
 
@@ -3061,7 +3407,6 @@
                 const amountDisplay = document.getElementById('manualFullAmountDisplay');
 
                 if (fullCheck.checked) {
-                    // Get total amount after discount (remove NPR and commas)
                     const totalRaw = document.getElementById('manualTotalAmount').textContent;
                     const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
                     input.value = totalNum.toFixed(2);
@@ -3087,7 +3432,6 @@
 
                 if (advanceAmount < 0) { showToast('⚠️', 'Advance amount cannot be negative'); return; }
 
-                // If full payment is checked but user cleared the input, fallback to total
                 if (fullCheck.checked) {
                     const totalRaw = document.getElementById('manualTotalAmount').textContent;
                     const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
@@ -3098,11 +3442,9 @@
                     if (!confirm('Advance amount is 0. Are you sure you want to proceed?')) return;
                 }
 
-                // Update the order's advance
                 order.paymentSummary.advance = `NPR ${advanceAmount.toFixed(2)}`;
-                order.paymentSummary.total = order.totalAmount; // ensure total is consistent
+                order.paymentSummary.total = order.totalAmount;
 
-                // If full payment, also update status to Payment Received if not already
                 if (fullCheck.checked) {
                     if (order.status !== 'Payment Received' && order.status !== 'Delivered' && order.status !==
                         'Shipped') {
@@ -3110,16 +3452,13 @@
                         order.currentStageIndex = statusToIndexMap['Order Approved'] || 3;
                         order.orderStage = 'Payment Received';
                     }
-                    // Also update the payment received datetime
                     order.paymentReceivedDateTime = new Date().toLocaleString('en-GB', { day: '2-digit',
                         month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
                 } else {
-                    // Partial advance: update lastUpdate
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
-                    // If advance > 0 and status is Order Created or similar, move to Payment Received
                     if (advanceAmount > 0 && ['Order Created', 'Quotation Received', 'Quotation Sent (Buy For Me)']
                         .includes(order.status)) {
                         order.status = 'Payment Received';
@@ -3130,7 +3469,6 @@
                     }
                 }
 
-                // Add a comment trail
                 const commentNote = fullCheck.checked ?
                     `✅ Full payment confirmed manually (NPR ${advanceAmount.toFixed(2)})` :
                     `💰 Advance of NPR ${advanceAmount.toFixed(2)} confirmed manually`;
@@ -3149,7 +3487,6 @@
                 document.getElementById('manualConfirmModal').classList.add('hidden');
                 document.body.style.overflow = '';
                 manualConfirmOrderId = null;
-                // Reset checkbox and input
                 document.getElementById('manualFullPaymentCheck').checked = false;
                 document.getElementById('manualAdvanceInput').value = '';
                 document.getElementById('manualAdvanceInput').disabled = false;
@@ -3222,7 +3559,6 @@
                         </div>
                     `;
 
-                    // ─── MANUAL CONFIRM BUTTON (Desktop) ──────────────────
                     const manualConfirmBtn = `
                         <button onclick="openManualConfirm('${order.id}')" class="manual-confirm-btn" title="Manual Payment Confirmation">
                             <svg class="icon-svg-small" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -3359,7 +3695,6 @@
                     const userNameHtml =
                         `<span class="user-clickable" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</span>`;
 
-                    // ─── MANUAL CONFIRM BUTTON (Mobile) ──────────────────
                     const manualConfirmBtnMobile = `
                         <button onclick="openManualConfirm('${order.id}')" class="manual-confirm-btn-mobile" title="Manual Payment Confirmation">
                             <svg class="icon-svg-small" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -3849,7 +4184,6 @@
                 modal.classList.add('flex');
                 modal.classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-                // sync checkboxes
                 const checkboxes = document.querySelectorAll('#settingsPartnerList input[type="checkbox"]');
                 checkboxes.forEach(cb => {
                     cb.checked = selectedPartners.includes(cb.value);
@@ -3906,6 +4240,7 @@
                     closeBulkLabelModal();
                     closeSettingsModal();
                     closeManualConfirmModal();
+                    closeOrderedModal();
                 }
             });
 
@@ -3959,11 +4294,15 @@
             window.closeSettingsModal = closeSettingsModal;
             window.saveSettings = saveSettings;
             window.removePartner = removePartner;
-            // Manual Confirm
             window.openManualConfirm = openManualConfirm;
             window.closeManualConfirmModal = closeManualConfirmModal;
             window.saveManualConfirm = saveManualConfirm;
             window.toggleManualFullPayment = toggleManualFullPayment;
+            // Ordered modal
+            window.openOrderedModal = openOrderedModal;
+            window.closeOrderedModal = closeOrderedModal;
+            window.saveOrderedConfirmation = saveOrderedConfirmation;
+            window.toggleOrderedPaymentType = toggleOrderedPaymentType;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
@@ -3972,7 +4311,6 @@
             renderPaginatedOrders();
             updateActiveFilters();
             handleStatsOnResize();
-            // restore settings display on load
             updateSettingsDisplay();
         })();
     </script>
