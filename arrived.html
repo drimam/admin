@@ -694,10 +694,6 @@
             flex-direction: column;
             line-height: 1.4;
         }
-        .product-cell .product-info .product-meta .warehouse-id {
-            font-weight: 600;
-            color: #475569;
-        }
         .product-cell .product-info .product-meta .order-id {
             font-weight: 600;
             color: #8B5CF6;
@@ -1092,7 +1088,6 @@
         .scan-table .col-action {
             width: 8%;
         }
-        /* NEW COLUMN for Payment Status */
         .scan-table .col-payment {
             width: 10%;
         }
@@ -1692,7 +1687,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
                         <div class="flex-1 w-full scan-input-wrapper">
-                            <input type="text" id="barcodeInput" placeholder="Scan Tracking to mark Received at Nepal WH..." />
+                            <input type="text" id="barcodeInput" placeholder="Scan Tracking or Warehouse Barcode to Receive..." />
                             <button onclick="processScan()" class="scan-btn">✅ Receive</button>
                             <button onclick="startReceiveScanner()" class="barcode-btn">📷 Scanner</button>
                         </div>
@@ -1947,7 +1942,6 @@
                                     <a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a>
                                 </div>
                                 <div class="product-meta">
-                                    <span class="warehouse-id">🏭 ${item.warehouseId}</span>
                                     <span class="order-id">📋 Order ID : ${item.orderId || 'N/A'}</span>
                                     ${item.warehouseBarcode ? `<span class="wh-barcode-tag"><span class="barcode-icon">🏷️</span> ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
                                 </div>
@@ -1971,39 +1965,39 @@
             // ─── DATA ──────────────────────────────────────────────────────
 
             const INITIAL_SHIPMENTS = [
-                { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001234', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage(
                         'Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped', comment: '',
                     paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001235', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage(
                         'Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302',
                     subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped', comment: '',
                     paymentType: 'COD', codAmount: 320.00, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001236', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage(
                         'Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped', comment: '',
                     paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001237', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage(
                         'Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202',
                     subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped', comment: '',
                     paymentType: 'COD', codAmount: 570.00, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001238', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage(
                         'USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped', comment: '',
                     paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001239', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage(
                         'Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302',
                     subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped', comment: '',
                     paymentType: 'COD', codAmount: 400.00, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001240', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage(
                         'Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471',
                     subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped', comment: '',
                     paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001241', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage(
                         'Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion',
                     quantity: 1, inrPrice: 580.00, status: 'shipped', comment: '', paymentType: 'COD',
                     codAmount: 580.00, warehouseBarcode: '' },
-                { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage(
+                { trackingNumber: 'TRK-2026-001242', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage(
                         'Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506',
                     subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped', comment: '',
                     paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
@@ -2059,7 +2053,6 @@
                     { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
-                    { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                     { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
@@ -2075,7 +2068,6 @@
                     { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
-                    { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                     { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
@@ -2091,7 +2083,6 @@
                     { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
-                    { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                     { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
@@ -2107,7 +2098,6 @@
                     { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
-                    { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
                     { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
@@ -2133,7 +2123,6 @@
                         <div class="detail-text">
                             <div class="name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
                             <div class="meta">
-                                <span>🏭 ${item.warehouseId}</span>
                                 <span>📋 ${item.orderId || 'N/A'}</span>
                                 <span>🔢 ${item.trackingNumber}</span>
                                 ${item.warehouseBarcode ? `<span>🏷️ ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
@@ -2224,7 +2213,6 @@
             }
 
             function simulateWhBarcodeScan() {
-                // Simulate scanning a barcode — generates a random barcode
                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 let code = 'WH-';
                 for (let i = 0; i < 10; i++) {
@@ -2258,10 +2246,8 @@
                     input.focus(); return; }
                 const item = shippedItems[idx];
 
-                // Show warehouse barcode modal
                 try {
                     const barcode = await showWhBarcodeModal(item);
-                    // User saved barcode
                     shippedItems.splice(idx, 1);
                     const arrived = {
                         ...item,
@@ -2284,7 +2270,6 @@
                     setTimeout(() => { statusEl.classList.add('hidden'); }, 4000);
                     stopScanner();
                 } catch (err) {
-                    // User cancelled
                     showToast('⏹️', 'Operation cancelled');
                     input.value = '';
                     input.focus();
@@ -2311,13 +2296,36 @@
                 showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
             }
 
+            // ─── SCAN & RECEIVE: accepts tracking OR warehouse barcode ────
+
             function processScan() {
                 const input = document.getElementById('barcodeInput');
-                const tracking = input.value.trim();
-                if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
-                const idx = dispatchedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
-                if (idx === -1) { showToast('❌', `No dispatched shipment found for tracking: ${tracking}`); input.value = '';
-                    input.focus(); return; }
+                const code = input.value.trim();
+                if (!code) {
+                    showToast('⚠️', 'Please enter a tracking number or warehouse barcode');
+                    return;
+                }
+
+                // Try to find by tracking number first
+                let idx = dispatchedItems.findIndex(s => s.trackingNumber.toLowerCase() === code.toLowerCase());
+                let matchType = 'tracking';
+                let matchedValue = code;
+
+                // If not found, try by warehouse barcode
+                if (idx === -1) {
+                    idx = dispatchedItems.findIndex(s => s.warehouseBarcode && s.warehouseBarcode.toLowerCase() === code
+                        .toLowerCase());
+                    matchType = 'barcode';
+                    matchedValue = code;
+                }
+
+                if (idx === -1) {
+                    showToast('❌', `No dispatched shipment found for: ${code}`);
+                    input.value = '';
+                    input.focus();
+                    return;
+                }
+
                 const item = dispatchedItems[idx];
                 dispatchedItems.splice(idx, 1);
                 const received = {
@@ -2332,13 +2340,16 @@
                 };
                 scannedLogs.push(received);
                 renderAll();
-                showToast('✅', `Shipment ${tracking} RECEIVED at Nepal WH`);
+
+                const displayVal = matchType === 'tracking' ? `Tracking: ${matchedValue}` :
+                    `Barcode: ${matchedValue}`;
+                showToast('✅', `Shipment RECEIVED at Nepal WH (${displayVal})`);
                 input.value = '';
                 input.focus();
                 const statusEl = document.getElementById('scanStatus');
                 statusEl.classList.remove('hidden');
-                statusEl.textContent = `✅ ${tracking} received!`;
-                setTimeout(() => { statusEl.classList.add('hidden'); }, 3000);
+                statusEl.textContent = `✅ Received! (${displayVal})`;
+                setTimeout(() => { statusEl.classList.add('hidden'); }, 4000);
                 stopReceiveScanner();
             }
 
@@ -3257,7 +3268,7 @@
 
             renderAll();
             switchTab('shipped');
-            showToast('✅', 'Warehouse Receiving loaded successfully | COD/Prepaid & Barcode features active');
+            showToast('✅', 'Warehouse Receiving loaded | COD/Prepaid + Barcode features active');
 
         })();
     </script>
