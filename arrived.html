@@ -41,195 +41,667 @@
         }
     </script>
     <style>
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .sidebar-scroll { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
-        .sidebar-scroll::-webkit-scrollbar { width: 3px; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-        .table-container { overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
-        .table-container::-webkit-scrollbar { height: 6px; }
-        .table-container::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 6px; }
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .table-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 6px;
+        }
 
-        .toast { animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards; }
-        @keyframes toastIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes toastOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
 
-        .modal-backdrop { background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px); }
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
 
-        .sidebar-section-header { cursor: pointer; user-select: none; transition: all 0.2s; }
-        .sidebar-section-header:hover { background: rgba(255, 255, 255, 0.04); }
-        .sidebar-section-content { overflow: hidden; transition: max-height 0.35s ease; }
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
 
-        .scan-row { transition: all 0.15s ease; }
-        .scan-row:hover { background: #f8fafc; box-shadow: inset 3px 0 0 #4F46E5; }
+        .scan-row {
+            transition: all 0.15s ease;
+        }
+        .scan-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
 
-        .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 12px; border-radius: 20px;
-            font-size: 11px; font-weight: 600; }
-        .status-badge .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-        .status-badge .dot.green { background: #10B981; }
-        .status-badge .dot.blue { background: #3B82F6; }
-        .status-badge .dot.yellow { background: #F59E0B; }
-        .status-badge .dot.red { background: #EF4444; }
-        .status-badge .dot.purple { background: #8B5CF6; }
-        .status-badge .dot.gray { background: #9CA3AF; }
-        .status-badge .dot.orange { background: #F97316; }
-        .status-badge .dot.teal { background: #14B8A6; }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-badge .dot.green {
+            background: #10B981;
+        }
+        .status-badge .dot.blue {
+            background: #3B82F6;
+        }
+        .status-badge .dot.yellow {
+            background: #F59E0B;
+        }
+        .status-badge .dot.red {
+            background: #EF4444;
+        }
+        .status-badge .dot.purple {
+            background: #8B5CF6;
+        }
+        .status-badge .dot.gray {
+            background: #9CA3AF;
+        }
+        .status-badge .dot.orange {
+            background: #F97316;
+        }
+        .status-badge .dot.teal {
+            background: #14B8A6;
+        }
 
-        .action-icon-btn { padding: 2px 8px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.15s;
-            font-size: 14px; line-height: 1; background: transparent; color: #64748b; }
-        .action-icon-btn:hover { background: #f1f5f9; transform: scale(1.1); }
-        .action-icon-btn.primary:hover { color: #4F46E5; background: #EEF2FF; }
-        .action-icon-btn.danger:hover { color: #DC2626; background: #FEF2F2; }
-        .action-icon-btn.green:hover { color: #059669; background: #ECFDF5; }
-        .action-icon-btn.amber:hover { color: #D97706; background: #FFFBEB; }
-        .action-icon-btn.purple:hover { color: #7C3AED; background: #F5F3FF; }
+        .action-icon-btn {
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-size: 14px;
+            line-height: 1;
+            background: transparent;
+            color: #64748b;
+        }
+        .action-icon-btn:hover {
+            background: #f1f5f9;
+            transform: scale(1.1);
+        }
+        .action-icon-btn.primary:hover {
+            color: #4F46E5;
+            background: #EEF2FF;
+        }
+        .action-icon-btn.danger:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+        }
+        .action-icon-btn.green:hover {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .action-icon-btn.amber:hover {
+            color: #D97706;
+            background: #FFFBEB;
+        }
+        .action-icon-btn.purple:hover {
+            color: #7C3AED;
+            background: #F5F3FF;
+        }
 
-        .filter-section { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-        .filter-section .filter-group { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-section .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
         .filter-section .filter-group input,
-        .filter-section .filter-group select { font-size: 13px; padding: 6px 10px; border: 1px solid #d1d5db;
-            border-radius: 8px; outline: none; background: #fff; }
+        .filter-section .filter-group select {
+            font-size: 13px;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            background: #fff;
+        }
         .filter-section .filter-group input:focus,
-        .filter-section .filter-group select:focus { border-color: #4F46E5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15); }
+        .filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+        }
 
-        .filter-actions .btn-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; padding: 6px 12px;
-            border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-        .filter-actions .btn-outline:hover { background: #f1f5f9; border-color: #cbd5e1; }
-        .filter-actions .btn-primary-sm { background: #4F46E5; color: #fff; border: none; padding: 6px 16px; border-radius: 8px;
-            font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-        .filter-actions .btn-primary-sm:hover { background: #4338CA; }
+        .filter-actions .btn-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .filter-actions .btn-primary-sm {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-actions .btn-primary-sm:hover {
+            background: #4338CA;
+        }
 
-        .detail-field { margin-bottom: 14px; }
-        .detail-field label { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase;
-            letter-spacing: 0.3px; display: block; margin-bottom: 3px; }
+        .detail-field {
+            margin-bottom: 14px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 3px;
+        }
         .detail-field input,
-        .detail-field select { width: 100%; padding: 8px 12px; border: 1.5px solid #dce3ef; border-radius: 10px;
-            font-size: 13px; background: #fafcff; transition: 0.2s; outline: none; }
+        .detail-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
         .detail-field input:focus,
-        .detail-field select:focus { border-color: #2a6df4; box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08); }
-        .detail-field .value-box { padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;
-            font-size: 14px; color: #0f172a; }
+        .detail-field select:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+        .detail-field .value-box {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #0f172a;
+        }
 
         @media (max-width: 767px) {
             .scan-table td,
-            .scan-table th { padding: 4px 6px !important; font-size: 10px !important; }
-            .action-icon-btn { font-size: 11px !important; padding: 1px 4px !important; }
+            .scan-table th {
+                padding: 4px 6px !important;
+                font-size: 10px !important;
+            }
+            .action-icon-btn {
+                font-size: 11px !important;
+                padding: 1px 4px !important;
+            }
             .filter-section .filter-group input,
-            .filter-section .filter-group select { font-size: 11px; padding: 4px 8px; min-width: 70px; }
+            .filter-section .filter-group select {
+                font-size: 11px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
             .filter-actions .btn-outline,
-            .filter-actions .btn-primary-sm { font-size: 11px; padding: 4px 10px; }
-            .status-badge { font-size: 9px; padding: 1px 8px; }
-            .detail-field .value-box { font-size: 12px; padding: 6px 10px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
-            .export-columns-grid { grid-template-columns: 1fr 1fr !important; }
-            .desktop-table { display: none !important; }
-            .mobile-cards { display: block !important; }
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .status-badge {
+                font-size: 9px;
+                padding: 1px 8px;
+            }
+            .detail-field .value-box {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
+            .export-columns-grid {
+                grid-template-columns: 1fr 1fr !important;
+            }
+            .desktop-table {
+                display: none !important;
+            }
+            .mobile-cards {
+                display: block !important;
+            }
         }
         @media (max-width: 480px) {
             .scan-table td,
-            .scan-table th { padding: 3px 4px !important; font-size: 9px !important; }
-            .action-icon-btn { font-size: 10px !important; padding: 0 3px !important; }
+            .scan-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 0 3px !important;
+            }
             .filter-section .filter-group input,
-            .filter-section .filter-group select { font-size: 10px; padding: 3px 6px; min-width: 55px; }
+            .filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 55px;
+            }
             .filter-actions .btn-outline,
-            .filter-actions .btn-primary-sm { font-size: 10px; padding: 3px 8px; }
-            .status-badge { font-size: 8px; padding: 1px 6px; }
-            .detail-field .value-box { font-size: 11px; padding: 5px 8px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px !important; }
-            .export-columns-grid { grid-template-columns: 1fr !important; }
+            .filter-actions .btn-primary-sm {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            .status-badge {
+                font-size: 8px;
+                padding: 1px 6px;
+            }
+            .detail-field .value-box {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4px !important;
+            }
+            .export-columns-grid {
+                grid-template-columns: 1fr !important;
+            }
         }
         @media (min-width: 768px) {
-            .desktop-table { display: table !important; }
-            .mobile-cards { display: none !important; }
+            .desktop-table {
+                display: table !important;
+            }
+            .mobile-cards {
+                display: none !important;
+            }
         }
 
-        .tab-btn { padding: 8px 20px; border-radius: 10px 10px 0 0; font-size: 13px; font-weight: 600; border: none;
-            cursor: pointer; transition: all 0.2s; background: transparent; color: #64748b;
-            border-bottom: 3px solid transparent; }
-        .tab-btn.active { color: #4F46E5; border-bottom-color: #4F46E5; background: #f8fafc; }
-        .tab-btn:hover:not(.active) { background: #f1f5f9; color: #475569; }
-        @media (max-width: 480px) { .tab-btn { font-size: 10px; padding: 4px 10px; } }
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom-color: #4F46E5;
+            background: #f8fafc;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
 
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
 
-        .user-avatar-sm { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; font-weight: 700; font-size: 10px; color: #fff; flex-shrink: 0; }
+        .user-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
 
-        .stat-card { transition: all 0.2s ease; cursor: default; }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06); }
-        .stat-card .stat-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center;
-            justify-content: center; font-size: 16px; flex-shrink: 0; }
-        .stat-value-sm { font-size: 15px; }
-        @media (min-width:768px) { .stat-value-sm { font-size: 17px; } }
-        @media (min-width:1024px) { .stat-value-sm { font-size: 20px; } }
-        .stat-label-one { font-size: 9px; letter-spacing: 0.2px; white-space: nowrap; overflow: hidden;
-            text-overflow: ellipsis; }
-        @media (min-width:768px) { .stat-label-one { font-size: 10px; } }
-        @media (min-width:1024px) { .stat-label-one { font-size: 11px; } }
+        .stat-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .stat-value-sm {
+            font-size: 15px;
+        }
+        @media (min-width:768px) {
+            .stat-value-sm {
+                font-size: 17px;
+            }
+        }
+        @media (min-width:1024px) {
+            .stat-value-sm {
+                font-size: 20px;
+            }
+        }
+        .stat-label-one {
+            font-size: 9px;
+            letter-spacing: 0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @media (min-width:768px) {
+            .stat-label-one {
+                font-size: 10px;
+            }
+        }
+        @media (min-width:1024px) {
+            .stat-label-one {
+                font-size: 11px;
+            }
+        }
 
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        @media (max-width:640px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; } }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width:640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
 
-        .product-link { color: #4F46E5; text-decoration: underline; cursor: pointer; font-weight: 500; }
-        .product-link:hover { color: #3730A3; }
-        .user-clickable { color: #1d4ed8; cursor: pointer; font-weight: 500; }
-        .user-clickable:hover { text-decoration: underline; }
+        .product-link {
+            color: #4F46E5;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .product-link:hover {
+            color: #3730A3;
+        }
+        .user-clickable {
+            color: #1d4ed8;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .user-clickable:hover {
+            text-decoration: underline;
+        }
 
-        .scan-input-wrapper { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .scan-input-wrapper input { flex: 1; padding: 10px 16px; border: 2px solid #dce3ef; border-radius: 12px;
-            font-size: 16px; outline: none; background: #fafcff; transition: 0.2s; letter-spacing: 1px;
-            font-family: monospace; min-width: 120px; }
-        .scan-input-wrapper input:focus { border-color: #4F46E5; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
-        .scan-input-wrapper .scan-btn { padding: 10px 20px; background: #4F46E5; color: #fff; border: none;
-            border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; white-space: nowrap; }
-        .scan-input-wrapper .scan-btn:hover { background: #4338CA; }
-        .scan-input-wrapper .barcode-btn { padding: 10px 14px; background: #10B981; color: #fff; border: none;
-            border-radius: 12px; font-weight: 600; cursor: pointer; transition: background 0.15s; font-size: 14px; }
-        .scan-input-wrapper .barcode-btn:hover { background: #059669; }
+        .scan-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .scan-input-wrapper input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid #dce3ef;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            background: #fafcff;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            font-family: monospace;
+            min-width: 120px;
+        }
+        .scan-input-wrapper input:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+        .scan-input-wrapper .scan-btn {
+            padding: 10px 20px;
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            white-space: nowrap;
+        }
+        .scan-input-wrapper .scan-btn:hover {
+            background: #4338CA;
+        }
+        .scan-input-wrapper .barcode-btn {
+            padding: 10px 14px;
+            background: #10B981;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .scan-input-wrapper .barcode-btn:hover {
+            background: #059669;
+        }
         @media (max-width:480px) {
-            .scan-input-wrapper input { font-size: 14px; padding: 8px 12px; }
+            .scan-input-wrapper input {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
             .scan-input-wrapper .scan-btn,
-            .scan-input-wrapper .barcode-btn { padding: 8px 14px; font-size: 13px; }
+            .scan-input-wrapper .barcode-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
         }
 
-        .product-img-wrapper { position: relative; display: inline-block; vertical-align: middle; margin-right: 6px;
-            width: 42px; height: 42px; flex-shrink: 0; }
-        .product-img-wrapper .product-thumb { width: 42px; height: 42px; border-radius: 6px; object-fit: cover;
-            border: 1.5px solid #e2e8f0; transition: all 0.2s; aspect-ratio: 1/1; background: #f1f5f9; }
-        .product-img-wrapper:hover .product-thumb { border-color: #4F46E5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
-        .product-img-zoom { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%) scale(0.9);
-            z-index: 9999; pointer-events: none; opacity: 0; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 10px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35); width: 140px; height: 140px;
-            object-fit: cover; background: #fff; border: 3px solid #4F46E5; aspect-ratio: 1/1; }
-        .product-img-wrapper:hover .product-img-zoom { opacity: 1; transform: translateY(-50%) scale(1); }
+        .product-img-wrapper {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 6px;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+        }
+        .product-img-wrapper .product-thumb {
+            width: 42px;
+            height: 42px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1.5px solid #e2e8f0;
+            transition: all 0.2s;
+            aspect-ratio: 1/1;
+            background: #f1f5f9;
+        }
+        .product-img-wrapper:hover .product-thumb {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+        .product-img-zoom {
+            position: absolute;
+            left: calc(100% + 8px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.9);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            background: #fff;
+            border: 3px solid #4F46E5;
+            aspect-ratio: 1/1;
+        }
+        .product-img-wrapper:hover .product-img-zoom {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
         @media (max-width:767px) {
-            .product-img-wrapper { width: 34px; height: 34px; }
-            .product-img-wrapper .product-thumb { width: 34px; height: 34px; }
-            .product-img-zoom { left: 50%; top: auto; bottom: calc(100% + 8px); transform: translateX(-50%) scale(0.9);
-                width: 120px; height: 120px; }
-            .product-img-wrapper:hover .product-img-zoom { transform: translateX(-50%) scale(1); }
+            .product-img-wrapper {
+                width: 34px;
+                height: 34px;
+            }
+            .product-img-wrapper .product-thumb {
+                width: 34px;
+                height: 34px;
+            }
+            .product-img-zoom {
+                left: 50%;
+                top: auto;
+                bottom: calc(100% + 8px);
+                transform: translateX(-50%) scale(0.9);
+                width: 120px;
+                height: 120px;
+            }
+            .product-img-wrapper:hover .product-img-zoom {
+                transform: translateX(-50%) scale(1);
+            }
         }
         @media (max-width:480px) {
-            .product-img-wrapper { width: 28px; height: 28px; }
-            .product-img-wrapper .product-thumb { width: 28px; height: 28px; }
-            .product-img-zoom { width: 100px; height: 100px; }
+            .product-img-wrapper {
+                width: 28px;
+                height: 28px;
+            }
+            .product-img-wrapper .product-thumb {
+                width: 28px;
+                height: 28px;
+            }
+            .product-img-zoom {
+                width: 100px;
+                height: 100px;
+            }
         }
 
-        .product-cell { display: flex; align-items: flex-start; gap: 6px; }
-        .product-cell .product-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
-        .product-cell .product-info .product-name { font-weight: 500; font-size: 12px; line-height: 1.3; display: flex;
-            align-items: center; flex-wrap: wrap; gap: 4px; }
-        .product-cell .product-info .product-name a { color: #4F46E5; text-decoration: underline; }
-        .product-cell .product-info .product-name a:hover { color: #3730A3; }
-        .product-cell .product-info .product-meta { font-size: 10px; color: #94a3b8; display: flex; flex-direction: column;
-            line-height: 1.4; }
-        .product-cell .product-info .product-meta .warehouse-id { font-weight: 600; color: #475569; }
-        .product-cell .product-info .product-meta .order-id { font-weight: 600; color: #8B5CF6; }
-        /* ─── COMMENT LINE ─── */
+        .product-cell {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .product-cell .product-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+        .product-cell .product-info .product-name {
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 1.3;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .product-cell .product-info .product-name a {
+            color: #4F46E5;
+            text-decoration: underline;
+        }
+        .product-cell .product-info .product-name a:hover {
+            color: #3730A3;
+        }
+        .product-cell .product-info .product-meta {
+            font-size: 10px;
+            color: #94a3b8;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.4;
+        }
+        .product-cell .product-info .product-meta .warehouse-id {
+            font-weight: 600;
+            color: #475569;
+        }
+        .product-cell .product-info .product-meta .order-id {
+            font-weight: 600;
+            color: #8B5CF6;
+        }
         .product-cell .product-info .product-comment {
             font-size: 10px;
             color: #64748b;
@@ -269,26 +741,81 @@
             flex-shrink: 0;
         }
 
-        .tracking-cell { font-family: monospace; font-weight: 600; color: #4F46E5; white-space: nowrap; overflow: visible; }
+        .tracking-cell {
+            font-family: monospace;
+            font-weight: 600;
+            color: #4F46E5;
+            white-space: nowrap;
+            overflow: visible;
+        }
 
-        .export-columns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 12px; }
-        .export-columns-grid label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #475569;
-            cursor: pointer; }
-        .export-columns-grid label input[type="checkbox"] { width: 14px; height: 14px; accent-color: #4F46E5;
-            cursor: pointer; }
+        .export-columns-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px 12px;
+        }
+        .export-columns-grid label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #475569;
+            cursor: pointer;
+        }
+        .export-columns-grid label input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: #4F46E5;
+            cursor: pointer;
+        }
 
-        .btn-sm { padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; border: none; cursor: pointer;
-            transition: all 0.15s; white-space: nowrap; }
-        .btn-sm-outline { background: transparent; border: 1px solid #d1d5db; color: #475569; }
-        .btn-sm-outline:hover { background: #f1f5f9; border-color: #cbd5e1; }
-        .btn-sm-primary { background: #4F46E5; color: #fff; }
-        .btn-sm-primary:hover { background: #4338CA; }
-        .btn-sm-success { background: #10B981; color: #fff; }
-        .btn-sm-success:hover { background: #059669; }
-        .btn-sm-arrive { background: #14B8A6; color: #fff; }
-        .btn-sm-arrive:hover { background: #0D9488; }
-        .btn-sm-disptach { background: #F97316; color: #fff; }
-        .btn-sm-disptach:hover { background: #EA580C; }
+        .btn-sm {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .btn-sm-outline {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+        }
+        .btn-sm-outline:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .btn-sm-primary {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .btn-sm-primary:hover {
+            background: #4338CA;
+        }
+        .btn-sm-success {
+            background: #10B981;
+            color: #fff;
+        }
+        .btn-sm-success:hover {
+            background: #059669;
+        }
+        .btn-sm-arrive {
+            background: #14B8A6;
+            color: #fff;
+        }
+        .btn-sm-arrive:hover {
+            background: #0D9488;
+        }
+        .btn-sm-disptach {
+            background: #F97316;
+            color: #fff;
+        }
+        .btn-sm-disptach:hover {
+            background: #EA580C;
+        }
 
         .user-card {
             background: white;
@@ -299,67 +826,231 @@
             overflow: hidden;
             margin-bottom: 12px;
         }
-        .user-card:hover { border-color: #e2e8f0; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); }
-        .user-card .card-header { padding: 12px 14px 8px 14px; display: flex; flex-wrap: wrap; align-items: center;
-            justify-content: space-between; border-bottom: 1px solid #f1f5f9; gap: 6px; }
-        .user-card .card-body { padding: 10px 14px 12px 14px; display: flex; flex-direction: column; gap: 6px; }
-        .user-card .card-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2px 10px; }
-        .user-card .card-row .label { font-size: 10px; font-weight: 600; color: #94a3b8; text-transform: uppercase;
-            letter-spacing: 0.3px; min-width: 60px; }
-        .user-card .card-row .value { font-size: 12px; color: #1e293b; font-weight: 500; flex: 1; word-break: break-word; }
-        .user-card .card-actions { padding: 8px 14px 12px 14px; border-top: 1px solid #f1f5f9; display: flex;
-            flex-wrap: wrap; gap: 6px; align-items: center; }
-        .user-card .card-actions .action-btn { display: inline-flex; align-items: center; justify-content: center;
-            padding: 6px 10px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
-            font-size: 12px; font-weight: 500; transition: all 0.15s; cursor: pointer; min-height: 32px; gap: 4px;
-            flex: 1 1 auto; }
-        .user-card .card-actions .action-btn:hover { background: #f1f5f9; border-color: #cbd5e1; }
-        .user-card .card-actions .action-btn.primary-btn { background: #4F46E5; border-color: #4F46E5; color: #fff; }
-        .user-card .card-actions .action-btn.primary-btn:hover { background: #4338CA; }
-        .user-card .card-actions .action-btn.success-btn { background: #10B981; border-color: #10B981; color: #fff; }
-        .user-card .card-actions .action-btn.success-btn:hover { background: #059669; }
-        .user-card .card-actions .action-btn.orange-btn { background: #F97316; border-color: #F97316; color: #fff; }
-        .user-card .card-actions .action-btn.orange-btn:hover { background: #EA580C; }
-        .user-card .card-actions .action-btn.danger-btn { background: #FEF2F2; border-color: #FECACA; color: #DC2626; }
-        .user-card .card-actions .action-btn.danger-btn:hover { background: #FEE2E2; }
-        .user-card .product-img-wrapper { width: 36px; height: 36px; }
-        .user-card .product-img-wrapper .product-thumb { width: 36px; height: 36px; }
-        .user-card .tracking-cell { font-size: 11px; }
-        .user-card .product-comment { font-size: 10px; cursor: pointer; background: #f8fafc; padding: 2px 10px 2px 8px;
-            border-radius: 12px; border: 1px solid #eef2f6; display: inline-flex; align-items: center; gap: 4px;
-            max-width: 100%; }
-        .user-card .product-comment:hover { background: #eef2f6; border-color: #cbd5e1; }
-        .user-card .product-comment .comment-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            max-width: 140px; font-style: italic; color: #334155; }
-        .user-card .product-comment .comment-empty { color: #cbd5e1; font-style: italic; font-size: 9px; }
-
-        #scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px;
-            border: 1px solid #e2e8f0; }
-        #scanner-container #reader { width: 100%; max-width: 400px; margin: 0 auto; }
-        #scanner-container .scanner-controls { display: flex; gap: 10px; justify-content: center; margin-top: 10px;
-            flex-wrap: wrap; }
-        .scanner-btn { padding: 8px 20px; border-radius: 8px; font-weight: 600; border: none; cursor: pointer;
-            transition: all 0.15s; }
-        .scanner-btn.start { background: #10B981; color: #fff; }
-        .scanner-btn.start:hover { background: #059669; }
-        .scanner-btn.stop { background: #EF4444; color: #fff; }
-        .scanner-btn.stop:hover { background: #DC2626; }
-
-        #receive-scanner-container { margin: 10px 0; padding: 10px; background: #f8fafc; border-radius: 12px;
-            border: 1px solid #e2e8f0; }
-        #receive-scanner-container #reader-receive { width: 100%; max-width: 400px; margin: 0 auto; }
-
-        .mobile-cards { display: none; }
-        @media (max-width: 767px) {
-            .mobile-cards { display: block; }
+        .user-card:hover {
+            border-color: #e2e8f0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+        .user-card .card-header {
+            padding: 12px 14px 8px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f1f5f9;
+            gap: 6px;
+        }
+        .user-card .card-body {
+            padding: 10px 14px 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .user-card .card-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 2px 10px;
+        }
+        .user-card .card-row .label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            min-width: 60px;
+        }
+        .user-card .card-row .value {
+            font-size: 12px;
+            color: #1e293b;
+            font-weight: 500;
+            flex: 1;
+            word-break: break-word;
+        }
+        .user-card .card-actions {
+            padding: 8px 14px 12px 14px;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .user-card .card-actions .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.15s;
+            cursor: pointer;
+            min-height: 32px;
+            gap: 4px;
+            flex: 1 1 auto;
+        }
+        .user-card .card-actions .action-btn:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+        }
+        .user-card .card-actions .action-btn.primary-btn {
+            background: #4F46E5;
+            border-color: #4F46E5;
+            color: #fff;
+        }
+        .user-card .card-actions .action-btn.primary-btn:hover {
+            background: #4338CA;
+        }
+        .user-card .card-actions .action-btn.success-btn {
+            background: #10B981;
+            border-color: #10B981;
+            color: #fff;
+        }
+        .user-card .card-actions .action-btn.success-btn:hover {
+            background: #059669;
+        }
+        .user-card .card-actions .action-btn.orange-btn {
+            background: #F97316;
+            border-color: #F97316;
+            color: #fff;
+        }
+        .user-card .card-actions .action-btn.orange-btn:hover {
+            background: #EA580C;
+        }
+        .user-card .card-actions .action-btn.danger-btn {
+            background: #FEF2F2;
+            border-color: #FECACA;
+            color: #DC2626;
+        }
+        .user-card .card-actions .action-btn.danger-btn:hover {
+            background: #FEE2E2;
+        }
+        .user-card .product-img-wrapper {
+            width: 36px;
+            height: 36px;
+        }
+        .user-card .product-img-wrapper .product-thumb {
+            width: 36px;
+            height: 36px;
+        }
+        .user-card .tracking-cell {
+            font-size: 11px;
+        }
+        .user-card .product-comment {
+            font-size: 10px;
+            cursor: pointer;
+            background: #f8fafc;
+            padding: 2px 10px 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #eef2f6;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            max-width: 100%;
+        }
+        .user-card .product-comment:hover {
+            background: #eef2f6;
+            border-color: #cbd5e1;
+        }
+        .user-card .product-comment .comment-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+            font-style: italic;
+            color: #334155;
+        }
+        .user-card .product-comment .comment-empty {
+            color: #cbd5e1;
+            font-style: italic;
+            font-size: 9px;
         }
 
-        .scanner-status { font-size: 12px; padding: 4px 12px; border-radius: 6px; display: inline-block; }
-        .scanner-status.scanning { background: #FEF3C7; color: #92400E; }
-        .scanner-status.ready { background: #D1FAE5; color: #065F46; }
-        .scanner-status.error { background: #FEE2E2; color: #991B1B; }
+        #scanner-container {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        #scanner-container #reader {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        #scanner-container .scanner-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .scanner-btn {
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .scanner-btn.start {
+            background: #10B981;
+            color: #fff;
+        }
+        .scanner-btn.start:hover {
+            background: #059669;
+        }
+        .scanner-btn.stop {
+            background: #EF4444;
+            color: #fff;
+        }
+        .scanner-btn.stop:hover {
+            background: #DC2626;
+        }
 
-        /* ─── FIXED TABLE LAYOUT ─── */
+        #receive-scanner-container {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+        #receive-scanner-container #reader-receive {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .mobile-cards {
+            display: none;
+        }
+        @media (max-width: 767px) {
+            .mobile-cards {
+                display: block;
+            }
+        }
+
+        .scanner-status {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .scanner-status.scanning {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .scanner-status.ready {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .scanner-status.error {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
         .scan-table {
             table-layout: fixed;
             width: 100%;
@@ -371,16 +1062,40 @@
             white-space: nowrap;
             padding: 6px 8px;
         }
-        .scan-table .col-tracking { width: 14%; }
-        .scan-table .col-product { width: 28%; }
-        .scan-table .col-user { width: 14%; }
-        .scan-table .col-qty { width: 6%; }
-        .scan-table .col-hsn { width: 8%; }
-        .scan-table .col-subcat { width: 11%; }
-        .scan-table .col-price { width: 9%; }
-        .scan-table .col-status { width: 9%; }
-        .scan-table .col-date { width: 7%; }
-        .scan-table .col-action { width: 8%; }
+        .scan-table .col-tracking {
+            width: 12%;
+        }
+        .scan-table .col-product {
+            width: 24%;
+        }
+        .scan-table .col-user {
+            width: 10%;
+        }
+        .scan-table .col-qty {
+            width: 5%;
+        }
+        .scan-table .col-hsn {
+            width: 7%;
+        }
+        .scan-table .col-subcat {
+            width: 9%;
+        }
+        .scan-table .col-price {
+            width: 8%;
+        }
+        .scan-table .col-status {
+            width: 8%;
+        }
+        .scan-table .col-date {
+            width: 6%;
+        }
+        .scan-table .col-action {
+            width: 8%;
+        }
+        /* NEW COLUMN for Payment Status */
+        .scan-table .col-payment {
+            width: 10%;
+        }
 
         .tracking-cell {
             overflow: visible !important;
@@ -390,40 +1105,90 @@
         }
 
         @media (max-width: 767px) {
-            .scan-table .col-tracking { width: 18%; }
-            .scan-table .col-product { width: 22%; }
-            .scan-table .col-user { width: 12%; }
-            .scan-table .col-qty { width: 6%; }
-            .scan-table .col-hsn { width: 8%; }
-            .scan-table .col-subcat { width: 10%; }
-            .scan-table .col-price { width: 8%; }
-            .scan-table .col-status { width: 8%; }
-            .scan-table .col-date { width: 6%; }
-            .scan-table .col-action { width: 6%; }
+            .scan-table .col-tracking {
+                width: 15%;
+            }
+            .scan-table .col-product {
+                width: 20%;
+            }
+            .scan-table .col-user {
+                width: 10%;
+            }
+            .scan-table .col-qty {
+                width: 5%;
+            }
+            .scan-table .col-hsn {
+                width: 7%;
+            }
+            .scan-table .col-subcat {
+                width: 8%;
+            }
+            .scan-table .col-price {
+                width: 7%;
+            }
+            .scan-table .col-status {
+                width: 7%;
+            }
+            .scan-table .col-date {
+                width: 5%;
+            }
+            .scan-table .col-action {
+                width: 5%;
+            }
+            .scan-table .col-payment {
+                width: 8%;
+            }
             .scan-table th,
             .scan-table td {
                 padding: 4px 6px;
                 font-size: 10px;
             }
-            .tracking-cell { font-size: 10px; }
+            .tracking-cell {
+                font-size: 10px;
+            }
         }
         @media (max-width: 480px) {
-            .scan-table .col-tracking { width: 16%; }
-            .scan-table .col-product { width: 20%; }
-            .scan-table .col-user { width: 10%; }
-            .scan-table .col-qty { width: 5%; }
-            .scan-table .col-hsn { width: 7%; }
-            .scan-table .col-subcat { width: 8%; }
-            .scan-table .col-price { width: 7%; }
-            .scan-table .col-status { width: 7%; }
-            .scan-table .col-date { width: 5%; }
-            .scan-table .col-action { width: 5%; }
+            .scan-table .col-tracking {
+                width: 13%;
+            }
+            .scan-table .col-product {
+                width: 18%;
+            }
+            .scan-table .col-user {
+                width: 8%;
+            }
+            .scan-table .col-qty {
+                width: 4%;
+            }
+            .scan-table .col-hsn {
+                width: 6%;
+            }
+            .scan-table .col-subcat {
+                width: 7%;
+            }
+            .scan-table .col-price {
+                width: 6%;
+            }
+            .scan-table .col-status {
+                width: 6%;
+            }
+            .scan-table .col-date {
+                width: 4%;
+            }
+            .scan-table .col-action {
+                width: 4%;
+            }
+            .scan-table .col-payment {
+                width: 7%;
+            }
             .scan-table th,
             .scan-table td {
                 padding: 3px 4px;
                 font-size: 9px;
             }
-            .tracking-cell { font-size: 9px; }
+            .tracking-cell {
+                font-size: 9px;
+            }
         }
 
         /* ─── COMMENT MODAL (read-only) ─── */
@@ -447,12 +1212,30 @@
             border-bottom: 1px solid #f1f5f9;
             margin-bottom: 14px;
         }
-        #commentModal .comment-product-detail .detail-text { flex: 1; min-width: 0; }
-        #commentModal .comment-product-detail .detail-text .name { font-weight: 600; font-size: 15px; color: #0f172a; }
-        #commentModal .comment-product-detail .detail-text .name a { color: #4F46E5; text-decoration: underline; }
-        #commentModal .comment-product-detail .detail-text .name a:hover { color: #3730A3; }
-        #commentModal .comment-product-detail .detail-text .meta { font-size: 12px; color: #94a3b8; margin-top: 2px; }
-        #commentModal .comment-product-detail .detail-text .meta span { margin-right: 12px; }
+        #commentModal .comment-product-detail .detail-text {
+            flex: 1;
+            min-width: 0;
+        }
+        #commentModal .comment-product-detail .detail-text .name {
+            font-weight: 600;
+            font-size: 15px;
+            color: #0f172a;
+        }
+        #commentModal .comment-product-detail .detail-text .name a {
+            color: #4F46E5;
+            text-decoration: underline;
+        }
+        #commentModal .comment-product-detail .detail-text .name a:hover {
+            color: #3730A3;
+        }
+        #commentModal .comment-product-detail .detail-text .meta {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+        #commentModal .comment-product-detail .detail-text .meta span {
+            margin-right: 12px;
+        }
         #commentModal .comment-display {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
@@ -471,10 +1254,103 @@
         }
 
         @media (max-width: 480px) {
-            #commentModal .comment-product-img { width: 48px; height: 48px; }
-            #commentModal .comment-product-detail .detail-text .name { font-size: 13px; }
-            #commentModal .comment-product-detail .detail-text .meta { font-size: 10px; }
-            #commentModal .comment-display { font-size: 13px; padding: 10px 12px; min-height: 60px; }
+            #commentModal .comment-product-img {
+                width: 48px;
+                height: 48px;
+            }
+            #commentModal .comment-product-detail .detail-text .name {
+                font-size: 13px;
+            }
+            #commentModal .comment-product-detail .detail-text .meta {
+                font-size: 10px;
+            }
+            #commentModal .comment-display {
+                font-size: 13px;
+                padding: 10px 12px;
+                min-height: 60px;
+            }
+        }
+
+        /* ─── WAREHOUSE BARCODE MODAL ─── */
+        #whBarcodeModal .modal-content {
+            max-width: 480px;
+        }
+        #whBarcodeModal .wh-barcode-preview {
+            font-family: monospace;
+            font-size: 18px;
+            letter-spacing: 2px;
+            background: #f1f5f9;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            color: #0f172a;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #whBarcodeModal .wh-barcode-preview .placeholder {
+            color: #94a3b8;
+            font-size: 13px;
+            font-family: sans-serif;
+            letter-spacing: 0;
+        }
+        .barcode-scan-hint {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+        }
+
+        /* Payment status badge */
+        .payment-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+        .payment-badge.prepaid {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+        .payment-badge.cod {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .payment-badge .cod-amount {
+            font-weight: 700;
+            color: #B45309;
+        }
+
+        /* Warehouse barcode display in stock table */
+        .wh-barcode-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f1f5f9;
+            padding: 1px 8px 1px 6px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 10px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+        }
+        .wh-barcode-tag .barcode-icon {
+            font-size: 11px;
+        }
+        .wh-barcode-tag .barcode-empty {
+            color: #94a3b8;
+            font-style: italic;
+            font-family: sans-serif;
         }
     </style>
 </head>
@@ -638,7 +1514,7 @@
                     <div class="desktop-table table-container">
                         <table class="scan-table w-full text-xs sm:text-sm" id="shippedTable">
                             <colgroup>
-                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-status"><col class="col-date">
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-payment"><col class="col-status"><col class="col-date">
                             </colgroup>
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
@@ -649,6 +1525,7 @@
                                     <th class="text-left">HSN</th>
                                     <th class="text-left">Sub-Category</th>
                                     <th class="text-center">INR Price</th>
+                                    <th class="text-center">Payment</th>
                                     <th class="text-left">Status</th>
                                     <th class="text-left">Shipped Date</th>
                                 </tr>
@@ -928,6 +1805,55 @@
         </div>
     </div>
 
+    <!-- ─── WAREHOUSE BARCODE MODAL ─── -->
+    <div id="whBarcodeModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeWhBarcodeModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2"><span>🏷️</span> Assign Warehouse Barcode</h3>
+                <button onclick="closeWhBarcodeModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-gray-500">Tracking</p>
+                        <p class="text-sm font-semibold text-gray-800 font-mono" id="whBarcodeTracking">—</p>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-xs text-gray-500">Product</p>
+                        <p class="text-sm font-medium text-gray-700 truncate" id="whBarcodeProduct">—</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-1">Warehouse Barcode</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="whBarcodeInput" placeholder="Enter or scan barcode..." class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl text-sm font-mono tracking-wider focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                        <button onclick="simulateWhBarcodeScan()" class="px-4 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-colors text-sm whitespace-nowrap">📷 Scan</button>
+                    </div>
+                    <div class="mt-2 flex items-center gap-2 flex-wrap">
+                        <div class="barcode-scan-hint text-xs">
+                            <span>📌</span> Enter manually or use the scan button to capture barcode
+                        </div>
+                        <button onclick="generateRandomWhBarcode()" class="text-xs text-primary hover:underline font-medium">🔄 Generate</button>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-1">Preview</label>
+                    <div class="wh-barcode-preview" id="whBarcodePreview">
+                        <span class="placeholder">Barcode will appear here</span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-3 border-t border-gray-200">
+                    <button onclick="saveWhBarcode()" class="flex-1 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save Barcode</button>
+                    <button onclick="closeWhBarcodeModal()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ─── TOAST ─── -->
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
@@ -974,6 +1900,14 @@
                 return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
             }
 
+            function getPaymentBadge(paymentType, codAmount) {
+                if (paymentType === 'COD') {
+                    const amt = codAmount || 0;
+                    return `<span class="payment-badge cod">💳 COD <span class="cod-amount">₹${amt.toFixed(2)}</span></span>`;
+                }
+                return `<span class="payment-badge prepaid">✅ PREPAID</span>`;
+            }
+
             function formatDate(dateStr) { return dateStr; }
 
             function generateId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -988,7 +1922,6 @@
                     `;
             }
 
-            // ─── COMMENT LINE (clickable, read-only) ──────────────────────
             function commentLineHtml(item, context) {
                 const comment = item.comment || '';
                 const tracking = item.trackingNumber;
@@ -1016,6 +1949,7 @@
                                 <div class="product-meta">
                                     <span class="warehouse-id">🏭 ${item.warehouseId}</span>
                                     <span class="order-id">📋 Order ID : ${item.orderId || 'N/A'}</span>
+                                    ${item.warehouseBarcode ? `<span class="wh-barcode-tag"><span class="barcode-icon">🏷️</span> ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
                                 </div>
                                 ${commentLineHtml(item, context)}
                             </div>
@@ -1039,31 +1973,40 @@
             const INITIAL_SHIPMENTS = [
                 { trackingNumber: 'TRK-2026-001234', warehouseId: 'WH-NPL-001', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage(
                         'Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518',
-                    subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped', comment: '' },
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001235', warehouseId: 'WH-NPL-002', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage(
                         'Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302',
-                    subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped', comment: '' },
+                    subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped', comment: '',
+                    paymentType: 'COD', codAmount: 320.00, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001236', warehouseId: 'WH-NPL-003', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage(
                         'Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517',
-                    subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped', comment: '' },
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001237', warehouseId: 'WH-NPL-004', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage(
                         'Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202',
-                    subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped', comment: '' },
+                    subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped', comment: '',
+                    paymentType: 'COD', codAmount: 570.00, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001238', warehouseId: 'WH-NPL-005', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage(
                         'USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544',
-                    subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped', comment: '' },
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001239', warehouseId: 'WH-NPL-006', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage(
                         'Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302',
-                    subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped', comment: '' },
+                    subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped', comment: '',
+                    paymentType: 'COD', codAmount: 400.00, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001240', warehouseId: 'WH-NPL-007', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage(
                         'Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471',
-                    subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped', comment: '' },
+                    subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001241', warehouseId: 'WH-NPL-008', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage(
                         'Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion',
-                    quantity: 1, inrPrice: 580.00, status: 'shipped', comment: '' },
+                    quantity: 1, inrPrice: 580.00, status: 'shipped', comment: '', paymentType: 'COD',
+                    codAmount: 580.00, warehouseBarcode: '' },
                 { trackingNumber: 'TRK-2026-001242', warehouseId: 'WH-NPL-009', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage(
                         'Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506',
-                    subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped', comment: '' },
+                    subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
             ];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -1086,7 +2029,7 @@
                 scanSize = 50,
                 scanFiltered = [];
 
-            let currentTab = 'scan';
+            let currentTab = 'shipped';
             let exportTarget = 'shipped';
             let exportColumns = {};
 
@@ -1098,6 +2041,11 @@
             let commentTracking = '';
             let commentItem = null;
 
+            // ─── WAREHOUSE BARCODE STATE ──────────────────────────────────
+            let whBarcodePendingItem = null;
+            let whBarcodeResolve = null;
+            let whBarcodeReject = null;
+
             const COLUMN_DEFS = {
                 shipped: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
@@ -1107,10 +2055,13 @@
                     { key: 'hsn', label: 'HSN Code' },
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'paymentType', label: 'Payment Type' },
+                    { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
+                    { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
                 stock: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
@@ -1120,10 +2071,13 @@
                     { key: 'hsn', label: 'HSN Code' },
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'paymentType', label: 'Payment Type' },
+                    { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
+                    { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
                 dispatched: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
@@ -1133,10 +2087,13 @@
                     { key: 'hsn', label: 'HSN Code' },
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'paymentType', label: 'Payment Type' },
+                    { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
+                    { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
                 scan: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
@@ -1146,14 +2103,17 @@
                     { key: 'hsn', label: 'HSN Code' },
                     { key: 'subCategory', label: 'Sub-Category' },
                     { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'paymentType', label: 'Payment Type' },
+                    { key: 'codAmount', label: 'COD Amount' },
                     { key: 'status', label: 'Status' },
                     { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'warehouseId', label: 'Warehouse ID' },
                     { key: 'orderId', label: 'Order ID' },
+                    { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
                 ],
             };
 
-            // ─── COMMENT MODAL (read-only) ───────────────────────────────────
+            // ─── COMMENT MODAL ─────────────────────────────────────────────
 
             function openCommentModal(tracking, context) {
                 commentTracking = tracking;
@@ -1176,11 +2136,13 @@
                                 <span>🏭 ${item.warehouseId}</span>
                                 <span>📋 ${item.orderId || 'N/A'}</span>
                                 <span>🔢 ${item.trackingNumber}</span>
+                                ${item.warehouseBarcode ? `<span>🏷️ ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
                             </div>
                             <div class="meta" style="margin-top:2px;color:#475569;">
                                 <span>📦 QTY: ${item.quantity}</span>
                                 <span>💰 ₹ ${item.inrPrice.toFixed(2)}</span>
                                 <span>📂 ${item.subCategory}</span>
+                                <span>${getPaymentBadge(item.paymentType, item.codAmount)}</span>
                             </div>
                         </div>
                     `;
@@ -1206,9 +2168,88 @@
                 commentContext = '';
             }
 
+            // ─── WAREHOUSE BARCODE MODAL ──────────────────────────────────
+
+            function showWhBarcodeModal(item) {
+                return new Promise((resolve, reject) => {
+                    whBarcodePendingItem = item;
+                    whBarcodeResolve = resolve;
+                    whBarcodeReject = reject;
+
+                    document.getElementById('whBarcodeTracking').textContent = item.trackingNumber;
+                    document.getElementById('whBarcodeProduct').textContent = item.productName;
+                    document.getElementById('whBarcodeInput').value = item.warehouseBarcode || '';
+                    document.getElementById('whBarcodePreview').innerHTML = item.warehouseBarcode ?
+                        `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(item.warehouseBarcode)}</span>` :
+                        `<span class="placeholder">Barcode will appear here</span>`;
+
+                    document.getElementById('whBarcodeModal').classList.add('flex');
+                    document.getElementById('whBarcodeModal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+
+                    setTimeout(() => {
+                        document.getElementById('whBarcodeInput').focus();
+                        document.getElementById('whBarcodeInput').select();
+                    }, 200);
+                });
+            }
+
+            function closeWhBarcodeModal() {
+                document.getElementById('whBarcodeModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                if (whBarcodeReject) {
+                    whBarcodeReject(new Error('Cancelled'));
+                    whBarcodeReject = null;
+                    whBarcodeResolve = null;
+                    whBarcodePendingItem = null;
+                }
+            }
+
+            function saveWhBarcode() {
+                const input = document.getElementById('whBarcodeInput');
+                const barcode = input.value.trim();
+                if (!barcode) {
+                    showToast('⚠️', 'Please enter a warehouse barcode');
+                    input.focus();
+                    return;
+                }
+                document.getElementById('whBarcodeModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                if (whBarcodeResolve) {
+                    whBarcodeResolve(barcode);
+                    whBarcodeResolve = null;
+                    whBarcodeReject = null;
+                    whBarcodePendingItem = null;
+                }
+            }
+
+            function simulateWhBarcodeScan() {
+                // Simulate scanning a barcode — generates a random barcode
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = 'WH-';
+                for (let i = 0; i < 10; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                document.getElementById('whBarcodeInput').value = code;
+                document.getElementById('whBarcodePreview').innerHTML =
+                    `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(code)}</span>`;
+                showToast('📷', 'Barcode scanned: ' + code);
+            }
+
+            function generateRandomWhBarcode() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = 'WH-';
+                for (let i = 0; i < 10; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                document.getElementById('whBarcodeInput').value = code;
+                document.getElementById('whBarcodePreview').innerHTML =
+                    `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(code)}</span>`;
+            }
+
             // ─── SCAN FUNCTIONS ─────────────────────────────────────────────
 
-            function processStockScan() {
+            async function processStockScan() {
                 const input = document.getElementById('stockBarcodeInput');
                 const tracking = input.value.trim();
                 if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
@@ -1216,19 +2257,38 @@
                 if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); input.value = '';
                     input.focus(); return; }
                 const item = shippedItems[idx];
-                shippedItems.splice(idx, 1);
-                const arrived = { ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
-                stockItems.push(arrived);
-                renderAll();
-                showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH`);
-                input.value = '';
-                input.focus();
-                const statusEl = document.getElementById('stockScanStatus');
-                statusEl.classList.remove('hidden');
-                statusEl.textContent = `✅ ${tracking} arrived!`;
-                setTimeout(() => { statusEl.classList.add('hidden'); }, 3000);
-                stopScanner();
+
+                // Show warehouse barcode modal
+                try {
+                    const barcode = await showWhBarcodeModal(item);
+                    // User saved barcode
+                    shippedItems.splice(idx, 1);
+                    const arrived = {
+                        ...item,
+                        status: 'arrived',
+                        arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit' }),
+                        comment: item.comment || '',
+                        warehouseBarcode: barcode,
+                        paymentType: item.paymentType || 'PREPAID',
+                        codAmount: item.codAmount || 0,
+                    };
+                    stockItems.push(arrived);
+                    renderAll();
+                    showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH (Barcode: ${barcode})`);
+                    input.value = '';
+                    input.focus();
+                    const statusEl = document.getElementById('stockScanStatus');
+                    statusEl.classList.remove('hidden');
+                    statusEl.textContent = `✅ ${tracking} arrived! Barcode: ${barcode}`;
+                    setTimeout(() => { statusEl.classList.add('hidden'); }, 4000);
+                    stopScanner();
+                } catch (err) {
+                    // User cancelled
+                    showToast('⏹️', 'Operation cancelled');
+                    input.value = '';
+                    input.focus();
+                }
             }
 
             function dispatchShipment(tracking) {
@@ -1236,8 +2296,16 @@
                 if (idx === -1) { showToast('❌', 'Shipment not found in India WH stock'); return; }
                 const item = stockItems[idx];
                 stockItems.splice(idx, 1);
-                const dispatched = { ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
+                const dispatched = {
+                    ...item,
+                    status: 'dispatched',
+                    dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    comment: item.comment || '',
+                    warehouseBarcode: item.warehouseBarcode || '',
+                    paymentType: item.paymentType || 'PREPAID',
+                    codAmount: item.codAmount || 0,
+                };
                 dispatchedItems.push(dispatched);
                 renderAll();
                 showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
@@ -1252,8 +2320,16 @@
                     input.focus(); return; }
                 const item = dispatchedItems[idx];
                 dispatchedItems.splice(idx, 1);
-                const received = { ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                        month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment || '' };
+                const received = {
+                    ...item,
+                    status: 'received',
+                    receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    comment: item.comment || '',
+                    warehouseBarcode: item.warehouseBarcode || '',
+                    paymentType: item.paymentType || 'PREPAID',
+                    codAmount: item.codAmount || 0,
+                };
                 scannedLogs.push(received);
                 renderAll();
                 showToast('✅', `Shipment ${tracking} RECEIVED at Nepal WH`);
@@ -1402,12 +2478,15 @@
                 if (!data || data.length === 0) return '<div class="text-center text-gray-400 py-4">No items found</div>';
                 return data.map(item => {
                     const statusBadge = getStatusBadge(item[statusKey] || item.status);
+                    const paymentBadge = getPaymentBadge(item.paymentType, item.codAmount);
                     return `
                             <div class="user-card">
                                 <div class="card-header">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 flex-wrap">
                                         <span class="tracking-cell text-sm">${item.trackingNumber}</span>
                                         ${statusBadge}
+                                        ${paymentBadge}
+                                        ${item.warehouseBarcode ? `<span class="wh-barcode-tag"><span class="barcode-icon">🏷️</span> ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -1519,7 +2598,7 @@
                 const tbody = document.getElementById('shippedTableBody');
                 if (pageData.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="9" class="px-4 py-8 text-center text-gray-400 text-sm">No shipments from seller</td></tr>`;
+                        `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No shipments from seller</td></tr>`;
                     document.getElementById('shippedResultCount').textContent = '0 entries';
                 } else {
                     tbody.innerHTML = pageData.map(item => `
@@ -1531,6 +2610,7 @@
                                 <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
                                 <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
                                 <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center">${getPaymentBadge(item.paymentType, item.codAmount)}</td>
                                 <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
                                 <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
                             </tr>
@@ -1927,6 +3007,12 @@
                                 received: 'Received' };
                             val = map[val] || val;
                         }
+                        if (c.key === 'paymentType') {
+                            val = val || 'PREPAID';
+                        }
+                        if (c.key === 'codAmount') {
+                            val = val || 0;
+                        }
                         if (c.key === 'productName' || c.key === 'username') {
                             val = `"${String(val).replace(/"/g, '""')}"`;
                         }
@@ -1950,6 +3036,12 @@
                                 const map = { shipped: 'Shipped', arrived: 'Arrived', dispatched: 'Dispatched',
                                     received: 'Received' };
                                 val = map[val] || val;
+                            }
+                            if (c.key === 'paymentType') {
+                                val = val || 'PREPAID';
+                            }
+                            if (c.key === 'codAmount') {
+                                val = val || 0;
                             }
                             return `<td style="padding:4px 8px;border:1px solid #ddd;text-align:left;font-size:11px;">${val}</td>`;
                         }).join('');
@@ -2045,8 +3137,13 @@
                     e.preventDefault();
                     processScan();
                 }
+                if (e.key === 'Enter' && document.activeElement === document.getElementById('whBarcodeInput')) {
+                    e.preventDefault();
+                    saveWhBarcode();
+                }
                 if (e.key === 'Escape') { closeExportModal();
-                    closeCommentModal(); }
+                    closeCommentModal();
+                    closeWhBarcodeModal(); }
             });
 
             // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
@@ -2081,6 +3178,10 @@
             window.stopReceiveScanner = stopReceiveScanner;
             window.openCommentModal = openCommentModal;
             window.closeCommentModal = closeCommentModal;
+            window.closeWhBarcodeModal = closeWhBarcodeModal;
+            window.saveWhBarcode = saveWhBarcode;
+            window.simulateWhBarcodeScan = simulateWhBarcodeScan;
+            window.generateRandomWhBarcode = generateRandomWhBarcode;
 
             // ─── INIT ──────────────────────────────────────────────────────
 
@@ -2090,9 +3191,16 @@
                 if (idx > -1) {
                     const item = shippedItems[idx];
                     shippedItems.splice(idx, 1);
-                    stockItems.push({ ...item, status: 'arrived', arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
-                            '' });
+                    stockItems.push({
+                        ...item,
+                        status: 'arrived',
+                        arrivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit' }),
+                        comment: item.comment || '',
+                        warehouseBarcode: 'WH-ABC123XYZ',
+                        paymentType: item.paymentType || 'PREPAID',
+                        codAmount: item.codAmount || 0,
+                    });
                 }
             });
             const demoDispatch = ['TRK-2026-001236', 'TRK-2026-001237'];
@@ -2101,9 +3209,16 @@
                 if (idx > -1) {
                     const item = stockItems[idx];
                     stockItems.splice(idx, 1);
-                    dispatchedItems.push({ ...item, status: 'dispatched', dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
-                            '' });
+                    dispatchedItems.push({
+                        ...item,
+                        status: 'dispatched',
+                        dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit' }),
+                        comment: item.comment || '',
+                        warehouseBarcode: item.warehouseBarcode || 'WH-DEF456UVW',
+                        paymentType: item.paymentType || 'PREPAID',
+                        codAmount: item.codAmount || 0,
+                    });
                 }
             });
             const demoReceive = ['TRK-2026-001238'];
@@ -2112,17 +3227,25 @@
                 if (idx > -1) {
                     const item = dispatchedItems[idx];
                     dispatchedItems.splice(idx, 1);
-                    scannedLogs.push({ ...item, status: 'received', receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit',
-                            month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }), comment: item.comment ||
-                            '' });
+                    scannedLogs.push({
+                        ...item,
+                        status: 'received',
+                        receivedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit' }),
+                        comment: item.comment || '',
+                        warehouseBarcode: item.warehouseBarcode || 'WH-GHI789JKL',
+                        paymentType: item.paymentType || 'PREPAID',
+                        codAmount: item.codAmount || 0,
+                    });
                 }
             });
 
-            // Seed a few comments for demo
+            // Seed comments for demo
             const demoComments = [
                 { tracking: 'TRK-2026-001234', comment: 'High priority order - expedite processing' },
                 { tracking: 'TRK-2026-001235', comment: 'Fragile items - handle with care' },
                 { tracking: 'TRK-2026-001236', comment: 'Customer requested gift wrapping' },
+                { tracking: 'TRK-2026-001241', comment: 'Rush delivery - customer called twice' },
             ];
             demoComments.forEach(dc => {
                 const target = stockItems.find(s => s.trackingNumber === dc.tracking) ||
@@ -2134,7 +3257,7 @@
 
             renderAll();
             switchTab('shipped');
-            showToast('✅', 'Warehouse Receiving loaded successfully');
+            showToast('✅', 'Warehouse Receiving loaded successfully | COD/Prepaid & Barcode features active');
 
         })();
     </script>
