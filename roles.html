@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>MeroWish | Role Management</title>
+    <title>MeroWish | Role & User Management</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
     <script>
@@ -27,7 +27,6 @@
                     animation: {
                         'slide-in': 'slideIn 0.3s ease-out',
                         'fade-in': 'fadeIn 0.2s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
@@ -127,62 +126,37 @@
             background: #f8fafc;
             box-shadow: inset 3px 0 0 #4F46E5;
         }
-        .user-row {
-            transition: all 0.15s ease;
-        }
-        .user-row:hover {
-            background: #f8fafc;
-            box-shadow: inset 3px 0 0 #4F46E5;
-        }
 
-        .status-badge {
+        .badge-role {
             display: inline-flex;
             align-items: center;
             gap: 4px;
             padding: 2px 12px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
         }
-        .status-badge .dot {
+        .badge-role .dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
             display: inline-block;
         }
-        .status-badge .dot.green {
-            background: #10B981;
-        }
-        .status-badge .dot.blue {
-            background: #3B82F6;
-        }
-        .status-badge .dot.yellow {
-            background: #F59E0B;
-        }
-        .status-badge .dot.red {
-            background: #EF4444;
-        }
-        .status-badge .dot.purple {
-            background: #8B5CF6;
-        }
-        .status-badge .dot.gray {
-            background: #9CA3AF;
-        }
 
         .action-icon-btn {
-            padding: 2px 8px;
+            padding: 4px 10px;
             border-radius: 6px;
             border: none;
             cursor: pointer;
             transition: all 0.15s;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1;
             background: transparent;
             color: #64748b;
         }
         .action-icon-btn:hover {
             background: #f1f5f9;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
         .action-icon-btn.primary:hover {
             color: #4F46E5;
@@ -196,13 +170,115 @@
             color: #059669;
             background: #ECFDF5;
         }
-        .action-icon-btn.amber:hover {
+        .action-icon-btn.warning:hover {
             color: #D97706;
             background: #FFFBEB;
         }
-        .action-icon-btn.purple:hover {
-            color: #7C3AED;
-            background: #F5F3FF;
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+        }
+
+        .stat-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+        .stat-card .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 10px 10px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom-color: #4F46E5;
+            background: #f8fafc;
+        }
+        .tab-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        @media (max-width: 480px) {
+            .tab-btn {
+                font-size: 10px;
+                padding: 4px 10px;
+            }
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .user-avatar-sm {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 10px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .user-row {
+            transition: all 0.15s ease;
+        }
+        .user-row:hover {
+            background: #f8fafc;
+            box-shadow: inset 3px 0 0 #4F46E5;
+        }
+
+        .perm-tag {
+            display: inline-block;
+            background: #EEF2FF;
+            color: #4338CA;
+            font-size: 8px;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 10px;
+            margin: 1px 2px;
+            white-space: nowrap;
+        }
+
+        .role-desc-cell {
+            max-width: 200px;
+            font-size: 12px;
+            color: #475569;
+            line-height: 1.4;
         }
 
         .filter-section {
@@ -262,20 +338,21 @@
             background: #4338CA;
         }
 
-        .detail-field {
+        .form-field {
             margin-bottom: 14px;
         }
-        .detail-field label {
+        .form-field label {
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            color: #475569;
             display: block;
             margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        .detail-field input,
-        .detail-field select {
+        .form-field input,
+        .form-field select,
+        .form-field textarea {
             width: 100%;
             padding: 8px 12px;
             border: 1.5px solid #dce3ef;
@@ -284,92 +361,128 @@
             background: #fafcff;
             transition: 0.2s;
             outline: none;
+            font-family: inherit;
         }
-        .detail-field input:focus,
-        .detail-field select:focus {
-            border-color: #2a6df4;
-            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.08);
         }
-        .detail-field .hint {
-            font-size: 10px;
-            color: #94a3b8;
-            margin-top: 2px;
+        .form-field textarea {
+            min-height: 50px;
+            resize: vertical;
         }
 
-        .permission-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 6px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .permission-grid .module-row {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 6px 16px;
-            padding: 6px 10px;
-            background: #f8fafc;
-            border-radius: 6px;
-            border: 1px solid #e2e8f0;
-        }
-        .permission-grid .module-row .module-name {
+        .btn-modal-primary {
+            background: #4F46E5;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .btn-modal-primary:hover {
+            background: #4338CA;
+        }
+        .btn-modal-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .btn-modal-secondary:hover {
+            background: #e2e8f0;
+        }
+        .btn-modal-danger {
+            background: #EF4444;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+        }
+        .btn-modal-danger:hover {
+            background: #DC2626;
+        }
+
+        .delete-confirm-item {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 8px 0 12px 0;
+        }
+        .delete-confirm-item .label {
+            font-weight: 600;
+            color: #475569;
+            font-size: 12px;
+        }
+        .delete-confirm-item .value {
+            font-weight: 600;
             color: #0f172a;
-            min-width: 130px;
+            font-size: 14px;
         }
-        .permission-grid .module-row .perms {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2px 10px;
+
+        .perm-checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 2px 12px;
         }
-        .permission-grid .module-row .perms label {
+        .perm-checkbox-grid label {
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 11px;
-            color: #475569;
+            gap: 8px;
+            font-size: 12px;
+            color: #334155;
             cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 4px;
+            transition: background 0.12s;
         }
-        .permission-grid .module-row .perms input[type="checkbox"] {
-            width: 13px;
-            height: 13px;
+        .perm-checkbox-grid label:hover {
+            background: #f1f5f9;
+        }
+        .perm-checkbox-grid label input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
             accent-color: #4F46E5;
             cursor: pointer;
+            flex-shrink: 0;
         }
-        .perm-group-label {
+        .perm-checkbox-grid label .perm-desc {
             font-size: 10px;
-            font-weight: 700;
             color: #94a3b8;
+            margin-left: 2px;
+            font-weight: 400;
+        }
+        .perm-group-header {
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
-            padding: 4px 0 2px 0;
-            display: block;
+            letter-spacing: 0.5px;
+            padding: 10px 0 4px 0;
+            border-bottom: 1.5px solid #e9eef6;
+            grid-column: 1 / -1;
+            margin-top: 6px;
+        }
+        .perm-group-header:first-of-type {
+            margin-top: 0;
         }
 
         @media (max-width: 767px) {
-            .permission-grid .module-row {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 8px 10px;
-                gap: 4px;
-            }
-            .permission-grid .module-row .module-name {
-                min-width: auto;
-                font-size: 12px;
-            }
-            .permission-grid .module-row .perms {
-                gap: 2px 6px;
-            }
-            .permission-grid .module-row .perms label {
-                font-size: 10px;
-            }
-            .permission-grid .module-row .perms input[type="checkbox"] {
-                width: 12px;
-                height: 12px;
-            }
             .role-table td,
             .role-table th,
             .user-table td,
@@ -379,7 +492,19 @@
             }
             .action-icon-btn {
                 font-size: 11px !important;
-                padding: 1px 4px !important;
+                padding: 2px 6px !important;
+            }
+            .role-desc-cell {
+                max-width: 100px;
+                font-size: 10px;
+            }
+            .perm-tag {
+                font-size: 7px;
+                padding: 0 4px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
             }
             .filter-section .filter-group input,
             .filter-section .filter-group select {
@@ -392,23 +517,19 @@
                 font-size: 11px;
                 padding: 4px 10px;
             }
-            .status-badge {
-                font-size: 9px;
-                padding: 1px 8px;
+            .perm-checkbox-grid {
+                grid-template-columns: 1fr 1fr;
             }
-            .detail-field .value-box {
-                font-size: 12px;
-                padding: 6px 10px;
+            .perm-checkbox-grid label {
+                font-size: 11px;
+                padding: 2px 4px;
+            }
+            .tab-btn {
+                font-size: 10px;
+                padding: 4px 12px;
             }
         }
-
         @media (max-width: 480px) {
-            .permission-grid .module-row .module-name {
-                font-size: 11px;
-            }
-            .permission-grid .module-row .perms label {
-                font-size: 9px;
-            }
             .role-table td,
             .role-table th,
             .user-table td,
@@ -418,7 +539,19 @@
             }
             .action-icon-btn {
                 font-size: 10px !important;
-                padding: 0 3px !important;
+                padding: 1px 4px !important;
+            }
+            .role-desc-cell {
+                max-width: 70px;
+                font-size: 9px;
+            }
+            .perm-tag {
+                font-size: 6px;
+                padding: 0 3px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4px !important;
             }
             .filter-section .filter-group input,
             .filter-section .filter-group select {
@@ -431,172 +564,22 @@
                 font-size: 10px;
                 padding: 3px 8px;
             }
-            .status-badge {
-                font-size: 8px;
-                padding: 1px 6px;
+            .perm-checkbox-grid {
+                grid-template-columns: 1fr;
             }
-            .detail-field .value-box {
-                font-size: 11px;
-                padding: 5px 8px;
-            }
-            .permission-grid {
-                max-height: 300px;
-            }
-        }
-
-        .tab-btn {
-            padding: 8px 20px;
-            border-radius: 10px 10px 0 0;
-            font-size: 13px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: transparent;
-            color: #64748b;
-            border-bottom: 3px solid transparent;
-        }
-        .tab-btn.active {
-            color: #4F46E5;
-            border-bottom-color: #4F46E5;
-            background: #f8fafc;
-        }
-        .tab-btn:hover:not(.active) {
-            background: #f1f5f9;
-            color: #475569;
-        }
-        @media (max-width: 480px) {
-            .tab-btn {
-                font-size: 11px;
-                padding: 6px 12px;
-            }
-        }
-
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        .user-avatar-sm {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 10px;
-            color: #fff;
-            flex-shrink: 0;
-        }
-
-        .role-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 2px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            background: #EEF2FF;
-            color: #4338CA;
-            border: 1px solid #C7D2FE;
-        }
-        .role-badge.admin {
-            background: #FEF2F2;
-            color: #DC2626;
-            border-color: #FECACA;
-        }
-        .role-badge.manager {
-            background: #ECFDF5;
-            color: #059669;
-            border-color: #A7F3D0;
-        }
-        .role-badge.staff {
-            background: #FFFBEB;
-            color: #D97706;
-            border-color: #FDE68A;
-        }
-
-        .stat-card {
-            transition: all 0.2s ease;
-            cursor: default;
-        }
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-        }
-        .stat-card .stat-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .stat-value-sm {
-            font-size: 15px;
-        }
-        @media (min-width: 768px) {
-            .stat-value-sm {
-                font-size: 17px;
-            }
-        }
-        @media (min-width: 1024px) {
-            .stat-value-sm {
-                font-size: 20px;
-            }
-        }
-        .stat-label-one {
-            font-size: 9px;
-            letter-spacing: 0.2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        @media (min-width: 768px) {
-            .stat-label-one {
+            .perm-checkbox-grid label {
                 font-size: 10px;
             }
-        }
-        @media (min-width: 1024px) {
-            .stat-label-one {
-                font-size: 11px;
+            .form-field input,
+            .form-field select,
+            .form-field textarea {
+                font-size: 12px;
+                padding: 6px 10px;
             }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-        }
-        @media (max-width: 640px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
+            .tab-btn {
+                font-size: 9px;
+                padding: 3px 8px;
             }
-        }
-
-        .perm-count-badge {
-            background: #E0E7FF;
-            color: #4338CA;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 1px 8px;
-            border-radius: 12px;
-            margin-left: 4px;
-        }
-        .order-perm-section {
-            border-left: 3px solid #4F46E5;
-            padding-left: 8px;
-            margin-left: 4px;
-        }
-        .order-perm-section .perms label {
-            font-size: 10px;
         }
     </style>
 </head>
@@ -622,11 +605,12 @@
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></a>
             <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
-            <!-- Active: Role Management -->
-            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">12</span></div></div>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0v10l-8 4m8-10l-8 4m-8-4l8 4m0 6v4m-8-4v4"/></svg>Warehouse<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Receiving</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Inventory</a></div></div>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
             <div class="my-2 border-t border-gray-700/50"></div>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>Role Management<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">3</span></div></div>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
@@ -635,8 +619,7 @@
             <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
             <div class="my-2 border-t border-gray-700/50"></div>
             <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
-            <!-- Role Management active -->
-            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>Role Management<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">3</span></div></div>
+            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User Roles</a></div></div>
         </nav>
         <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
             <div class="flex items-center gap-3">
@@ -653,8 +636,8 @@
         <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
             <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">🔐 Role Management</h1>
-                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">🔐 Roles</span>
+                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">👥 Role & User Management</h1>
+                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">👥 Roles</span>
             </div>
             <div class="flex items-center gap-2 sm:gap-3">
                 <button onclick="refreshData()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
@@ -662,8 +645,8 @@
                     <span class="hidden xs:inline">Refresh</span>
                 </button>
                 <button onclick="openAddRoleModal()" class="flex items-center gap-1 sm:gap-2 bg-primary text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-primaryDark transition-colors whitespace-nowrap no-print">
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span class="hidden xs:inline">Add Role</span>
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    <span>New Role</span>
                 </button>
             </div>
         </header>
@@ -671,75 +654,85 @@
         <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
 
             <!-- ─── STATS ─── -->
-            <div class="stats-grid">
+            <div class="stats-grid" id="statsGrid">
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-blue-50 text-blue-600">👥</div>
+                        <div class="stat-icon bg-indigo-50 text-indigo-600">👥</div>
                         <div>
                             <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Roles</p>
-                            <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 stat-value-sm" id="statTotalRoles">0</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-indigo-600 stat-value-sm" id="statTotalRoles">0</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-green-50 text-green-600">✅</div>
-                        <div>
-                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Active Users</p>
-                            <p class="text-base sm:text-lg lg:text-xl font-bold text-green-600 stat-value-sm" id="statActiveUsers">0</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
-                    <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-purple-50 text-purple-600">👤</div>
+                        <div class="stat-icon bg-emerald-50 text-emerald-600">👤</div>
                         <div>
                             <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Users</p>
-                            <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-800 stat-value-sm" id="statTotalUsers">0</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-emerald-600 stat-value-sm" id="statTotalUsers">0</p>
                         </div>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
-                        <div class="stat-icon bg-amber-50 text-amber-600">📋</div>
+                        <div class="stat-icon bg-purple-50 text-purple-600">🔑</div>
                         <div>
-                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Permissions</p>
-                            <p class="text-base sm:text-lg lg:text-xl font-bold text-amber-600 stat-value-sm" id="statPermissions">0</p>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Permissions</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-purple-600 stat-value-sm" id="statTotalPermissions">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-amber-50 text-amber-600">⚡</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Active Roles</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-amber-600 stat-value-sm" id="statActiveRoles">0</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- ─── TABS ─── -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
-                <div class="flex flex-wrap gap-1 border-b border-gray-200">
-                    <button class="tab-btn active" data-tab="roles" onclick="switchTab('roles')">📋 Roles</button>
-                    <button class="tab-btn" data-tab="users" onclick="switchTab('users')">👥 Users</button>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden no-print">
+                <div class="flex border-b border-gray-200 px-2 sm:px-4 pt-2 gap-0">
+                    <button class="tab-btn active" data-tab="rolesTab" onclick="switchTab('rolesTab')">👥 Roles</button>
+                    <button class="tab-btn" data-tab="usersTab" onclick="switchTab('usersTab')">🧑 Users</button>
                 </div>
             </div>
 
-            <!-- ─── TAB: ROLES ─── -->
-            <div id="tab-roles" class="tab-content active">
-                <!-- Filters -->
+            <!-- ─── ROLES TAB ─── -->
+            <div id="rolesTab" class="tab-content active space-y-3 sm:space-y-4">
+
+                <!-- FILTERS -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                     <div class="filter-section">
                         <div class="filter-group flex-1 min-w-[120px]">
                             <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
-                            <input type="text" id="searchRoles" placeholder="Role name..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterRoles()" />
+                            <input type="text" id="roleSearch" placeholder="Role, user, description..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterRoles()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                            <select id="roleStatusFilter" class="text-xs sm:text-sm" onchange="filterRoles()">
+                                <option value="all">All</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
                         </div>
                         <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
                             <button onclick="clearRoleFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
                             <button onclick="filterRoles()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
                         </div>
                     </div>
+                    <div id="activeRoleFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
                 </div>
 
-                <!-- Roles Table -->
+                <!-- ROLE TABLE -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
-                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Roles List</span>
-                            <span id="roleResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Roles &amp; Permissions</span>
+                            <span id="roleResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
@@ -755,17 +748,19 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="role-table w-full text-xs sm:text-sm" id="rolesTable">
+                        <table class="w-full text-xs sm:text-sm role-table" id="roleTable">
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Role</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Description</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Users</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Permissions</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Actions</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">#</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">Role</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">Description</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Users</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Permissions</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Status</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="rolesTableBody"></tbody>
+                            <tbody id="roleTableBody"></tbody>
                         </table>
                     </div>
 
@@ -776,19 +771,31 @@
                 </div>
             </div>
 
-            <!-- ─── TAB: USERS ─── -->
-            <div id="tab-users" class="tab-content">
-                <!-- Filters -->
+            <!-- ─── USERS TAB ─── -->
+            <div id="usersTab" class="tab-content space-y-3 sm:space-y-4">
+
+                <!-- Users Filter -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                     <div class="filter-section">
                         <div class="filter-group flex-1 min-w-[120px]">
                             <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
-                            <input type="text" id="searchUsers" placeholder="User name, email..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterUsers()" />
+                            <input type="text" id="userSearch" placeholder="Name, email, role..." class="flex-1 min-w-[80px] text-xs sm:text-sm" oninput="filterUsers()" />
                         </div>
                         <div class="filter-group">
                             <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Role:</label>
-                            <select id="roleUserFilter" onchange="filterUsers()" class="text-xs sm:text-sm">
+                            <select id="userRoleFilter" class="text-xs sm:text-sm" onchange="filterUsers()">
                                 <option value="all">All Roles</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Staff">Staff</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Status:</label>
+                            <select id="userStatusFilter" class="text-xs sm:text-sm" onchange="filterUsers()">
+                                <option value="all">All</option>
+                                <option value="Active">Active</option>
+                                <option value="Blocked">Blocked</option>
                             </select>
                         </div>
                         <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
@@ -799,20 +806,20 @@
                     <div id="activeUserFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
                 </div>
 
-                <!-- Users Table -->
+                <!-- USER TABLE -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
                             <span class="text-xs sm:text-sm font-semibold text-gray-700">Users List</span>
-                            <span id="userResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                            <span id="userResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
                                 <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
                                 <select id="userPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changeUserPageSize()">
+                                    <option value="5" selected>5</option>
                                     <option value="10">10</option>
                                     <option value="25">25</option>
-                                    <option value="50" selected>50</option>
                                 </select>
                                 <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
                             </div>
@@ -820,17 +827,18 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="user-table w-full text-xs sm:text-sm" id="usersTable">
+                        <table class="w-full text-xs sm:text-sm user-table" id="userTable">
                             <thead>
                                 <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">User</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Email</th>
-                                    <th class="px-2 py-1 sm:py-2 text-left whitespace-nowrap">Role</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Status</th>
-                                    <th class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">Actions</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">#</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">User</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">Email</th>
+                                    <th class="px-3 py-2 sm:py-3 text-left whitespace-nowrap">Role</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Status</th>
+                                    <th class="px-3 py-2 sm:py-3 text-center whitespace-nowrap">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="usersTableBody"></tbody>
+                            <tbody id="userTableBody"></tbody>
                         </table>
                     </div>
 
@@ -844,59 +852,58 @@
         </div>
     </main>
 
-    <!-- ─── ADD / EDIT ROLE MODAL ─── -->
+    <!-- ─── ADD/EDIT ROLE MODAL ─── -->
     <div id="roleModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeRoleModal()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-3 sm:mx-4 max-h-[95vh] overflow-y-auto animate-fade-in z-10">
-            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl z-10">
-                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="roleModalTitle">➕ Add Role</h3>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl mx-3 sm:mx-4 max-h-[92vh] overflow-y-auto animate-fade-in z-10 modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800" id="roleModalTitle">➕ Add New Role</h3>
                 <button onclick="closeRoleModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 sm:p-6">
                 <form id="roleForm" onsubmit="saveRole(event)">
-                    <input type="hidden" id="editRoleId" />
-                    <div class="detail-field">
-                        <label>Role Name *</label>
-                        <input type="text" id="roleName" placeholder="e.g. Manager" required />
-                    </div>
-                    <div class="detail-field">
-                        <label>Description</label>
-                        <input type="text" id="roleDescription" placeholder="Brief description of the role" />
-                    </div>
-                    <div class="detail-field">
-                        <label>Permissions</label>
-                        <div class="permission-grid" id="permissionGrid">
-                            <!-- populated by JS -->
+                    <input type="hidden" id="editRoleId" value="" />
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="form-field">
+                            <label for="roleNameInput">Role Name *</label>
+                            <input type="text" id="roleNameInput" placeholder="e.g. Warehouse Manager" required />
                         </div>
-                        <div class="hint mt-2">Select the permissions for this role. <span class="text-blue-600 font-medium">Orders</span> module has granular controls.</div>
+                        <div class="form-field">
+                            <label for="roleStatusInput">Status</label>
+                            <select id="roleStatusInput">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="flex gap-3 mt-4">
-                        <button type="submit" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save</button>
-                        <button type="button" onclick="closeRoleModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+
+                    <div class="form-field">
+                        <label for="roleDescInput">Description</label>
+                        <textarea id="roleDescInput" placeholder="Describe the responsibilities of this role..." rows="2"></textarea>
+                    </div>
+
+                    <div class="form-field">
+                        <label for="roleUsersInput">Assigned Users (comma separated emails)</label>
+                        <input type="text" id="roleUsersInput" placeholder="e.g. john@example.com, jane@example.com" />
+                        <p class="text-[10px] text-gray-400 mt-1">💡 Users will be assigned to this role. Existing users will be replaced.</p>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4 mt-2">
+                        <div class="flex items-center justify-between mb-2">
+                            <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Permissions</label>
+                            <span class="text-xs text-gray-400">(Select all that apply)</span>
+                        </div>
+                        <div class="perm-checkbox-grid" id="permissionCheckboxGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 mt-6 pt-4 border-t border-gray-200">
+                        <button type="submit" class="btn-modal-primary flex-1">💾 Save Role</button>
+                        <button type="button" onclick="closeRoleModal()" class="btn-modal-secondary flex-1">Cancel</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- ─── ASSIGN ROLE MODAL ─── -->
-    <div id="assignRoleModal" class="fixed inset-0 z-50 hidden items-center justify-center">
-        <div class="modal-backdrop absolute inset-0" onclick="closeAssignRoleModal()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
-            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
-                <h3 class="text-base sm:text-lg font-bold text-gray-800">👤 Assign Role</h3>
-                <button onclick="closeAssignRoleModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="p-4 sm:p-6">
-                <p class="text-sm text-gray-500 mb-3">Assign a role to <span id="assignUserName" class="font-semibold text-gray-800">—</span></p>
-                <div class="detail-field">
-                    <label>Role</label>
-                    <select id="assignRoleSelect" class="w-full"></select>
-                </div>
-                <div class="flex gap-3 mt-4">
-                    <button onclick="saveAssignRole()" class="flex-1 bg-primary text-white py-2.5 rounded-xl font-semibold hover:bg-primaryDark transition-colors">Assign</button>
-                    <button onclick="closeAssignRoleModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
-                </div>
             </div>
         </div>
     </div>
@@ -904,14 +911,21 @@
     <!-- ─── DELETE CONFIRM MODAL ─── -->
     <div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeDeleteModal()"></div>
-        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm mx-3 sm:mx-4 animate-fade-in z-10">
-            <div class="p-4 sm:p-6 text-center">
-                <div class="text-5xl mb-3">🗑️</div>
-                <h3 class="text-lg font-bold text-gray-800 mb-2">Delete Role</h3>
-                <p class="text-sm text-gray-500 mb-4">Are you sure you want to delete role <span id="deleteRoleName" class="font-semibold text-gray-800">—</span>? This action cannot be undone.</p>
-                <div class="flex gap-3">
-                    <button onclick="confirmDeleteRole()" class="flex-1 bg-red-500 text-white py-2.5 rounded-xl font-semibold hover:bg-red-600 transition-colors">Delete</button>
-                    <button onclick="closeDeleteModal()" class="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">🗑️ Delete Role</h3>
+                <button onclick="closeDeleteModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <p class="text-sm text-gray-600 mb-3">Are you sure you want to delete this role? This action cannot be undone.</p>
+                <div class="delete-confirm-item">
+                    <div><span class="label">Role:</span> <span class="value" id="deleteRoleName">—</span></div>
+                    <div class="mt-1"><span class="label">Users:</span> <span class="value text-sm" id="deleteRoleUsers">0</span></div>
+                </div>
+                <p class="text-xs text-red-500 font-medium">⚠️ Users assigned to this role will lose their permissions.</p>
+                <div class="flex gap-3 mt-4">
+                    <button onclick="confirmDeleteRole()" class="btn-modal-danger flex-1">🗑️ Delete</button>
+                    <button onclick="closeDeleteModal()" class="btn-modal-secondary flex-1">Cancel</button>
                 </div>
             </div>
         </div>
@@ -929,231 +943,168 @@
         (function() {
             'use strict';
 
-            // ─── MODULE DEFINITIONS WITH PERMISSIONS ─────────────────────
-
-            // Each module has: id, label, and permissions array
-            // Orders module has more granular permissions
-            const MODULE_DEFS = [{
-                id: 'dashboard',
-                label: 'Dashboard',
-                perms: ['view']
-            }, {
-                id: 'users',
-                label: 'Users',
-                perms: ['view', 'add', 'edit', 'delete', 'export']
-            }, {
-                id: 'orders',
-                label: 'Orders',
+            // ─── ALL ACTIONS / PERMISSIONS ──────────────────────────────────
+            const PERMISSION_GROUPS = [{
+                group: '📦 Orders & Shipments',
                 perms: [
-                    'view', 'create', 'edit', 'delete',
-                    'cancel', 'refund', 'update_status',
-                    'assign_delivery', 'print_invoice', 'shipping_label',
-                    'view_timeline', 'export', 'approve_price'
+                    { key: 'view_orders', label: 'View Orders', desc: 'View order list & details' },
+                    { key: 'edit_orders', label: 'Edit / Update Orders', desc: 'Change order status, fields' },
+                    { key: 'set_ordered', label: 'Set Ordered (Placed)', desc: 'Mark order as placed' },
+                    { key: 'manage_tracking', label: 'Manage Tracking', desc: 'Add / edit tracking numbers' },
+                    { key: 'cancel_orders', label: 'Cancel Orders', desc: 'Cancel orders with reason' },
+                    { key: 'view_timeline', label: 'View Timeline', desc: 'View shipment tracking timeline' },
+                    { key: 'view_comments', label: 'View Comments', desc: 'View order comments' },
+                    { key: 'manage_internal_remarks', label: 'Internal Remarks', desc: 'Add / edit internal notes' },
                 ]
             }, {
-                id: 'categories',
-                label: 'Categories',
-                perms: ['view', 'add', 'edit', 'delete']
+                group: '🏭 Warehouse Operations',
+                perms: [
+                    { key: 'view_warehouse', label: 'View Warehouse', desc: 'View stock & warehouse data' },
+                    { key: 'arrive_warehouse', label: 'Arrive at India WH', desc: 'Mark shipment as arrived' },
+                    { key: 'dispatch_warehouse', label: 'Dispatch from India WH', desc: 'Dispatch to Nepal' },
+                    { key: 'receive_warehouse', label: 'Receive at Nepal WH', desc: 'Final receive' },
+                    { key: 'manage_barcodes', label: 'Manage Barcodes', desc: 'Assign warehouse barcodes' },
+                    { key: 'scan_barcode', label: 'Scan Barcode', desc: 'Use barcode scanner' },
+                ]
             }, {
-                id: 'subcategories',
-                label: 'SubCategories',
-                perms: ['view', 'add', 'edit', 'delete']
+                group: '💰 Finance & Payments',
+                perms: [
+                    { key: 'view_finance', label: 'View Finance', desc: 'View financial data' },
+                    { key: 'confirm_payment', label: 'Confirm Payment', desc: 'Manual payment confirmation' },
+                    { key: 'verify_payment', label: 'Verify Payment', desc: 'Verify Buy For Me payments' },
+                    { key: 'view_cost_calculator', label: 'Cost Calculator', desc: 'View cost breakdown' },
+                ]
             }, {
-                id: 'price_corrections',
-                label: 'Price Corrections',
-                perms: ['view', 'review', 'approve', 'reject', 'export']
+                group: '📊 Reports & Export',
+                perms: [
+                    { key: 'view_reports', label: 'View Reports', desc: 'Access reports' },
+                    { key: 'export_excel', label: 'Export Excel', desc: 'Export to Excel/CSV' },
+                    { key: 'export_pdf', label: 'Export PDF', desc: 'Export to PDF' },
+                    { key: 'print_label', label: 'Print Label', desc: 'Print shipping label' },
+                    { key: 'print_invoice', label: 'Print Invoice', desc: 'Print invoice' },
+                    { key: 'bulk_actions', label: 'Bulk Actions', desc: 'Bulk labels & invoices' },
+                ]
             }, {
-                id: 'reports',
-                label: 'Reports',
-                perms: ['view', 'export', 'download']
+                group: '🔧 Filters & Navigation',
+                perms: [
+                    { key: 'filter_orders', label: 'Filter Orders', desc: 'Use date / search filters' },
+                    { key: 'filter_by_type', label: 'Filter by Type', desc: 'Quick/Buy/Self order filters' },
+                    { key: 'filter_by_status', label: 'Filter by Status', desc: 'Status tab filters' },
+                    { key: 'filter_by_user', label: 'Filter by User', desc: 'Click user to filter' },
+                    { key: 'switch_tabs', label: 'Switch Tabs', desc: 'Navigate tabs' },
+                ]
             }, {
-                id: 'settings',
-                label: 'Settings',
-                perms: ['view', 'edit']
-            }, {
-                id: 'delivery',
-                label: 'Delivery',
-                perms: ['view', 'assign', 'track', 'update']
-            }, {
-                id: 'feedback',
-                label: 'Feedback & Tickets',
-                perms: ['view', 'reply', 'resolve', 'delete']
-            }, {
-                id: 'blog',
-                label: 'Blog',
-                perms: ['view', 'add', 'edit', 'delete']
-            }, {
-                id: 'role_management',
-                label: 'Role Management',
-                perms: ['view', 'add', 'edit', 'delete', 'assign']
+                group: '⚙️ Administration & Settings',
+                perms: [
+                    { key: 'manage_users', label: 'Manage Users', desc: 'User management' },
+                    { key: 'manage_roles', label: 'Manage Roles', desc: 'Role management' },
+                    { key: 'manage_settings', label: 'Manage Settings', desc: 'Logistic partners, settings' },
+                    { key: 'price_corrections', label: 'Price Corrections', desc: 'View price corrections cart' },
+                    { key: 'refresh_data', label: 'Refresh Data', desc: 'Refresh all data' },
+                ]
             }];
 
-            // ─── PERMISSION LABEL MAP ─────────────────────────────────────
+            const ALL_PERMISSION_KEYS = PERMISSION_GROUPS.flatMap(g => g.perms.map(p => p.key));
+            const TOTAL_PERMISSIONS = ALL_PERMISSION_KEYS.length; // 34
 
-            const PERM_LABELS = {
-                // Common
-                'view': '👁️ View',
-                'add': '➕ Add',
-                'edit': '✏️ Edit',
-                'delete': '🗑️ Delete',
-                'export': '📤 Export',
-                'approve': '✅ Approve',
+            // ─── DUMMY USERS DATA ────────────────────────────────────────────
+            const DUMMY_USERS_DATA = [{
+                id: 'user_1',
+                initials: 'DB',
+                name: 'Damodar Bhattarai',
+                email: 'damodar@example.com',
+                role: 'Admin',
+                status: 'Active'
+            }, {
+                id: 'user_2',
+                initials: 'SS',
+                name: 'Sita Sharma',
+                email: 'sita@example.com',
+                role: 'Manager',
+                status: 'Active'
+            }, {
+                id: 'user_3',
+                initials: 'RA',
+                name: 'Ramesh Adhikari',
+                email: 'ramesh@example.com',
+                role: 'Staff',
+                status: 'Active'
+            }, {
+                id: 'user_4',
+                initials: 'PG',
+                name: 'Priya Gurung',
+                email: 'priya@example.com',
+                role: 'Staff',
+                status: 'Blocked'
+            }, {
+                id: 'user_5',
+                initials: 'BT',
+                name: 'Bikash Thapa',
+                email: 'bikash@example.com',
+                role: 'Manager',
+                status: 'Active'
+            }];
 
-                // Orders specific
-                'create': '📝 Create',
-                'cancel': '❌ Cancel',
-                'refund': '💸 Refund',
-                'update_status': '🔄 Update Status',
-                'assign_delivery': '🚚 Assign Delivery',
-                'print_invoice': '🧾 Print Invoice',
-                'shipping_label': '📦 Shipping Label',
-                'view_timeline': '📋 View Timeline',
-                'approve_price': '💰 Approve Price',
+            // ─── DEFAULT ROLES (3 roles with dummy data) ────────────────────
+            // Admin: all permissions (34), Manager: 30, Staff: 17
+            const MANAGER_PERMS = ALL_PERMISSION_KEYS.filter(k =>
+                !k.startsWith('manage_users') &&
+                !k.startsWith('manage_roles') &&
+                !k.startsWith('manage_settings') &&
+                !k.startsWith('price_corrections')
+            ); // 30
 
-                // Price Corrections specific
-                'review': '🔍 Review',
-                'reject': '🚫 Reject',
+            const STAFF_PERMS = [
+                'view_orders', 'view_warehouse', 'view_comments',
+                'filter_orders', 'filter_by_type', 'filter_by_status', 'switch_tabs',
+                'view_reports', 'view_timeline',
+                'arrive_warehouse', 'receive_warehouse', 'scan_barcode',
+                'view_finance', 'view_cost_calculator'
+            ]; // 14
 
-                // Delivery specific
-                'assign': '📌 Assign',
-                'track': '📍 Track',
-                'update': '🔄 Update',
-
-                // Feedback specific
-                'reply': '💬 Reply',
-                'resolve': '✅ Resolve',
-
-                // Role Management specific
-                'assign': '🔑 Assign',
-
-                // Reports specific
-                'download': '⬇️ Download',
-            };
-
-            // ─── DEFAULT ROLES WITH PERMISSIONS ──────────────────────────
-
-            function buildDefaultPermissions() {
-                const perms = {};
-                MODULE_DEFS.forEach(mod => {
-                    const p = {};
-                    mod.perms.forEach(perm => {
-                        p[perm] = false;
-                    });
-                    perms[mod.id] = p;
-                });
-                return perms;
-            }
-
-            function getAllPermissions(roleName) {
-                const perms = buildDefaultPermissions();
-
-                if (roleName === 'Admin') {
-                    // Admin gets all permissions
-                    MODULE_DEFS.forEach(mod => {
-                        mod.perms.forEach(perm => {
-                            perms[mod.id][perm] = true;
-                        });
-                    });
-                } else if (roleName === 'Manager') {
-                    // Manager gets most permissions except sensitive ones
-                    MODULE_DEFS.forEach(mod => {
-                        mod.perms.forEach(perm => {
-                            if (mod.id === 'settings' && (perm === 'edit' || perm === 'delete')) {
-                                perms[mod.id][perm] = false;
-                            } else if (mod.id === 'role_management' && perm !== 'view') {
-                                perms[mod.id][perm] = false;
-                            } else if (mod.id === 'users' && (perm === 'delete' || perm === 'add')) {
-                                perms[mod.id][perm] = false;
-                            } else if (mod.id === 'reports' && perm === 'download') {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'price_corrections' && (perm === 'approve' || perm ===
-                                    'reject')) {
-                                perms[mod.id][perm] = false;
-                            } else {
-                                perms[mod.id][perm] = true;
-                            }
-                        });
-                    });
-                } else if (roleName === 'Staff') {
-                    // Staff gets limited permissions
-                    MODULE_DEFS.forEach(mod => {
-                        mod.perms.forEach(perm => {
-                            if (mod.id === 'dashboard' && perm === 'view') {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'orders' && (perm === 'view' || perm === 'create' ||
-                                    perm === 'edit' || perm === 'update_status' || perm ===
-                                    'print_invoice' || perm === 'shipping_label' || perm ===
-                                    'view_timeline')) {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'delivery' && (perm === 'view' || perm === 'track' ||
-                                    perm === 'update')) {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'price_corrections' && (perm === 'view' || perm ===
-                                    'review')) {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'feedback' && (perm === 'view' || perm === 'reply')) {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'categories' && perm === 'view') {
-                                perms[mod.id][perm] = true;
-                            } else if (mod.id === 'subcategories' && perm === 'view') {
-                                perms[mod.id][perm] = true;
-                            } else {
-                                perms[mod.id][perm] = false;
-                            }
-                        });
-                    });
-                }
-
-                return perms;
-            }
-
-            // ─── ROLES DATA ──────────────────────────────────────────────
-
-            let roles = [{
-                id: 1,
+            const DEFAULT_ROLES = [{
+                id: 'role_admin',
                 name: 'Admin',
                 description: 'Full access to all features',
-                permissions: getAllPermissions('Admin')
+                users: ['damodar@example.com'],
+                permissions: ALL_PERMISSION_KEYS,
+                status: 'active',
+                createdAt: '2026-01-01T00:00:00',
             }, {
-                id: 2,
+                id: 'role_manager',
                 name: 'Manager',
                 description: 'Manage orders, users, and content',
-                permissions: getAllPermissions('Manager')
+                users: ['sita@example.com', 'bikash@example.com'],
+                permissions: MANAGER_PERMS,
+                status: 'active',
+                createdAt: '2026-01-02T00:00:00',
             }, {
-                id: 3,
+                id: 'role_staff',
                 name: 'Staff',
                 description: 'Basic operational access',
-                permissions: getAllPermissions('Staff')
+                users: ['ramesh@example.com', 'priya@example.com'],
+                permissions: STAFF_PERMS,
+                status: 'active',
+                createdAt: '2026-01-03T00:00:00',
             }];
 
-            // ─── USERS DATA ──────────────────────────────────────────────
-
-            let users = [
-                { id: 1, name: 'Damodar Bhattarai', email: 'damodar@example.com', role: 'Admin', status: 'active' },
-                { id: 2, name: 'Sita Sharma', email: 'sita@example.com', role: 'Manager', status: 'active' },
-                { id: 3, name: 'Ramesh Adhikari', email: 'ramesh@example.com', role: 'Staff', status: 'active' },
-                { id: 4, name: 'Priya Gurung', email: 'priya@example.com', role: 'Staff', status: 'blocked' },
-                { id: 5, name: 'Bikash Thapa', email: 'bikash@example.com', role: 'Manager', status: 'active' },
-            ];
-
-            // ─── STATE ──────────────────────────────────────────────────────
-
-            let roleFiltered = [...roles];
+            // ─── STATE ──────────────────────────────────────────────────────────
+            let roles = [];
+            let filteredRoles = [];
             let rolePage = 1;
-            let roleSize = 50;
-            let userFiltered = [...users];
+            let rolePageSize = 50;
+
+            let users = [];
+            let filteredUsers = [];
             let userPage = 1;
-            let userSize = 50;
+            let userPageSize = 5;
+
             let deleteTargetId = null;
-            let assignTargetUserId = null;
+            let editTargetId = null;
 
-            // ─── HELPERS ────────────────────────────────────────────────────
-
-            function escapeHtml(text) {
-                if (!text) return '';
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
+            // ─── HELPERS ──────────────────────────────────────────────────────
+            function generateId() {
+                return 'role_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
             }
 
             function getInitials(name) {
@@ -1161,419 +1112,484 @@
             }
 
             function getAvatarColor(name) {
-                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
+                const colors = ['#4F46E5', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316',
+                    '#6366F1', '#A855F7'
+                ];
                 let hash = 0;
                 for (let i = 0; i < name.length; i++) hash = (hash + name.charCodeAt(i) * 31) % colors.length;
                 return colors[hash];
             }
 
             function getStatusBadge(status) {
-                if (status === 'active') {
-                    return '<span class="status-badge bg-green-100 text-green-700"><span class="dot green"></span>Active</span>';
-                } else {
-                    return '<span class="status-badge bg-red-100 text-red-700"><span class="dot red"></span>Blocked</span>';
+                if (status === 'active' || status === 'Active') {
+                    return `<span class="badge-role bg-green-100 text-green-700"><span class="dot bg-green-500"></span>Active</span>`;
                 }
+                return `<span class="badge-role bg-red-100 text-red-700"><span class="dot bg-red-500"></span>Blocked</span>`;
             }
 
-            function getRoleBadge(roleName) {
-                const map = {
-                    'Admin': 'admin',
-                    'Manager': 'manager',
-                    'Staff': 'staff'
-                };
-                const cls = map[roleName] || '';
-                return `<span class="role-badge ${cls}">${escapeHtml(roleName)}</span>`;
+            function formatDate(iso) {
+                if (!iso) return '—';
+                const d = new Date(iso);
+                return d.toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
             }
 
-            function countUsersForRole(roleName) {
-                return users.filter(u => u.role === roleName).length;
+            function getRoleCount() { return roles.length; }
+
+            function getTotalUsers() {
+                const all = new Set();
+                roles.forEach(r => { if (r.users) r.users.forEach(u => all.add(u)); });
+                return all.size;
             }
 
-            function countPermissions(perms) {
-                let count = 0;
-                MODULE_DEFS.forEach(mod => {
-                    const p = perms[mod.id] || {};
-                    mod.perms.forEach(perm => {
-                        if (p[perm]) count++;
-                    });
+            function getTotalPermissions() {
+                const all = new Set();
+                roles.forEach(r => { if (r.permissions) r.permissions.forEach(p => all.add(p)); });
+                return all.size;
+            }
+
+            function getActiveRoles() {
+                return roles.filter(r => r.status === 'active').length;
+            }
+
+            function getUserRole(email) {
+                for (const r of roles) {
+                    if (r.users && r.users.includes(email)) return r.name;
+                }
+                return '—';
+            }
+
+            // ─── LOCAL STORAGE ─────────────────────────────────────────────────
+            const STORAGE_KEY = 'MeroWish_roles_data_v3';
+
+            function loadRoles() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            roles = parsed;
+                            return;
+                        }
+                    }
+                } catch (_) { /* ignore */ }
+                roles = JSON.parse(JSON.stringify(DEFAULT_ROLES));
+                saveRoles();
+            }
+
+            function saveRoles() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(roles));
+            }
+
+            // ─── INIT USERS ────────────────────────────────────────────────────
+            function initUsers() {
+                users = JSON.parse(JSON.stringify(DUMMY_USERS_DATA));
+                // Ensure role names match
+                users.forEach(u => {
+                    const role = roles.find(r => r.name === u.role);
+                    if (role) {
+                        // keep role name as-is
+                    }
                 });
-                return count;
             }
 
-            function getPermLabel(perm) {
-                return PERM_LABELS[perm] || perm;
+            // ─── RENDER ──────────────────────────────────────────────────────────
+            function renderAll() {
+                updateStats();
+                filterRoles();
+                filterUsers();
             }
 
-            // ─── RENDER ROLES ──────────────────────────────────────────────
+            function updateStats() {
+                document.getElementById('statTotalRoles').textContent = getRoleCount();
+                document.getElementById('statTotalUsers').textContent = getTotalUsers();
+                document.getElementById('statTotalPermissions').textContent = getTotalPermissions();
+                document.getElementById('statActiveRoles').textContent = getActiveRoles();
+            }
 
-            function renderRoles() {
-                const start = (rolePage - 1) * roleSize;
-                const end = Math.min(start + roleSize, roleFiltered.length);
-                const pageData = roleFiltered.slice(start, end);
-                const tbody = document.getElementById('rolesTableBody');
+            // ─── ROLES ──────────────────────────────────────────────────────────
+
+            function filterRoles() {
+                const search = document.getElementById('roleSearch').value.toLowerCase().trim();
+                const statusFilter = document.getElementById('roleStatusFilter').value;
+
+                let filtered = [...roles];
+
+                if (search) {
+                    filtered = filtered.filter(r =>
+                        r.name.toLowerCase().includes(search) ||
+                        (r.description && r.description.toLowerCase().includes(search)) ||
+                        (r.users && r.users.some(u => u.toLowerCase().includes(search)))
+                    );
+                }
+
+                if (statusFilter !== 'all') {
+                    filtered = filtered.filter(r => r.status === statusFilter);
+                }
+
+                filteredRoles = filtered;
+                rolePage = 1;
+                renderRoleTable();
+                updateActiveRoleFilters();
+            }
+
+            function updateActiveRoleFilters() {
+                const container = document.getElementById('activeRoleFilters');
+                let html = '';
+                const search = document.getElementById('roleSearch').value.trim();
+                const status = document.getElementById('roleStatusFilter').value;
+
+                if (search) {
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${search} <button onclick="document.getElementById('roleSearch').value='';filterRoles();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                if (status !== 'all') {
+                    const label = status === 'active' ? 'Active' : 'Inactive';
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📌 ${label} <button onclick="document.getElementById('roleStatusFilter').value='all';filterRoles();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            function clearRoleFilters() {
+                document.getElementById('roleSearch').value = '';
+                document.getElementById('roleStatusFilter').value = 'all';
+                filterRoles();
+            }
+
+            function renderRoleTable() {
+                const start = (rolePage - 1) * rolePageSize;
+                const end = Math.min(start + rolePageSize, filteredRoles.length);
+                const pageData = filteredRoles.slice(start, end);
+                const tbody = document.getElementById('roleTableBody');
 
                 if (pageData.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No roles found</td></tr>`;
-                    document.getElementById('roleResultCount').textContent = 'Showing 0 entries';
-                    updateRolePagination();
-                    return;
+                        `<tr><td colspan="7" class="px-4 py-8 text-center text-gray-400 text-sm">No roles found. Click "New Role" to create one.</td></tr>`;
+                    document.getElementById('roleResultCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map((role, idx) => {
+                        const rowNum = start + idx + 1;
+                        const userCount = (role.users || []).length;
+                        const permCount = (role.permissions || []).length;
+                        const statusHtml = getStatusBadge(role.status);
+                        const desc = role.description || '—';
+                        const descShort = desc.length > 70 ? desc.slice(0, 70) + '…' : desc;
+
+                        return `
+                                <tr class="role-row border-b border-gray-100">
+                                    <td class="px-3 py-2 sm:py-3 text-center text-gray-400 text-xs">${rowNum}</td>
+                                    <td class="px-3 py-2 sm:py-3">
+                                        <div class="font-semibold text-gray-800 text-sm">${role.name}</div>
+                                        <div class="text-[9px] text-gray-400">${role.id}</div>
+                                    </td>
+                                    <td class="px-3 py-2 sm:py-3">
+                                        <div class="role-desc-cell" title="${desc}">${descShort}</div>
+                                        <div class="text-[9px] text-gray-400 mt-0.5">Created: ${formatDate(role.createdAt)}</div>
+                                    </td>
+                                    <td class="px-3 py-2 sm:py-3 text-center font-semibold text-gray-700">${userCount}</td>
+                                    <td class="px-3 py-2 sm:py-3 text-center font-semibold text-gray-700">${permCount}</td>
+                                    <td class="px-3 py-2 sm:py-3 text-center">${statusHtml}</td>
+                                    <td class="px-3 py-2 sm:py-3 text-center">
+                                        <div class="flex items-center justify-center gap-1">
+                                            <button onclick="openEditRoleModal('${role.id}')" class="action-icon-btn primary" title="Edit Role">✏️</button>
+                                            <button onclick="openDeleteModal('${role.id}')" class="action-icon-btn danger" title="Delete Role">🗑️</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                    }).join('');
+                    document.getElementById('roleResultCount').textContent =
+                        `Showing ${pageData.length} of ${filteredRoles.length} entries`;
                 }
 
-                tbody.innerHTML = pageData.map(role => {
-                    const userCount = countUsersForRole(role.name);
-                    const permCount = countPermissions(role.permissions);
-                    return `
-                        <tr class="role-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">${getRoleBadge(role.name)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${escapeHtml(role.description || '—')}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm">${userCount}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm">${permCount}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
-                                <button onclick="editRole(${role.id})" class="action-icon-btn primary" title="Edit">✏️</button>
-                                <button onclick="deleteRole(${role.id})" class="action-icon-btn danger" title="Delete">🗑️</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-                document.getElementById('roleResultCount').textContent =
-                    `Showing ${pageData.length} of ${roleFiltered.length} entries`;
                 updateRolePagination();
-                updateStats();
             }
 
             function updateRolePagination() {
-                const totalPages = Math.ceil(roleFiltered.length / roleSize) || 1;
+                const total = Math.ceil(filteredRoles.length / rolePageSize) || 1;
                 document.getElementById('rolePaginationInfo').textContent =
-                    `Page ${rolePage} of ${totalPages} (${roleFiltered.length} entries)`;
-                const btnContainer = document.getElementById('rolePaginationButtons');
-                btnContainer.innerHTML = '';
-                if (totalPages <= 1) return;
-                for (let i = 1; i <= totalPages; i++) {
+                    `Page ${rolePage} of ${total} (${filteredRoles.length} entries)`;
+                const btns = document.getElementById('rolePaginationButtons');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+
+                if (rolePage > 1) {
+                    const prev = document.createElement('button');
+                    prev.className =
+                        'px-2 py-1 border border-gray-300 rounded-lg text-xs bg-white hover:bg-gray-50 text-gray-600';
+                    prev.textContent = '‹';
+                    prev.onclick = () => { rolePage--;
+                        renderRoleTable(); };
+                    btns.appendChild(prev);
+                }
+
+                const maxShow = 5;
+                let startP = Math.max(1, rolePage - Math.floor(maxShow / 2));
+                let endP = Math.min(total, startP + maxShow - 1);
+                if (endP - startP < maxShow - 1) startP = Math.max(1, endP - maxShow + 1);
+
+                for (let i = startP; i <= endP; i++) {
                     const btn = document.createElement('button');
                     btn.className =
                         `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === rolePage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
                     btn.textContent = i;
                     btn.onclick = () => { rolePage = i;
-                        renderRoles(); };
-                    btnContainer.appendChild(btn);
+                        renderRoleTable(); };
+                    btns.appendChild(btn);
                 }
-            }
 
-            function filterRoles() {
-                const search = document.getElementById('searchRoles').value.toLowerCase().trim();
-                let filtered = [...roles];
-                if (search) {
-                    filtered = filtered.filter(r => r.name.toLowerCase().includes(search) ||
-                        (r.description && r.description.toLowerCase().includes(search)));
+                if (rolePage < total) {
+                    const next = document.createElement('button');
+                    next.className =
+                        'px-2 py-1 border border-gray-300 rounded-lg text-xs bg-white hover:bg-gray-50 text-gray-600';
+                    next.textContent = '›';
+                    next.onclick = () => { rolePage++;
+                        renderRoleTable(); };
+                    btns.appendChild(next);
                 }
-                roleFiltered = filtered;
-                rolePage = 1;
-                renderRoles();
-            }
-
-            function clearRoleFilters() {
-                document.getElementById('searchRoles').value = '';
-                filterRoles();
             }
 
             function changeRolePageSize() {
-                roleSize = parseInt(document.getElementById('rolePageSize').value, 10);
+                rolePageSize = parseInt(document.getElementById('rolePageSize').value, 10);
                 rolePage = 1;
-                renderRoles();
+                renderRoleTable();
             }
 
-            // ─── RENDER USERS ──────────────────────────────────────────────
-
-            function renderUsers() {
-                const start = (userPage - 1) * userSize;
-                const end = Math.min(start + userSize, userFiltered.length);
-                const pageData = userFiltered.slice(start, end);
-                const tbody = document.getElementById('usersTableBody');
-
-                if (pageData.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">No users found</td></tr>`;
-                    document.getElementById('userResultCount').textContent = 'Showing 0 entries';
-                    updateUserPagination();
-                    return;
-                }
-
-                tbody.innerHTML = pageData.map(user => {
-                    const color = getAvatarColor(user.name);
-                    const initials = getInitials(user.name);
-                    const statusBadge = getStatusBadge(user.status);
-                    return `
-                        <tr class="user-row border-b border-gray-100">
-                            <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
-                                <div class="flex items-center gap-2">
-                                    <div class="user-avatar-sm" style="background:${color}">${initials}</div>
-                                    <span class="font-medium">${escapeHtml(user.name)}</span>
-                                </div>
-                            </td>
-                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${escapeHtml(user.email)}</td>
-                            <td class="px-2 py-1 sm:py-2">${getRoleBadge(user.role)}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center">${statusBadge}</td>
-                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
-                                <button onclick="openAssignRoleModal(${user.id})" class="action-icon-btn primary" title="Assign Role">🔑</button>
-                                <button onclick="toggleUserStatus(${user.id})" class="action-icon-btn ${user.status === 'active' ? 'danger' : 'green'}" title="${user.status === 'active' ? 'Block' : 'Unblock'}">${user.status === 'active' ? '🚫' : '✅'}</button>
-                            </td>
-                        </tr>
-                    `;
-                }).join('');
-
-                document.getElementById('userResultCount').textContent =
-                    `Showing ${pageData.length} of ${userFiltered.length} entries`;
-                updateUserPagination();
-                updateStats();
-            }
-
-            function updateUserPagination() {
-                const totalPages = Math.ceil(userFiltered.length / userSize) || 1;
-                document.getElementById('userPaginationInfo').textContent =
-                    `Page ${userPage} of ${totalPages} (${userFiltered.length} entries)`;
-                const btnContainer = document.getElementById('userPaginationButtons');
-                btnContainer.innerHTML = '';
-                if (totalPages <= 1) return;
-                for (let i = 1; i <= totalPages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === userPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
-                    btn.textContent = i;
-                    btn.onclick = () => { userPage = i;
-                        renderUsers(); };
-                    btnContainer.appendChild(btn);
-                }
-            }
+            // ─── USERS ──────────────────────────────────────────────────────────
 
             function filterUsers() {
-                const search = document.getElementById('searchUsers').value.toLowerCase().trim();
-                const roleFilter = document.getElementById('roleUserFilter').value;
+                const search = document.getElementById('userSearch').value.toLowerCase().trim();
+                const roleFilter = document.getElementById('userRoleFilter').value;
+                const statusFilter = document.getElementById('userStatusFilter').value;
+
                 let filtered = [...users];
+
                 if (search) {
-                    filtered = filtered.filter(u => u.name.toLowerCase().includes(search) ||
-                        u.email.toLowerCase().includes(search));
+                    filtered = filtered.filter(u =>
+                        u.name.toLowerCase().includes(search) ||
+                        u.email.toLowerCase().includes(search) ||
+                        u.role.toLowerCase().includes(search)
+                    );
                 }
+
                 if (roleFilter !== 'all') {
                     filtered = filtered.filter(u => u.role === roleFilter);
                 }
-                userFiltered = filtered;
-                userPage = 1;
-                renderUsers();
-                updateActiveUserFilters();
-            }
 
-            function clearUserFilters() {
-                document.getElementById('searchUsers').value = '';
-                document.getElementById('roleUserFilter').value = 'all';
-                filterUsers();
+                if (statusFilter !== 'all') {
+                    filtered = filtered.filter(u => u.status === statusFilter);
+                }
+
+                filteredUsers = filtered;
+                userPage = 1;
+                renderUserTable();
+                updateActiveUserFilters();
             }
 
             function updateActiveUserFilters() {
                 const container = document.getElementById('activeUserFilters');
                 let html = '';
-                const search = document.getElementById('searchUsers').value.trim();
-                const role = document.getElementById('roleUserFilter').value;
-                if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchUsers').value='';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (role !== 'all') html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Role: ${escapeHtml(role)} <button onclick="document.getElementById('roleUserFilter').value='all';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                const search = document.getElementById('userSearch').value.trim();
+                const role = document.getElementById('userRoleFilter').value;
+                const status = document.getElementById('userStatusFilter').value;
+
+                if (search) {
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${search} <button onclick="document.getElementById('userSearch').value='';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                if (role !== 'all') {
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-medium">👤 ${role} <button onclick="document.getElementById('userRoleFilter').value='all';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                if (status !== 'all') {
+                    const label = status === 'Active' ? 'Active' : 'Blocked';
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📌 ${label} <button onclick="document.getElementById('userStatusFilter').value='all';filterUsers();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
                 container.innerHTML = html || '';
             }
 
+            function clearUserFilters() {
+                document.getElementById('userSearch').value = '';
+                document.getElementById('userRoleFilter').value = 'all';
+                document.getElementById('userStatusFilter').value = 'all';
+                filterUsers();
+            }
+
+            function renderUserTable() {
+                const start = (userPage - 1) * userPageSize;
+                const end = Math.min(start + userPageSize, filteredUsers.length);
+                const pageData = filteredUsers.slice(start, end);
+                const tbody = document.getElementById('userTableBody');
+
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="6" class="px-4 py-8 text-center text-gray-400 text-sm">No users found.</td></tr>`;
+                    document.getElementById('userResultCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map((u, idx) => {
+                        const rowNum = start + idx + 1;
+                        const color = getAvatarColor(u.name);
+                        const statusHtml = getStatusBadge(u.status);
+                        const roleName = u.role;
+
+                        return `
+                                <tr class="user-row border-b border-gray-100">
+                                    <td class="px-3 py-2 sm:py-3 text-center text-gray-400 text-xs">${rowNum}</td>
+                                    <td class="px-3 py-2 sm:py-3">
+                                        <div class="flex items-center gap-2">
+                                            <span class="user-avatar-sm" style="background:${color}">${u.initials}</span>
+                                            <span class="font-medium text-gray-800 text-sm">${u.name}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-3 py-2 sm:py-3 text-gray-600 text-xs">${u.email}</td>
+                                    <td class="px-3 py-2 sm:py-3">
+                                        <span class="inline-block px-2 py-0.5 bg-indigo-50 text-indigo-700 rounded-full text-xs font-semibold">${roleName}</span>
+                                    </td>
+                                    <td class="px-3 py-2 sm:py-3 text-center">${statusHtml}</td>
+                                    <td class="px-3 py-2 sm:py-3 text-center">
+                                        <div class="flex items-center justify-center gap-1">
+                                            <button class="action-icon-btn primary" title="Manage Permissions">🔑</button>
+                                            ${u.status === 'Active'
+                                                ? `<button class="action-icon-btn danger" title="Block User">🚫</button>`
+                                                : `<button class="action-icon-btn green" title="Unblock User">✅</button>`
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                    }).join('');
+                    document.getElementById('userResultCount').textContent =
+                        `Showing ${pageData.length} of ${filteredUsers.length} entries`;
+                }
+
+                updateUserPagination();
+            }
+
+            function updateUserPagination() {
+                const total = Math.ceil(filteredUsers.length / userPageSize) || 1;
+                document.getElementById('userPaginationInfo').textContent =
+                    `Page ${userPage} of ${total} (${filteredUsers.length} entries)`;
+                const btns = document.getElementById('userPaginationButtons');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+
+                if (userPage > 1) {
+                    const prev = document.createElement('button');
+                    prev.className =
+                        'px-2 py-1 border border-gray-300 rounded-lg text-xs bg-white hover:bg-gray-50 text-gray-600';
+                    prev.textContent = '‹';
+                    prev.onclick = () => { userPage--;
+                        renderUserTable(); };
+                    btns.appendChild(prev);
+                }
+
+                const maxShow = 5;
+                let startP = Math.max(1, userPage - Math.floor(maxShow / 2));
+                let endP = Math.min(total, startP + maxShow - 1);
+                if (endP - startP < maxShow - 1) startP = Math.max(1, endP - maxShow + 1);
+
+                for (let i = startP; i <= endP; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === userPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { userPage = i;
+                        renderUserTable(); };
+                    btns.appendChild(btn);
+                }
+
+                if (userPage < total) {
+                    const next = document.createElement('button');
+                    next.className =
+                        'px-2 py-1 border border-gray-300 rounded-lg text-xs bg-white hover:bg-gray-50 text-gray-600';
+                    next.textContent = '›';
+                    next.onclick = () => { userPage++;
+                        renderUserTable(); };
+                    btns.appendChild(next);
+                }
+            }
+
             function changeUserPageSize() {
-                userSize = parseInt(document.getElementById('userPageSize').value, 10);
+                userPageSize = parseInt(document.getElementById('userPageSize').value, 10);
                 userPage = 1;
-                renderUsers();
+                renderUserTable();
             }
 
-            // ─── POPULATE ROLE FILTER DROPDOWN ────────────────────────────
-
-            function populateRoleFilter() {
-                const select = document.getElementById('roleUserFilter');
-                const currentVal = select.value;
-                select.innerHTML = '<option value="all">All Roles</option>';
-                roles.forEach(r => {
-                    const opt = document.createElement('option');
-                    opt.value = r.name;
-                    opt.textContent = r.name;
-                    select.appendChild(opt);
-                });
-                select.value = currentVal;
-            }
-
-            // ─── PERMISSION GRID ───────────────────────────────────────────
-
-            function renderPermissionGrid(permissions) {
-                const container = document.getElementById('permissionGrid');
-                container.innerHTML = '';
-
-                MODULE_DEFS.forEach(mod => {
-                    const perms = permissions[mod.id] || {};
-                    const row = document.createElement('div');
-                    row.className = 'module-row';
-
-                    // Module name with count badge
-                    const nameSpan = document.createElement('span');
-                    nameSpan.className = 'module-name';
-                    const count = mod.perms.filter(p => perms[p]).length;
-                    nameSpan.innerHTML =
-                        `${mod.label} <span class="perm-count-badge">${count}/${mod.perms.length}</span>`;
-                    row.appendChild(nameSpan);
-
-                    const permsDiv = document.createElement('div');
-                    permsDiv.className = 'perms';
-
-                    // For Orders module, show permissions with nicer grouping
-                    if (mod.id === 'orders') {
-                        // Group order permissions
-                        const groups = [
-                            { label: 'Basic', perms: ['view', 'create', 'edit', 'delete'] },
-                            { label: 'Actions', perms: ['cancel', 'refund', 'update_status', 'assign_delivery'] },
-                            { label: 'Documents', perms: ['print_invoice', 'shipping_label', 'view_timeline'] },
-                            { label: 'Advanced', perms: ['export', 'approve_price'] }
-                        ];
-                        groups.forEach(group => {
-                            const groupSpan = document.createElement('span');
-                            groupSpan.className = 'perm-group-label';
-                            groupSpan.textContent = group.label;
-                            permsDiv.appendChild(groupSpan);
-
-                            group.perms.forEach(perm => {
-                                const label = document.createElement('label');
-                                const cb = document.createElement('input');
-                                cb.type = 'checkbox';
-                                cb.checked = perms[perm] || false;
-                                cb.dataset.module = mod.id;
-                                cb.dataset.perm = perm;
-                                label.appendChild(cb);
-                                label.appendChild(document.createTextNode(getPermLabel(perm)));
-                                permsDiv.appendChild(label);
-                            });
-                        });
-                    } else {
-                        // Standard permissions
-                        mod.perms.forEach(perm => {
-                            const label = document.createElement('label');
-                            const cb = document.createElement('input');
-                            cb.type = 'checkbox';
-                            cb.checked = perms[perm] || false;
-                            cb.dataset.module = mod.id;
-                            cb.dataset.perm = perm;
-                            label.appendChild(cb);
-                            label.appendChild(document.createTextNode(getPermLabel(perm)));
-                            permsDiv.appendChild(label);
-                        });
-                    }
-
-                    row.appendChild(permsDiv);
-                    container.appendChild(row);
-                });
-            }
-
-            function getPermissionsFromGrid() {
-                const perms = {};
-                MODULE_DEFS.forEach(mod => {
-                    const modPerms = {};
-                    mod.perms.forEach(perm => {
-                        const cb = document.querySelector(
-                            `#permissionGrid input[data-module="${mod.id}"][data-perm="${perm}"]`);
-                        modPerms[perm] = cb ? cb.checked : false;
+            // ─── PERMISSION CHECKBOXES ─────────────────────────────────────────
+            function renderPermissionCheckboxes(selectedPerms) {
+                const container = document.getElementById('permissionCheckboxGrid');
+                const selected = selectedPerms || [];
+                let html = '';
+                PERMISSION_GROUPS.forEach(group => {
+                    html += `<div class="perm-group-header">${group.group}</div>`;
+                    group.perms.forEach(p => {
+                        const checked = selected.includes(p.key) ? 'checked' : '';
+                        html += `
+                                <label>
+                                    <input type="checkbox" value="${p.key}" ${checked} />
+                                    ${p.label}
+                                    <span class="perm-desc">— ${p.desc}</span>
+                                </label>
+                            `;
                     });
-                    perms[mod.id] = modPerms;
                 });
-                return perms;
+                container.innerHTML = html;
             }
 
-            // ─── ROLE MODAL ────────────────────────────────────────────────
+            function getSelectedPermissions() {
+                const checkboxes = document.querySelectorAll('#permissionCheckboxGrid input[type="checkbox"]');
+                const selected = [];
+                checkboxes.forEach(cb => { if (cb.checked) selected.push(cb.value); });
+                return selected;
+            }
+
+            // ─── MODAL FUNCTIONS ───────────────────────────────────────────────
 
             function openAddRoleModal() {
+                editTargetId = null;
+                document.getElementById('roleModalTitle').textContent = '➕ Add New Role';
                 document.getElementById('editRoleId').value = '';
-                document.getElementById('roleModalTitle').textContent = '➕ Add Role';
-                document.getElementById('roleName').value = '';
-                document.getElementById('roleDescription').value = '';
-                const emptyPerms = buildDefaultPermissions();
-                renderPermissionGrid(emptyPerms);
+                document.getElementById('roleNameInput').value = '';
+                document.getElementById('roleDescInput').value = '';
+                document.getElementById('roleUsersInput').value = '';
+                document.getElementById('roleStatusInput').value = 'active';
+                renderPermissionCheckboxes([]);
                 document.getElementById('roleModal').classList.add('flex');
                 document.getElementById('roleModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-                setTimeout(() => document.getElementById('roleName').focus(), 100);
+                setTimeout(() => document.getElementById('roleNameInput').focus(), 150);
             }
 
-            function editRole(id) {
-                const role = roles.find(r => r.id === id);
-                if (!role) return;
-                document.getElementById('editRoleId').value = id;
+            function openEditRoleModal(roleId) {
+                const role = roles.find(r => r.id === roleId);
+                if (!role) { showToast('❌', 'Role not found'); return; }
+                editTargetId = roleId;
                 document.getElementById('roleModalTitle').textContent = '✏️ Edit Role';
-                document.getElementById('roleName').value = role.name;
-                document.getElementById('roleDescription').value = role.description || '';
-                renderPermissionGrid(role.permissions);
+                document.getElementById('editRoleId').value = roleId;
+                document.getElementById('roleNameInput').value = role.name;
+                document.getElementById('roleDescInput').value = role.description || '';
+                document.getElementById('roleUsersInput').value = (role.users || []).join(', ');
+                document.getElementById('roleStatusInput').value = role.status || 'active';
+                renderPermissionCheckboxes(role.permissions || []);
                 document.getElementById('roleModal').classList.add('flex');
                 document.getElementById('roleModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('roleNameInput').focus(), 150);
             }
 
             function closeRoleModal() {
                 document.getElementById('roleModal').classList.add('hidden');
                 document.body.style.overflow = '';
+                editTargetId = null;
             }
 
-            function saveRole(e) {
-                e.preventDefault();
-                const id = document.getElementById('editRoleId').value;
-                const name = document.getElementById('roleName').value.trim();
-                const description = document.getElementById('roleDescription').value.trim();
-                if (!name) {
-                    showToast('⚠️', 'Role name is required');
-                    return;
-                }
-                // Check duplicate name
-                const duplicate = roles.find(r => r.name.toLowerCase() === name.toLowerCase() && r.id != id);
-                if (duplicate) {
-                    showToast('⚠️', 'A role with this name already exists');
-                    return;
-                }
-                const permissions = getPermissionsFromGrid();
-
-                if (id) {
-                    // Edit
-                    const role = roles.find(r => r.id === parseInt(id));
-                    if (role) {
-                        role.name = name;
-                        role.description = description;
-                        role.permissions = permissions;
-                        showToast('✅', `Role "${name}" updated successfully!`);
-                    }
-                } else {
-                    // Add
-                    const newId = Math.max(...roles.map(r => r.id), 0) + 1;
-                    roles.push({
-                        id: newId,
-                        name,
-                        description,
-                        permissions
-                    });
-                    showToast('✅', `Role "${name}" added successfully!`);
-                }
-                closeRoleModal();
-                filterRoles();
-                populateRoleFilter();
-                updateStats();
-            }
-
-            function deleteRole(id) {
-                const role = roles.find(r => r.id === id);
-                if (!role) return;
-                // Check if role is assigned to any user
-                const usersWithRole = users.filter(u => u.role === role.name);
-                if (usersWithRole.length > 0) {
-                    showToast('⚠️',
-                        `Cannot delete role "${role.name}" because it is assigned to ${usersWithRole.length} user(s).`);
-                    return;
-                }
-                deleteTargetId = id;
+            function openDeleteModal(roleId) {
+                const role = roles.find(r => r.id === roleId);
+                if (!role) { showToast('❌', 'Role not found'); return; }
+                deleteTargetId = roleId;
                 document.getElementById('deleteRoleName').textContent = role.name;
+                document.getElementById('deleteRoleUsers').textContent = (role.users || []).length + ' users';
                 document.getElementById('deleteModal').classList.add('flex');
                 document.getElementById('deleteModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
@@ -1586,118 +1602,108 @@
             }
 
             function confirmDeleteRole() {
-                if (deleteTargetId === null) return;
+                if (!deleteTargetId) return;
                 const idx = roles.findIndex(r => r.id === deleteTargetId);
-                if (idx > -1) {
-                    const name = roles[idx].name;
-                    roles.splice(idx, 1);
-                    showToast('🗑️', `Role "${name}" deleted successfully!`);
-                }
-                closeDeleteModal();
-                filterRoles();
-                populateRoleFilter();
-                updateStats();
-            }
-
-            // ─── ASSIGN ROLE MODAL ────────────────────────────────────────
-
-            function openAssignRoleModal(userId) {
-                const user = users.find(u => u.id === userId);
-                if (!user) return;
-                assignTargetUserId = userId;
-                document.getElementById('assignUserName').textContent = user.name;
-                const select = document.getElementById('assignRoleSelect');
-                select.innerHTML = '';
-                roles.forEach(r => {
-                    const opt = document.createElement('option');
-                    opt.value = r.name;
-                    opt.textContent = r.name;
-                    if (r.name === user.role) opt.selected = true;
-                    select.appendChild(opt);
-                });
-                document.getElementById('assignRoleModal').classList.add('flex');
-                document.getElementById('assignRoleModal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeAssignRoleModal() {
-                document.getElementById('assignRoleModal').classList.add('hidden');
-                document.body.style.overflow = '';
-                assignTargetUserId = null;
-            }
-
-            function saveAssignRole() {
-                if (assignTargetUserId === null) return;
-                const user = users.find(u => u.id === assignTargetUserId);
-                if (!user) return;
-                const newRole = document.getElementById('assignRoleSelect').value;
-                if (!newRole) {
-                    showToast('⚠️', 'Please select a role');
+                if (idx === -1) { showToast('❌', 'Role not found'); return; }
+                const role = roles[idx];
+                if (role.name === 'Admin') {
+                    showToast('⚠️', 'Cannot delete the Admin role');
+                    closeDeleteModal();
                     return;
                 }
-                user.role = newRole;
-                closeAssignRoleModal();
-                renderUsers();
-                updateStats();
-                showToast('✅', `Role assigned to ${user.name}`);
-            }
-
-            // ─── TOGGLE USER STATUS ──────────────────────────────────────
-
-            function toggleUserStatus(userId) {
-                const user = users.find(u => u.id === userId);
-                if (!user) return;
-                const newStatus = user.status === 'active' ? 'blocked' : 'active';
-                const action = newStatus === 'active' ? 'unblocked' : 'blocked';
-                if (!confirm(`Are you sure you want to ${action} ${user.name}?`)) return;
-                user.status = newStatus;
-                renderUsers();
-                updateStats();
-                showToast('🔄', `${user.name} ${action} successfully`);
-            }
-
-            // ─── STATS ──────────────────────────────────────────────────────
-
-            function updateStats() {
-                document.getElementById('statTotalRoles').textContent = roles.length;
-                document.getElementById('statTotalUsers').textContent = users.length;
-                const activeUsers = users.filter(u => u.status === 'active').length;
-                document.getElementById('statActiveUsers').textContent = activeUsers;
-                // Count total permissions (sum of all roles' permissions)
-                let totalPerms = 0;
-                roles.forEach(r => {
-                    totalPerms += countPermissions(r.permissions);
+                // Remove users from this role
+                if (role.users) {
+                    role.users.forEach(email => {
+                        const u = users.find(user => user.email === email);
+                        if (u) {
+                            // keep user but role will be removed
+                        }
+                    });
+                }
+                roles.splice(idx, 1);
+                saveRoles();
+                // Update users' roles if they were assigned to this role
+                users.forEach(u => {
+                    const found = roles.find(r => r.users && r.users.includes(u.email));
+                    if (!found) {
+                        // user has no role now
+                    }
                 });
-                document.getElementById('statPermissions').textContent = totalPerms;
+                closeDeleteModal();
+                renderAll();
+                showToast('🗑️', `Role "${role.name}" deleted successfully`);
+                deleteTargetId = null;
             }
 
-            // ─── TABS ──────────────────────────────────────────────────────
+            // ─── SAVE ROLE ─────────────────────────────────────────────────────
 
-            function switchTab(tab) {
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            function saveRole(event) {
+                event.preventDefault();
 
-                document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-                document.getElementById(`tab-${tab}`).classList.add('active');
+                const name = document.getElementById('roleNameInput').value.trim();
+                const description = document.getElementById('roleDescInput').value.trim();
+                const usersRaw = document.getElementById('roleUsersInput').value.trim();
+                const status = document.getElementById('roleStatusInput').value;
+                const permissions = getSelectedPermissions();
+                const editId = document.getElementById('editRoleId').value;
 
-                if (tab === 'users') {
-                    populateRoleFilter();
-                    filterUsers();
+                if (!name) { showToast('⚠️', 'Role name is required'); return; }
+
+                const users = usersRaw ? usersRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+                const existing = roles.find(r => r.name.toLowerCase() === name.toLowerCase() && r.id !== editId);
+                if (existing) {
+                    showToast('⚠️', `A role named "${name}" already exists`);
+                    return;
+                }
+
+                if (editId) {
+                    const idx = roles.findIndex(r => r.id === editId);
+                    if (idx === -1) { showToast('❌', 'Role not found'); return; }
+                    if (roles[idx].name === 'Admin' && name !== 'Admin') {
+                        showToast('⚠️', 'Cannot rename the Admin role');
+                        return;
+                    }
+                    roles[idx] = {
+                        ...roles[idx],
+                        name,
+                        description,
+                        users,
+                        permissions,
+                        status,
+                    };
+                    saveRoles();
+                    closeRoleModal();
+                    renderAll();
+                    showToast('✅', `Role "${name}" updated successfully`);
                 } else {
-                    filterRoles();
+                    const newRole = {
+                        id: generateId(),
+                        name,
+                        description,
+                        users,
+                        permissions,
+                        status,
+                        createdAt: new Date().toISOString(),
+                    };
+                    roles.push(newRole);
+                    saveRoles();
+                    closeRoleModal();
+                    renderAll();
+                    showToast('✅', `Role "${name}" created successfully`);
                 }
             }
 
-            // ─── REFRESH ──────────────────────────────────────────────────
+            // ─── REFRESH ────────────────────────────────────────────────────────
 
             function refreshData() {
-                filterRoles();
-                filterUsers();
-                populateRoleFilter();
+                loadRoles();
+                initUsers();
+                renderAll();
                 showToast('🔄', 'Data refreshed');
             }
 
-            // ─── TOAST ──────────────────────────────────────────────────────
+            // ─── TOAST ──────────────────────────────────────────────────────────
 
             function showToast(icon, msg) {
                 const t = document.getElementById('toast');
@@ -1709,7 +1715,7 @@
                     t.classList.remove('toast'); }, 2800);
             }
 
-            // ─── SIDEBAR ────────────────────────────────────────────────────
+            // ─── SIDEBAR ────────────────────────────────────────────────────────
 
             function toggleSidebar() {
                 document.getElementById('sidebar').classList.toggle('-translate-x-full');
@@ -1730,16 +1736,19 @@
                 }
             }
 
-            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    closeRoleModal();
-                    closeAssignRoleModal();
-                    closeDeleteModal();
-                }
-            });
+            // ─── TABS ───────────────────────────────────────────────────────────
 
-            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            function switchTab(tabId) {
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+                document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+                // Re-render table if needed
+                if (tabId === 'usersTab') renderUserTable();
+                if (tabId === 'rolesTab') renderRoleTable();
+            }
+
+            // ─── EXPOSE ──────────────────────────────────────────────────────────
 
             window.filterRoles = filterRoles;
             window.clearRoleFilters = clearRoleFilters;
@@ -1748,29 +1757,35 @@
             window.clearUserFilters = clearUserFilters;
             window.changeUserPageSize = changeUserPageSize;
             window.openAddRoleModal = openAddRoleModal;
-            window.editRole = editRole;
+            window.openEditRoleModal = openEditRoleModal;
             window.closeRoleModal = closeRoleModal;
-            window.saveRole = saveRole;
-            window.deleteRole = deleteRole;
+            window.openDeleteModal = openDeleteModal;
             window.closeDeleteModal = closeDeleteModal;
             window.confirmDeleteRole = confirmDeleteRole;
-            window.openAssignRoleModal = openAssignRoleModal;
-            window.closeAssignRoleModal = closeAssignRoleModal;
-            window.saveAssignRole = saveAssignRole;
-            window.toggleUserStatus = toggleUserStatus;
-            window.switchTab = switchTab;
+            window.saveRole = saveRole;
             window.refreshData = refreshData;
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
+            window.switchTab = switchTab;
             window.showToast = showToast;
 
-            // ─── INIT ──────────────────────────────────────────────────────
+            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
 
-            filterRoles();
-            populateRoleFilter();
-            filterUsers();
-            updateStats();
-            showToast('✅', 'Role Management loaded successfully');
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeRoleModal();
+                    closeDeleteModal();
+                }
+            });
+
+            // ─── INIT ───────────────────────────────────────────────────────────
+
+            loadRoles();
+            initUsers();
+            renderAll();
+
+            showToast('👋', 'Role & User Management loaded | ' + getRoleCount() + ' roles, ' + getTotalUsers() +
+            ' users');
 
         })();
     </script>
