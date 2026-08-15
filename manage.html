@@ -869,6 +869,143 @@
             justify-content: center;
         }
 
+        /* ─── INTERNAL REMARKS STYLES ────────────────────────────────── */
+        .internal-remarks-trigger {
+            cursor: pointer;
+            color: #8B5CF6;
+            font-weight: 500;
+            font-size: 11px;
+            border-bottom: 1px dashed #8B5CF6;
+            display: inline-block;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .internal-remarks-trigger:hover {
+            color: #7C3AED;
+            border-bottom-color: #7C3AED;
+        }
+        .internal-remarks-modal .remarks-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+            resize: vertical;
+            line-height: 1.6;
+        }
+        .internal-remarks-modal .remarks-textarea:focus {
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+        }
+        .internal-remarks-modal .remark-meta {
+            font-size: 12px;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 4px 12px;
+            padding: 6px 0 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            margin-bottom: 12px;
+        }
+        .internal-remarks-modal .remark-meta .label {
+            font-weight: 600;
+            color: #64748b;
+        }
+        .internal-remarks-modal .remark-meta .value {
+            color: #1e293b;
+        }
+        .internal-remarks-modal .btn-row-remarks {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .internal-remarks-modal .btn-row-remarks button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .internal-remarks-modal .btn-row-remarks .btn-save-remarks {
+            background: #8B5CF6;
+            color: #fff;
+        }
+        .internal-remarks-modal .btn-row-remarks .btn-save-remarks:hover {
+            background: #7C3AED;
+        }
+        .internal-remarks-modal .btn-row-remarks .btn-close-remarks {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .internal-remarks-modal .btn-row-remarks .btn-close-remarks:hover {
+            background: #e2e8f0;
+        }
+        .internal-remarks-modal .remark-history {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-top: 6px;
+            font-size: 13px;
+            max-height: 120px;
+            overflow-y: auto;
+            border: 1px solid #e9eef6;
+            color: #334155;
+        }
+        .internal-remarks-modal .remark-history .entry {
+            padding: 4px 0;
+            border-bottom: 1px dashed #e9eef6;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .internal-remarks-modal .remark-history .entry:last-child {
+            border-bottom: none;
+        }
+        .internal-remarks-modal .remark-history .entry .time {
+            font-size: 11px;
+            color: #94a3b8;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .internal-remarks-modal .remark-history .entry .text {
+            flex: 1;
+            word-break: break-word;
+        }
+        .internal-remarks-modal .remark-history .empty {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 13px;
+            padding: 8px 0;
+            text-align: center;
+        }
+
+        .internal-remark-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #F3E8FF;
+            color: #6D28D9;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 12px;
+            margin-left: 4px;
+            cursor: default;
+        }
+
+        /* ─── END INTERNAL REMARKS ────────────────────────────────────── */
+
         @media (max-width: 767px) {
             .order-card .card-actions .action-btn {
                 flex: 1 1 auto;
@@ -1639,7 +1776,6 @@
             flex-shrink: 0;
         }
 
-        /* ─── ORDERED MODAL STYLES ──────────────────────────────────────── */
         .ordered-modal .payment-type-group {
             display: flex;
             gap: 20px;
@@ -1968,7 +2104,6 @@
                             <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                             <span class="hidden xs:inline">Refresh</span>
                         </button>
-                        <!-- ─── SETTINGS ICON ─── -->
                         <button onclick="openSettingsModal()" class="settings-icon-btn" title="Settings">
                             ⚙️
                         </button>
@@ -2319,7 +2454,7 @@
         </div>
     </div>
 
-    <!-- ─── ORDERED CONFIRM MODAL (NEW) ────────────────────────────────── -->
+    <!-- ─── ORDERED CONFIRM MODAL ────────────────────────────────────── -->
     <div id="orderedModal" class="fixed inset-0 z-50 hidden items-center justify-center ordered-modal">
         <div class="modal-backdrop absolute inset-0" onclick="closeOrderedModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-3 sm:mx-4 animate-fade-in z-10">
@@ -2329,16 +2464,12 @@
             </div>
             <div class="p-4 sm:p-6">
                 <p class="text-sm text-gray-500 mb-2">Confirm order placement for <span id="orderedOrderId" class="font-semibold text-primary">#</span></p>
-
-                <!-- Order info summary -->
                 <div class="order-info-summary">
                     <span><span class="label">Product:</span> <span class="value" id="orderedProductName">—</span></span>
                     <span><span class="label">QTY:</span> <span class="value" id="orderedQty">—</span></span>
                     <span><span class="label">Total:</span> <span class="value" id="orderedTotalAmount">—</span></span>
                 </div>
-
                 <div class="space-y-4">
-                    <!-- Payment Type -->
                     <div>
                         <label class="text-xs font-semibold text-gray-500 uppercase block mb-1">Payment Type</label>
                         <div class="payment-type-group" id="orderedPaymentTypeGroup">
@@ -2352,25 +2483,52 @@
                             </label>
                         </div>
                     </div>
-
-                    <!-- Dynamic fields -->
                     <div class="ordered-fields" id="orderedFieldsContainer">
-                        <!-- PREPAID fields (checkbox removed) -->
                         <div id="orderedPrepaidFields">
                             <p class="text-xs text-gray-400 mt-1">Prepaid Order Placed at Seller Website</p>
                         </div>
-                        <!-- COD fields -->
                         <div id="orderedCodFields" class="hidden">
                             <label class="field-label">INR Amount to Collect</label>
                             <input type="number" id="orderedInrAmount" placeholder="Enter INR amount" step="0.01" min="0" />
                             <p class="inr-hint">This amount will be recorded as the invoice value in INR.</p>
                         </div>
                     </div>
-
                     <div class="btn-row-ordered">
                         <button class="btn-save-ordered" onclick="saveOrderedConfirmation()">💾 Save</button>
                         <button class="btn-close-ordered" onclick="closeOrderedModal()">Cancel</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── INTERNAL REMARKS MODAL ──────────────────────────────────────── -->
+    <div id="internalRemarksModal" class="fixed inset-0 z-50 hidden items-center justify-center internal-remarks-modal">
+        <div class="modal-backdrop absolute inset-0" onclick="closeInternalRemarksModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 animate-fade-in z-10">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800">📝 Internal Remarks</h3>
+                <button onclick="closeInternalRemarksModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="remark-meta">
+                    <span><span class="label">Order:</span> <span class="value" id="remarksOrderId">#</span></span>
+                    <span><span class="label">User:</span> <span class="value" id="remarksUser">—</span></span>
+                    <span><span class="label">Product:</span> <span class="value" id="remarksProduct">—</span></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="text-xs font-semibold text-gray-500 uppercase block mb-1.5">Add / Edit Internal Note</label>
+                    <textarea id="internalRemarksTextarea" class="remarks-textarea" placeholder="Type your internal notes here... This is only visible to admin/staff."></textarea>
+                </div>
+
+                <div class="remark-history" id="remarksHistoryContainer">
+                    <div class="empty">No internal remarks yet.</div>
+                </div>
+
+                <div class="btn-row-remarks">
+                    <button class="btn-save-remarks" onclick="saveInternalRemarks()">💾 Save Remark</button>
+                    <button class="btn-close-remarks" onclick="closeInternalRemarksModal()">Close</button>
                 </div>
             </div>
         </div>
@@ -2499,7 +2657,8 @@
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001234',
                 address: 'Kathmandu, Nepal',
                 lastUpdate: '07 May 2026 10:30',
-                orderStage: 'Delivered'
+                orderStage: 'Delivered',
+                internalRemarks: 'Customer is a VIP. Expedite delivery. 🚀'
             }, {
                 id: 'MW202600045',
                 user: 'Sita Sharma',
@@ -2522,7 +2681,8 @@
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001235',
                 address: 'Pokhara, Nepal',
                 lastUpdate: '06 May 2026 08:15',
-                orderStage: 'Shipped'
+                orderStage: 'Shipped',
+                internalRemarks: ''
             }, {
                 id: 'MW202600078',
                 user: 'Ramesh Adhikari',
@@ -2545,7 +2705,8 @@
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001236',
                 address: 'Biratnagar, Nepal',
                 lastUpdate: '07 May 2026 06:45',
-                orderStage: 'Arrived at Nepal WH'
+                orderStage: 'Arrived at Nepal WH',
+                internalRemarks: 'High-value item. Insurance required. 📦'
             }, {
                 id: 'MW202600092',
                 user: 'Priya Gurung',
@@ -2568,7 +2729,8 @@
                 trackingUrl: '',
                 address: 'Lalitpur, Nepal',
                 lastUpdate: '06 May 2026 14:20',
-                orderStage: 'Custom Clearance'
+                orderStage: 'Custom Clearance',
+                internalRemarks: 'Customs clearance in progress. All docs submitted.'
             }, {
                 id: 'MW202600115',
                 user: 'Bikash Thapa',
@@ -2592,7 +2754,8 @@
                 trackingUrl: '',
                 address: 'Butwal, Nepal',
                 lastUpdate: '06 May 2026 11:00',
-                orderStage: 'Custom Hold'
+                orderStage: 'Custom Hold',
+                internalRemarks: '📞 Called customer for invoice. Waiting for response.'
             }, {
                 id: 'MW202600130',
                 user: 'Anita Rai',
@@ -2615,7 +2778,8 @@
                 trackingUrl: '',
                 address: 'Dharan, Nepal',
                 lastUpdate: '01 May 2026 08:50',
-                orderStage: 'Order Created'
+                orderStage: 'Order Created',
+                internalRemarks: ''
             }, {
                 id: 'MW202600142',
                 user: 'Kiran Bhandari',
@@ -2638,7 +2802,8 @@
                 trackingUrl: '',
                 address: 'Nepalgunj, Nepal',
                 lastUpdate: '30 Apr 2026 19:40',
-                orderStage: 'Cancelled'
+                orderStage: 'Cancelled',
+                internalRemarks: 'Refund processed on 01 May 2026.'
             }, {
                 id: 'MW202600158',
                 user: 'Maya Devi',
@@ -2662,7 +2827,8 @@
                 trackingUrl: 'https://track.dhl.com/TRK-2026-001237',
                 address: 'Janakpur, Nepal',
                 lastUpdate: '05 May 2026 09:10',
-                orderStage: 'Incoming Shipment'
+                orderStage: 'Incoming Shipment',
+                internalRemarks: ''
             }];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -2675,6 +2841,7 @@
             let pendingCancelOrderId = null;
             let selectedOrders = new Set();
             let statsCollapsed = true;
+            let internalRemarksOrderId = null;
 
             // ─── MANUAL CONFIRM STATE ─────────────────────────────────────
             let manualConfirmOrderId = null;
@@ -2813,9 +2980,8 @@
                 showToast('✅', `Order ${orderId} updated to ${newStatus}`);
             };
 
-            // ─── ORDERED BUTTON FUNCTION (MODIFIED) ───────────────────────
+            // ─── ORDERED BUTTON FUNCTION ───────────────────────────────────
             window.setOrdered = function(orderId) {
-                // Open the modal instead of directly updating
                 openOrderedModal(orderId);
             };
 
@@ -2826,8 +2992,6 @@
                     showToast('❌', 'Order not found');
                     return;
                 }
-
-                // Check terminal states
                 const terminal = ['Delivered', 'Order Cancelled', 'Failed Delivery', 'Returned'];
                 if (terminal.includes(order.status)) {
                     if (!confirm(
@@ -2836,38 +3000,26 @@
                         return;
                     }
                 }
-
                 orderedModalOrderId = orderId;
-
-                // Populate order info
                 document.getElementById('orderedOrderId').textContent = `#${orderId}`;
                 document.getElementById('orderedProductName').textContent = order.productName;
                 document.getElementById('orderedQty').textContent = order.qty;
                 document.getElementById('orderedTotalAmount').textContent = order.totalAmount;
-
-                // Reset form: default to PREPAID
                 const prepaidRadio = document.querySelector('input[name="orderedPaymentType"][value="PREPAID"]');
                 const codRadio = document.querySelector('input[name="orderedPaymentType"][value="COD"]');
                 if (prepaidRadio) prepaidRadio.checked = true;
                 if (codRadio) codRadio.checked = false;
-
                 document.getElementById('orderedInrAmount').value = '';
-
-                // Update UI labels
                 const labelPrepaid = document.getElementById('orderedLabelPrepaid');
                 const labelCod = document.getElementById('orderedLabelCod');
                 if (labelPrepaid) { labelPrepaid.classList.add('active-prepaid');
                     labelPrepaid.classList.remove('active-cod'); }
                 if (labelCod) { labelCod.classList.add('active-cod');
                     labelCod.classList.remove('active-prepaid'); }
-
                 toggleOrderedPaymentType();
-
                 document.getElementById('orderedModal').classList.add('flex');
                 document.getElementById('orderedModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-
-                // Focus first input
                 setTimeout(() => {
                     const inp = document.getElementById('orderedInrAmount');
                     if (inp && !inp.closest('.hidden')) inp.focus();
@@ -2884,12 +3036,10 @@
                 const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
                 if (!selected) return;
                 const isPrepaid = selected.value === 'PREPAID';
-
                 const prepaidFields = document.getElementById('orderedPrepaidFields');
                 const codFields = document.getElementById('orderedCodFields');
                 const labelPrepaid = document.getElementById('orderedLabelPrepaid');
                 const labelCod = document.getElementById('orderedLabelCod');
-
                 if (isPrepaid) {
                     prepaidFields.classList.remove('hidden');
                     codFields.classList.add('hidden');
@@ -2908,33 +3058,16 @@
             }
 
             function saveOrderedConfirmation() {
-                if (!orderedModalOrderId) {
-                    showToast('❌', 'No order selected');
-                    return;
-                }
+                if (!orderedModalOrderId) { showToast('❌', 'No order selected'); return; }
                 const order = ordersData.find(o => o.id === orderedModalOrderId);
-                if (!order) {
-                    showToast('❌', 'Order not found');
-                    return;
-                }
-
+                if (!order) { showToast('❌', 'Order not found'); return; }
                 const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
-                if (!selected) {
-                    showToast('⚠️', 'Please select a payment type');
-                    return;
-                }
+                if (!selected) { showToast('⚠️', 'Please select a payment type'); return; }
                 const isPrepaid = selected.value === 'PREPAID';
-
-                // ─── PREPAID ──────────────────────────────────────────────
                 if (isPrepaid) {
-                    // No checkbox needed – just proceed
-
-                    // Update order
                     order.status = 'Order Approved';
                     order.currentStageIndex = 3;
                     order.orderStage = 'Assign Pending';
-
-                    // Update payment summary for PREPAID
                     const totalAmount = parseFloat(order.totalAmount.replace(/[^0-9.]/g, '')) || 0;
                     order.paymentSummary.advance = `NPR ${totalAmount.toFixed(2)}`;
                     order.paymentSummary.cod = 'NPR 0.00';
@@ -2947,23 +3080,14 @@
                         `Order placed as PREPAID (${new Date().toLocaleString()})`;
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
                     showToast('✅', `Order ${orderedModalOrderId} marked as PREPAID (Order Approved)`);
-
                 } else {
-                    // ─── COD ──────────────────────────────────────────────
                     const inrAmount = parseFloat(document.getElementById('orderedInrAmount').value);
-                    if (!inrAmount || inrAmount <= 0) {
-                        showToast('⚠️', 'Please enter a valid INR amount for COD');
-                        return;
-                    }
-
-                    // Update order
+                    if (!inrAmount || inrAmount <= 0) { showToast('⚠️', 'Please enter a valid INR amount for COD');
+                        return; }
                     order.status = 'Order Approved';
                     order.currentStageIndex = 3;
                     order.orderStage = 'Assign Pending';
-
-                    // Update payment summary for COD
                     const totalAmount = parseFloat(order.totalAmount.replace(/[^0-9.]/g, '')) || 0;
                     order.paymentSummary.advance = 'NPR 0.00';
                     order.paymentSummary.cod = `NPR ${totalAmount.toFixed(2)}`;
@@ -2977,10 +3101,8 @@
                         `Order placed as COD (INR ${inrAmount.toFixed(2)}) (${new Date().toLocaleString()})`;
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
-
                     showToast('✅', `Order ${orderedModalOrderId} marked as COD (Order Approved)`);
                 }
-
                 closeOrderedModal();
                 updateStats();
                 filterOrders();
@@ -3036,7 +3158,8 @@
                     label: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>`,
                     invoice: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`,
                     cost: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`,
-                    verify: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+                    verify: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+                    internalNote: `<svg class="icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>`
                 };
             }
 
@@ -3254,7 +3377,8 @@
                             order.type.toLowerCase().includes(combinedTerm) ||
                             order.status.toLowerCase().includes(combinedTerm) ||
                             order.totalAmount.toLowerCase().includes(combinedTerm) ||
-                            order.paymentSummary.gateway.toLowerCase().includes(combinedTerm);
+                            order.paymentSummary.gateway.toLowerCase().includes(combinedTerm) ||
+                            (order.internalRemarks && order.internalRemarks.toLowerCase().includes(combinedTerm));
                         if (!match) return false;
                     }
                     return true;
@@ -3378,13 +3502,11 @@
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) { showToast('❌', 'Order not found'); return; }
                 manualConfirmOrderId = orderId;
-
                 document.getElementById('manualOrderId').textContent = `#${orderId}`;
                 document.getElementById('manualOrderIdDisplay').textContent = orderId;
                 document.getElementById('manualProductName').textContent = order.productName;
                 document.getElementById('manualTotalAmount').textContent = order.totalAmount;
                 document.getElementById('manualCurrentAdvance').textContent = order.paymentSummary.advance || 'NPR 0.00';
-
                 const input = document.getElementById('manualAdvanceInput');
                 input.value = '';
                 input.placeholder = '0.00';
@@ -3392,11 +3514,9 @@
                 fullCheck.checked = false;
                 document.getElementById('manualFullPaymentInfo').classList.add('hidden');
                 document.getElementById('manualFullAmountDisplay').textContent = '';
-
                 document.getElementById('manualConfirmModal').classList.add('flex');
                 document.getElementById('manualConfirmModal').classList.remove('hidden');
                 document.body.style.overflow = 'hidden';
-
                 setTimeout(() => input.focus(), 100);
             };
 
@@ -3405,7 +3525,6 @@
                 const input = document.getElementById('manualAdvanceInput');
                 const infoEl = document.getElementById('manualFullPaymentInfo');
                 const amountDisplay = document.getElementById('manualFullAmountDisplay');
-
                 if (fullCheck.checked) {
                     const totalRaw = document.getElementById('manualTotalAmount').textContent;
                     const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
@@ -3425,26 +3544,20 @@
                 if (!manualConfirmOrderId) { showToast('❌', 'No order selected'); return; }
                 const order = ordersData.find(o => o.id === manualConfirmOrderId);
                 if (!order) { showToast('❌', 'Order not found'); return; }
-
                 const input = document.getElementById('manualAdvanceInput');
                 const fullCheck = document.getElementById('manualFullPaymentCheck');
                 let advanceAmount = parseFloat(input.value) || 0;
-
                 if (advanceAmount < 0) { showToast('⚠️', 'Advance amount cannot be negative'); return; }
-
                 if (fullCheck.checked) {
                     const totalRaw = document.getElementById('manualTotalAmount').textContent;
                     const totalNum = parseFloat(totalRaw.replace(/[^0-9.]/g, '')) || 0;
                     if (advanceAmount === 0) advanceAmount = totalNum;
                 }
-
                 if (advanceAmount === 0 && !fullCheck.checked) {
                     if (!confirm('Advance amount is 0. Are you sure you want to proceed?')) return;
                 }
-
                 order.paymentSummary.advance = `NPR ${advanceAmount.toFixed(2)}`;
                 order.paymentSummary.total = order.totalAmount;
-
                 if (fullCheck.checked) {
                     if (order.status !== 'Payment Received' && order.status !== 'Delivered' && order.status !==
                         'Shipped') {
@@ -3468,14 +3581,12 @@
                             month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     }
                 }
-
                 const commentNote = fullCheck.checked ?
                     `✅ Full payment confirmed manually (NPR ${advanceAmount.toFixed(2)})` :
                     `💰 Advance of NPR ${advanceAmount.toFixed(2)} confirmed manually`;
                 order.comment = order.comment ?
                     `${order.comment} | ${commentNote} (${new Date().toLocaleString()})` :
                     `${commentNote} (${new Date().toLocaleString()})`;
-
                 closeManualConfirmModal();
                 updateStats();
                 filterOrders();
@@ -3491,6 +3602,75 @@
                 document.getElementById('manualAdvanceInput').value = '';
                 document.getElementById('manualAdvanceInput').disabled = false;
                 document.getElementById('manualFullPaymentInfo').classList.add('hidden');
+            };
+
+            // ─── INTERNAL REMARKS FUNCTIONS ──────────────────────────────
+            window.openInternalRemarksModal = function(orderId) {
+                const order = ordersData.find(o => o.id === orderId);
+                if (!order) { showToast('❌', 'Order not found'); return; }
+                internalRemarksOrderId = orderId;
+                document.getElementById('remarksOrderId').textContent = `#${orderId}`;
+                document.getElementById('remarksUser').textContent = order.user;
+                document.getElementById('remarksProduct').textContent = order.productName;
+                const textarea = document.getElementById('internalRemarksTextarea');
+                textarea.value = order.internalRemarks || '';
+                // Render history
+                const historyContainer = document.getElementById('remarksHistoryContainer');
+                if (order.internalRemarks && order.internalRemarks.trim().length > 0) {
+                    const entries = order.internalRemarks.split('\n').filter(s => s.trim().length > 0);
+                    if (entries.length > 0) {
+                        historyContainer.innerHTML = entries.map((entry, idx) => {
+                            const time = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                                year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                            return `<div class="entry"><span class="time">${time}</span><span class="text">${entry}</span></div>`;
+                        }).join('');
+                    } else {
+                        historyContainer.innerHTML = `<div class="empty">No internal remarks yet.</div>`;
+                    }
+                } else {
+                    historyContainer.innerHTML = `<div class="empty">No internal remarks yet.</div>`;
+                }
+                document.getElementById('internalRemarksModal').classList.add('flex');
+                document.getElementById('internalRemarksModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => textarea.focus(), 150);
+            };
+
+            window.closeInternalRemarksModal = function() {
+                document.getElementById('internalRemarksModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                internalRemarksOrderId = null;
+            };
+
+            window.saveInternalRemarks = function() {
+                if (!internalRemarksOrderId) { showToast('❌', 'No order selected'); return; }
+                const order = ordersData.find(o => o.id === internalRemarksOrderId);
+                if (!order) { showToast('❌', 'Order not found'); return; }
+                const textarea = document.getElementById('internalRemarksTextarea');
+                const newRemark = textarea.value.trim();
+                if (!newRemark) {
+                    if (order.internalRemarks && order.internalRemarks.trim().length > 0) {
+                        if (!confirm('This will clear all internal remarks. Continue?')) return;
+                    } else {
+                        showToast('⚠️', 'Please enter a remark or cancel.');
+                        return;
+                    }
+                }
+                // Append new remark with timestamp
+                const timestamp = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const formattedRemark = `[${timestamp}] ${newRemark}`;
+                if (order.internalRemarks && order.internalRemarks.trim().length > 0) {
+                    order.internalRemarks = order.internalRemarks + '\n' + formattedRemark;
+                } else {
+                    order.internalRemarks = formattedRemark;
+                }
+                order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                    year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                closeInternalRemarksModal();
+                updateStats();
+                filterOrders();
+                showToast('📝', `Internal remark saved for ${internalRemarksOrderId}`);
             };
 
             // ─── RENDER ──────────────────────────────────────────────────────
@@ -3520,16 +3700,15 @@
                     const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
                         'Custom Hold' ? 'status-pulse-red' : '');
                     const hasComment = order.comment && order.comment.trim().length > 0;
+                    const hasInternalRemark = order.internalRemarks && order.internalRemarks.trim().length > 0;
                     const tierData = getUserTier(order.user);
                     const tierIcon = tierData.icon;
                     const tierClass = tierData.tier.toLowerCase();
                     const mobile = tierData.mobile;
                     const isSelected = selectedOrders.has(order.id);
-
                     const userArrivals = ordersData.filter(o => o.user === order.user && (o.status === 'Arrived at Nepal Warehouse' ||
                         o.status === 'Arrived at Nepal WH'));
                     const arrivalCount = userArrivals.length;
-
                     let verifyButton = '';
                     if (order.type === 'Buy For Me') {
                         verifyButton =
@@ -3539,6 +3718,8 @@
                     const statusOptions = statusUpdateOptions.map(s =>
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
+                    const internalRemarkBadge = hasInternalRemark ?
+                        `<span class="internal-remark-badge" title="Has internal remarks">📝</span>` : '';
 
                     const statusCellHtml = `
                         <div class="status-cell-wrapper">
@@ -3546,6 +3727,7 @@
                                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold cursor-pointer ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
                                     <span class="w-1.5 h-1.5 rounded-full ${statusColor.dot}"></span>${order.status}
                                 </span>
+                                ${internalRemarkBadge}
                             </div>
                             <div class="status-row">
                                 <select onchange="updateOrderStatus('${order.id}', this.value)" class="status-select-desktop">
@@ -3579,6 +3761,10 @@
                             <div class="flex items-center gap-1">
                                 <button onclick="openTrackingModal('${order.id}')" class="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100" title="Add Tracking Number"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg></button>
                                 <button onclick="openCancelModal('${order.id}')" class="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100" title="Cancel Order"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+                                <button onclick="openInternalRemarksModal('${order.id}')" class="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 relative" title="Internal Remarks">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    ${hasInternalRemark ? '<span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-purple-500 rounded-full border border-white"></span>' : ''}
+                                </button>
                                 <button onclick="printShippingLabel('${order.id}')" class="p-1.5 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg></button>
                                 <button onclick="printInvoice('${order.id}')" class="p-1.5 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></button>
                             </div>
@@ -3604,6 +3790,7 @@
                             <div><a href="${order.productLink}" target="_blank" class="text-primary hover:underline">${order.productName}</a></div>
                             ${hasComment ? `<div class="mt-1"><span class="comment-trigger" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 30 ? order.comment.substring(0,30)+'…' : order.comment}</span></div>` : ''}
                             ${order.trackingNumber ? `<div class="mt-1 text-[10px] text-blue-500">🔗 ${order.trackingNumber}</div>` : ''}
+                            ${hasInternalRemark ? `<div class="mt-1 text-[10px] text-purple-500"><span class="internal-remarks-trigger" onclick="openInternalRemarksModal('${order.id}')">📝 ${order.internalRemarks.split('\n').pop().length > 25 ? '…' + order.internalRemarks.split('\n').pop().slice(-25) : order.internalRemarks.split('\n').pop()}</span></div>` : ''}
                         </td>
                         <td class="px-3 py-3 whitespace-nowrap">
                             ${statusCellHtml}
@@ -3664,6 +3851,7 @@
                     const pulseClass = (order.status === 'Delivered') ? 'status-pulse' : (order.status ===
                         'Custom Hold' ? 'status-pulse-red' : '');
                     const hasComment = order.comment && order.comment.trim().length > 0;
+                    const hasInternalRemark = order.internalRemarks && order.internalRemarks.trim().length > 0;
                     const tierData = getUserTier(order.user);
                     const tierIcon = tierData.icon;
                     const tierClass = tierData.tier.toLowerCase();
@@ -3673,11 +3861,9 @@
                     const userArrivals = ordersData.filter(o => o.user === order.user && (o.status === 'Arrived at Nepal Warehouse' ||
                         o.status === 'Arrived at Nepal WH'));
                     const arrivalCount = userArrivals.length;
-
                     const waMsg = encodeURIComponent(
                         `Hello, I have an order #${order.id} for product: ${order.productName}. Please check.`);
                     const waLink = `https://wa.me/${mobile.replace(/[^0-9]/g, '')}?text=${waMsg}`;
-
                     let verifyButton = '';
                     if (order.type === 'Buy For Me') {
                         verifyButton =
@@ -3691,16 +3877,16 @@
                     const statusOptions = statusUpdateOptions.map(s =>
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`
                     ).join('');
-
                     const userNameHtml =
                         `<span class="user-clickable" onclick="filterByUser('${order.user.replace(/'/g, "\\'")}')">${order.user}</span>`;
-
                     const manualConfirmBtnMobile = `
                         <button onclick="openManualConfirm('${order.id}')" class="manual-confirm-btn-mobile" title="Manual Payment Confirmation">
                             <svg class="icon-svg-small" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             Confirm
                         </button>
                     `;
+                    const internalRemarkBadge = hasInternalRemark ?
+                        `<span class="internal-remark-badge" title="Has internal remarks">📝</span>` : '';
 
                     const card = document.createElement('div');
                     card.className = 'order-card';
@@ -3712,6 +3898,7 @@
                                        onchange="toggleOrderSelection('${order.id}', this.checked)" 
                                        class="w-5 h-5 accent-primary-600 cursor-pointer flex-shrink-0" />
                                 <span class="font-bold text-sm text-primary">${order.id}</span>
+                                ${internalRemarkBadge}
                             </div>
                             <div class="flex items-center gap-1.5 flex-wrap">
                                 <span class="status-badge ${statusColor.bg} ${statusColor.text} ${pulseClass}" onclick="openTimelineModal('${order.id}')">
@@ -3728,6 +3915,7 @@
                                     <div class="text-[10px] text-gray-400">${order.paymentSummary.invoiceValue}</div>
                                     ${order.trackingNumber ? `<div class="text-[10px] text-blue-500 mt-0.5">🔗 ${order.trackingNumber}</div>` : ''}
                                     ${hasComment ? `<div class="text-[10px] text-amber-500 mt-0.5"><span class="comment-trigger text-[10px]" onclick="openCommentsModal('${order.id}')">💬 ${order.comment.length > 40 ? order.comment.substring(0,40)+'…' : order.comment}</span></div>` : ''}
+                                    ${hasInternalRemark ? `<div class="text-[10px] text-purple-500 mt-0.5"><span class="internal-remarks-trigger text-[10px]" onclick="openInternalRemarksModal('${order.id}')">📝 ${order.internalRemarks.split('\n').pop().length > 35 ? '…' + order.internalRemarks.split('\n').pop().slice(-35) : order.internalRemarks.split('\n').pop()}</span></div>` : ''}
                                 </div>
                                 ${customerImageBtn}
                             </div>
@@ -3781,6 +3969,10 @@
                         <div class="card-actions">
                             <button onclick="openTrackingModal('${order.id}')" class="action-btn" title="Track">${icons.track} <span class="hidden xs:inline">Track</span></button>
                             <button onclick="openCancelModal('${order.id}')" class="action-btn danger-btn" title="Cancel">${icons.cancel} <span class="hidden xs:inline">Cancel</span></button>
+                            <button onclick="openInternalRemarksModal('${order.id}')" class="action-btn" style="background:#F3E8FF;border-color:#C4B5FD;color:#6D28D9;" title="Internal Remarks">
+                                ${icons.internalNote} <span class="hidden xs:inline">Notes</span>
+                                ${hasInternalRemark ? '<span class="w-2 h-2 bg-purple-500 rounded-full inline-block ml-0.5"></span>' : ''}
+                            </button>
                             <button onclick="printShippingLabel('${order.id}')" class="action-btn purple-btn" title="Label">${icons.label} <span class="hidden xs:inline">Label</span></button>
                             <button onclick="printInvoice('${order.id}')" class="action-btn amber-btn" title="Invoice">${icons.invoice} <span class="hidden xs:inline">Invoice</span></button>
                             <button onclick="openCostModal('${order.id}')" class="action-btn primary-btn" title="Cost">${icons.cost} <span class="hidden xs:inline">Cost</span></button>
@@ -4114,11 +4306,13 @@
             function exportToExcel() {
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(() => {
-                    let csv = 'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage\n';
+                    let csv =
+                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks\n';
                     filteredOrders.forEach(o => {
                         const tierData = getUserTier(o.user);
+                        const remarks = (o.internalRemarks || '').replace(/,/g, ';').replace(/\n/g, ' ');
                         csv +=
-                            `${o.id},"${o.user}",${tierData.mobile},"${o.type}","${o.status}","${o.productName}",${o.qty},"${o.totalAmount}","${o.paymentSummary.advance}","${o.paymentSummary.cod}","${o.paymentSummary.gateway}","${o.paymentSummary.gross}","${o.paymentSummary.discount}","${o.paymentSummary.invoiceValue}","${o.paymentSummary.approxWeight}","${o.dateTime}","${o.paymentReceivedDateTime || ''}","${o.etaDeliveryDate || ''}","${o.lastUpdate || ''}","${o.orderStage || o.status}"\n`;
+                            `${o.id},"${o.user}",${tierData.mobile},"${o.type}","${o.status}","${o.productName}",${o.qty},"${o.totalAmount}","${o.paymentSummary.advance}","${o.paymentSummary.cod}","${o.paymentSummary.gateway}","${o.paymentSummary.gross}","${o.paymentSummary.discount}","${o.paymentSummary.invoiceValue}","${o.paymentSummary.approxWeight}","${o.dateTime}","${o.paymentReceivedDateTime || ''}","${o.etaDeliveryDate || ''}","${o.lastUpdate || ''}","${o.orderStage || o.status}","${remarks}"\n`;
                     });
                     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     const a = document.createElement('a');
@@ -4241,6 +4435,7 @@
                     closeSettingsModal();
                     closeManualConfirmModal();
                     closeOrderedModal();
+                    closeInternalRemarksModal();
                 }
             });
 
@@ -4298,11 +4493,14 @@
             window.closeManualConfirmModal = closeManualConfirmModal;
             window.saveManualConfirm = saveManualConfirm;
             window.toggleManualFullPayment = toggleManualFullPayment;
-            // Ordered modal
             window.openOrderedModal = openOrderedModal;
             window.closeOrderedModal = closeOrderedModal;
             window.saveOrderedConfirmation = saveOrderedConfirmation;
             window.toggleOrderedPaymentType = toggleOrderedPaymentType;
+            // Internal remarks
+            window.openInternalRemarksModal = openInternalRemarksModal;
+            window.closeInternalRemarksModal = closeInternalRemarksModal;
+            window.saveInternalRemarks = saveInternalRemarks;
 
             // ─── INIT ──────────────────────────────────────────────────────
             updateStats();
