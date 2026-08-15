@@ -6,6 +6,8 @@
     <title>MeroWish | Finance Management</title>
     <script src="https://cdn.tailwindcss.com">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
     <script>
         tailwind.config = {
             theme: {
@@ -157,6 +159,20 @@
             color: #3730A3;
         }
 
+        .pdf-link {
+            color: #DC2626;
+            cursor: pointer;
+            font-weight: 600;
+            margin-left: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 13px;
+        }
+        .pdf-link:hover {
+            color: #991B1B;
+        }
+
         .period-btn {
             padding: 4px 12px;
             border-radius: 20px;
@@ -192,6 +208,48 @@
             margin-top: 1px;
         }
 
+        .action-btn {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .action-btn.refund-btn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .action-btn.refund-btn:hover {
+            background: #fde68a;
+        }
+        .action-btn.delete-btn {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .action-btn.delete-btn:hover {
+            background: #fecaca;
+        }
+        .action-btn.pdf-btn {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .action-btn.pdf-btn:hover {
+            background: #bfdbfe;
+        }
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
         @media (max-width: 768px) {
             .stat-card .stat-value {
                 font-size: 1rem !important;
@@ -210,6 +268,10 @@
             .table-container td {
                 padding: 4px 6px !important;
             }
+            .action-btn {
+                font-size: 10px;
+                padding: 2px 5px;
+            }
         }
         @media (max-width: 480px) {
             .stat-card .stat-value {
@@ -219,6 +281,183 @@
                 font-size: 9px;
                 padding: 1px 6px;
             }
+        }
+
+        /* Confirm Dialog */
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 60;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .confirm-overlay.active {
+            display: flex;
+        }
+        .confirm-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 32px 40px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.2s ease-out;
+            text-align: center;
+        }
+        .confirm-box h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        .confirm-box p {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .confirm-box .btn-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        .confirm-box .btn-group button {
+            padding: 10px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .confirm-box .btn-group .btn-cancel {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .confirm-box .btn-group .btn-cancel:hover {
+            background: #cbd5e1;
+        }
+        .confirm-box .btn-group .btn-delete {
+            background: #ef4444;
+            color: #fff;
+        }
+        .confirm-box .btn-group .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        /* Invoice PDF hidden container */
+        #invoicePdfContainer {
+            position: fixed;
+            left: -9999px;
+            top: 0;
+            width: 800px;
+            background: #fff;
+            padding: 40px;
+            font-family: 'Arial', sans-serif;
+            z-index: -1;
+        }
+        #invoicePdfContainer .invoice-page {
+            page-break-after: always;
+            margin-bottom: 30px;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 30px;
+        }
+        #invoicePdfContainer .invoice-page:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+            page-break-after: auto;
+        }
+        #invoicePdfContainer .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #4F46E5;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        #invoicePdfContainer .invoice-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0;
+        }
+        #invoicePdfContainer .invoice-header .inv-id {
+            font-size: 14px;
+            color: #64748b;
+        }
+        #invoicePdfContainer .invoice-body {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        #invoicePdfContainer .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        #invoicePdfContainer .invoice-row .label {
+            color: #64748b;
+            font-size: 13px;
+        }
+        #invoicePdfContainer .invoice-row .value {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 14px;
+        }
+        #invoicePdfContainer .invoice-total {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        #invoicePdfContainer .invoice-items {
+            margin: 12px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        #invoicePdfContainer .invoice-items table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        #invoicePdfContainer .invoice-items th {
+            background: #f8fafc;
+            text-align: left;
+            padding: 8px 12px;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        #invoicePdfContainer .invoice-items td {
+            padding: 6px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }
+        #invoicePdfContainer .invoice-items tr:last-child td {
+            border-bottom: none;
+        }
+        #invoicePdfContainer .invoice-footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 16px;
+        }
+
+        .order-count-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
         }
     </style>
 </head>
@@ -393,7 +632,8 @@
                     <li><span class="font-medium">Net Revenue</span> = Total Revenue - (Import Duty + VAT + Service Charges + Discounts + Refunds + Shipping Fees).</li>
                     <li><span class="font-medium">Net Loss</span> = negative Net Revenue (if any).</li>
                     <li>Click on order count to see order IDs for that period.</li>
-                    <li>Click "Refund" to add additional refund amount (accumulates).</li>
+                    <li>Click <span class="text-red-600 font-medium">PDF</span> icon to download all invoices as PDF.</li>
+                    <li>Click <span class="text-red-600 font-medium">🗑️</span> to delete a row (confirm required).</li>
                 </ul>
             </div>
         </div>
@@ -438,6 +678,21 @@
         </div>
     </div>
 
+    <!-- ─── CONFIRM DELETE DIALOG ──────────────────────────────────────── -->
+    <div id="confirmDeleteOverlay" class="confirm-overlay">
+        <div class="confirm-box">
+            <h3>⚠️ Delete Row</h3>
+            <p>Are you sure you want to delete this row?<br><span class="text-xs text-gray-400" id="confirmDeleteLabel">—</span></p>
+            <div class="btn-group">
+                <button class="btn-cancel" onclick="cancelDelete()">Cancel</button>
+                <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── INVOICE PDF HIDDEN CONTAINER ──────────────────────────────── -->
+    <div id="invoicePdfContainer"></div>
+
     <!-- Toast -->
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
@@ -453,12 +708,58 @@
             const NEPALI_MONTHS = ['Poush', 'Magh', 'Falgun', 'Chaitra', 'Baishakh', 'Jestha', 'Ashadh', 'Shrawan', 'Bhadra',
                 'Ashwin', 'Kartik', 'Mangsir'
             ];
+            const CUSTOMER_NAMES = [
+                'Ram Sharma', 'Sita Adhikari', 'Hari Gurung', 'Gita Thapa', 'Krishna Poudel',
+                'Nirmala Bhandari', 'Bishnu Karki', 'Laxmi Rana', 'Prakash Shahi', 'Maya Tamang',
+                'Dipesh Rajbanshi', 'Anita Mahato', 'Suresh Yadav', 'Rita Chaudhary', 'Ganesh Pandey'
+            ];
+            const PRODUCTS = [
+                { name: 'iPhone 15 Pro', price: 145000 },
+                { name: 'Samsung Galaxy S24', price: 120000 },
+                { name: 'MacBook Air M3', price: 165000 },
+                { name: 'Sony WH-1000XM5', price: 38000 },
+                { name: 'Dell XPS 16', price: 195000 },
+                { name: 'iPad Pro 12.9', price: 155000 },
+                { name: 'Apple Watch Ultra 2', price: 95000 },
+                { name: 'Bose QC45', price: 32000 },
+                { name: 'Nikon Z6 III', price: 235000 },
+                { name: 'DJI Mini 4 Pro', price: 82000 }
+            ];
 
             function getNepaliYearMonth(engYear, engMonthIndex) {
                 let nepaliYear = engYear - 57;
                 if (engMonthIndex < 3) nepaliYear -= 1;
                 const nepaliMonth = NEPALI_MONTHS[engMonthIndex];
                 return { year: nepaliYear, month: nepaliMonth };
+            }
+
+            function getRandomCustomer() {
+                return CUSTOMER_NAMES[Math.floor(Math.random() * CUSTOMER_NAMES.length)];
+            }
+
+            function generateOrderItems(count) {
+                const items = [];
+                const used = new Set();
+                for (let i = 0; i < Math.min(count, 4); i++) {
+                    let idx;
+                    do {
+                        idx = Math.floor(Math.random() * PRODUCTS.length);
+                    } while (used.has(idx) && used.size < PRODUCTS.length);
+                    used.add(idx);
+                    const product = PRODUCTS[idx];
+                    const qty = Math.floor(Math.random() * 3) + 1;
+                    items.push({
+                        name: product.name,
+                        price: product.price,
+                        qty: qty,
+                        total: product.price * qty
+                    });
+                }
+                if (items.length === 0) {
+                    const p = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
+                    items.push({ name: p.name, price: p.price, qty: 1, total: p.price });
+                }
+                return items;
             }
 
             // ─── DATA GENERATION ───────────────────────────────────────────
@@ -479,10 +780,27 @@
                     const shippingFees = orders * (80 + Math.random() * 40);
                     const netRevenue = totalRevenue - importDuty - vat - serviceCharges - discounts - refunds - shippingFees;
 
-                    // Payment gateways: split advance among Esewa, Khalti, FonePay
                     const ese = advance * (0.4 + Math.random() * 0.3);
                     const khalti = advance * (0.2 + Math.random() * 0.2);
                     const fonepay = advance - ese - khalti;
+
+                    // Generate order IDs with full invoice data
+                    const orderIds = [];
+                    const orderData = [];
+                    for (let idx = 0; idx < Math.round(orders); idx++) {
+                        const id = `MW${year}${String(month).padStart(2, '0')}${String(idx+1).padStart(4, '0')}`;
+                        orderIds.push(id);
+                        const items = generateOrderItems(Math.floor(Math.random() * 4) + 1);
+                        const total = items.reduce((s, it) => s + it.total, 0);
+                        const orderTotal = Math.round(total + (Math.random() - 0.5) * total * 0.1);
+                        orderData.push({
+                            id: id,
+                            date: `${year}-${String(month).padStart(2, '0')}-${String(Math.floor(Math.random()*28)+1).padStart(2, '0')}`,
+                            customer: getRandomCustomer(),
+                            items: items,
+                            total: Math.max(100, Math.round(orderTotal))
+                        });
+                    }
 
                     data.push({
                         month: MONTHS[i],
@@ -502,28 +820,27 @@
                         ese: Math.round(ese),
                         khalti: Math.round(khalti),
                         fonepay: Math.round(fonepay),
-                        orderIds: Array.from({ length: Math.round(orders) }, (_, idx) =>
-                            `MW${year}${String(month).padStart(2, '0')}${String(idx+1).padStart(4, '0')}`
-                        )
+                        orderIds: orderIds,
+                        orderData: orderData,
+                        _deleted: false
                     });
                 }
                 return data;
             }
 
             // Generate data for 2025 and 2026
-            const financeDataAll = [
+            let financeData = [
                 ...generateMonthlyData(2025),
                 ...generateMonthlyData(2026)
             ];
-
-            // Store original data to allow refund updates
-            let financeData = financeDataAll.map(row => ({ ...row }));
 
             // ─── STATE ──────────────────────────────────────────────────────
             let currentPeriod = 'monthly';
             let dateFrom = new Date(2026, 0, 1);
             let dateTo = new Date(2026, 11, 31);
             let filteredData = [];
+            let deleteTargetIndex = null;
+            let deleteTargetRow = null;
 
             // ─── DATE FILTER ──────────────────────────────────────────────
             function applyDateFilter() {
@@ -556,13 +873,13 @@
                 const toMonth = dateTo.getMonth();
 
                 let filtered = financeData.filter(row => {
+                    if (row._deleted) return false;
                     const rowDate = new Date(row.year, row.monthIndex, 1);
                     return rowDate >= new Date(fromYear, fromMonth, 1) && rowDate <= new Date(toYear, toMonth, 1);
                 });
 
                 let groupedData = [];
                 if (currentPeriod === 'daily') {
-                    // For daily, use first month in range
                     if (filtered.length === 0) {
                         groupedData = [];
                     } else {
@@ -606,9 +923,11 @@
                                 ese: Math.round(dailyEse + (Math.random() - 0.5) * 5),
                                 khalti: Math.round(dailyKhalti + (Math.random() - 0.5) * 5),
                                 fonepay: Math.round(dailyFonepay + (Math.random() - 0.5) * 5),
-                                orderIds: monthData.orderIds.slice(0, dailyOrders),
+                                orderIds: monthData.orderIds.slice(0, Math.max(1, dailyOrders)),
+                                orderData: monthData.orderData.slice(0, Math.max(1, dailyOrders)),
                                 monthIndex: monthData.monthIndex,
-                                year: monthData.year
+                                year: monthData.year,
+                                _sourceKey: `${monthData.year}-${monthData.monthIndex}`
                             });
                         }
                     }
@@ -619,9 +938,8 @@
                         const weekNumber = getWeekNumber(dateObj);
                         const key = `${row.year}-W${weekNumber}`;
                         if (!weekMap[key]) {
-                            // Get the Monday of that week
                             const firstDay = new Date(row.year, row.monthIndex, 1);
-                            const dayOfWeek = firstDay.getDay(); // 0=Sun
+                            const dayOfWeek = firstDay.getDay();
                             const diff = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
                             const monday = new Date(firstDay);
                             monday.setDate(firstDay.getDate() - diff);
@@ -643,7 +961,9 @@
                                 ese: 0,
                                 khalti: 0,
                                 fonepay: 0,
-                                orderIds: []
+                                orderIds: [],
+                                orderData: [],
+                                _sourceKey: key
                             };
                         }
                         const w = weekMap[key];
@@ -662,6 +982,7 @@
                         w.khalti += row.khalti;
                         w.fonepay += row.fonepay;
                         w.orderIds = w.orderIds.concat(row.orderIds);
+                        w.orderData = w.orderData.concat(row.orderData || []);
                     });
                     groupedData = Object.values(weekMap);
                 } else if (currentPeriod === 'monthly') {
@@ -671,6 +992,7 @@
                             ...row,
                             label: `${row.month} ${row.year}`,
                             nepLabel: `${nep.month} ${nep.year}`,
+                            _sourceKey: `${row.year}-${row.monthIndex}`
                         };
                     });
                 } else if (currentPeriod === 'trimester') {
@@ -679,7 +1001,6 @@
                         const quarter = Math.floor(row.monthIndex / 3) + 1;
                         const key = `${row.year}-Q${quarter}`;
                         if (!quarterMap[key]) {
-                            // Get first month of quarter
                             const firstMonth = (quarter - 1) * 3;
                             const nep = getNepaliYearMonth(row.year, firstMonth);
                             quarterMap[key] = {
@@ -699,7 +1020,9 @@
                                 ese: 0,
                                 khalti: 0,
                                 fonepay: 0,
-                                orderIds: []
+                                orderIds: [],
+                                orderData: [],
+                                _sourceKey: key
                             };
                         }
                         const q = quarterMap[key];
@@ -718,6 +1041,7 @@
                         q.khalti += row.khalti;
                         q.fonepay += row.fonepay;
                         q.orderIds = q.orderIds.concat(row.orderIds);
+                        q.orderData = q.orderData.concat(row.orderData || []);
                     });
                     groupedData = Object.values(quarterMap);
                 }
@@ -729,7 +1053,6 @@
                     `${currentPeriod.charAt(0).toUpperCase()+currentPeriod.slice(1)} Financial Summary`;
             }
 
-            // Helper: get week number
             function getWeekNumber(date) {
                 const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                 d.setHours(0, 0, 0, 0);
@@ -772,19 +1095,23 @@
                     const tr = document.createElement('tr');
                     tr.className = 'finance-row border-b border-gray-100';
 
-                    // Period cell: English on first line, Nepali on second
-                    const periodHtml = `<span class="period-cell"><span class="eng">${row.label}</span><span class="nep">${row.nepLabel || ''}</span></span>`;
+                    const periodHtml =
+                        `<span class="period-cell"><span class="eng">${row.label}</span><span class="nep">${row.nepLabel || ''}</span></span>`;
 
-                    // Order count clickable
+                    const orderCount = row.orders || 0;
                     const orderLink =
-                        `<span class="order-link" onclick="showOrders('${row.label.replace(/'/g, "\\'")}', ${idx})">${row.orders}</span>`;
+                        `<span class="order-link" onclick="showOrders('${row.label.replace(/'/g, "\\'")}', ${idx})">${orderCount}</span>`;
 
-                    // Net loss
+                    const pdfLink =
+                        `<span class="pdf-link" onclick="downloadInvoicesPDF(${idx})" title="Download all invoices as PDF">📄</span>`;
+
                     const netLoss = row.netRevenue < 0 ? Math.abs(row.netRevenue) : 0;
 
                     tr.innerHTML = `
                         <td class="px-3 py-2.5 font-medium text-gray-700">${periodHtml}</td>
-                        <td class="px-3 py-2.5 text-right">${orderLink}</td>
+                        <td class="px-3 py-2.5 text-right">
+                            <span class="order-count-wrap">${orderLink} ${pdfLink}</span>
+                        </td>
                         <td class="px-3 py-2.5 text-right font-medium">NPR ${row.totalRevenue.toLocaleString()}</td>
                         <td class="px-3 py-2.5 text-right">NPR ${row.advance.toLocaleString()}</td>
                         <td class="px-3 py-2.5 text-right">NPR ${row.cod.toLocaleString()}</td>
@@ -797,12 +1124,14 @@
                         <td class="px-3 py-2.5 text-right font-semibold text-primary">NPR ${row.netRevenue.toLocaleString()}</td>
                         <td class="px-3 py-2.5 text-right font-semibold text-red-600">${netLoss > 0 ? 'NPR '+netLoss.toLocaleString() : '—'}</td>
                         <td class="px-3 py-2.5 text-center">
-                            <button onclick="openRefundModal('${row.label.replace(/'/g, "\\'")}', ${idx})" class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded hover:bg-yellow-200">Refund</button>
+                            <div class="action-group">
+                                <button class="action-btn refund-btn" onclick="openRefundModal('${row.label.replace(/'/g, "\\'")}', ${idx})">💸</button>
+                                <button class="action-btn delete-btn" onclick="openDeleteConfirm(${idx})" title="Delete row">🗑️</button>
+                            </div>
                         </td>
                     `;
                     tbody.appendChild(tr);
 
-                    // Accumulate totals
                     totals.orders += row.orders;
                     totals.totalRevenue += row.totalRevenue;
                     totals.advance += row.advance;
@@ -820,7 +1149,6 @@
                     totals.fonepay += row.fonepay || 0;
                 });
 
-                // Footer
                 tfoot.innerHTML = `
                     <tr class="border-t-2 border-gray-300 bg-gray-50">
                         <td class="px-3 py-3 text-left font-bold text-gray-700">TOTAL</td>
@@ -942,17 +1270,14 @@
                 }
 
                 const row = filteredData[refundTargetIndex];
-                // Find original data
                 let target = null;
                 if (currentPeriod === 'monthly') {
-                    target = financeData.find(d => d.year === row.year && d.monthIndex === row.monthIndex);
+                    target = financeData.find(d => d.year === row.year && d.monthIndex === row.monthIndex && !d._deleted);
                 } else {
-                    // For aggregated, find first match by label
-                    target = financeData.find(d => `${d.month} ${d.year}` === row.label);
+                    target = financeData.find(d => `${d.month} ${d.year}` === row.label && !d._deleted);
                 }
                 if (!target) {
-                    // Fallback: pick first month if any
-                    const firstMonth = financeData.find(d => d.orderIds && d.orderIds.length > 0);
+                    const firstMonth = financeData.find(d => d.orderIds && d.orderIds.length > 0 && !d._deleted);
                     if (firstMonth) target = firstMonth;
                 }
                 if (!target) {
@@ -960,21 +1285,202 @@
                     return;
                 }
 
-                // Add to existing refund (not replace)
                 const newRefund = target.refunds + amount;
                 target.refunds = newRefund;
-                // Recalculate net revenue
                 target.netRevenue = target.totalRevenue - target.importDuty - target.vat - target.serviceCharges -
                     target.discounts - target.refunds - target.shippingFees;
 
-                // Update filtered row
                 row.refunds = newRefund;
                 row.netRevenue = target.netRevenue;
 
-                // Re-render
                 refreshView();
                 closeRefundModal();
                 showToast('✅', `Added refund of NPR ${amount.toLocaleString()}. Total refund: NPR ${newRefund.toLocaleString()}`);
+            };
+
+            // ─── DELETE FUNCTION ──────────────────────────────────────────
+            window.openDeleteConfirm = function(index) {
+                const row = filteredData[index];
+                if (!row) return;
+                deleteTargetIndex = index;
+                deleteTargetRow = row;
+                document.getElementById('confirmDeleteLabel').textContent = `"${row.label}" (${row.orders} orders)`;
+                document.getElementById('confirmDeleteOverlay').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.cancelDelete = function() {
+                document.getElementById('confirmDeleteOverlay').classList.remove('active');
+                document.body.style.overflow = '';
+                deleteTargetIndex = null;
+                deleteTargetRow = null;
+            };
+
+            window.confirmDelete = function() {
+                if (deleteTargetIndex === null || !deleteTargetRow) {
+                    cancelDelete();
+                    return;
+                }
+
+                const row = deleteTargetRow;
+
+                // Find and mark source data as deleted
+                let found = false;
+                if (currentPeriod === 'monthly') {
+                    const target = financeData.find(d =>
+                        d.year === row.year && d.monthIndex === row.monthIndex && !d._deleted
+                    );
+                    if (target) {
+                        target._deleted = true;
+                        found = true;
+                    }
+                } else {
+                    // For aggregated views, find any matching month
+                    const labelParts = row.label.split(' ');
+                    const monthName = labelParts[0];
+                    const yearNum = parseInt(labelParts[1]);
+                    if (monthName && !isNaN(yearNum)) {
+                        const monthIdx = MONTHS.indexOf(monthName);
+                        if (monthIdx !== -1) {
+                            const target = financeData.find(d =>
+                                d.year === yearNum && d.monthIndex === monthIdx && !d._deleted
+                            );
+                            if (target) {
+                                target._deleted = true;
+                                found = true;
+                            }
+                        }
+                    }
+                    if (!found) {
+                        // Fallback: try to find by source key
+                        const target = financeData.find(d =>
+                            `${d.month} ${d.year}` === row.label && !d._deleted
+                        );
+                        if (target) {
+                            target._deleted = true;
+                            found = true;
+                        }
+                    }
+                }
+
+                if (!found) {
+                    // Try to find by label
+                    for (const d of financeData) {
+                        if (`${d.month} ${d.year}` === row.label && !d._deleted) {
+                            d._deleted = true;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!found) {
+                    showToast('⚠️', 'Could not find the source data to delete');
+                    cancelDelete();
+                    return;
+                }
+
+                cancelDelete();
+                refreshView();
+                showToast('🗑️', `Deleted: ${row.label}`);
+            };
+
+            // ─── PDF INVOICE DOWNLOAD ─────────────────────────────────────
+            window.downloadInvoicesPDF = function(index) {
+                const row = filteredData[index];
+                if (!row) {
+                    showToast('⚠️', 'No data for this period');
+                    return;
+                }
+
+                const orderData = row.orderData || [];
+                if (orderData.length === 0) {
+                    showToast('⚠️', 'No orders with invoice data for this period');
+                    return;
+                }
+
+                // Build invoice HTML
+                let html = `<div style="padding:20px;font-family:Arial,sans-serif;">`;
+                let pageNum = 0;
+                orderData.forEach((order, oi) => {
+                    pageNum++;
+                    const total = order.total || 0;
+                    const items = order.items || [];
+                    const customer = order.customer || 'Customer';
+                    const date = order.date || '—';
+
+                    html += `
+                        <div class="invoice-page" style="page-break-after:always;margin-bottom:30px;border-bottom:2px dashed #e2e8f0;padding-bottom:30px;${oi === orderData.length - 1 ? 'border-bottom:none;margin-bottom:0;padding-bottom:0;page-break-after:auto;' : ''}">
+                            <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #4F46E5;padding-bottom:16px;margin-bottom:20px;">
+                                <div>
+                                    <h2 style="font-size:24px;font-weight:700;color:#1e293b;margin:0;">🧾 INVOICE</h2>
+                                    <p style="font-size:12px;color:#94a3b8;margin:2px 0 0;">MeroWish · ${row.label}</p>
+                                </div>
+                                <div style="text-align:right;">
+                                    <div style="font-size:14px;font-weight:700;color:#1e293b;">#${order.id}</div>
+                                    <div style="font-size:12px;color:#64748b;">${date}</div>
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;">
+                                <div><span style="color:#64748b;">Customer:</span> <strong>${customer}</strong></div>
+                                <div><span style="color:#64748b;">Order:</span> <strong>${order.id}</strong></div>
+                            </div>
+                            <div style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;margin:12px 0;">
+                                <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                                    <thead>
+                                        <tr style="background:#f8fafc;">
+                                            <th style="text-align:left;padding:8px 12px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0;">Item</th>
+                                            <th style="text-align:right;padding:8px 12px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0;">Qty</th>
+                                            <th style="text-align:right;padding:8px 12px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0;">Price</th>
+                                            <th style="text-align:right;padding:8px 12px;font-weight:600;color:#475569;border-bottom:1px solid #e2e8f0;">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${items.map(it => `
+                                            <tr>
+                                                <td style="padding:6px 12px;border-bottom:1px solid #f1f5f9;color:#334155;">${it.name}</td>
+                                                <td style="padding:6px 12px;border-bottom:1px solid #f1f5f9;color:#334155;text-align:right;">${it.qty}</td>
+                                                <td style="padding:6px 12px;border-bottom:1px solid #f1f5f9;color:#334155;text-align:right;">NPR ${it.price.toLocaleString()}</td>
+                                                <td style="padding:6px 12px;border-bottom:1px solid #f1f5f9;color:#334155;text-align:right;">NPR ${it.total.toLocaleString()}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="margin-top:16px;padding-top:16px;border-top:2px solid #e2e8f0;display:flex;justify-content:flex-end;font-size:18px;font-weight:700;color:#1e293b;">
+                                <span>Grand Total: NPR ${total.toLocaleString()}</span>
+                            </div>
+                            <div style="margin-top:20px;font-size:12px;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:16px;">
+                                Thank you for your business! · MeroWish · ${date}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+
+                const container = document.getElementById('invoicePdfContainer');
+                container.innerHTML = html;
+
+                // Generate PDF using html2pdf
+                const opt = {
+                    margin: 10,
+                    filename: `Invoices_${row.label.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+
+                showToast('⏳', 'Generating PDF...');
+
+                html2pdf().set(opt).from(container).save().then(() => {
+                    showToast('✅', `PDF downloaded: ${row.label}`);
+                    container.innerHTML = '';
+                }).catch(err => {
+                    console.error('PDF error:', err);
+                    showToast('❌', 'Failed to generate PDF');
+                    container.innerHTML = '';
+                });
             };
 
             // ─── EXPORT EXCEL ──────────────────────────────────────────────
@@ -992,7 +1498,6 @@
                     csv +=
                         `${label},${row.orders},${row.totalRevenue},${row.advance},${row.cod},${row.importDuty},${row.vat},${row.serviceCharges},${row.discounts},${row.refunds},${row.shippingFees},${row.netRevenue},${netLoss},${row.ese||0},${row.khalti||0},${row.fonepay||0}\n`;
                 });
-                // Totals
                 const totals = data.reduce((acc, r) => {
                     acc.orders += r.orders;
                     acc.totalRevenue += r.totalRevenue;
@@ -1071,6 +1576,10 @@
             window.openRefundModal = window.openRefundModal;
             window.closeRefundModal = window.closeRefundModal;
             window.saveRefundUpdate = window.saveRefundUpdate;
+            window.openDeleteConfirm = window.openDeleteConfirm;
+            window.cancelDelete = window.cancelDelete;
+            window.confirmDelete = window.confirmDelete;
+            window.downloadInvoicesPDF = window.downloadInvoicesPDF;
 
             // ─── INIT ──────────────────────────────────────────────────────
             document.getElementById('dateFrom').value = '2026-01-01';
@@ -1083,6 +1592,9 @@
                 if (e.key === 'Escape') {
                     closeOrdersModal();
                     closeRefundModal();
+                    if (document.getElementById('confirmDeleteOverlay').classList.contains('active')) {
+                        cancelDelete();
+                    }
                 }
             });
         })();
