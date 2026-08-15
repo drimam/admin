@@ -1800,7 +1800,7 @@
         </div>
     </div>
 
-    <!-- ─── WAREHOUSE BARCODE MODAL ─── -->
+    <!-- ─── WAREHOUSE BARCODE MODAL (UPDATED with Payment and Product Link) ─── -->
     <div id="whBarcodeModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeWhBarcodeModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 modal-content">
@@ -1809,14 +1809,23 @@
                 <button onclick="closeWhBarcodeModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 sm:p-6">
-                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-gray-100">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xs text-gray-500">Tracking</p>
-                        <p class="text-sm font-semibold text-gray-800 font-mono" id="whBarcodeTracking">—</p>
+                <!-- Info row: Tracking, Product, Payment -->
+                <div class="flex flex-col gap-2 mb-4 pb-3 border-b border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-gray-500">Tracking</p>
+                            <p class="text-sm font-semibold text-gray-800 font-mono" id="whBarcodeTracking">—</p>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-gray-500">Product</p>
+                            <p class="text-sm font-medium text-gray-700 truncate" id="whBarcodeProduct">—</p>
+                        </div>
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-xs text-gray-500">Product</p>
-                        <p class="text-sm font-medium text-gray-700 truncate" id="whBarcodeProduct">—</p>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-gray-500">Payment</p>
+                            <p class="text-sm font-semibold" id="whBarcodePayment">—</p>
+                        </div>
                     </div>
                 </div>
 
@@ -2165,8 +2174,16 @@
                     whBarcodeResolve = resolve;
                     whBarcodeReject = reject;
 
+                    // Set tracking
                     document.getElementById('whBarcodeTracking').textContent = item.trackingNumber;
-                    document.getElementById('whBarcodeProduct').textContent = item.productName;
+                    // Set product name as clickable link
+                    const productEl = document.getElementById('whBarcodeProduct');
+                    productEl.innerHTML = `<a href="${item.productLink}" target="_blank" class="text-primary hover:underline">${escapeHtml(item.productName)}</a>`;
+                    // Set payment badge
+                    const paymentEl = document.getElementById('whBarcodePayment');
+                    paymentEl.innerHTML = getPaymentBadge(item.paymentType, item.codAmount);
+
+                    // Set input and preview
                     document.getElementById('whBarcodeInput').value = item.warehouseBarcode || '';
                     document.getElementById('whBarcodePreview').innerHTML = item.warehouseBarcode ?
                         `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(item.warehouseBarcode)}</span>` :
@@ -3268,7 +3285,7 @@
 
             renderAll();
             switchTab('shipped');
-            showToast('✅', 'Warehouse Receiving loaded | COD/Prepaid + Barcode features active');
+            showToast('✅', 'Warehouse Receiving loaded | Payment & Product link in Barcode modal');
 
         })();
     </script>
