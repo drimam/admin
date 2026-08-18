@@ -1347,6 +1347,44 @@
             font-style: italic;
             font-family: sans-serif;
         }
+
+        /* ─── TRACKING ASSIGN MODAL (preview removed) ─── */
+        #trackingAssignModal .modal-content {
+            max-width: 480px;
+        }
+        #trackingAssignModal .detail-row {
+            display: flex;
+            gap: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 13px;
+        }
+        #trackingAssignModal .detail-row .label {
+            font-weight: 600;
+            color: #64748b;
+            min-width: 70px;
+        }
+        #trackingAssignModal .detail-row .value {
+            color: #0f172a;
+            flex: 1;
+        }
+        #trackingAssignModal .detail-row .value a {
+            color: #4F46E5;
+            text-decoration: underline;
+        }
+        #trackingAssignModal .detail-row .value a:hover {
+            color: #3730A3;
+        }
+
+        @media (max-width: 480px) {
+            #trackingAssignModal .detail-row {
+                font-size: 11px;
+                gap: 8px;
+            }
+            #trackingAssignModal .detail-row .label {
+                min-width: 55px;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
@@ -1418,6 +1456,15 @@
             <div class="stats-grid">
                 <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
                     <div class="flex items-center gap-3">
+                        <div class="stat-icon bg-purple-50 text-purple-600">⏳</div>
+                        <div>
+                            <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Pending to Ship</p>
+                            <p class="text-base sm:text-lg lg:text-xl font-bold text-purple-600 stat-value-sm" id="statPending">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100 stat-card">
+                    <div class="flex items-center gap-3">
                         <div class="stat-icon bg-teal-50 text-teal-600">🚚</div>
                         <div>
                             <p class="text-[9px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Shipped by Seller</p>
@@ -1460,7 +1507,8 @@
                     <button class="tab-btn" data-tab="shipped" onclick="switchTab('shipped')">🚚 Shipped by Seller</button>
                     <button class="tab-btn" data-tab="stock" onclick="switchTab('stock')">📦 India WH Stock</button>
                     <button class="tab-btn" data-tab="dispatched" onclick="switchTab('dispatched')">📤 Dispatched by India WH</button>
-                    <button class="tab-btn active" data-tab="scan" onclick="switchTab('scan')">📷 Scan & Receive</button>
+                    <button class="tab-btn" data-tab="scan" onclick="switchTab('scan')">📷 Scan & Receive</button>
+                    <button class="tab-btn active" data-tab="pending" onclick="switchTab('pending')">⏳ Pending to Ship</button>
                 </div>
             </div>
 
@@ -1683,7 +1731,7 @@
             </div>
 
             <!-- ─── TAB: SCAN & RECEIVE ─── -->
-            <div id="tab-scan" class="tab-content active">
+            <div id="tab-scan" class="tab-content">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mb-4">
                         <div class="flex-1 w-full scan-input-wrapper">
@@ -1753,6 +1801,81 @@
                 </div>
             </div>
 
+            <!-- ─── TAB: PENDING TO SHIP ─── -->
+            <div id="tab-pending" class="tab-content active">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+                    <div class="filter-section">
+                        <div class="filter-group flex-1 min-w-[100px]">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
+                            <input type="text" id="pendingSearch" placeholder="Product, Order ID..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterPending()" />
+                        </div>
+                        <div class="filter-group">
+                            <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">From:</label>
+                            <input type="date" id="pendingDateFrom" class="text-xs sm:text-sm" onchange="filterPending()" />
+                            <span class="text-gray-400 text-xs">–</span>
+                            <input type="date" id="pendingDateTo" class="text-xs sm:text-sm" onchange="filterPending()" />
+                        </div>
+                        <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
+                            <button onclick="clearPendingFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
+                            <button onclick="filterPending()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                            <button onclick="openExportModal('pending')" class="btn-outline text-xs sm:text-sm">📤 Export</button>
+                        </div>
+                    </div>
+                    <div id="activePendingFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
+                        <div>
+                            <span class="text-xs sm:text-sm font-semibold text-gray-700">Pending to Ship</span>
+                            <span id="pendingResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">0 entries</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-3">
+                            <div class="flex items-center gap-1 sm:gap-2">
+                                <label class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">Show</label>
+                                <select id="pendingPageSize" class="text-[10px] sm:text-xs border border-gray-300 rounded px-1 sm:px-2 py-0.5 sm:py-1" onchange="changePendingPageSize()">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50" selected>50</option>
+                                </select>
+                                <span class="text-[9px] sm:text-xs text-gray-500 hidden xs:inline">entries</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="desktop-table table-container">
+                        <table class="scan-table w-full text-xs sm:text-sm" id="pendingTable">
+                            <colgroup>
+                                <col class="col-tracking"><col class="col-product"><col class="col-user"><col class="col-qty"><col class="col-hsn"><col class="col-subcat"><col class="col-price"><col class="col-payment"><col class="col-status"><col class="col-date"><col class="col-action">
+                            </colgroup>
+                            <thead>
+                                <tr class="bg-gray-100 text-gray-600 text-[10px] sm:text-xs font-semibold uppercase tracking-wider">
+                                    <th class="text-left">Order ID</th>
+                                    <th class="text-left">Product</th>
+                                    <th class="text-left">User</th>
+                                    <th class="text-center">QTY</th>
+                                    <th class="text-left">HSN</th>
+                                    <th class="text-left">Sub-Category</th>
+                                    <th class="text-center">INR Price</th>
+                                    <th class="text-center">Payment</th>
+                                    <th class="text-left">Status</th>
+                                    <th class="text-left">Order Date</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pendingTableBody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="mobile-cards" id="pendingCardsContainer"></div>
+
+                    <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
+                        <div class="text-gray-500" id="pendingPaginationInfo">Page 1 of 1</div>
+                        <div class="flex gap-1" id="pendingPaginationButtons"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </main>
 
@@ -1800,7 +1923,7 @@
         </div>
     </div>
 
-    <!-- ─── WAREHOUSE BARCODE MODAL (UPDATED with Payment and Product Link) ─── -->
+    <!-- ─── WAREHOUSE BARCODE MODAL ─── -->
     <div id="whBarcodeModal" class="fixed inset-0 z-50 hidden items-center justify-center">
         <div class="modal-backdrop absolute inset-0" onclick="closeWhBarcodeModal()"></div>
         <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 modal-content">
@@ -1809,7 +1932,6 @@
                 <button onclick="closeWhBarcodeModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
             <div class="p-4 sm:p-6">
-                <!-- Info row: Tracking, Product, Payment -->
                 <div class="flex flex-col gap-2 mb-4 pb-3 border-b border-gray-100">
                     <div class="flex items-center gap-3">
                         <div class="flex-1 min-w-0">
@@ -1858,6 +1980,55 @@
         </div>
     </div>
 
+    <!-- ─── TRACKING ASSIGN MODAL (preview removed) ─── -->
+    <div id="trackingAssignModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="modal-backdrop absolute inset-0" onclick="closeTrackingAssignModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-3 sm:mx-4 max-h-[90vh] overflow-y-auto animate-fade-in z-10 modal-content">
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between rounded-t-2xl">
+                <h3 class="text-base sm:text-lg font-bold text-gray-800 flex items-center gap-2"><span>🔢</span> Assign Tracking Number</h3>
+                <button onclick="closeTrackingAssignModal()" class="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg text-gray-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="p-4 sm:p-6">
+                <div class="detail-row">
+                    <span class="label">Order ID</span>
+                    <span class="value font-mono" id="assignOrderId">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Product</span>
+                    <span class="value" id="assignProductName">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">User</span>
+                    <span class="value" id="assignUser">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">QTY</span>
+                    <span class="value" id="assignQty">—</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Payment</span>
+                    <span class="value" id="assignPayment">—</span>
+                </div>
+
+                <div class="mt-4">
+                    <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-1">Tracking Number</label>
+                    <input type="text" id="assignTrackingInput" placeholder="Enter tracking number..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm font-mono tracking-wider focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                    <button onclick="generateRandomTracking()" class="text-xs text-primary hover:underline font-medium mt-1">🔄 Generate</button>
+                </div>
+
+                <div class="mt-4">
+                    <label class="text-xs font-semibold text-gray-600 uppercase tracking-wide block mb-1">ETA Delivery Date</label>
+                    <input type="date" id="assignEtaInput" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all" />
+                </div>
+
+                <div class="flex gap-3 pt-4 mt-4 border-t border-gray-200">
+                    <button onclick="saveTrackingAssign()" class="flex-1 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primaryDark transition-colors">💾 Save & Ship</button>
+                    <button onclick="closeTrackingAssignModal()" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-colors">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ─── TOAST ─── -->
     <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
         <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
@@ -1895,12 +2066,13 @@
 
             function getStatusBadge(status) {
                 const map = {
+                    'pending': { bg: 'bg-purple-100', text: 'text-purple-700', dot: 'purple', label: 'Pending' },
                     'shipped': { bg: 'bg-teal-100', text: 'text-teal-700', dot: 'teal', label: 'Shipped' },
                     'arrived': { bg: 'bg-yellow-100', text: 'text-yellow-700', dot: 'yellow', label: 'Arrived' },
                     'dispatched': { bg: 'bg-orange-100', text: 'text-orange-700', dot: 'orange', label: 'Dispatched' },
                     'received': { bg: 'bg-green-100', text: 'text-green-700', dot: 'green', label: 'Received' },
                 };
-                const m = map[status] || map.shipped;
+                const m = map[status] || map.pending;
                 return `<span class="status-badge ${m.bg} ${m.text}"><span class="dot ${m.dot}"></span>${m.label}</span>`;
             }
 
@@ -1928,7 +2100,7 @@
 
             function commentLineHtml(item, context) {
                 const comment = item.comment || '';
-                const tracking = item.trackingNumber;
+                const tracking = item.trackingNumber || item.orderId || '';
                 if (comment) {
                     return `<div class="product-comment" onclick="openCommentModal('${tracking}','${context}')" title="Click to view full comment">
                                 <span class="comment-text">💬 ${escapeHtml(comment)}</span>
@@ -1973,52 +2145,89 @@
 
             // ─── DATA ──────────────────────────────────────────────────────
 
+            // Pending items (orders not yet shipped by seller)
+            const INITIAL_PENDING = [
+                { orderId: 'MW202623354', trackingNumber: '', shippedDate: 'Pending', productName: 'Smart LED TV 55"', productLink: 'https://example.com/prod9', productImage: getProductImage(
+                        'Smart LED TV 55"'), username: 'Hari Shrestha', userId: 11, hsn: '8528', subCategory: 'Electronics',
+                    quantity: 1, inrPrice: 18200.00, status: 'pending', comment: 'Customer requested express delivery', paymentType: 'PREPAID',
+                    codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623355', trackingNumber: '', shippedDate: 'Pending', productName: 'Noise Cancelling Headphones', productLink: 'https://example.com/prod10', productImage: getProductImage(
+                        'Noise Cancelling Headphones'), username: 'Nisha Thapa', userId: 12, hsn: '8518',
+                    subCategory: 'Electronics', quantity: 2, inrPrice: 850.00, status: 'pending', comment: '',
+                    paymentType: 'COD', codAmount: 850.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623356', trackingNumber: '', shippedDate: 'Pending', productName: 'Stainless Steel Water Bottle', productLink: 'https://example.com/prod11', productImage: getProductImage(
+                        'Stainless Steel Water Bottle'), username: 'Sunil KC', userId: 9, hsn: '7323',
+                    subCategory: 'Home & Living', quantity: 3, inrPrice: 205.00, status: 'pending', comment: '',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623357', trackingNumber: '', shippedDate: 'Pending', productName: 'Wireless Mouse & Keyboard Combo', productLink: 'https://example.com/prod12', productImage: getProductImage(
+                        'Wireless Mouse & Keyboard Combo'), username: 'Gita Poudel', userId: 10, hsn: '8471',
+                    subCategory: 'Electronics', quantity: 1, inrPrice: 490.00, status: 'pending', comment: 'Gift wrapping requested',
+                    paymentType: 'COD', codAmount: 490.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623358', trackingNumber: '', shippedDate: 'Pending', productName: 'Men\'s Leather Jacket', productLink: 'https://example.com/prod13', productImage: getProductImage(
+                        'Men\'s Leather Jacket'), username: 'Bikash Thapa', userId: 5, hsn: '4203', subCategory: 'Fashion',
+                    quantity: 1, inrPrice: 1200.00, status: 'pending', comment: '', paymentType: 'PREPAID', codAmount: 0,
+                    warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623359', trackingNumber: '', shippedDate: 'Pending', productName: 'Digital Kitchen Scale', productLink: 'https://example.com/prod14', productImage: getProductImage(
+                        'Digital Kitchen Scale'), username: 'Anita Rai', userId: 6, hsn: '8423',
+                    subCategory: 'Home & Living', quantity: 2, inrPrice: 300.00, status: 'pending', comment: '',
+                    paymentType: 'COD', codAmount: 300.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                { orderId: 'MW202623360', trackingNumber: '', shippedDate: 'Pending', productName: 'Fitness Tracker Band', productLink: 'https://example.com/prod15', productImage: getProductImage(
+                        'Fitness Tracker Band'), username: 'Kiran Bhandari', userId: 7, hsn: '9029',
+                    subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 640.00, status: 'pending', comment: 'Rush delivery requested',
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+            ];
+
+            // Existing shipped items
             const INITIAL_SHIPMENTS = [
                 { trackingNumber: 'TRK-2026-001234', orderId: 'MW202623345', shippedDate: '06 May 2026', productName: 'Wireless Bluetooth Earphones - Black', productLink: 'https://example.com/product/456', productImage: getProductImage(
                         'Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai', userId: 1, hsn: '8518',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped', comment: '',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '12 May 2026' },
                 { trackingNumber: 'TRK-2026-001235', orderId: 'MW202623346', shippedDate: '05 May 2026', productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789', productImage: getProductImage(
                         'Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma', userId: 2, hsn: '6302',
                     subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped', comment: '',
-                    paymentType: 'COD', codAmount: 320.00, warehouseBarcode: '' },
+                    paymentType: 'COD', codAmount: 320.00, warehouseBarcode: '', etaDeliveryDate: '10 May 2026' },
                 { trackingNumber: 'TRK-2026-001236', orderId: 'MW202623347', shippedDate: '04 May 2026', productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101', productImage: getProductImage(
                         'Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari', userId: 3, hsn: '8517',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped', comment: '',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '15 May 2026' },
                 { trackingNumber: 'TRK-2026-001237', orderId: 'MW202623348', shippedDate: '03 May 2026', productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606', productImage: getProductImage(
                         'Leather Handbag - Brown'), username: 'Maya Devi', userId: 8, hsn: '4202',
                     subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped', comment: '',
-                    paymentType: 'COD', codAmount: 570.00, warehouseBarcode: '' },
+                    paymentType: 'COD', codAmount: 570.00, warehouseBarcode: '', etaDeliveryDate: '08 May 2026' },
                 { trackingNumber: 'TRK-2026-001238', orderId: 'MW202623349', shippedDate: '02 May 2026', productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707', productImage: getProductImage(
                         'USB-C to Lightning Cable'), username: 'Sujan Adhikari', userId: 9, hsn: '8544',
                     subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped', comment: '',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '09 May 2026' },
                 { trackingNumber: 'TRK-2026-001239', orderId: 'MW202623350', shippedDate: '01 May 2026', productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808', productImage: getProductImage(
                         'Premium Cotton Towel Set'), username: 'Test User', userId: 999, hsn: '6302',
                     subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00, status: 'shipped', comment: '',
-                    paymentType: 'COD', codAmount: 400.00, warehouseBarcode: '' },
+                    paymentType: 'COD', codAmount: 400.00, warehouseBarcode: '', etaDeliveryDate: '06 May 2026' },
                 { trackingNumber: 'TRK-2026-001240', orderId: 'MW202623351', shippedDate: '30 Apr 2026', productName: 'Wireless Mouse', productLink: 'https://example.com/product/909', productImage: getProductImage(
                         'Wireless Mouse'), username: 'Test User 2', userId: 1000, hsn: '8471',
                     subCategory: 'Electronics', quantity: 2, inrPrice: 210.00, status: 'shipped', comment: '',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '05 May 2026' },
                 { trackingNumber: 'TRK-2026-001241', orderId: 'MW202623352', shippedDate: '29 Apr 2026', productName: 'Leather Jacket', productLink: 'https://example.com/product/1010', productImage: getProductImage(
                         'Leather Jacket'), username: 'Test User 3', userId: 1001, hsn: '4203', subCategory: 'Fashion',
                     quantity: 1, inrPrice: 580.00, status: 'shipped', comment: '', paymentType: 'COD',
-                    codAmount: 580.00, warehouseBarcode: '' },
+                    codAmount: 580.00, warehouseBarcode: '', etaDeliveryDate: '04 May 2026' },
                 { trackingNumber: 'TRK-2026-001242', orderId: 'MW202623353', shippedDate: '28 Apr 2026', productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111', productImage: getProductImage(
                         'Yoga Block Set'), username: 'Test User 4', userId: 1002, hsn: '9506',
                     subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00, status: 'shipped', comment: '',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '03 May 2026' },
             ];
 
             // ─── STATE ──────────────────────────────────────────────────────
 
+            let pendingItems = [...INITIAL_PENDING];
             let shippedItems = [...INITIAL_SHIPMENTS];
             let stockItems = [];
             let dispatchedItems = [];
             let scannedLogs = [];
 
+            let pendingPage = 1,
+                pendingSize = 50,
+                pendingFiltered = [];
             let shippedPage = 1,
                 shippedSize = 50,
                 shippedFiltered = [];
@@ -2032,24 +2241,38 @@
                 scanSize = 50,
                 scanFiltered = [];
 
-            let currentTab = 'shipped';
-            let exportTarget = 'shipped';
+            let currentTab = 'pending';
+            let exportTarget = 'pending';
             let exportColumns = {};
 
             let html5QrCode = null;
             let html5QrCodeReceive = null;
 
-            // ─── COMMENT STATE ─────────────────────────────────────────────
             let commentContext = '';
             let commentTracking = '';
             let commentItem = null;
 
-            // ─── WAREHOUSE BARCODE STATE ──────────────────────────────────
             let whBarcodePendingItem = null;
             let whBarcodeResolve = null;
             let whBarcodeReject = null;
 
+            let trackingAssignPendingItem = null;
+
             const COLUMN_DEFS = {
+                pending: [
+                    { key: 'orderId', label: 'Order ID' },
+                    { key: 'productName', label: 'Product Name' },
+                    { key: 'username', label: 'User' },
+                    { key: 'quantity', label: 'Quantity' },
+                    { key: 'hsn', label: 'HSN Code' },
+                    { key: 'subCategory', label: 'Sub-Category' },
+                    { key: 'inrPrice', label: 'INR Price' },
+                    { key: 'paymentType', label: 'Payment Type' },
+                    { key: 'codAmount', label: 'COD Amount' },
+                    { key: 'status', label: 'Status' },
+                    { key: 'shippedDate', label: 'Order Date' },
+                    { key: 'orderId', label: 'Order ID' },
+                ],
                 shipped: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
                     { key: 'productName', label: 'Product Name' },
@@ -2064,6 +2287,7 @@
                     { key: 'shippedDate', label: 'Shipped Date' },
                     { key: 'orderId', label: 'Order ID' },
                     { key: 'warehouseBarcode', label: 'Warehouse Barcode' },
+                    { key: 'etaDeliveryDate', label: 'ETA Delivery Date' },
                 ],
                 stock: [
                     { key: 'trackingNumber', label: 'Tracking Number' },
@@ -2112,6 +2336,88 @@
                 ],
             };
 
+            // ─── TRACKING ASSIGN MODAL ────────────────────────────────────
+
+            function openTrackingAssignModal(orderId) {
+                const item = pendingItems.find(p => p.orderId === orderId);
+                if (!item) {
+                    showToast('❌', 'Order not found');
+                    return;
+                }
+                trackingAssignPendingItem = item;
+                document.getElementById('assignOrderId').textContent = item.orderId;
+                document.getElementById('assignProductName').innerHTML =
+                    `<a href="${item.productLink}" target="_blank" class="text-primary hover:underline">${escapeHtml(item.productName)}</a>`;
+                document.getElementById('assignUser').textContent = item.username;
+                document.getElementById('assignQty').textContent = item.quantity;
+                document.getElementById('assignPayment').innerHTML = getPaymentBadge(item.paymentType, item.codAmount);
+                document.getElementById('assignTrackingInput').value = '';
+                document.getElementById('assignEtaInput').value = '';
+
+                document.getElementById('trackingAssignModal').classList.add('flex');
+                document.getElementById('trackingAssignModal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => document.getElementById('assignTrackingInput').focus(), 200);
+            }
+
+            function closeTrackingAssignModal() {
+                document.getElementById('trackingAssignModal').classList.add('hidden');
+                document.body.style.overflow = '';
+                trackingAssignPendingItem = null;
+            }
+
+            function generateRandomTracking() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let tracking = 'TRK-';
+                for (let i = 0; i < 8; i++) {
+                    if (i === 4) tracking += '-';
+                    tracking += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                document.getElementById('assignTrackingInput').value = tracking;
+            }
+
+            function saveTrackingAssign() {
+                const item = trackingAssignPendingItem;
+                if (!item) {
+                    showToast('❌', 'No order selected');
+                    return;
+                }
+                const tracking = document.getElementById('assignTrackingInput').value.trim();
+                if (!tracking) {
+                    showToast('⚠️', 'Please enter a tracking number');
+                    document.getElementById('assignTrackingInput').focus();
+                    return;
+                }
+                const eta = document.getElementById('assignEtaInput').value;
+                const today = new Date();
+                const shippedDateStr = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                // Remove from pending
+                const idx = pendingItems.findIndex(p => p.orderId === item.orderId);
+                if (idx > -1) {
+                    pendingItems.splice(idx, 1);
+                }
+
+                // Add to shipped
+                const shippedItem = {
+                    ...item,
+                    trackingNumber: tracking,
+                    shippedDate: shippedDateStr,
+                    status: 'shipped',
+                    etaDeliveryDate: eta || '',
+                    comment: item.comment || '',
+                    warehouseBarcode: '',
+                    paymentType: item.paymentType || 'PREPAID',
+                    codAmount: item.codAmount || 0,
+                };
+                shippedItems.push(shippedItem);
+
+                closeTrackingAssignModal();
+                renderAll();
+                showToast('✅', `Order ${item.orderId} shipped with tracking: ${tracking}`);
+                switchTab('shipped');
+            }
+
             // ─── COMMENT MODAL ─────────────────────────────────────────────
 
             function openCommentModal(tracking, context) {
@@ -2120,9 +2426,10 @@
 
                 let item = null;
                 let list = [];
-                if (context === 'shipped') { list = shippedItems; } else if (context === 'stock') { list = stockItems; } else if (
-                    context === 'dispatched') { list = dispatchedItems; } else if (context === 'scan') { list = scannedLogs; }
-                item = list.find(i => i.trackingNumber === tracking);
+                if (context === 'pending') { list = pendingItems; } else if (context === 'shipped') { list = shippedItems; } else if (
+                    context === 'stock') { list = stockItems; } else if (context === 'dispatched') { list = dispatchedItems; } else if (
+                    context === 'scan') { list = scannedLogs; }
+                item = list.find(i => (i.trackingNumber === tracking || i.orderId === tracking));
                 if (!item) { showToast('⚠️', 'Item not found'); return; }
                 commentItem = item;
 
@@ -2133,7 +2440,7 @@
                             <div class="name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
                             <div class="meta">
                                 <span>📋 ${item.orderId || 'N/A'}</span>
-                                <span>🔢 ${item.trackingNumber}</span>
+                                <span>🔢 ${item.trackingNumber || 'N/A'}</span>
                                 ${item.warehouseBarcode ? `<span>🏷️ ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
                             </div>
                             <div class="meta" style="margin-top:2px;color:#475569;">
@@ -2174,16 +2481,13 @@
                     whBarcodeResolve = resolve;
                     whBarcodeReject = reject;
 
-                    // Set tracking
                     document.getElementById('whBarcodeTracking').textContent = item.trackingNumber;
-                    // Set product name as clickable link
                     const productEl = document.getElementById('whBarcodeProduct');
-                    productEl.innerHTML = `<a href="${item.productLink}" target="_blank" class="text-primary hover:underline">${escapeHtml(item.productName)}</a>`;
-                    // Set payment badge
+                    productEl.innerHTML =
+                        `<a href="${item.productLink}" target="_blank" class="text-primary hover:underline">${escapeHtml(item.productName)}</a>`;
                     const paymentEl = document.getElementById('whBarcodePayment');
                     paymentEl.innerHTML = getPaymentBadge(item.paymentType, item.codAmount);
 
-                    // Set input and preview
                     document.getElementById('whBarcodeInput').value = item.warehouseBarcode || '';
                     document.getElementById('whBarcodePreview').innerHTML = item.warehouseBarcode ?
                         `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(item.warehouseBarcode)}</span>` :
@@ -2313,8 +2617,6 @@
                 showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
             }
 
-            // ─── SCAN & RECEIVE: accepts tracking OR warehouse barcode ────
-
             function processScan() {
                 const input = document.getElementById('barcodeInput');
                 const code = input.value.trim();
@@ -2323,12 +2625,10 @@
                     return;
                 }
 
-                // Try to find by tracking number first
                 let idx = dispatchedItems.findIndex(s => s.trackingNumber.toLowerCase() === code.toLowerCase());
                 let matchType = 'tracking';
                 let matchedValue = code;
 
-                // If not found, try by warehouse barcode
                 if (idx === -1) {
                     idx = dispatchedItems.findIndex(s => s.warehouseBarcode && s.warehouseBarcode.toLowerCase() === code
                         .toLowerCase());
@@ -2491,12 +2791,14 @@
             // ─── RENDER FUNCTIONS ─────────────────────────────────────────
 
             function renderAll() {
+                renderPendingTableAndCards();
                 renderShippedTableAndCards();
                 renderStockTableAndCards();
                 renderDispatchedTableAndCards();
                 renderScanTableAndCards();
                 updateStats();
-                if (currentTab === 'shipped') filterShipped();
+                if (currentTab === 'pending') filterPending();
+                else if (currentTab === 'shipped') filterShipped();
                 else if (currentTab === 'stock') filterStock();
                 else if (currentTab === 'dispatched') filterDispatched();
                 else if (currentTab === 'scan') renderScanTableAndCards();
@@ -2511,7 +2813,7 @@
                             <div class="user-card">
                                 <div class="card-header">
                                     <div class="flex items-center gap-2 flex-wrap">
-                                        <span class="tracking-cell text-sm">${item.trackingNumber}</span>
+                                        <span class="tracking-cell text-sm">${item.trackingNumber || item.orderId || 'N/A'}</span>
                                         ${statusBadge}
                                         ${paymentBadge}
                                         ${item.warehouseBarcode ? `<span class="wh-barcode-tag"><span class="barcode-icon">🏷️</span> ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
@@ -2544,8 +2846,9 @@
                                     </div>
                                     <div class="card-row">
                                         <span class="label">Date</span>
-                                        <span class="value">${item.shippedDate || item.receivedAt || item.dispatchedAt || item.arrivedAt || ''}</span>
+                                        <span class="value">${item.shippedDate || item.receivedAt || item.dispatchedAt || item.arrivedAt || 'Pending'}</span>
                                     </div>
+                                    ${item.etaDeliveryDate ? `<div class="card-row"><span class="label">ETA</span><span class="value">${item.etaDeliveryDate}</span></div>` : ''}
                                 </div>
                                 <div class="card-actions">
                                     ${actionButtons(item)}
@@ -2553,6 +2856,10 @@
                             </div>
                         `;
                 }).join('');
+            }
+
+            function pendingActionButtons(item) {
+                return `<button onclick="openTrackingAssignModal('${item.orderId}')" class="action-btn primary-btn btn-sm" style="font-size:10px;padding:2px 8px;">🔢 Assign Tracking</button>`;
             }
 
             function shippedActionButtons(item) {
@@ -2569,6 +2876,113 @@
 
             function scanActionButtons(item) {
                 return `<button class="action-btn success-btn btn-sm" style="font-size:10px;padding:2px 8px;">✅ Received</button>`;
+            }
+
+            // ─── PENDING ────────────────────────────────────────────────────
+
+            function filterPending() {
+                const search = document.getElementById('pendingSearch').value.toLowerCase().trim();
+                const from = document.getElementById('pendingDateFrom').value;
+                const to = document.getElementById('pendingDateTo').value;
+                let filtered = [...pendingItems];
+                if (search) {
+                    filtered = filtered.filter(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.orderId.toLowerCase().includes(search) ||
+                        item.username.toLowerCase().includes(search)
+                    );
+                }
+                if (from) { filtered = filtered.filter(item => new Date(item.shippedDate) >= new Date(from)); }
+                if (to) { filtered = filtered.filter(item => new Date(item.shippedDate) <= new Date(to + 'T23:59:59')); }
+                pendingFiltered = filtered;
+                pendingPage = 1;
+                renderPendingTableAndCards();
+                updateActivePendingFilters();
+            }
+
+            function clearPendingFilters() {
+                document.getElementById('pendingSearch').value = '';
+                document.getElementById('pendingDateFrom').value = '';
+                document.getElementById('pendingDateTo').value = '';
+                filterPending();
+            }
+
+            function updateActivePendingFilters() {
+                const container = document.getElementById('activePendingFilters');
+                let html = '';
+                const search = document.getElementById('pendingSearch').value.trim();
+                const from = document.getElementById('pendingDateFrom').value;
+                const to = document.getElementById('pendingDateTo').value;
+                if (search) html +=
+                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('pendingSearch').value='';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
+                if (from || to) {
+                    let ds = '';
+                    if (from && to) ds = `${from} → ${to}`;
+                    else if (from) ds = `From ${from}`;
+                    else ds = `Until ${to}`;
+                    html +=
+                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${ds} <button onclick="document.getElementById('pendingDateFrom').value='';document.getElementById('pendingDateTo').value='';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
+                }
+                container.innerHTML = html || '';
+            }
+
+            function renderPendingTableAndCards() {
+                const start = (pendingPage - 1) * pendingSize;
+                const end = Math.min(start + pendingSize, pendingFiltered.length);
+                const pageData = pendingFiltered.slice(start, end);
+                const tbody = document.getElementById('pendingTableBody');
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="11" class="px-4 py-8 text-center text-gray-400 text-sm">No pending orders to ship</td></tr>`;
+                    document.getElementById('pendingResultCount').textContent = '0 entries';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                            <tr class="scan-row border-b border-gray-100">
+                                <td class="px-2 py-1 sm:py-2 tracking-cell font-mono font-semibold text-primary">${item.orderId}</td>
+                                <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'pending')}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
+                                <td class="px-2 py-1 sm:py-2 font-mono text-gray-500 text-xs">${item.hsn}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${item.subCategory}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">₹ ${item.inrPrice.toFixed(2)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center">${getPaymentBadge(item.paymentType, item.codAmount)}</td>
+                                <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                                <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
+                                <td class="px-2 py-1 sm:py-2 text-center">
+                                    <button onclick="openTrackingAssignModal('${item.orderId}')" class="btn-sm btn-sm-primary" style="font-size:10px;padding:2px 8px;">🔢 Assign</button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    document.getElementById('pendingResultCount').textContent =
+                        `Showing ${pageData.length} of ${pendingFiltered.length} entries`;
+                }
+                const cardsContainer = document.getElementById('pendingCardsContainer');
+                cardsContainer.innerHTML = generateCards(pageData, 'status', pendingActionButtons, 'pending');
+                updatePendingPagination();
+            }
+
+            function updatePendingPagination() {
+                const total = Math.ceil(pendingFiltered.length / pendingSize) || 1;
+                document.getElementById('pendingPaginationInfo').textContent =
+                    `Page ${pendingPage} of ${total} (${pendingFiltered.length} entries)`;
+                const btns = document.getElementById('pendingPaginationButtons');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const btn = document.createElement('button');
+                    btn.className =
+                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === pendingPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
+                    btn.textContent = i;
+                    btn.onclick = () => { pendingPage = i;
+                        renderPendingTableAndCards(); };
+                    btns.appendChild(btn);
+                }
+            }
+
+            function changePendingPageSize() {
+                pendingSize = parseInt(document.getElementById('pendingPageSize').value, 10);
+                pendingPage = 1;
+                renderPendingTableAndCards();
             }
 
             // ─── SHIPPED ────────────────────────────────────────────────────
@@ -2953,6 +3367,7 @@
             // ─── STATS ─────────────────────────────────────────────────────
 
             function updateStats() {
+                document.getElementById('statPending').textContent = pendingItems.length;
                 document.getElementById('statShipped').textContent = shippedItems.length;
                 document.getElementById('statStock').textContent = stockItems.length;
                 document.getElementById('statDispatched').textContent = dispatchedItems.length;
@@ -2969,7 +3384,9 @@
                 document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
                 document.getElementById(`tab-${tab}`).classList.add('active');
 
-                if (tab === 'shipped') { filterShipped();
+                if (tab === 'pending') { filterPending();
+                    setTimeout(() => document.getElementById('pendingSearch')?.focus(), 100); } else if (tab === 'shipped') {
+                    filterShipped();
                     setTimeout(() => document.getElementById('shippedSearch')?.focus(), 100); } else if (tab === 'stock') {
                     filterStock();
                     setTimeout(() => document.getElementById('stockBarcodeInput')?.focus(), 100); } else if (tab ===
@@ -2982,6 +3399,7 @@
             function openExportModal(target) {
                 exportTarget = target;
                 const tabNames = {
+                    pending: 'Pending to Ship',
                     shipped: 'Shipped by Seller',
                     stock: 'India WH Stock',
                     dispatched: 'Dispatched by India WH',
@@ -2989,7 +3407,7 @@
                 };
                 document.getElementById('exportTabName').textContent = tabNames[target] || target;
                 const container = document.getElementById('exportColumnsContainer');
-                const cols = COLUMN_DEFS[target] || COLUMN_DEFS.shipped;
+                const cols = COLUMN_DEFS[target] || COLUMN_DEFS.pending;
                 exportColumns = {};
                 cols.forEach(c => { exportColumns[c.key] = true; });
                 container.innerHTML = cols.map(c =>
@@ -3012,7 +3430,8 @@
 
             function getExportData(target) {
                 let data = [];
-                if (target === 'shipped') data = shippedFiltered;
+                if (target === 'pending') data = pendingFiltered;
+                else if (target === 'shipped') data = shippedFiltered;
                 else if (target === 'stock') data = stockFiltered;
                 else if (target === 'dispatched') data = dispatchedFiltered;
                 else if (target === 'scan') data = scanFiltered;
@@ -3022,7 +3441,7 @@
             function exportWithColumns(format) {
                 const data = getExportData(exportTarget);
                 if (!data || data.length === 0) { showToast('⚠️', 'No data to export'); return; }
-                const cols = COLUMN_DEFS[exportTarget] || COLUMN_DEFS.shipped;
+                const cols = COLUMN_DEFS[exportTarget] || COLUMN_DEFS.pending;
                 const selected = cols.filter(c => exportColumns[c.key]);
                 if (selected.length === 0) { showToast('⚠️', 'Please select at least one column'); return; }
                 const headers = selected.map(c => c.label);
@@ -3031,8 +3450,8 @@
                     const row = selected.map(c => {
                         let val = item[c.key] !== undefined ? item[c.key] : '';
                         if (c.key === 'status') {
-                            const map = { shipped: 'Shipped', arrived: 'Arrived', dispatched: 'Dispatched',
-                                received: 'Received' };
+                            const map = { pending: 'Pending', shipped: 'Shipped', arrived: 'Arrived',
+                                dispatched: 'Dispatched', received: 'Received' };
                             val = map[val] || val;
                         }
                         if (c.key === 'paymentType') {
@@ -3061,7 +3480,8 @@
                         const cells = selected.map(c => {
                             let val = item[c.key] !== undefined ? item[c.key] : '';
                             if (c.key === 'status') {
-                                const map = { shipped: 'Shipped', arrived: 'Arrived', dispatched: 'Dispatched',
+                                const map = { pending: 'Pending', shipped: 'Shipped',
+                                    arrived: 'Arrived', dispatched: 'Dispatched',
                                     received: 'Received' };
                                 val = map[val] || val;
                             }
@@ -3076,6 +3496,7 @@
                         return `<tr>${cells}</tr>`;
                     }).join('');
                     const titleMap = {
+                        pending: 'Pending to Ship',
                         shipped: 'Shipped by Seller',
                         stock: 'India WH Stock',
                         dispatched: 'Dispatched by India WH',
@@ -3169,9 +3590,14 @@
                     e.preventDefault();
                     saveWhBarcode();
                 }
+                if (e.key === 'Enter' && document.activeElement === document.getElementById('assignTrackingInput')) {
+                    e.preventDefault();
+                    saveTrackingAssign();
+                }
                 if (e.key === 'Escape') { closeExportModal();
                     closeCommentModal();
-                    closeWhBarcodeModal(); }
+                    closeWhBarcodeModal();
+                    closeTrackingAssignModal(); }
             });
 
             // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
@@ -3182,6 +3608,9 @@
             window.dispatchShipment = dispatchShipment;
             window.manualReceive = manualReceive;
             window.switchTab = switchTab;
+            window.filterPending = filterPending;
+            window.clearPendingFilters = clearPendingFilters;
+            window.changePendingPageSize = changePendingPageSize;
             window.filterShipped = filterShipped;
             window.clearShippedFilters = clearShippedFilters;
             window.changeShippedPageSize = changeShippedPageSize;
@@ -3210,9 +3639,14 @@
             window.saveWhBarcode = saveWhBarcode;
             window.simulateWhBarcodeScan = simulateWhBarcodeScan;
             window.generateRandomWhBarcode = generateRandomWhBarcode;
+            window.openTrackingAssignModal = openTrackingAssignModal;
+            window.closeTrackingAssignModal = closeTrackingAssignModal;
+            window.saveTrackingAssign = saveTrackingAssign;
+            window.generateRandomTracking = generateRandomTracking;
 
             // ─── INIT ──────────────────────────────────────────────────────
 
+            // Seed some demo data for warehouse flow
             const demoArrive = ['TRK-2026-001234', 'TRK-2026-001235'];
             demoArrive.forEach(tracking => {
                 const idx = shippedItems.findIndex(s => s.trackingNumber === tracking);
@@ -3270,22 +3704,24 @@
 
             // Seed comments for demo
             const demoComments = [
+                { tracking: 'MW202623354', comment: 'Customer requested express delivery' },
+                { tracking: 'MW202623357', comment: 'Gift wrapping requested' },
+                { tracking: 'MW202623360', comment: 'Rush delivery requested' },
                 { tracking: 'TRK-2026-001234', comment: 'High priority order - expedite processing' },
                 { tracking: 'TRK-2026-001235', comment: 'Fragile items - handle with care' },
-                { tracking: 'TRK-2026-001236', comment: 'Customer requested gift wrapping' },
-                { tracking: 'TRK-2026-001241', comment: 'Rush delivery - customer called twice' },
             ];
             demoComments.forEach(dc => {
-                const target = stockItems.find(s => s.trackingNumber === dc.tracking) ||
+                const target = pendingItems.find(s => s.orderId === dc.tracking) ||
+                    shippedItems.find(s => s.trackingNumber === dc.tracking) ||
+                    stockItems.find(s => s.trackingNumber === dc.tracking) ||
                     dispatchedItems.find(s => s.trackingNumber === dc.tracking) ||
-                    scannedLogs.find(s => s.trackingNumber === dc.tracking) ||
-                    shippedItems.find(s => s.trackingNumber === dc.tracking);
+                    scannedLogs.find(s => s.trackingNumber === dc.tracking);
                 if (target) target.comment = dc.comment;
             });
 
             renderAll();
-            switchTab('shipped');
-            showToast('✅', 'Warehouse Receiving loaded | Payment & Product link in Barcode modal');
+            switchTab('pending');
+            showToast('✅', 'Warehouse Receiving loaded | Preview removed from Assign Tracking modal');
 
         })();
     </script>
