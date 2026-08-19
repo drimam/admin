@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>MeroWish · Return Processing</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ─── RESET & BASE (exactly as cart) ─── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    body {
+      background: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 20px 16px 40px;
+    }
+    .cart-container {
+      max-width: 860px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.2);
+      padding: 28px 28px 20px;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 650;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .currency-toggle {
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px;
+      display: inline-flex;
+      border: 1px solid #cbd5e1;
+    }
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.1s;
+      color: #334155;
+    }
+    .toggle-btn.active {
+      background: white;
+      color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    /* ─── CARD (identical to cart item) ─── */
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 12px 16px;
+      border: 1px solid #e2e8f0;
+      transition: 0.15s;
+      flex-wrap: wrap;
+    }
+    .cart-item:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .item-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      background: #f8fafc;
+      object-fit: cover;
+      border: 1px solid #d1d9e6;
+    }
+    .item-info {
+      flex: 2;
+      min-width: 160px;
+    }
+    .item-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+    .pricing-details {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .unit-price {
+      font-weight: 600;
+      color: #334155;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+    }
+    .item-total {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #1e293b;
+    }
+    .item-total small {
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 40px;
+      padding: 4px;
+      border: 1px solid #cbd5e1;
+      margin-left: auto;
+    }
+    .quantity-btn {
+      background: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      color: #1e293b;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .quantity-btn:hover { background: #e2e8f0; }
+    .quantity-number {
+      width: 44px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .breakdown-btn {
+      background: none;
+      border: 1px solid #94a3b8;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #2563eb;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      font-size: 0.9rem;
+      transition: 0.15s;
+    }
+    .breakdown-btn:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+    /* ─── SUMMARY PANEL (same as cart) ─── */
+    .summary-panel {
+      background: #f8fafc;
+      border-radius: 24px;
+      padding: 20px 24px;
+      margin: 28px 0 24px;
+      border: 1px solid #d9e2ef;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px dashed #cbd5e1;
+      font-size: 1.1rem;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row.total {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #0f172a;
+      border-top: 2px solid #b9c7da;
+      border-bottom: none;
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+    .advance-due {
+      display: flex;
+      justify-content: space-between;
+      background: #eef2ff;
+      border-radius: 18px;
+      padding: 16px 20px;
+      margin-top: 12px;
+    }
+    .advance-item {
+      text-align: center;
+      flex: 1;
+    }
+    .advance-item .label {
+      font-size: 0.9rem;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+    .advance-item .value {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: #1e293b;
+    }
+    .pay-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1e293b;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 60px;
+      margin-top: 24px;
+    }
+    .pay-amount {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pay-amount small {
+      font-weight: 400;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    .pay-now-btn {
+      background: #3b82f6;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 12px 32px;
+      border-radius: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.1s;
+      border: 1px solid #2563eb;
+    }
+    .pay-now-btn:hover {
+      background: #2563eb;
+    }
+
+    /* ─── BOTTOM SHEET (breakdown modal) ─── */
+    .overlay {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(3px);
+      opacity: 0; visibility: hidden;
+      transition: 0.2s; z-index: 998;
+    }
+    .overlay.active { opacity: 1; visibility: visible; }
+    .bottom-sheet {
+      position: fixed; bottom:0; left:0; width:100%;
+      background: white;
+      border-top-left-radius: 32px; border-top-right-radius: 32px;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.2,0.9,0.3,1);
+      z-index: 999; max-height: 85vh; overflow-y: auto;
+      padding: 24px 28px 32px;
+    }
+    .bottom-sheet.active { transform: translateY(0); }
+    .sheet-header {
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;
+    }
+    .sheet-header h3 { font-size: 1.6rem; font-weight: 650; }
+    .close-sheet {
+      background: #f1f5f9; border: none; width: 42px; height: 42px;
+      border-radius: 50%; font-size: 1.4rem; cursor: pointer;
+    }
+    .cost-breakdown { background: #f8fafc; border-radius: 24px; padding: 20px; }
+    .breakdown-row {
+      display: flex; justify-content: space-between; padding: 12px 0;
+      border-bottom: 1px dashed #d1d9e6; font-size: 1.05rem;
+    }
+    .breakdown-row.total { font-weight: 700; font-size: 1.3rem; border-top: 2px solid #cbd5e1; border-bottom: none; }
+    .value.inr { color:#2563eb; } .value.npr { color:#b45309; }
+
+    /* ─── ADDITIONAL STYLES FOR RETURN PAGE ─── */
+
+    /* Stats cards (matching stat-card from cart) */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .stat-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .stat-value-sm {
+      font-size: 20px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .stat-label-one {
+      font-size: 11px;
+      font-weight: 500;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    /* Filter section (matching cart's filter style) */
+    .filter-section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 12px 16px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 16px;
+    }
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+    .filter-group input,
+    .filter-group select {
+      font-size: 13px;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      outline: none;
+      background: #fff;
+      min-height: 38px;
+    }
+    .filter-group input:focus,
+    .filter-group select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 2px rgba(79,70,229,0.15);
+    }
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.15s;
+      min-height: 38px;
+    }
+    .btn-outline:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .btn-primary-sm {
+      background: #4f46e5;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+      min-height: 38px;
+    }
+    .btn-primary-sm:hover { background: #4338ca; }
+
+    /* Return card (extends cart-item) */
+    .return-card .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f1f5f9;
+      margin-bottom: 8px;
+    }
+    .return-card .card-body {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .return-card .card-actions {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 6px;
+    }
+    .return-card .card-actions .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.15s;
+      border: 1px solid transparent;
+      gap: 6px;
+      min-height: 40px;
+    }
+    .return-card .card-actions .action-btn.primary-btn {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: #fff;
+    }
+    .return-card .card-actions .action-btn.primary-btn:hover {
+      background: #4338ca;
+    }
+    .return-card .card-actions .action-btn.success-btn {
+      background: #10b981;
+      border-color: #10b981;
+      color: #fff;
+    }
+    .return-card .card-actions .action-btn.outline-btn {
+      background: transparent;
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+    .return-card .card-actions .action-btn.outline-btn:hover {
+      background: #f1f5f9;
+    }
+    .return-card .card-actions .action-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    /* Badges */
+    .return-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .return-badge.eligible {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .return-badge.returned {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .return-badge.expired {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .time-remaining {
+      font-size: 12px;
+      color: #059669;
+      font-weight: 500;
+    }
+    .time-remaining.expired { color: #dc2626; }
+
+    /* Product image + zoom (unchanged) */
+    .product-img-wrapper {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 6px;
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
+    }
+    .product-img-wrapper .product-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+      transition: all 0.2s;
+      aspect-ratio: 1/1;
+      background: #f1f5f9;
+    }
+    .product-img-wrapper:hover .product-thumb {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+    .product-img-zoom {
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%) scale(0.9);
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      border-radius: 10px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      background: #fff;
+      border: 3px solid #4f46e5;
+      aspect-ratio: 1/1;
+    }
+    .product-img-wrapper:hover .product-img-zoom {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+    @media (max-width:767px) {
+      .product-img-wrapper { width: 44px; height: 44px; }
+      .product-img-wrapper .product-thumb { width: 44px; height: 44px; }
+      .product-img-zoom { left: 50%; top: auto; bottom: calc(100% + 8px); transform: translateX(-50%) scale(0.9); width: 120px; height: 120px; }
+      .product-img-wrapper:hover .product-img-zoom { transform: translateX(-50%) scale(1); }
+    }
+
+    .product-cell {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .product-cell .product-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      flex: 1;
+    }
+    .product-cell .product-info .product-name {
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1.3;
+      color: #0f172a;
+    }
+    .product-cell .product-info .product-name a {
+      color: #4f46e5;
+      text-decoration: underline;
+    }
+    .product-cell .product-info .product-name a:hover { color: #3730a3; }
+    .product-cell .product-info .product-meta {
+      font-size: 12px;
+      color: #94a3b8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 12px;
+      margin-top: 2px;
+    }
+    .product-cell .product-info .product-meta .order-id { font-weight: 600; color: #8b5cf6; }
+    .product-cell .product-info .delivery-date {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .card-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 4px 12px;
+    }
+    .card-row .label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      min-width: 70px;
+    }
+    .card-row .value {
+      font-size: 14px;
+      color: #1e293b;
+      font-weight: 500;
+      flex: 1;
+      word-break: break-word;
+    }
+
+    /* ─── MODAL (matching cart's bottom sheet style) ─── */
+    .modal-backdrop {
+      background: rgba(15,23,42,0.6);
+      backdrop-filter: blur(4px);
+      position: fixed;
+      inset: 0;
+      z-index: 45;
+    }
+    .modal-content {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      z-index: 50;
+      padding: 0;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .modal-header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 32px 32px 0 0;
+      z-index: 5;
+    }
+    .modal-body { padding: 20px 24px 24px; }
+    .modal-footer {
+      padding: 12px 24px 20px;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .breakdown-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .breakdown-table tr { border-bottom: 1px solid #f1f5f9; }
+    .breakdown-table tr:last-child { border-bottom: none; }
+    .breakdown-table td { padding: 8px 4px; }
+    .breakdown-table .label-cell { color: #475569; font-weight: 500; }
+    .breakdown-table .value-cell { text-align: right; font-weight: 600; color: #0f172a; }
+    .breakdown-table .refundable { color: #059669; }
+    .breakdown-table .non-refundable { color: #dc2626; }
+    .breakdown-table .total-row { border-top: 2px solid #e2e8f0; font-weight: 700; }
+    .breakdown-table .total-row td { padding-top: 12px; }
+    .breakdown-table .total-row .value-cell { font-size: 18px; }
+    .badge-refundable {
+      display: inline-block;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 10px;
+      border-radius: 12px;
+      margin-left: 6px;
+    }
+    .badge-nonrefundable {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 10px;
+      border-radius: 12px;
+      margin-left: 6px;
+    }
+
+    /* ─── TOAST (same as cart) ─── */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: none;
+    }
+    #toast .toast-inner {
+      background: #1e293b;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    #toast.show { display: block !important; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes toastIn { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateY(0); opacity: 1; } to { transform: translateY(30px); opacity: 0; } }
+    .toast { animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards; }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .empty-state .empty-icon { font-size: 56px; display: block; margin-bottom: 16px; }
+    .empty-state .empty-title { font-size: 20px; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
+    .empty-state .empty-desc { font-size: 14px; color: #94a3b8; max-width: 400px; margin: 0 auto; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width:767px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .stat-card { padding: 12px; }
+      .stat-value-sm { font-size: 16px; }
+      .filter-section { flex-direction: column; align-items: stretch; }
+      .filter-actions { margin-left: 0; justify-content: flex-end; }
+      .cart-item { flex-direction: column; align-items: flex-start; }
+      .item-info { width: 100%; }
+      .quantity-control { margin-left: 0; }
+      .modal-content { max-width: 95%; }
+    }
+    @media (max-width:480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cart-container">
+    <div class="header-row">
+      <h2><i class="fas fa-sync-alt"></i> Return Processing</h2>
+    </div>
+
+    <!-- ─── STATS ─── -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#eef2ff;color:#4f46e5;">📦</div>
+        <div>
+          <p class="stat-label-one">Delivered (24h)</p>
+          <p class="stat-value-sm" id="statDelivered">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#d1fae5;color:#059669;">✅</div>
+        <div>
+          <p class="stat-label-one">Eligible</p>
+          <p class="stat-value-sm" style="color:#059669;" id="statEligible">0</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#fee2e2;color:#dc2626;">↩️</div>
+        <div>
+          <p class="stat-label-one">Returned</p>
+          <p class="stat-value-sm" style="color:#dc2626;" id="statReturned">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── FILTERS ─── -->
+    <div class="filter-section">
+      <div class="filter-group" style="flex:1;min-width:120px;">
+        <label style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;white-space:nowrap;">Search:</label>
+        <input type="text" id="searchInput" placeholder="Order ID, Product..." style="flex:1;min-width:80px;" oninput="filterOrders()" />
+      </div>
+      <div class="filter-group">
+        <label style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;white-space:nowrap;">Status:</label>
+        <select id="statusFilter" style="font-size:13px;" onchange="filterOrders()">
+          <option value="all">All</option>
+          <option value="eligible">Eligible</option>
+          <option value="returned">Returned</option>
+          <option value="expired">Expired</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button onclick="clearFilters()" class="btn-outline" style="font-size:13px;">Clear</button>
+        <button onclick="filterOrders()" class="btn-primary-sm" style="font-size:13px;">Apply</button>
+      </div>
+    </div>
+    <div id="activeFilters" style="display:flex;flex-wrap:wrap;gap:4px 8px;margin-bottom:12px;"></div>
+
+    <!-- ─── RETURNS LIST ─── -->
+    <div id="returnsContainer" class="cart-items">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ─── RETURN BREAKDOWN MODAL ─── -->
+  <div id="returnModal" style="display:none;">
+    <div class="modal-backdrop" onclick="closeReturnModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size:18px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:8px;">🔄 Return Confirmation</h3>
+        <button onclick="closeReturnModal()" style="padding:6px 8px;border-radius:8px;border:none;background:transparent;color:#64748b;cursor:pointer;"><svg style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div id="returnProductInfo" style="display:flex;gap:14px;align-items:flex-start;padding-bottom:14px;border-bottom:1px solid #f1f5f9;margin-bottom:14px;"></div>
+
+        <p style="font-size:15px;font-weight:600;color:#0f172a;margin-bottom:10px;">💰 Refundable Amount Breakdown</p>
+        <div style="background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow:hidden;padding:4px 0;">
+          <table class="breakdown-table" id="breakdownTable">
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px;padding:12px 16px;background:#fef3c7;border-radius:8px;border:1px solid #fde68a;font-size:13px;color:#92400e;">
+          ⚠️ <strong>Note:</strong> Import Duty, VAT, and International Shipping Fees are <strong>non-refundable</strong>. Only the Item Price and Service Fees are refundable.
+        </div>
+
+        <div style="margin-top:20px;display:flex;gap:12px;">
+          <button onclick="confirmReturn()" style="flex:1;background:#4f46e5;color:#fff;padding:12px;border-radius:40px;border:none;font-weight:600;cursor:pointer;transition:background 0.15s;">🔄 Return</button>
+          <button onclick="closeReturnModal()" style="flex:1;background:#e2e8f0;color:#475569;padding:12px;border-radius:40px;border:none;font-weight:600;cursor:pointer;transition:background 0.15s;">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TOAST ─── -->
+  <div id="toast">
+    <div class="toast-inner">
+      <span id="toastIcon">✅</span>
+      <span id="toastMessage">Action completed!</span>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ─── DATA ──────────────────────────────────────────────────────
+
+      function getProductImage(productName) {
+        const seed = productName.replace(/\s/g, '').toLowerCase();
+        return `https://picsum.photos/seed/${seed}/200/200`;
+      }
+
+      function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function formatDate(date) {
+        const d = new Date(date);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit',
+          minute: '2-digit' });
+      }
+
+      function getTimeRemaining(deliveryDate) {
+        const now = new Date();
+        const delivered = new Date(deliveryDate);
+        const elapsed = (now - delivered) / (1000 * 60 * 60);
+        const remaining = 24 - elapsed;
+        if (remaining <= 0) return { expired: true, hours: 0, label: 'Expired' };
+        if (remaining < 1) {
+          const mins = Math.round(remaining * 60);
+          return { expired: false, hours: remaining, label: `${mins} minute${mins > 1 ? 's' : ''}` };
+        }
+        return { expired: false, hours: remaining, label: `${Math.floor(remaining)}h ${Math.round((remaining % 1) * 60)}m` };
+      }
+
+      // ─── SAMPLE ORDERS ─────────────────────────────────────────────
+
+      function generateOrders() {
+        const now = new Date();
+        const orders = [];
+        const products = [
+          { name: 'Wireless Bluetooth Earphones - Black', price: 'NPR 665.07', link: 'https://example.com/prod1',
+            img: getProductImage('Wireless Bluetooth Earphones - Black'), weight: '0.50 KG',
+            invoice: 'INR 176.00' },
+          { name: 'Samsung Galaxy Watch 6 - 44mm', price: 'NPR 3,420.50', link: 'https://example.com/prod3',
+            img: getProductImage('Samsung Galaxy Watch 6 - 44mm'), weight: '2.80 KG', invoice: 'INR 890.00' },
+          { name: 'Home Theater Sound System', price: 'NPR 5,100.00', link: 'https://example.com/prod5',
+            img: getProductImage('Home Theater Sound System'), weight: '4.50 KG', invoice: 'INR 1,350.00' },
+          { name: 'Yoga Mat Premium', price: 'NPR 1,750.00', link: 'https://example.com/prod6',
+            img: getProductImage('Yoga Mat Premium'), weight: '0.90 KG', invoice: 'INR 450.00' },
+          { name: 'Leather Handbag - Brown', price: 'NPR 2,200.00', link: 'https://example.com/prod8',
+            img: getProductImage('Leather Handbag - Brown'), weight: '1.60 KG', invoice: 'INR 570.00' },
+          { name: 'Noise Cancelling Headphones', price: 'NPR 3,200.00', link: 'https://example.com/prod10',
+            img: getProductImage('Noise Cancelling Headphones'), weight: '0.60 KG', invoice: 'INR 850.00' },
+          { name: 'Smart LED TV 55"', price: 'NPR 68,500.00', link: 'https://example.com/prod9',
+            img: getProductImage('Smart LED TV 55"'), weight: '15.00 KG', invoice: 'INR 18,200.00' },
+        ];
+
+        const users = ['John Doe', 'Jane Smith', 'Robert Johnson', 'Emily Davis', 'Michael Brown'];
+
+        for (let i = 0; i < 12; i++) {
+          const product = products[i % products.length];
+          const user = users[i % users.length];
+          const hoursAgo = Math.random() * 48;
+          const deliveryDate = new Date(now - hoursAgo * 60 * 60 * 1000);
+
+          const priceINR = parseFloat(product.invoice.replace(/[^0-9.]/g, ''));
+          const INR_TO_NPR = 1.6015;
+          const priceNPR = priceINR * INR_TO_NPR;
+          const importDuty = priceNPR * 0.15;
+          const serviceFees = priceNPR * 0.0345;
+          const vat = (priceNPR + importDuty + serviceFees) * 0.13;
+          const shipping = 280;
+
+          const orderId = 'MW2026' + String(10000 + i).padStart(5, '0');
+          const status = hoursAgo <= 24 ? 'eligible' : 'expired';
+          const returned = (i % 5 === 0 && status === 'eligible');
+
+          orders.push({
+            id: orderId,
+            user: user,
+            productName: product.name,
+            productLink: product.link,
+            productImage: product.img,
+            quantity: Math.floor(Math.random() * 3) + 1,
+            totalAmount: `NPR ${(priceNPR + importDuty + serviceFees + vat + shipping).toFixed(2)}`,
+            deliveryDate: deliveryDate.toISOString(),
+            status: returned ? 'returned' : status,
+            costBreakdown: {
+              itemPrice: priceNPR,
+              importDuty: importDuty,
+              serviceFees: serviceFees,
+              vat: vat,
+              shipping: shipping,
+              total: priceNPR + importDuty + serviceFees + vat + shipping,
+              refundable: priceNPR + serviceFees,
+              nonRefundable: importDuty + vat + shipping,
+            },
+            paymentType: i % 2 === 0 ? 'PREPAID' : 'COD',
+            trackingNumber: 'TRK-2026-' + String(100000 + i).padStart(6, '0'),
+            comment: i % 3 === 0 ? 'Customer requested return due to size issue' : '',
+            returnedDate: returned ? new Date(now - Math.random() * 2 * 60 * 60 * 1000).toISOString() : null,
+          });
+        }
+        return orders;
+      }
+
+      let orders = generateOrders();
+      let filteredOrders = [];
+      let returnTargetId = null;
+
+      // ─── HELPERS ────────────────────────────────────────────────────
+
+      function showToast(icon, msg) {
+        const t = document.getElementById('toast');
+        document.getElementById('toastIcon').textContent = icon;
+        document.getElementById('toastMessage').textContent = msg;
+        t.classList.add('show');
+        t.classList.add('toast');
+        setTimeout(() => { t.classList.remove('show');
+          t.classList.remove('toast'); }, 2800);
+      }
+
+      function getStatusBadge(status, deliveryDate) {
+        if (status === 'returned') {
+          return `<span class="return-badge returned">↩️ Returned</span>`;
+        }
+        if (status === 'expired') {
+          return `<span class="return-badge expired">⏰ Expired</span>`;
+        }
+        const remaining = getTimeRemaining(deliveryDate);
+        if (remaining.expired) {
+          return `<span class="return-badge expired">⏰ Expired</span>`;
+        }
+        return `<span class="return-badge eligible">✅ Eligible <span class="time-remaining">(${remaining.label} left)</span></span>`;
+      }
+
+      function isEligible(deliveryDate) {
+        const remaining = getTimeRemaining(deliveryDate);
+        return !remaining.expired;
+      }
+
+      // ─── FILTERS ──────────────────────────────────────────────────
+
+      function filterOrders() {
+        const search = document.getElementById('searchInput').value.toLowerCase().trim();
+        const status = document.getElementById('statusFilter').value;
+
+        filteredOrders = orders.filter(order => {
+          if (order.status === 'pending' || order.status === 'shipped') return false;
+          if (search) {
+            const match = order.id.toLowerCase().includes(search) ||
+              order.productName.toLowerCase().includes(search) ||
+              order.user.toLowerCase().includes(search);
+            if (!match) return false;
+          }
+          if (status === 'eligible' && order.status !== 'eligible') return false;
+          if (status === 'returned' && order.status !== 'returned') return false;
+          if (status === 'expired' && order.status !== 'expired') return false;
+          return true;
+        });
+
+        renderResults();
+        updateActiveFilters();
+        updateStats();
+      }
+
+      function clearFilters() {
+        document.getElementById('searchInput').value = '';
+        document.getElementById('statusFilter').value = 'all';
+        filterOrders();
+      }
+
+      function updateActiveFilters() {
+        const container = document.getElementById('activeFilters');
+        let html = '';
+        const search = document.getElementById('searchInput').value.trim();
+        const status = document.getElementById('statusFilter').value;
+
+        if (search) html +=
+          `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#eff6ff;color:#1d4ed8;border-radius:9999px;font-size:11px;font-weight:500;">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchInput').value='';filterOrders();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
+        if (status !== 'all') {
+          const labels = { eligible: '✅ Eligible', returned: '↩️ Returned', expired: '⏰ Expired' };
+          html +=
+            `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:9999px;font-size:11px;font-weight:500;">${labels[status] || status} <button onclick="document.getElementById('statusFilter').value='all';filterOrders();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
+        }
+        container.innerHTML = html || '';
+      }
+
+      // ─── STATS ──────────────────────────────────────────────────────
+
+      function updateStats() {
+        const delivered = orders.filter(o => o.status === 'eligible' || o.status === 'expired' || o.status === 'returned')
+          .length;
+        const eligible = orders.filter(o => o.status === 'eligible' && isEligible(o.deliveryDate)).length;
+        const returned = orders.filter(o => o.status === 'returned').length;
+
+        document.getElementById('statDelivered').textContent = delivered;
+        document.getElementById('statEligible').textContent = eligible;
+        document.getElementById('statReturned').textContent = returned;
+      }
+
+      // ─── RENDER ────────────────────────────────────────────────────
+
+      function renderResults() {
+        const container = document.getElementById('returnsContainer');
+
+        if (filteredOrders.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <span class="empty-icon">📭</span>
+              <div class="empty-title">No returns available</div>
+              <div class="empty-desc">You don't have any orders eligible for return at the moment. Orders can be returned within 24 hours of delivery.</div>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = filteredOrders.map(order => {
+          const remaining = getTimeRemaining(order.deliveryDate);
+          const isEligibleNow = order.status === 'eligible' && !remaining.expired;
+          const statusBadge = getStatusBadge(order.status, order.deliveryDate);
+          const showReturnBtn = isEligibleNow && order.status !== 'returned';
+          const deliveryFormatted = formatDate(order.deliveryDate);
+
+          let actionButtons = '';
+          if (showReturnBtn) {
+            actionButtons =
+              `<button onclick="openReturnModal('${order.id}')" class="action-btn primary-btn">🔄 Return This Item</button>`;
+          } else if (order.status === 'returned') {
+            actionButtons =
+              `<button class="action-btn success-btn" disabled style="opacity:0.7;cursor:default;">✅ Returned on ${formatDate(order.returnedDate)}</button>`;
+          } else if (order.status === 'expired' || remaining.expired) {
+            actionButtons =
+              `<button class="action-btn outline-btn" disabled style="opacity:0.6;cursor:default;">⏰ Return Window Expired</button>`;
+          }
+
+          return `
+            <div class="cart-item return-card">
+              <div class="card-header">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                  <span style="font-weight:600;font-size:14px;color:#4f46e5;">${order.id}</span>
+                  <span style="font-size:12px;color:#64748b;font-weight:500;">📦 ${order.user}</span>
+                </div>
+                <div>${statusBadge}</div>
+              </div>
+              <div class="card-body">
+                <div class="product-cell">
+                  <div class="product-img-wrapper">
+                    <img src="${order.productImage}" alt="${escapeHtml(order.productName)}" class="product-thumb" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%2256%22><rect fill=%22%23f1f5f9%22 width=%2256%22 height=%2256%22 rx=%228%22/><text x=%2228%22 y=%2233%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                    <img src="${order.productImage}" alt="Zoom" class="product-img-zoom" loading="lazy" onerror="this.style.display='none'">
+                  </div>
+                  <div class="product-info">
+                    <div class="product-name">
+                      <a href="${order.productLink}" target="_blank">${escapeHtml(order.productName)}</a>
+                      <span style="font-size:12px;color:#64748b;font-weight:400;">× ${order.quantity}</span>
+                    </div>
+                    <div class="product-meta">
+                      <span class="order-id">📋 ${order.id}</span>
+                      <span>🔢 ${order.trackingNumber || 'N/A'}</span>
+                      <span>💳 ${order.paymentType}</span>
+                    </div>
+                    <div class="delivery-date">
+                      📅 Delivered: ${deliveryFormatted}
+                      ${isEligibleNow ? `<span style="color:#059669;font-weight:600;"> (${remaining.label} left)</span>` : ''}
+                      ${order.status === 'returned' ? `<span style="color:#64748b;"> • Returned: ${formatDate(order.returnedDate)}</span>` : ''}
+                    </div>
+                    ${order.comment ? `<div style="font-size:12px;color:#64748b;margin-top:4px;font-style:italic;">💬 ${escapeHtml(order.comment)}</div>` : ''}
+                  </div>
+                </div>
+                <div class="card-row">
+                  <span class="label">Total Amount</span>
+                  <span class="value" style="font-weight:700;color:#0f172a;">${order.totalAmount}</span>
+                </div>
+              </div>
+              <div class="card-actions">
+                ${actionButtons}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ─── RETURN MODAL ─────────────────────────────────────────────
+
+      function openReturnModal(orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (!order) { showToast('❌', 'Order not found'); return; }
+        returnTargetId = orderId;
+
+        const remaining = getTimeRemaining(order.deliveryDate);
+        if (remaining.expired || order.status === 'expired') {
+          showToast('⏰', 'Return window has expired for this order');
+          return;
+        }
+        if (order.status === 'returned') {
+          showToast('↩️', 'This order has already been returned');
+          return;
+        }
+
+        const productInfo = document.getElementById('returnProductInfo');
+        productInfo.innerHTML = `
+          <img src="${order.productImage}" alt="${escapeHtml(order.productName)}" style="width:56px;height:56px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;flex-shrink:0;background:#f1f5f9;" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%2256%22><rect fill=%22%23f1f5f9%22 width=%2256%22 height=%2256%22 rx=%228%22/><text x=%2228%22 y=%2233%22 text-anchor=%22middle%22 font-size=%2228%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+          <div style="flex:1;min-width:0;">
+            <div style="font-weight:600;font-size:15px;color:#0f172a;"><a href="${order.productLink}" target="_blank" style="color:#4f46e5;text-decoration:underline;">${escapeHtml(order.productName)}</a></div>
+            <div style="font-size:12px;color:#94a3b8;margin-top:2px;">
+              <span>📋 ${order.id}</span>
+              <span style="margin-left:12px;">📦 QTY: ${order.quantity}</span>
+              <span style="margin-left:12px;">💳 ${order.paymentType}</span>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:#0f172a;margin-top:4px;">${order.totalAmount}</div>
+          </div>
+        `;
+
+        const cb = order.costBreakdown;
+        const tbody = document.querySelector('#breakdownTable tbody');
+        const refundableTotal = cb.refundable;
+        const nonRefundableTotal = cb.nonRefundable;
+        const grandTotal = cb.total;
+
+        const formatNPR = (v) => `NPR ${v.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+
+        tbody.innerHTML = `
+          <tr>
+            <td class="label-cell">Item Price <span class="badge-refundable">Refundable ✅</span></td>
+            <td class="value-cell refundable">${formatNPR(cb.itemPrice)}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Service Fees <span class="badge-refundable">Refundable ✅</span></td>
+            <td class="value-cell refundable">${formatNPR(cb.serviceFees)}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Import Duty <span class="badge-nonrefundable">Non-Refundable ❌</span></td>
+            <td class="value-cell non-refundable">${formatNPR(cb.importDuty)}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">VAT <span class="badge-nonrefundable">Non-Refundable ❌</span></td>
+            <td class="value-cell non-refundable">${formatNPR(cb.vat)}</td>
+          </tr>
+          <tr>
+            <td class="label-cell">Int'l Shipping <span class="badge-nonrefundable">Non-Refundable ❌</span></td>
+            <td class="value-cell non-refundable">${formatNPR(cb.shipping)}</td>
+          </tr>
+          <tr class="total-row">
+            <td class="label-cell">Refundable Amount</td>
+            <td class="value-cell" style="color:#059669;font-size:18px;">${formatNPR(refundableTotal)}</td>
+          </tr>
+          <tr style="border-top:1px solid #e2e8f0;">
+            <td class="label-cell" style="color:#64748b;">Non-Refundable</td>
+            <td class="value-cell" style="color:#dc2626;font-size:14px;">${formatNPR(nonRefundableTotal)}</td>
+          </tr>
+          <tr style="border-top:1px solid #e2e8f0;">
+            <td class="label-cell" style="font-weight:600;">Original Total</td>
+            <td class="value-cell" style="font-weight:600;font-size:14px;color:#64748b;">${formatNPR(grandTotal)}</td>
+          </tr>
+        `;
+
+        document.getElementById('returnModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeReturnModal() {
+        document.getElementById('returnModal').style.display = 'none';
+        document.body.style.overflow = '';
+        returnTargetId = null;
+      }
+
+      function confirmReturn() {
+        if (!returnTargetId) { showToast('❌', 'No order selected'); return; }
+        const order = orders.find(o => o.id === returnTargetId);
+        if (!order) { showToast('❌', 'Order not found'); return; }
+
+        const remaining = getTimeRemaining(order.deliveryDate);
+        if (remaining.expired || order.status === 'expired') {
+          showToast('⏰', 'Return window has expired');
+          closeReturnModal();
+          filterOrders();
+          return;
+        }
+        if (order.status === 'returned') {
+          showToast('↩️', 'Already returned');
+          closeReturnModal();
+          return;
+        }
+
+        order.status = 'returned';
+        order.returnedDate = new Date().toISOString();
+
+        closeReturnModal();
+        filterOrders();
+        updateStats();
+        showToast('✅', `Return processed for ${order.id}. Refund of ${order.totalAmount} will be initiated.`);
+      }
+
+      // ─── REFRESH ──────────────────────────────────────────────────
+
+      function refreshData() {
+        filterOrders();
+        updateStats();
+        showToast('🔄', 'Data refreshed');
+      }
+
+      // ─── KEYBOARD SHORTCUTS ──────────────────────────────────────
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeReturnModal();
+        }
+        if (e.key === 'Enter') {
+          if (document.getElementById('returnModal').style.display === 'flex') {
+            confirmReturn();
+          }
+        }
+      });
+
+      // ─── INIT ──────────────────────────────────────────────────────
+
+      filterOrders();
+      updateStats();
+      showToast('🔄', 'Return Processing loaded');
+
+      // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
+
+      window.filterOrders = filterOrders;
+      window.clearFilters = clearFilters;
+      window.refreshData = refreshData;
+      window.openReturnModal = openReturnModal;
+      window.closeReturnModal = closeReturnModal;
+      window.confirmReturn = confirmReturn;
+      window.showToast = showToast;
+
+    })();
+  </script>
+</body>
+</html>
