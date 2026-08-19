@@ -1491,7 +1491,6 @@
             height: 15px;
             flex-shrink: 0;
         }
-        /* Tooltip label on hover */
         .action-icon-btn .action-label {
             display: none;
             font-size: 9px;
@@ -2149,6 +2148,46 @@
             border: 1px solid #fecaca;
             margin-left: 4px;
         }
+
+        /* ─── FULL PAYMENT INDICATOR ─── */
+        .full-payment-active {
+            position: relative;
+        }
+        .full-payment-active::after {
+            content: "✓";
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 8px;
+            color: #fff;
+            background: #10b981;
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            border: 1.5px solid #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .action-icon-btn.full-payment-active {
+            color: #10b981;
+        }
+        .action-icon-btn.full-payment-active:hover {
+            background: #d1fae5;
+        }
+        .full-payment-badge {
+            display: inline-block;
+            background: #d1fae5;
+            color: #065f46;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 1px 10px;
+            border-radius: 12px;
+            border: 1px solid #6ee7b7;
+            margin-left: 4px;
+        }
     </style>
 </head>
 <body>
@@ -2321,6 +2360,7 @@
                                 <option value="gold">GOLD</option>
                                 <option value="diamond">DIAMOND</option>
                                 <option value="expired">Expired</option>
+                                <option value="fullpayment">Full Payment</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -2360,12 +2400,12 @@
                         <table class="user-table">
                             <thead>
                                 <tr>
-                                    <th style="text-align:center;width:110px;min-width:110px;">Action</th>
+                                    <th style="text-align:center;width:120px;min-width:120px;">Action</th>
                                     <th style="width:100px;">User ID</th>
                                     <th>Full Name</th>
                                     <th>Email</th>
                                     <th style="width:130px;">Mobile Number</th>
-                                    <th style="width:140px;">Membership</th>
+                                    <th style="width:160px;">Membership</th>
                                     <th style="width:100px;">Status</th>
                                 </tr>
                             </thead>
@@ -2580,6 +2620,28 @@
         </div>
     </div>
 
+    <!-- ─── ACTIVATE FULL PAYMENT FONEPAY QR MODAL ─── -->
+    <div id="activatePaymentModal" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;">
+        <div class="modal-backdrop" onclick="closeActivatePaymentModal()"></div>
+        <div class="modal-content max-w-md">
+            <div class="modal-header">
+                <h3 style="font-size:16px;font-weight:700;color:#1e293b;">💳 Activate Full Payment (FonePay QR)</h3>
+                <button onclick="closeActivatePaymentModal()" style="padding:6px 8px;border-radius:8px;border:none;background:transparent;color:#64748b;cursor:pointer;"><svg style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:15px;color:#1e293b;">Confirm activation of <strong>Full Payment FonePay QR</strong> for user <span id="paymentUserName" style="font-weight:600;color:#4f46e5;">—</span>.</p>
+                <p style="font-size:13px;color:#64748b;margin-top:8px;">This will enable the user to pay the full amount via FonePay QR code. The user will receive a notification with the payment link.</p>
+                <div style="margin-top:12px;padding:10px 14px;background:#f0fdf4;border-radius:8px;border:1px solid #bbf7d0;font-size:13px;color:#166534;">
+                    ✅ User will be able to pay the total order amount using FonePay QR.
+                </div>
+            </div>
+            <div style="display:flex;gap:12px;padding:12px 16px;border-top:1px solid #e2e8f0;">
+                <button onclick="confirmActivatePayment()" style="flex:1;background:#4f46e5;color:#fff;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer;transition:background 0.15s;">💳 Activate</button>
+                <button onclick="closeActivatePaymentModal()" style="flex:1;background:#e2e8f0;color:#475569;padding:10px;border-radius:10px;border:none;font-weight:600;cursor:pointer;transition:background 0.15s;">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ─── DELETE CONFIRM MODAL ─── -->
     <div id="deleteModal" style="position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;">
         <div class="modal-backdrop" onclick="closeDeleteModal()"></div>
@@ -2640,7 +2702,6 @@
                 return addDays(now, days[tier] || 0);
             }
 
-            // Generate a random IP for each user
             function generateIp() {
                 const parts = [];
                 for (let i = 0; i < 4; i++) {
@@ -2649,59 +2710,66 @@
                 return parts.join('.');
             }
 
-            // Initial users with IPs
             let users = [
                 { id: 'FF66258', name: 'Sujit Dhakal', email: 'suzit.dhakal@gmail.com', mobile: '9851130555',
                     membership: 'free', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2026,
                         4, 1),
-                    upgradedAt: null, expiresAt: null, activity: [] },
+                    upgradedAt: null, expiresAt: null, activity: [], fullPayment: false },
                 { id: 'FF77259', name: 'Alisha Sharma', email: 'alisha.sharma@email.com', mobile: '9851234567',
                     membership: 'silver', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2026,
                         3, 15),
-                    upgradedAt: new Date(2026, 3, 15), expiresAt: addDays(new Date(2026, 3, 15), 90), activity: [] },
+                    upgradedAt: new Date(2026, 3, 15), expiresAt: addDays(new Date(2026, 3, 15), 90), activity: [],
+                    fullPayment: true },
                 { id: 'FF88260', name: 'Ramesh Adhikari', email: 'ramesh.adhikari@email.com', mobile: '9812345678',
                     membership: 'gold', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2026,
                         2, 20),
-                    upgradedAt: new Date(2026, 2, 20), expiresAt: addDays(new Date(2026, 2, 20), 180), activity: [] },
+                    upgradedAt: new Date(2026, 2, 20), expiresAt: addDays(new Date(2026, 2, 20), 180), activity: [],
+                    fullPayment: false },
                 { id: 'FF99261', name: 'Priya Gurung', email: 'priya.gurung@email.com', mobile: '9823456789',
                     membership: 'diamond', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2026,
                         1, 10),
-                    upgradedAt: new Date(2026, 1, 10), expiresAt: addDays(new Date(2026, 1, 10), 365), activity: [] },
+                    upgradedAt: new Date(2026, 1, 10), expiresAt: addDays(new Date(2026, 1, 10), 365), activity: [],
+                    fullPayment: true },
                 { id: 'FF11262', name: 'Bikash Thapa', email: 'bikash.thapa@email.com', mobile: '9834567890',
                     membership: 'free', blocked: true, ipBlocks: ['192.168.1.100'], ipAddress: generateIp(),
                     createdAt: new Date(2026, 0, 5),
-                    upgradedAt: null, expiresAt: null, activity: [] },
+                    upgradedAt: null, expiresAt: null, activity: [], fullPayment: false },
                 { id: 'FF22263', name: 'Anita Rai', email: 'anita.rai@email.com', mobile: '9845678901',
                     membership: 'silver', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         11, 12),
-                    upgradedAt: new Date(2025, 11, 12), expiresAt: addDays(new Date(2025, 11, 12), 90), activity: [] },
+                    upgradedAt: new Date(2025, 11, 12), expiresAt: addDays(new Date(2025, 11, 12), 90), activity: [],
+                    fullPayment: false },
                 { id: 'FF33264', name: 'Kiran Bhandari', email: 'kiran.bhandari@email.com', mobile: '9856789012',
                     membership: 'gold', blocked: false, ipBlocks: ['192.168.1.50'], ipAddress: generateIp(),
                     createdAt: new Date(2025, 10, 8),
-                    upgradedAt: new Date(2025, 10, 8), expiresAt: addDays(new Date(2025, 10, 8), 180), activity: [] },
+                    upgradedAt: new Date(2025, 10, 8), expiresAt: addDays(new Date(2025, 10, 8), 180), activity: [],
+                    fullPayment: true },
                 { id: 'FF44265', name: 'Maya Devi', email: 'maya.devi@email.com', mobile: '9867890123',
                     membership: 'diamond', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         9, 25),
-                    upgradedAt: new Date(2025, 9, 25), expiresAt: addDays(new Date(2025, 9, 25), 365), activity: [] },
+                    upgradedAt: new Date(2025, 9, 25), expiresAt: addDays(new Date(2025, 9, 25), 365), activity: [],
+                    fullPayment: false },
                 { id: 'FF55266', name: 'Sunil KC', email: 'sunil.kc@email.com', mobile: '9878901234',
                     membership: 'free', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         8, 14),
-                    upgradedAt: null, expiresAt: null, activity: [] },
+                    upgradedAt: null, expiresAt: null, activity: [], fullPayment: false },
                 { id: 'FF66267', name: 'Gita Poudel', email: 'gita.poudel@email.com', mobile: '9889012345',
                     membership: 'silver', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         7, 30),
-                    upgradedAt: new Date(2025, 7, 30), expiresAt: addDays(new Date(2025, 7, 30), 90), activity: [] },
+                    upgradedAt: new Date(2025, 7, 30), expiresAt: addDays(new Date(2025, 7, 30), 90), activity: [],
+                    fullPayment: true },
                 { id: 'FF77268', name: 'Hari Shrestha', email: 'hari.shrestha@email.com', mobile: '9890123456',
                     membership: 'gold', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         6, 18),
-                    upgradedAt: new Date(2025, 6, 18), expiresAt: addDays(new Date(2025, 6, 18), 180), activity: [] },
+                    upgradedAt: new Date(2025, 6, 18), expiresAt: addDays(new Date(2025, 6, 18), 180), activity: [],
+                    fullPayment: false },
                 { id: 'FF88269', name: 'Nisha Thapa', email: 'nisha.thapa@email.com', mobile: '9801234567',
                     membership: 'diamond', blocked: false, ipBlocks: [], ipAddress: generateIp(), createdAt: new Date(2025,
                         5, 5),
-                    upgradedAt: new Date(2025, 5, 5), expiresAt: addDays(new Date(2025, 5, 5), 365), activity: [] },
+                    upgradedAt: new Date(2025, 5, 5), expiresAt: addDays(new Date(2025, 5, 5), 365), activity: [],
+                    fullPayment: true },
             ];
 
-            // Seed activity logs
             const activityMessages = [
                 'User logged in successfully',
                 'User profile updated',
@@ -2745,6 +2813,7 @@
             let selectedTier = null;
             let activityUserId = null;
             let ipBlockUserId = null;
+            let activatePaymentUserId = null;
 
             // ─── HELPERS ────────────────────────────────────────────────────
 
@@ -2759,7 +2828,7 @@
                 return colors[hash];
             }
 
-            function getMembershipBadge(tier, expiresAt) {
+            function getMembershipBadge(tier, expiresAt, fullPayment) {
                 const map = {
                     free: { label: 'FREE', cls: 'free', icon: '🆓' },
                     silver: { label: 'SILVER', cls: 'silver', icon: '🥈' },
@@ -2770,7 +2839,8 @@
                 const isExpired = expiresAt && new Date(expiresAt) < new Date();
                 const expiryLabel = expiresAt ? ` (expires ${formatDate(expiresAt)})` : '';
                 const expiredClass = isExpired ? ' expired' : '';
-                return `<span class="membership-badge ${m.cls}${expiredClass}"><span class="tier-icon">${m.icon}</span> ${m.label}${expiryLabel}</span>`;
+                const fullPaymentBadge = fullPayment ? '<span class="full-payment-badge">💳 Full Payment</span>' : '';
+                return `<span class="membership-badge ${m.cls}${expiredClass}"><span class="tier-icon">${m.icon}</span> ${m.label}${expiryLabel}</span> ${fullPaymentBadge}`;
             }
 
             function getStatusBadge(blocked) {
@@ -2852,6 +2922,8 @@
                     }
                     if (membership === 'expired') {
                         if (!isExpired(user)) return false;
+                    } else if (membership === 'fullpayment') {
+                        if (!user.fullPayment) return false;
                     } else if (membership !== 'all' && user.membership !== membership) {
                         return false;
                     }
@@ -2884,6 +2956,8 @@
                     `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#eff6ff;color:#1d4ed8;border-radius:9999px;font-size:11px;font-weight:500;">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchInput').value='';filterUsers();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
                 if (membership === 'expired') html +=
                     `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#fee2e2;color:#dc2626;border-radius:9999px;font-size:11px;font-weight:500;">⏰ Expired <button onclick="document.getElementById('membershipFilter').value='all';filterUsers();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
+                else if (membership === 'fullpayment') html +=
+                    `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#d1fae5;color:#065f46;border-radius:9999px;font-size:11px;font-weight:500;">💳 Full Payment <button onclick="document.getElementById('membershipFilter').value='all';filterUsers();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
                 else if (membership !== 'all') html +=
                     `<span style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:#f5f3ff;color:#6d28d9;border-radius:9999px;font-size:11px;font-weight:500;">💎 ${escapeHtml(membership.toUpperCase())} <button onclick="document.getElementById('membershipFilter').value='all';filterUsers();" style="margin-left:4px;background:none;border:none;color:#ef4444;cursor:pointer;">×</button></span>`;
                 if (status !== 'all') html +=
@@ -2918,11 +2992,14 @@
                     const isBlocked = user.blocked;
                     const rowClass = `user-row ${isBlocked ? 'blocked' : ''}`;
                     const expired = isExpired(user);
+                    const isFullPayment = user.fullPayment || false;
+                    const paymentIconClass = isFullPayment ? 'full-payment-active' : '';
 
                     return `
                         <tr class="${rowClass}">
                             <td style="text-align:center;white-space:nowrap;">
                                 <div class="action-cell">
+                                    <button onclick="openActivatePaymentModal('${user.id}')" class="action-icon-btn teal ${paymentIconClass}" title="${isFullPayment ? 'Full Payment Active' : 'Activate Full Payment'}">💳</button>
                                     <button onclick="openUpgradeModal('${user.id}')" class="action-icon-btn success" title="Upgrade Membership">⬆️</button>
                                     <button onclick="openEditUserModal('${user.id}')" class="action-icon-btn primary" title="Edit User">✏️</button>
                                     <button onclick="toggleBlockUser('${user.id}')" class="action-icon-btn ${isBlocked ? 'success' : 'warning'}" title="${isBlocked ? 'Unblock' : 'Block'} User">${isBlocked ? '🔓' : '🔒'}</button>
@@ -2939,13 +3016,14 @@
                                         <a href="#" onclick="viewUserOrders('${user.id}')" class="user-link">${escapeHtml(user.name)}</a>
                                         ${isBlocked ? '<span style="font-size:10px;color:#dc2626;font-weight:600;margin-left:4px;">🚫</span>' : ''}
                                         ${expired ? '<span style="font-size:9px;color:#dc2626;font-weight:600;margin-left:4px;" class="expired-badge">⏰ EXPIRED</span>' : ''}
+                                        ${isFullPayment ? '<span class="full-payment-badge">💳 Full Payment</span>' : ''}
                                     </div>
                                 </div>
                             </td>
                             <td style="font-size:13px;color:#475569;">${escapeHtml(user.email)}</td>
                             <td style="font-size:13px;color:#475569;">${escapeHtml(user.mobile)}</td>
                             <td>
-                                ${getMembershipBadge(user.membership, user.expiresAt)}
+                                ${getMembershipBadge(user.membership, user.expiresAt, user.fullPayment)}
                                 ${user.upgradedAt ? `<div style="font-size:10px;color:#64748b;margin-top:2px;">Upgraded: ${formatDate(user.upgradedAt)}</div>` : ''}
                                 ${user.expiresAt && user.membership !== 'free' ? `<div style="font-size:10px;color:${expired ? '#dc2626' : '#64748b'};margin-top:1px;">Expires: ${formatDate(user.expiresAt)}</div>` : ''}
                             </td>
@@ -2968,6 +3046,8 @@
                     const initials = getInitials(user.name);
                     const isBlocked = user.blocked;
                     const expired = isExpired(user);
+                    const isFullPayment = user.fullPayment || false;
+                    const paymentIconClass = isFullPayment ? 'full-payment-active' : '';
 
                     return `
                         <div class="user-card-mobile">
@@ -2978,6 +3058,7 @@
                                         <a href="#" onclick="viewUserOrders('${user.id}')" class="user-link" style="font-size:13px;">${escapeHtml(user.name)}</a>
                                         ${isBlocked ? '<span style="font-size:10px;color:#dc2626;font-weight:600;margin-left:4px;">🚫</span>' : ''}
                                         ${expired ? '<span style="font-size:9px;color:#dc2626;font-weight:600;margin-left:4px;" class="expired-badge">⏰ EXPIRED</span>' : ''}
+                                        ${isFullPayment ? '<span class="full-payment-badge">💳 Full Payment</span>' : ''}
                                     </div>
                                 </div>
                                 <div>
@@ -3000,13 +3081,14 @@
                                 <div class="card-row">
                                     <span class="label">Membership</span>
                                     <span class="value">
-                                        ${getMembershipBadge(user.membership, user.expiresAt)}
+                                        ${getMembershipBadge(user.membership, user.expiresAt, user.fullPayment)}
                                         ${user.upgradedAt ? `<div style="font-size:10px;color:#64748b;margin-top:2px;">Upgraded: ${formatDate(user.upgradedAt)}</div>` : ''}
                                         ${user.expiresAt && user.membership !== 'free' ? `<div style="font-size:10px;color:${expired ? '#dc2626' : '#64748b'};margin-top:1px;">Expires: ${formatDate(user.expiresAt)}</div>` : ''}
                                     </span>
                                 </div>
                             </div>
                             <div class="card-actions">
+                                <button onclick="openActivatePaymentModal('${user.id}')" class="action-btn btn-sm btn-sm-primary ${paymentIconClass}" style="font-size:10px;padding:2px 8px;">💳 QR</button>
                                 <button onclick="openUpgradeModal('${user.id}')" class="action-btn btn-sm btn-sm-success" style="font-size:10px;padding:2px 8px;">⬆️ Upgrade</button>
                                 <button onclick="openEditUserModal('${user.id}')" class="action-btn btn-sm btn-sm-primary" style="font-size:10px;padding:2px 8px;">✏️ Edit</button>
                                 <button onclick="toggleBlockUser('${user.id}')" class="action-btn btn-sm ${isBlocked ? 'btn-sm-success' : 'btn-sm-warning'}" style="font-size:10px;padding:2px 8px;">${isBlocked ? '🔓 Unblock' : '🔒 Block'}</button>
@@ -3050,15 +3132,16 @@
                     showToast('⚠️', 'No data to export');
                     return;
                 }
-                let csv = 'User ID,Full Name,Email,Mobile Number,Membership,Status,IP Address,IP Blocks,Upgraded Date,Expiry Date,Created At\n';
+                let csv = 'User ID,Full Name,Email,Mobile Number,Membership,Status,IP Address,IP Blocks,Upgraded Date,Expiry Date,Created At,Full Payment\n';
                 dataToExport.forEach(u => {
                     const status = u.blocked ? 'Blocked' : 'Active';
                     const expiry = u.expiresAt ? formatDate(u.expiresAt) : '';
                     const upgraded = u.upgradedAt ? formatDate(u.upgradedAt) : '';
                     const createdAt = formatDate(u.createdAt);
                     const ipBlocks = u.ipBlocks.join('; ');
+                    const fullPayment = u.fullPayment ? 'Yes' : 'No';
                     csv +=
-                        `${u.id},"${u.name}","${u.email}","${u.mobile}",${u.membership.toUpperCase()},${status},"${u.ipAddress}","${ipBlocks}","${upgraded}","${expiry}","${createdAt}"\n`;
+                        `${u.id},"${u.name}","${u.email}","${u.mobile}",${u.membership.toUpperCase()},${status},"${u.ipAddress}","${ipBlocks}","${upgraded}","${expiry}","${createdAt}","${fullPayment}"\n`;
                 });
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const a = document.createElement('a');
@@ -3075,6 +3158,41 @@
                 if (user) {
                     showToast('📦', `Redirecting to order history for ${user.name}...`);
                 }
+            }
+
+            // ─── ACTIVATE FULL PAYMENT FONEPAY QR ────────────────────────
+
+            function openActivatePaymentModal(userId) {
+                const user = users.find(u => u.id === userId);
+                if (!user) { showToast('❌', 'User not found'); return; }
+                activatePaymentUserId = userId;
+                document.getElementById('paymentUserName').textContent = user.name;
+                document.getElementById('activatePaymentModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeActivatePaymentModal() {
+                document.getElementById('activatePaymentModal').style.display = 'none';
+                document.body.style.overflow = '';
+                activatePaymentUserId = null;
+            }
+
+            function confirmActivatePayment() {
+                if (!activatePaymentUserId) { showToast('❌', 'No user selected'); return; }
+                const user = users.find(u => u.id === activatePaymentUserId);
+                if (!user) { showToast('❌', 'User not found'); return; }
+                // Toggle the full payment status
+                user.fullPayment = !user.fullPayment;
+                const status = user.fullPayment ? 'activated' : 'deactivated';
+                user.activity.push({
+                    text: `Full Payment FonePay QR ${status}`,
+                    time: new Date().toISOString(),
+                    icon: '💳'
+                });
+                closeActivatePaymentModal();
+                filterUsers();
+                updateStats();
+                showToast('💳', `Full Payment FonePay QR ${status} for ${user.name}`);
             }
 
             // ─── ADD USER ──────────────────────────────────────────────────
@@ -3121,7 +3239,8 @@
                     createdAt: new Date(),
                     upgradedAt: membership !== 'free' ? new Date() : null,
                     expiresAt: membership !== 'free' ? getDefaultExpiry(membership) : null,
-                    activity: [{ text: 'User account created', time: new Date().toISOString(), icon: '🎉' }]
+                    activity: [{ text: 'User account created', time: new Date().toISOString(), icon: '🎉' }],
+                    fullPayment: false
                 };
 
                 users.push(newUser);
@@ -3305,7 +3424,6 @@
                 document.getElementById('ipBlockUserName').textContent = user.name;
                 document.getElementById('ipBlockInput').value = '';
 
-                // Show user's current IP
                 document.getElementById('userCurrentIp').textContent = user.ipAddress || 'Unknown';
                 const blockBtn = document.getElementById('blockCurrentIpBtn');
                 const isBlocked = user.ipBlocks && user.ipBlocks.includes(user.ipAddress);
@@ -3380,7 +3498,6 @@
                 renderIpBlocks(user);
                 document.getElementById('ipBlockInput').value = '';
                 document.getElementById('ipBlockInput').focus();
-                // Check if this is the user's current IP
                 if (ip === user.ipAddress) {
                     const blockBtn = document.getElementById('blockCurrentIpBtn');
                     blockBtn.textContent = '✅ IP Blocked';
@@ -3474,6 +3591,7 @@
                     closeActivityModal();
                     closeIpBlockModal();
                     closeDeleteModal();
+                    closeActivatePaymentModal();
                 }
                 if (e.key === 'Enter') {
                     if (document.getElementById('addUserModal').style.display === 'flex') {
@@ -3488,6 +3606,9 @@
                     if (document.getElementById('ipBlockModal').style.display === 'flex') {
                         addIpBlock();
                     }
+                    if (document.getElementById('activatePaymentModal').style.display === 'flex') {
+                        confirmActivatePayment();
+                    }
                 }
             });
 
@@ -3495,7 +3616,7 @@
 
             filterUsers();
             updateStats();
-            showToast('👥', 'User Management loaded with all features');
+            showToast('👥', 'User Management loaded with Full Payment filter and indicator');
 
             // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
 
@@ -3531,6 +3652,10 @@
             window.addIpBlock = addIpBlock;
             window.removeIpBlock = removeIpBlock;
             window.blockCurrentIp = blockCurrentIp;
+
+            window.openActivatePaymentModal = openActivatePaymentModal;
+            window.closeActivatePaymentModal = closeActivatePaymentModal;
+            window.confirmActivatePayment = confirmActivatePayment;
 
             window.openDeleteModal = openDeleteModal;
             window.closeDeleteModal = closeDeleteModal;
