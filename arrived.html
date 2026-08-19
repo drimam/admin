@@ -1688,6 +1688,12 @@
             overflow: visible !important;
             text-overflow: clip !important;
         }
+        .tracking-cell .tracking-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
 
         /* ─── WH BARCODE TAG ─── */
         .wh-barcode-tag {
@@ -2496,6 +2502,64 @@
         #toast.show {
             display: block !important;
         }
+
+        /* ─── EXPRESS TRUCK ICON ─── */
+        .express-truck-wrapper {
+            display: inline-flex;
+            align-items: center;
+            gap: 0px;
+            position: relative;
+            margin-left: 3px;
+            cursor: default;
+            flex-shrink: 0;
+        }
+        .express-truck-wrapper .express-truck-svg {
+            width: 18px;
+            height: 18px;
+            color: #F59E0B;
+            stroke-width: 2.2;
+            flex-shrink: 0;
+        }
+        .express-truck-wrapper .express-days-sup {
+            font-size: 8px;
+            font-weight: 700;
+            color: #D97706;
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 50%;
+            min-width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            padding: 0 3px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .express-truck-wrapper .express-tooltip {
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 20;
+        }
+        .express-truck-wrapper:hover .express-tooltip {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -3172,6 +3236,24 @@
         (function() {
             'use strict';
 
+            // ─── EXPRESS TRUCK HELPER ─────────────────────────────────────
+            function renderExpressTruck(expressDays) {
+                if (!expressDays || expressDays < 2 || expressDays > 7) return '';
+                return `
+                    <span class="express-truck-wrapper" title="Express Delivery: ${expressDays} days">
+                        <svg class="express-truck-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+                            <path d="M9 17v-2a2 2 0 012-2h6a2 2 0 012 2v2"/>
+                            <circle cx="7" cy="17" r="1.5"/>
+                            <circle cx="17" cy="17" r="1.5"/>
+                            <path d="M7 11V5a1 1 0 011-1h8a1 1 0 011 1v6"/>
+                        </svg>
+                        <sup class="express-days-sup">${expressDays}</sup>
+                        <span class="express-tooltip">⚡ Express ${expressDays}d</span>
+                    </span>
+                `;
+            }
+
             function getProductImage(productName) {
                 const seed = productName.replace(/\s/g, '').toLowerCase();
                 return `https://picsum.photos/seed/${seed}/200/200`;
@@ -3241,6 +3323,7 @@
                 }
             }
 
+            // ─── PRODUCT CELL WITHOUT EXPRESS ICON (now in tracking column) ──
             function productCellHtml(item, context) {
                 return `
                     <div class="product-cell">
@@ -3277,37 +3360,40 @@
                     productLink: 'https://example.com/prod9', productImage: getProductImage('Smart LED TV 55"'),
                     username: 'Hari Shrestha', userId: 11, hsn: '8528', subCategory: 'Electronics',
                     quantity: 1, inrPrice: 18200.00, status: 'pending', comment: 'Customer requested express delivery',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '',
+                    expressDays: 3 },
                 { orderId: 'MW202623355', trackingNumber: '', shippedDate: 'Pending', productName: 'Noise Cancelling Headphones',
                     productLink: 'https://example.com/prod10', productImage: getProductImage('Noise Cancelling Headphones'),
                     username: 'Nisha Thapa', userId: 12, hsn: '8518', subCategory: 'Electronics',
                     quantity: 2, inrPrice: 850.00, status: 'pending', comment: '', paymentType: 'COD',
-                    codAmount: 850.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                    codAmount: 850.00, warehouseBarcode: '', etaDeliveryDate: '', expressDays: null },
                 { orderId: 'MW202623356', trackingNumber: '', shippedDate: 'Pending', productName: 'Stainless Steel Water Bottle',
                     productLink: 'https://example.com/prod11', productImage: getProductImage('Stainless Steel Water Bottle'),
                     username: 'Sunil KC', userId: 9, hsn: '7323', subCategory: 'Home & Living',
                     quantity: 3, inrPrice: 205.00, status: 'pending', comment: '', paymentType: 'PREPAID',
-                    codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                    codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '', expressDays: null },
                 { orderId: 'MW202623357', trackingNumber: '', shippedDate: 'Pending', productName: 'Wireless Mouse & Keyboard Combo',
                     productLink: 'https://example.com/prod12', productImage: getProductImage('Wireless Mouse & Keyboard Combo'),
                     username: 'Gita Poudel', userId: 10, hsn: '8471', subCategory: 'Electronics',
                     quantity: 1, inrPrice: 490.00, status: 'pending', comment: 'Gift wrapping requested',
-                    paymentType: 'COD', codAmount: 490.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                    paymentType: 'COD', codAmount: 490.00, warehouseBarcode: '', etaDeliveryDate: '',
+                    expressDays: 5 },
                 { orderId: 'MW202623358', trackingNumber: '', shippedDate: 'Pending', productName: 'Men\'s Leather Jacket',
                     productLink: 'https://example.com/prod13', productImage: getProductImage('Men\'s Leather Jacket'),
                     username: 'Bikash Thapa', userId: 5, hsn: '4203', subCategory: 'Fashion',
                     quantity: 1, inrPrice: 1200.00, status: 'pending', comment: '', paymentType: 'PREPAID',
-                    codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                    codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '', expressDays: null },
                 { orderId: 'MW202623359', trackingNumber: '', shippedDate: 'Pending', productName: 'Digital Kitchen Scale',
                     productLink: 'https://example.com/prod14', productImage: getProductImage('Digital Kitchen Scale'),
                     username: 'Anita Rai', userId: 6, hsn: '8423', subCategory: 'Home & Living',
                     quantity: 2, inrPrice: 300.00, status: 'pending', comment: '', paymentType: 'COD',
-                    codAmount: 300.00, warehouseBarcode: '', etaDeliveryDate: '' },
+                    codAmount: 300.00, warehouseBarcode: '', etaDeliveryDate: '', expressDays: null },
                 { orderId: 'MW202623360', trackingNumber: '', shippedDate: 'Pending', productName: 'Fitness Tracker Band',
                     productLink: 'https://example.com/prod15', productImage: getProductImage('Fitness Tracker Band'),
                     username: 'Kiran Bhandari', userId: 7, hsn: '9029', subCategory: 'Sports & Fitness',
                     quantity: 1, inrPrice: 640.00, status: 'pending', comment: 'Rush delivery requested',
-                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '' },
+                    paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '', etaDeliveryDate: '',
+                    expressDays: 2 },
             ];
 
             const INITIAL_SHIPMENTS = [
@@ -3316,55 +3402,55 @@
                     productImage: getProductImage('Wireless Bluetooth Earphones - Black'), username: 'Damodar Bhattarai',
                     userId: 1, hsn: '8518', subCategory: 'Electronics', quantity: 1, inrPrice: 176.00, status: 'shipped',
                     comment: '', paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '',
-                etaDeliveryDate: '12 May 2026' },
+                etaDeliveryDate: '12 May 2026', expressDays: 4 },
                 { trackingNumber: 'TRK-2026-001235', orderId: 'MW202623346', shippedDate: '05 May 2026',
                     productName: 'Cotton Bed Sheet Set - Queen Size', productLink: 'https://example.com/product/789',
                     productImage: getProductImage('Cotton Bed Sheet Set - Queen Size'), username: 'Sita Sharma',
                     userId: 2, hsn: '6302', subCategory: 'Home & Living', quantity: 2, inrPrice: 320.00, status: 'shipped',
                     comment: '', paymentType: 'COD', codAmount: 320.00, warehouseBarcode: '',
-                etaDeliveryDate: '10 May 2026' },
+                etaDeliveryDate: '10 May 2026', expressDays: null },
                 { trackingNumber: 'TRK-2026-001236', orderId: 'MW202623347', shippedDate: '04 May 2026',
                     productName: 'Samsung Galaxy Watch 6 - 44mm', productLink: 'https://example.com/product/101',
                     productImage: getProductImage('Samsung Galaxy Watch 6 - 44mm'), username: 'Ramesh Adhikari',
                     userId: 3, hsn: '8517', subCategory: 'Electronics', quantity: 1, inrPrice: 890.00, status: 'shipped',
                     comment: '', paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '',
-                etaDeliveryDate: '15 May 2026' },
+                etaDeliveryDate: '15 May 2026', expressDays: 6 },
                 { trackingNumber: 'TRK-2026-001237', orderId: 'MW202623348', shippedDate: '03 May 2026',
                     productName: 'Leather Handbag - Brown', productLink: 'https://example.com/product/606',
                     productImage: getProductImage('Leather Handbag - Brown'), username: 'Maya Devi',
                     userId: 8, hsn: '4202', subCategory: 'Fashion', quantity: 1, inrPrice: 570.00, status: 'shipped',
                     comment: '', paymentType: 'COD', codAmount: 570.00, warehouseBarcode: '',
-                etaDeliveryDate: '08 May 2026' },
+                etaDeliveryDate: '08 May 2026', expressDays: null },
                 { trackingNumber: 'TRK-2026-001238', orderId: 'MW202623349', shippedDate: '02 May 2026',
                     productName: 'USB-C to Lightning Cable', productLink: 'https://example.com/product/707',
                     productImage: getProductImage('USB-C to Lightning Cable'), username: 'Sujan Adhikari',
                     userId: 9, hsn: '8544', subCategory: 'Electronics', quantity: 1, inrPrice: 85.00, status: 'shipped',
                     comment: '', paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '',
-                etaDeliveryDate: '09 May 2026' },
+                etaDeliveryDate: '09 May 2026', expressDays: null },
                 { trackingNumber: 'TRK-2026-001239', orderId: 'MW202623350', shippedDate: '01 May 2026',
                     productName: 'Premium Cotton Towel Set', productLink: 'https://example.com/product/808',
                     productImage: getProductImage('Premium Cotton Towel Set'), username: 'Test User',
                     userId: 999, hsn: '6302', subCategory: 'Home & Living', quantity: 1, inrPrice: 400.00,
                     status: 'shipped', comment: '', paymentType: 'COD', codAmount: 400.00, warehouseBarcode: '',
-                etaDeliveryDate: '06 May 2026' },
+                etaDeliveryDate: '06 May 2026', expressDays: 3 },
                 { trackingNumber: 'TRK-2026-001240', orderId: 'MW202623351', shippedDate: '30 Apr 2026',
                     productName: 'Wireless Mouse', productLink: 'https://example.com/product/909',
                     productImage: getProductImage('Wireless Mouse'), username: 'Test User 2',
                     userId: 1000, hsn: '8471', subCategory: 'Electronics', quantity: 2, inrPrice: 210.00,
                     status: 'shipped', comment: '', paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '',
-                etaDeliveryDate: '05 May 2026' },
+                etaDeliveryDate: '05 May 2026', expressDays: null },
                 { trackingNumber: 'TRK-2026-001241', orderId: 'MW202623352', shippedDate: '29 Apr 2026',
                     productName: 'Leather Jacket', productLink: 'https://example.com/product/1010',
                     productImage: getProductImage('Leather Jacket'), username: 'Test User 3',
                     userId: 1001, hsn: '4203', subCategory: 'Fashion', quantity: 1, inrPrice: 580.00,
                     status: 'shipped', comment: '', paymentType: 'COD', codAmount: 580.00, warehouseBarcode: '',
-                etaDeliveryDate: '04 May 2026' },
+                etaDeliveryDate: '04 May 2026', expressDays: null },
                 { trackingNumber: 'TRK-2026-001242', orderId: 'MW202623353', shippedDate: '28 Apr 2026',
                     productName: 'Yoga Block Set', productLink: 'https://example.com/product/1111',
                     productImage: getProductImage('Yoga Block Set'), username: 'Test User 4',
                     userId: 1002, hsn: '9506', subCategory: 'Sports & Fitness', quantity: 1, inrPrice: 320.00,
                     status: 'shipped', comment: '', paymentType: 'PREPAID', codAmount: 0, warehouseBarcode: '',
-                etaDeliveryDate: '03 May 2026' },
+                etaDeliveryDate: '03 May 2026', expressDays: 5 },
             ];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -3555,6 +3641,7 @@
                     warehouseBarcode: '',
                     paymentType: item.paymentType || 'PREPAID',
                     codAmount: item.codAmount || 0,
+                    expressDays: item.expressDays || null,
                 };
                 shippedItems.push(shippedItem);
 
@@ -3590,6 +3677,7 @@
                     paymentType: item.paymentType || 'PREPAID',
                     codAmount: item.codAmount || 0,
                     etaDeliveryDate: '',
+                    expressDays: item.expressDays || null,
                 };
                 dispatchedItems.push(dispatchedItem);
 
@@ -3757,6 +3845,7 @@
                         warehouseBarcode: barcode,
                         paymentType: item.paymentType || 'PREPAID',
                         codAmount: item.codAmount || 0,
+                        expressDays: item.expressDays || null,
                     };
                     stockItems.push(arrived);
                     renderAll();
@@ -3789,6 +3878,7 @@
                     warehouseBarcode: item.warehouseBarcode || '',
                     paymentType: item.paymentType || 'PREPAID',
                     codAmount: item.codAmount || 0,
+                    expressDays: item.expressDays || null,
                 };
                 dispatchedItems.push(dispatched);
                 renderAll();
@@ -3832,6 +3922,7 @@
                     warehouseBarcode: item.warehouseBarcode || '',
                     paymentType: item.paymentType || 'PREPAID',
                     codAmount: item.codAmount || 0,
+                    expressDays: item.expressDays || null,
                 };
                 scannedLogs.push(received);
                 renderAll();
@@ -3987,11 +4078,13 @@
                 return data.map(item => {
                     const statusBadge = getStatusBadge(item[statusKey] || item.status);
                     const paymentBadge = getPaymentBadge(item.paymentType, item.codAmount);
+                    const expressIcon = renderExpressTruck(item.expressDays);
+                    const trackingDisplay = item.trackingNumber || item.orderId || 'N/A';
                     return `
                         <div class="user-card">
                             <div class="card-header">
                                 <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="tracking-cell text-sm">${item.trackingNumber || item.orderId || 'N/A'}</span>
+                                    <span class="tracking-cell text-sm" style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">${trackingDisplay} ${expressIcon}</span>
                                     ${statusBadge}
                                     ${paymentBadge}
                                     ${item.warehouseBarcode ? `<span class="wh-barcode-tag"><span class="barcode-icon">🏷️</span> ${escapeHtml(item.warehouseBarcode)}</span>` : ''}
@@ -4121,9 +4214,13 @@
                         `<tr><td colspan="11" class="px-4 py-8 text-center text-gray-400 text-sm">No pending orders to ship</td></tr>`;
                     document.getElementById('pendingResultCount').textContent = '0 entries';
                 } else {
-                    tbody.innerHTML = pageData.map(item => `
+                    tbody.innerHTML = pageData.map(item => {
+                        const expressIcon = renderExpressTruck(item.expressDays);
+                        return `
                         <tr class="scan-row">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell font-mono font-semibold text-primary">${item.orderId}</td>
+                            <td class="px-2 py-1 sm:py-2 tracking-cell font-mono font-semibold text-primary">
+                                <span style="display:flex;align-items:center;gap:4px;flex-wrap:nowrap;">${item.orderId} ${expressIcon}</span>
+                            </td>
                             <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'pending')}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
                             <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
@@ -4138,7 +4235,7 @@
                                 <button onclick="dispatchPendingDirect('${item.orderId}')" class="btn-sm" style="font-size:10px;padding:2px 8px;background:#8b5cf6;color:#fff;border:none;border-radius:4px;">📤 Dispatch</button>
                             </td>
                         </tr>
-                    `).join('');
+                    `}).join('');
                     document.getElementById('pendingResultCount').textContent =
                         `Showing ${pageData.length} of ${pendingFiltered.length} entries`;
                 }
@@ -4230,9 +4327,13 @@
                         `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No shipments from seller</td></tr>`;
                     document.getElementById('shippedResultCount').textContent = '0 entries';
                 } else {
-                    tbody.innerHTML = pageData.map(item => `
+                    tbody.innerHTML = pageData.map(item => {
+                        const expressIcon = renderExpressTruck(item.expressDays);
+                        return `
                         <tr class="scan-row">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">
+                                <span class="tracking-wrapper">${item.trackingNumber} ${expressIcon}</span>
+                            </td>
                             <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'shipped')}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
                             <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
@@ -4243,7 +4344,7 @@
                             <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
                         </tr>
-                    `).join('');
+                    `}).join('');
                     document.getElementById('shippedResultCount').textContent =
                         `Showing ${pageData.length} of ${shippedFiltered.length} entries`;
                 }
@@ -4340,9 +4441,13 @@
                         `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No items in India WH Stock</td></tr>`;
                     document.getElementById('stockResultCount').textContent = '0 entries';
                 } else {
-                    tbody.innerHTML = pageData.map(item => `
+                    tbody.innerHTML = pageData.map(item => {
+                        const expressIcon = renderExpressTruck(item.expressDays);
+                        return `
                         <tr class="scan-row">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">
+                                <span class="tracking-wrapper">${item.trackingNumber} ${expressIcon}</span>
+                            </td>
                             <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'stock')}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
                             <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
@@ -4355,7 +4460,7 @@
                                 <button onclick="dispatchShipment('${item.trackingNumber}')" class="btn-sm btn-sm-disptach" style="font-size:10px;padding:2px 8px;">📤 Dispatch</button>
                             </td>
                         </tr>
-                    `).join('');
+                    `}).join('');
                     document.getElementById('stockResultCount').textContent =
                         `Showing ${pageData.length} of ${stockFiltered.length} entries`;
                 }
@@ -4447,9 +4552,13 @@
                         `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No dispatched shipments</td></tr>`;
                     document.getElementById('dispatchedResultCount').textContent = '0 entries';
                 } else {
-                    tbody.innerHTML = pageData.map(item => `
+                    tbody.innerHTML = pageData.map(item => {
+                        const expressIcon = renderExpressTruck(item.expressDays);
+                        return `
                         <tr class="scan-row">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">
+                                <span class="tracking-wrapper">${item.trackingNumber} ${expressIcon}</span>
+                            </td>
                             <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'dispatched')}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
                             <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
@@ -4460,7 +4569,7 @@
                             <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.shippedDate}</td>
                         </tr>
-                    `).join('');
+                    `}).join('');
                     document.getElementById('dispatchedResultCount').textContent =
                         `Showing ${pageData.length} of ${dispatchedFiltered.length} entries`;
                 }
@@ -4559,9 +4668,13 @@
                         `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No received shipments yet</td></tr>`;
                     document.getElementById('scanHistoryCount').textContent = '0 entries';
                 } else {
-                    tbody.innerHTML = pageData.map(item => `
+                    tbody.innerHTML = pageData.map(item => {
+                        const expressIcon = renderExpressTruck(item.expressDays);
+                        return `
                         <tr class="scan-row">
-                            <td class="px-2 py-1 sm:py-2 tracking-cell">${item.trackingNumber}</td>
+                            <td class="px-2 py-1 sm:py-2 tracking-cell">
+                                <span class="tracking-wrapper">${item.trackingNumber} ${expressIcon}</span>
+                            </td>
                             <td class="px-2 py-1 sm:py-2">${productCellHtml(item, 'scan')}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs">${userCellHtml(item.username, item.userId)}</td>
                             <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-700">${item.quantity}</td>
@@ -4572,7 +4685,7 @@
                             <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.status)}</td>
                             <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs whitespace-nowrap">${item.receivedAt}</td>
                         </tr>
-                    `).join('');
+                    `}).join('');
                     document.getElementById('scanHistoryCount').textContent = `${scannedLogs.length} entries`;
                 }
                 const cardsContainer = document.getElementById('scanCardsContainer');
@@ -4902,6 +5015,7 @@
                         warehouseBarcode: 'WH-ABC123XYZ',
                         paymentType: item.paymentType || 'PREPAID',
                         codAmount: item.codAmount || 0,
+                        expressDays: item.expressDays || null,
                     });
                 }
             });
@@ -4920,6 +5034,7 @@
                         warehouseBarcode: item.warehouseBarcode || 'WH-DEF456UVW',
                         paymentType: item.paymentType || 'PREPAID',
                         codAmount: item.codAmount || 0,
+                        expressDays: item.expressDays || null,
                     });
                 }
             });
@@ -4938,6 +5053,7 @@
                         warehouseBarcode: item.warehouseBarcode || 'WH-GHI789JKL',
                         paymentType: item.paymentType || 'PREPAID',
                         codAmount: item.codAmount || 0,
+                        expressDays: item.expressDays || null,
                     });
                 }
             });
