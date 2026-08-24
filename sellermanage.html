@@ -1,0 +1,3591 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Merowish Admin Dashboard</title>
+
+<style>
+:root {
+    --primary: #053A66;
+    --secondary: #72C7C0;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #17212b;
+    --muted: #718096;
+    --border: #e5eaf0;
+    --success: #15803d;
+    --warning: #c97a00;
+    --danger: #dc3545;
+    --purple: #6d4fc2;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    width: 250px;
+    background: var(--primary);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    padding: 20px 12px;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+.logo small {
+    display: block;
+    color: #b7d2e5;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.nav-item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #c8dce9;
+    padding: 13px;
+    text-align: left;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: rgba(255,255,255,.12);
+    color: white;
+}
+
+/* MAIN */
+
+.main {
+    margin-left: 250px;
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 72px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.content {
+    padding: 25px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+/* CARDS */
+
+.card {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-number {
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.muted {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* BUTTONS */
+
+.btn {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-outline {
+    background: white;
+    border: 1px solid var(--border);
+}
+
+.btn-success {
+    background: var(--success);
+    color: white;
+}
+
+.btn-danger {
+    background: #fff0f1;
+    color: var(--danger);
+}
+
+.btn-small {
+    padding: 6px 9px;
+    font-size: 12px;
+}
+
+/* TOOLBAR */
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.toolbar input,
+.toolbar select,
+.form-control {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    min-width: 180px;
+    width: 100%;
+}
+
+/* TABLE */
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+th {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+/* BADGES */
+
+.badge {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.badge-success {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.badge-warning {
+    background: #fff4d8;
+    color: #b66a00;
+}
+
+.badge-danger {
+    background: #fee2e2;
+    color: #dc3545;
+}
+
+.badge-purple {
+    background: #eee9ff;
+    color: #6d4fc2;
+}
+
+/* MODAL */
+
+.modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,20,40,.6);
+    z-index: 999;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.modal-bg.show {
+    display: block;
+}
+
+.modal {
+    background: white;
+    max-width: 850px;
+    margin: 30px auto;
+    border-radius: 16px;
+    padding: 25px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    right: 15px;
+    top: 8px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.full {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+/* TIMELINE */
+
+.timeline {
+    border-left: 2px solid #dce5eb;
+    margin-left: 8px;
+    padding-left: 18px;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.timeline-item::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: var(--secondary);
+    border-radius: 50%;
+    position: absolute;
+    left: -24px;
+    top: 4px;
+}
+
+/* PERFORMANCE */
+
+.progress {
+    height: 8px;
+    background: #edf1f5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--secondary);
+}
+
+.notice {
+    background: #fff8e9;
+    border-left: 4px solid var(--warning);
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+}
+
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+}
+
+/* TOAST */
+
+.toast {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #17212b;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    z-index: 2000;
+}
+
+/* MOBILE */
+
+@media(max-width: 800px) {
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: .3s;
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main {
+        margin-left: 0;
+    }
+
+    .content {
+        padding: 12px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full {
+        grid-column: auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="logo">
+        MEROWISH
+        <small>ADMIN CONTROL CENTER</small>
+    </div>
+
+    <button class="nav-item active" onclick="showPage('dashboard',this)">
+        🏠 Executive Dashboard
+    </button>
+
+    <button class="nav-item" onclick="showPage('shipments',this)">
+        📦 All Shipments
+    </button>
+
+    <button class="nav-item" onclick="showPage('sellers',this)">
+        🏪 Seller Management
+    </button>
+
+    <button class="nav-item" onclick="showPage('products',this)">
+        🛍 Product Records
+    </button>
+
+    <button class="nav-item" onclick="showPage('customers',this)">
+        👥 Customer Database
+    </button>
+
+    <button class="nav-item" onclick="showPage('warehouse',this)">
+        🏭 Warehouse Operations
+    </button>
+
+    <button class="nav-item" onclick="showPage('issues',this)">
+        ⚠ Issues & Holds
+    </button>
+
+    <button class="nav-item" onclick="showPage('reports',this)">
+        📊 Reports & Export
+    </button>
+
+    <button class="nav-item" onclick="showPage('settings',this)">
+        ⚙ Settings
+    </button>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+
+    <div style="display:flex;align-items:center;gap:15px">
+
+        <button class="btn btn-outline"
+        onclick="document.getElementById('sidebar').classList.toggle('show')">
+            ☰
+        </button>
+
+        <div>
+            <b id="pageTitle">Executive Dashboard</b>
+            <div class="muted">Multi-seller shipment administration</div>
+        </div>
+
+    </div>
+
+    <div style="display:flex;gap:10px">
+
+        <button class="btn btn-outline" onclick="exportShipments()">
+            Export CSV
+        </button>
+
+        <button class="btn btn-primary" onclick="openSellerModal()">
+            + Add Seller
+        </button>
+
+    </div>
+
+</div>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+
+<div class="page active" id="dashboard">
+
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div style="display:grid;grid-template-columns:1.4fr .6fr;gap:15px">
+
+        <div class="card">
+
+            <div style="display:flex;justify-content:space-between">
+
+                <b>Recent Shipments</b>
+
+                <button class="btn btn-outline btn-small"
+                onclick="showPage('shipments')">
+                    View All
+                </button>
+
+            </div>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Shipment</th>
+                            <th>Seller</th>
+                            <th>Customer</th>
+                            <th>Status</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="recentShipments"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <b>Operational Alerts</b>
+
+            <div id="alerts"></div>
+
+        </div>
+
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px">
+
+        <div class="card">
+
+            <b>Top Seller Performance</b>
+
+            <div id="sellerPerformance"></div>
+
+        </div>
+
+        <div class="card">
+
+            <b>Shipment Status Distribution</b>
+
+            <div id="statusDistribution"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SHIPMENTS -->
+
+<div class="page" id="shipments">
+
+    <div class="toolbar">
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+            <input
+            id="shipmentSearch"
+            placeholder="Search shipment, tracking, seller..."
+            oninput="renderShipments()">
+
+            <select id="shipmentStatusFilter"
+            onchange="renderShipments()"></select>
+
+            <select id="shipmentSellerFilter"
+            onchange="renderShipments()"></select>
+
+        </div>
+
+    </div>
+
+    <div class="card table-wrap">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Seller</th>
+                    <th>Customer</th>
+                    <th>Tracking ID</th>
+                    <th>Products</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+            <tbody id="shipmentTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- SELLERS -->
+
+<div class="page" id="sellers">
+
+    <div class="toolbar">
+
+        <input
+        id="sellerSearch"
+        placeholder="Search seller..."
+        oninput="renderSellers()">
+
+        <button class="btn btn-primary" onclick="openSellerModal()">
+            + Add Seller
+        </button>
+
+    </div>
+
+    <div class="card table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Seller</th>
+                    <th>Business</th>
+                    <th>Contact</th>
+                    <th>Shipments</th>
+                    <th>Delivered</th>
+                    <th>Declared Value</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="sellerTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCTS -->
+
+<div class="page" id="products">
+
+    <div class="toolbar">
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+            <input
+            id="productSearch"
+            placeholder="Search product, SKU or seller..."
+            oninput="renderProducts()">
+
+            <select id="productSellerFilter"
+            onchange="renderProducts()"></select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="openProductModal()">
+            + Add Product
+        </button>
+
+    </div>
+
+    <div class="card table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Seller</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Unit Value</th>
+                    <th>Qty</th>
+                    <th>Link</th>
+                </tr>
+            </thead>
+
+            <tbody id="productTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- CUSTOMERS -->
+
+<div class="page" id="customers">
+
+    <div class="toolbar">
+
+        <input
+        id="customerSearch"
+        placeholder="Search customer or mobile..."
+        oninput="renderCustomers()">
+
+        <button class="btn btn-outline"
+        onclick="exportCustomers()">
+            Export Customers
+        </button>
+
+    </div>
+
+    <div class="card table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Mobile</th>
+                    <th>Address</th>
+                    <th>Sellers Used</th>
+                    <th>Shipments</th>
+                    <th>History</th>
+                </tr>
+            </thead>
+
+            <tbody id="customerTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- WAREHOUSE -->
+
+<div class="page" id="warehouse">
+
+    <div class="stats-grid" id="warehouseStats"></div>
+
+    <div class="card">
+
+        <h3>Warehouse Queue</h3>
+
+        <div id="warehouseList"></div>
+
+    </div>
+
+</div>
+
+
+<!-- ISSUES -->
+
+<div class="page" id="issues">
+
+    <div class="card">
+
+        <h3>Shipment Issues & Holds</h3>
+
+        <div id="issueList"></div>
+
+    </div>
+
+</div>
+
+
+<!-- REPORTS -->
+
+<div class="page" id="reports">
+
+    <div class="stats-grid" id="reportStats"></div>
+
+    <div class="card">
+
+        <h3>Export Center</h3>
+
+        <p class="muted">
+            Download records for accounting, seller reconciliation
+            and warehouse operations.
+        </p>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+            <button class="btn btn-primary"
+            onclick="exportShipments()">
+                Export Shipments
+            </button>
+
+            <button class="btn btn-outline"
+            onclick="exportSellers()">
+                Export Sellers
+            </button>
+
+            <button class="btn btn-outline"
+            onclick="exportCustomers()">
+                Export Customers
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div class="page" id="settings">
+
+    <div class="card">
+
+        <h3>Admin Settings</h3>
+
+        <div class="form-group">
+
+            <label>India Warehouse Address</label>
+
+            <textarea
+            id="warehouseAddress"
+            class="form-control"
+            rows="4">
+Merowish India Warehouse, Raxaul, Bihar, India
+            </textarea>
+
+        </div>
+
+        <br>
+
+        <button class="btn btn-primary"
+        onclick="saveSettings()">
+            Save Settings
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- SELLER MODAL -->
+
+<div class="modal-bg" id="sellerModal">
+
+    <div class="modal">
+
+        <button class="close-modal"
+        onclick="closeModal('sellerModal')">
+            ×
+        </button>
+
+        <h2>Add / Edit Seller</h2>
+
+        <form onsubmit="saveSeller(event)">
+
+            <input type="hidden" id="sellerId">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Contact Name *</label>
+                    <input class="form-control"
+                    id="sellerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Business Name *</label>
+                    <input class="form-control"
+                    id="sellerBusiness" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input class="form-control"
+                    id="sellerPhone" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control"
+                    id="sellerEmail">
+                </div>
+
+                <div class="form-group">
+                    <label>Seller Type</label>
+
+                    <select class="form-control"
+                    id="sellerType">
+
+                        <option>Individual Seller</option>
+                        <option>Online Store</option>
+                        <option>Business / Brand</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Status</label>
+
+                    <select class="form-control"
+                    id="sellerStatus">
+
+                        <option>Active</option>
+                        <option>Pending Verification</option>
+                        <option>Suspended</option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Address / Admin Notes</label>
+
+                    <textarea
+                    class="form-control"
+                    id="sellerAddress"></textarea>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="btn btn-primary">
+                Save Seller
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCT MODAL -->
+
+<div class="modal-bg" id="productModal">
+
+    <div class="modal">
+
+        <button class="close-modal"
+        onclick="closeModal('productModal')">
+            ×
+        </button>
+
+        <h2>Add Product Record</h2>
+
+        <form onsubmit="saveProduct(event)">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>Seller *</label>
+
+                    <select class="form-control"
+                    id="productSeller" required></select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Product Name *</label>
+
+                    <input class="form-control"
+                    id="productName" required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>SKU</label>
+
+                    <input class="form-control"
+                    id="productSku">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Category</label>
+
+                    <input class="form-control"
+                    id="productCategory">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Unit Value INR</label>
+
+                    <input type="number"
+                    class="form-control"
+                    id="productValue">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Quantity</label>
+
+                    <input type="number"
+                    class="form-control"
+                    id="productQty"
+                    value="1">
+
+                </div>
+
+                <div class="form-group full">
+
+                    <label>Product Link</label>
+
+                    <input class="form-control"
+                    id="productLink">
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="btn btn-primary">
+                Save Product
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- SHIPMENT DETAIL MODAL -->
+
+<div class="modal-bg" id="detailModal">
+
+    <div class="modal">
+
+        <button class="close-modal"
+        onclick="closeModal('detailModal')">
+            ×
+        </button>
+
+        <div id="detailContent"></div>
+
+    </div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =====================================================
+   DATABASE
+===================================================== */
+
+const STORAGE_KEY = "merowish_admin_dashboard";
+
+let db =
+JSON.parse(localStorage.getItem(STORAGE_KEY))
+|| {
+    sellers: [],
+    customers: [],
+    products: [],
+    shipments: [],
+    settings: {}
+};
+
+
+/* =====================================================
+   CONSTANTS
+===================================================== */
+
+const shipmentStatuses = [
+
+    "Shipment Created",
+    "Seller Dispatched",
+    "In Transit to India Warehouse",
+    "Arrived at India Warehouse",
+    "Warehouse Inspection",
+    "Issue Found / Hold",
+    "Processing Complete",
+    "Ready for Nepal Dispatch",
+    "In Transit to Nepal",
+    "Arrived at Nepal Warehouse",
+    "Ready for Delivery",
+    "Out for Delivery",
+    "Delivered",
+    "Cancelled"
+
+];
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function saveDatabase() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(db)
+    );
+
+}
+
+
+function generateId(prefix) {
+
+    return prefix + "-" +
+    Date.now().toString().slice(-7) +
+    "-" +
+    Math.floor(Math.random() * 999);
+
+}
+
+
+function getSeller(id) {
+
+    return db.sellers.find(
+        seller => seller.id === id
+    );
+
+}
+
+
+function getCustomer(id) {
+
+    return db.customers.find(
+        customer => customer.id === id
+    );
+
+}
+
+
+function shipmentValue(shipment) {
+
+    return (shipment.items || []).reduce(
+        (total, item) => {
+
+            return total +
+            (Number(item.qty) || 0) *
+            (Number(item.value) || 0);
+
+        },
+        0
+    );
+
+}
+
+
+function showToast(message) {
+
+    const toast =
+    document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.style.display = "block";
+
+    setTimeout(() => {
+
+        toast.style.display = "none";
+
+    }, 2500);
+
+}
+
+
+function closeModal(id) {
+
+    document
+    .getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPage(page, button) {
+
+    document
+    .querySelectorAll(".page")
+    .forEach(element => {
+
+        element.classList.remove("active");
+
+    });
+
+    document
+    .getElementById(page)
+    .classList.add("active");
+
+
+    document
+    .querySelectorAll(".nav-item")
+    .forEach(element => {
+
+        element.classList.remove("active");
+
+    });
+
+
+    if (button) {
+
+        button.classList.add("active");
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+        button.textContent.trim();
+
+    }
+
+    renderAll();
+
+}
+
+
+/* =====================================================
+   STATUS BADGE
+===================================================== */
+
+function getBadge(status) {
+
+    let className = "badge-purple";
+
+    if (
+        status.includes("Delivered") ||
+        status === "Active"
+    ) {
+        className = "badge-success";
+    }
+
+    else if (
+        status.includes("Issue") ||
+        status.includes("Hold") ||
+        status.includes("Cancelled") ||
+        status === "Suspended"
+    ) {
+        className = "badge-danger";
+    }
+
+    else if (
+        status.includes("Transit") ||
+        status.includes("Pending") ||
+        status.includes("Dispatched")
+    ) {
+        className = "badge-warning";
+    }
+
+    return `
+        <span class="badge ${className}">
+            ${status}
+        </span>
+    `;
+
+}
+
+
+/* =====================================================
+   FILTERS
+===================================================== */
+
+function renderFilters() {
+
+    const sellerOptions =
+    db.sellers.map(seller => {
+
+        return `
+            <option value="${seller.id}">
+                ${seller.business}
+            </option>
+        `;
+
+    }).join("");
+
+
+    document
+    .getElementById("shipmentSellerFilter")
+    .innerHTML =
+    `<option value="">All Sellers</option>`
+    + sellerOptions;
+
+
+    document
+    .getElementById("productSellerFilter")
+    .innerHTML =
+    `<option value="">All Sellers</option>`
+    + sellerOptions;
+
+
+    document
+    .getElementById("shipmentStatusFilter")
+    .innerHTML =
+    `<option value="">All Status</option>`
+    +
+    shipmentStatuses.map(status => {
+
+        return `
+            <option value="${status}">
+                ${status}
+            </option>
+        `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function renderDashboard() {
+
+    const totalShipments =
+    db.shipments.length;
+
+
+    const delivered =
+    db.shipments.filter(
+        shipment =>
+        shipment.status === "Delivered"
+    ).length;
+
+
+    const issues =
+    db.shipments.filter(
+        shipment =>
+        shipment.status.includes("Issue")
+    ).length;
+
+
+    const totalValue =
+    db.shipments.reduce(
+        (total, shipment) =>
+        total + shipmentValue(shipment),
+        0
+    );
+
+
+    const activeSellers =
+    db.sellers.filter(
+        seller =>
+        seller.status === "Active"
+    ).length;
+
+
+    const stats = [
+
+        ["🏪 Active Sellers", activeSellers],
+
+        ["📦 Total Shipments", totalShipments],
+
+        ["🛍 Product Records", db.products.length],
+
+        ["👥 Customers", db.customers.length],
+
+        ["⚠ Open Issues", issues],
+
+        [
+            "₹ Declared Value",
+            "₹" + totalValue.toLocaleString()
+        ]
+
+    ];
+
+
+    document
+    .getElementById("statsGrid")
+    .innerHTML =
+    stats.map(stat => {
+
+        return `
+        <div class="card">
+
+            <div class="muted">
+                ${stat[0]}
+            </div>
+
+            <div class="stat-number">
+                ${stat[1]}
+            </div>
+
+        </div>
+        `;
+
+    }).join("");
+
+
+    const recent =
+    db.shipments
+    .slice(-8)
+    .reverse();
+
+
+    document
+    .getElementById("recentShipments")
+    .innerHTML =
+    recent.length ?
+
+    recent.map(shipment => {
+
+        const seller =
+        getSeller(shipment.sellerId);
+
+        const customer =
+        getCustomer(shipment.customerId);
+
+        return `
+        <tr>
+
+            <td>
+                <b>${shipment.id}</b>
+            </td>
+
+            <td>
+                ${seller?.business || "-"}
+            </td>
+
+            <td>
+                ${customer?.name || "-"}
+            </td>
+
+            <td>
+                ${getBadge(shipment.status)}
+            </td>
+
+            <td>
+                ₹${shipmentValue(shipment).toLocaleString()}
+            </td>
+
+        </tr>
+        `;
+
+    }).join("")
+
+    :
+
+    `
+    <tr>
+        <td colspan="5" class="empty">
+            No shipment records available
+        </td>
+    </tr>
+    `;
+
+
+    const warehouseArrivals =
+    db.shipments.filter(
+        shipment =>
+        shipment.status ===
+        "Arrived at India Warehouse"
+    ).length;
+
+
+    let alerts = "";
+
+    if (issues > 0) {
+
+        alerts += `
+        <div class="notice">
+
+            <b>${issues} open issue(s)</b>
+
+            <br>
+
+            <span class="muted">
+                Requires admin attention.
+            </span>
+
+        </div>
+        `;
+
+    }
+
+
+    if (warehouseArrivals > 0) {
+
+        alerts += `
+        <div class="notice">
+
+            <b>
+                ${warehouseArrivals}
+                shipment(s) arrived in India
+            </b>
+
+            <br>
+
+            <span class="muted">
+                Awaiting warehouse inspection.
+            </span>
+
+        </div>
+        `;
+
+    }
+
+
+    document
+    .getElementById("alerts")
+    .innerHTML =
+    alerts ||
+    `<div class="empty">No active alerts</div>`;
+
+
+    renderSellerPerformance();
+
+    renderStatusDistribution();
+
+}
+
+
+/* =====================================================
+   SELLER PERFORMANCE
+===================================================== */
+
+function renderSellerPerformance() {
+
+    const data =
+    db.sellers.map(seller => {
+
+        return {
+
+            seller,
+
+            count:
+            db.shipments.filter(
+                shipment =>
+                shipment.sellerId === seller.id
+            ).length
+
+        };
+
+    })
+    .sort((a,b) =>
+        b.count - a.count
+    );
+
+
+    const max =
+    Math.max(
+        1,
+        ...data.map(
+            item => item.count
+        )
+    );
+
+
+    document
+    .getElementById("sellerPerformance")
+    .innerHTML =
+    data.length ?
+
+    data.map(item => {
+
+        const percentage =
+        item.count / max * 100;
+
+        return `
+        <div style="margin:15px 0">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                margin-bottom:6px
+            ">
+
+                <span>
+                    ${item.seller.business}
+                </span>
+
+                <b>
+                    ${item.count}
+                </b>
+
+            </div>
+
+            <div class="progress">
+
+                <div
+                class="progress-bar"
+                style="width:${percentage}%">
+                </div>
+
+            </div>
+
+        </div>
+        `;
+
+    }).join("")
+
+    :
+
+    `<div class="empty">No seller data</div>`;
+
+}
+
+
+/* =====================================================
+   STATUS DISTRIBUTION
+===================================================== */
+
+function renderStatusDistribution() {
+
+    const data =
+    shipmentStatuses.map(status => {
+
+        return {
+
+            status,
+
+            count:
+            db.shipments.filter(
+                shipment =>
+                shipment.status === status
+            ).length
+
+        };
+
+    })
+    .filter(item =>
+        item.count > 0
+    );
+
+
+    document
+    .getElementById("statusDistribution")
+    .innerHTML =
+    data.length ?
+
+    data.map(item => {
+
+        return `
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            padding:9px 0;
+            border-bottom:1px solid #eee
+        ">
+
+            ${getBadge(item.status)}
+
+            <b>${item.count}</b>
+
+        </div>
+        `;
+
+    }).join("")
+
+    :
+
+    `<div class="empty">No shipment records</div>`;
+
+}
+
+
+/* =====================================================
+   SHIPMENTS
+===================================================== */
+
+function renderShipments() {
+
+    const search =
+    (
+        document
+        .getElementById("shipmentSearch")
+        ?.value || ""
+    )
+    .toLowerCase();
+
+
+    const status =
+    document
+    .getElementById("shipmentStatusFilter")
+    ?.value || "";
+
+
+    const sellerId =
+    document
+    .getElementById("shipmentSellerFilter")
+    ?.value || "";
+
+
+    const results =
+    db.shipments.filter(shipment => {
+
+        const seller =
+        getSeller(shipment.sellerId);
+
+        const customer =
+        getCustomer(shipment.customerId);
+
+
+        const searchable =
+        [
+            shipment.id,
+            shipment.tracking,
+            seller?.business,
+            customer?.name
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+        return
+        searchable.includes(search) &&
+        (!status ||
+            shipment.status === status) &&
+        (!sellerId ||
+            shipment.sellerId === sellerId);
+
+    });
+
+
+    document
+    .getElementById("shipmentTable")
+    .innerHTML =
+    results.length ?
+
+    results.map(shipment => {
+
+        const seller =
+        getSeller(shipment.sellerId);
+
+        const customer =
+        getCustomer(shipment.customerId);
+
+
+        const products =
+        (shipment.items || [])
+        .map(item => item.name)
+        .join(", ");
+
+
+        return `
+        <tr>
+
+            <td>
+                <b>${shipment.id}</b>
+            </td>
+
+            <td>
+                ${seller?.business || "-"}
+            </td>
+
+            <td>
+                ${customer?.name || "-"}
+            </td>
+
+            <td>
+                ${shipment.tracking || "-"}
+            </td>
+
+            <td>
+                ${products}
+            </td>
+
+            <td>
+                ₹${shipmentValue(shipment).toLocaleString()}
+            </td>
+
+            <td>
+                ${getBadge(shipment.status)}
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-outline btn-small"
+                onclick="manageShipment('${shipment.id}')">
+
+                    Manage
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+    }).join("")
+
+    :
+
+    `
+    <tr>
+        <td colspan="8" class="empty">
+            No shipments found
+        </td>
+    </tr>
+    `;
+
+}
+
+
+/* =====================================================
+   SELLERS
+===================================================== */
+
+function renderSellers() {
+
+    const search =
+    (
+        document
+        .getElementById("sellerSearch")
+        ?.value || ""
+    )
+    .toLowerCase();
+
+
+    const results =
+    db.sellers.filter(seller => {
+
+        return [
+            seller.name,
+            seller.business,
+            seller.phone,
+            seller.email
+        ]
+        .join(" ")
+        .toLowerCase()
+        .includes(search);
+
+    });
+
+
+    document
+    .getElementById("sellerTable")
+    .innerHTML =
+    results.length ?
+
+    results.map(seller => {
+
+        const shipments =
+        db.shipments.filter(
+            shipment =>
+            shipment.sellerId === seller.id
+        );
+
+
+        const delivered =
+        shipments.filter(
+            shipment =>
+            shipment.status === "Delivered"
+        ).length;
+
+
+        const value =
+        shipments.reduce(
+            (total, shipment) =>
+            total + shipmentValue(shipment),
+            0
+        );
+
+
+        return `
+        <tr>
+
+            <td>
+                <b>${seller.name}</b>
+            </td>
+
+            <td>
+                ${seller.business}
+            </td>
+
+            <td>
+                ${seller.phone}
+                <br>
+                <span class="muted">
+                    ${seller.email || ""}
+                </span>
+            </td>
+
+            <td>
+                ${shipments.length}
+            </td>
+
+            <td>
+                ${delivered}
+            </td>
+
+            <td>
+                ₹${value.toLocaleString()}
+            </td>
+
+            <td>
+                ${getBadge(seller.status)}
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-outline btn-small"
+                onclick="openSellerModal('${seller.id}')">
+
+                    Edit
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+    }).join("")
+
+    :
+
+    `
+    <tr>
+        <td colspan="8" class="empty">
+            No sellers available
+        </td>
+    </tr>
+    `;
+
+}
+
+
+/* =====================================================
+   SELLER MODAL
+===================================================== */
+
+function openSellerModal(id = null) {
+
+    const modal =
+    document.getElementById("sellerModal");
+
+    modal.classList.add("show");
+
+
+    document
+    .querySelector("#sellerModal form")
+    .reset();
+
+
+    document
+    .getElementById("sellerId")
+    .value = "";
+
+
+    if (!id) return;
+
+
+    const seller =
+    getSeller(id);
+
+
+    document
+    .getElementById("sellerId")
+    .value =
+    seller.id;
+
+
+    document
+    .getElementById("sellerName")
+    .value =
+    seller.name;
+
+
+    document
+    .getElementById("sellerBusiness")
+    .value =
+    seller.business;
+
+
+    document
+    .getElementById("sellerPhone")
+    .value =
+    seller.phone;
+
+
+    document
+    .getElementById("sellerEmail")
+    .value =
+    seller.email || "";
+
+
+    document
+    .getElementById("sellerType")
+    .value =
+    seller.type;
+
+
+    document
+    .getElementById("sellerStatus")
+    .value =
+    seller.status;
+
+
+    document
+    .getElementById("sellerAddress")
+    .value =
+    seller.address || "";
+
+}
+
+
+function saveSeller(event) {
+
+    event.preventDefault();
+
+
+    const id =
+    document
+    .getElementById("sellerId")
+    .value;
+
+
+    const data = {
+
+        name:
+        document.getElementById(
+            "sellerName"
+        ).value,
+
+        business:
+        document.getElementById(
+            "sellerBusiness"
+        ).value,
+
+        phone:
+        document.getElementById(
+            "sellerPhone"
+        ).value,
+
+        email:
+        document.getElementById(
+            "sellerEmail"
+        ).value,
+
+        type:
+        document.getElementById(
+            "sellerType"
+        ).value,
+
+        status:
+        document.getElementById(
+            "sellerStatus"
+        ).value,
+
+        address:
+        document.getElementById(
+            "sellerAddress"
+        ).value
+
+    };
+
+
+    if (id) {
+
+        Object.assign(
+            getSeller(id),
+            data
+        );
+
+    }
+
+    else {
+
+        db.sellers.push({
+
+            id:
+            generateId("SEL"),
+
+            ...data
+
+        });
+
+    }
+
+
+    saveDatabase();
+
+    closeModal("sellerModal");
+
+    renderAll();
+
+    showToast("Seller saved successfully");
+
+}
+
+
+/* =====================================================
+   PRODUCTS
+===================================================== */
+
+function openProductModal() {
+
+    if (!db.sellers.length) {
+
+        showToast(
+            "Please add a seller first"
+        );
+
+        return;
+
+    }
+
+
+    document
+    .getElementById("productSeller")
+    .innerHTML =
+    db.sellers.map(seller => {
+
+        return `
+        <option value="${seller.id}">
+            ${seller.business}
+        </option>
+        `;
+
+    }).join("");
+
+
+    document
+    .getElementById("productModal")
+    .classList.add("show");
+
+}
+
+
+function saveProduct(event) {
+
+    event.preventDefault();
+
+
+    db.products.push({
+
+        id:
+        generateId("PRD"),
+
+        sellerId:
+        document.getElementById(
+            "productSeller"
+        ).value,
+
+        name:
+        document.getElementById(
+            "productName"
+        ).value,
+
+        sku:
+        document.getElementById(
+            "productSku"
+        ).value,
+
+        category:
+        document.getElementById(
+            "productCategory"
+        ).value,
+
+        value:
+        Number(
+            document.getElementById(
+                "productValue"
+            ).value
+        ) || 0,
+
+        qty:
+        Number(
+            document.getElementById(
+                "productQty"
+            ).value
+        ) || 0,
+
+        link:
+        document.getElementById(
+            "productLink"
+        ).value
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("productModal");
+
+    renderAll();
+
+    showToast(
+        "Product record added"
+    );
+
+}
+
+
+function renderProducts() {
+
+    const search =
+    (
+        document
+        .getElementById("productSearch")
+        ?.value || ""
+    )
+    .toLowerCase();
+
+
+    const sellerId =
+    document
+    .getElementById("productSellerFilter")
+    ?.value || "";
+
+
+    const results =
+    db.products.filter(product => {
+
+        const seller =
+        getSeller(product.sellerId);
+
+
+        const text =
+        [
+            product.name,
+            product.sku,
+            seller?.business
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+        return
+        text.includes(search) &&
+        (
+            !sellerId ||
+            product.sellerId === sellerId
+        );
+
+    });
+
+
+    document
+    .getElementById("productTable")
+    .innerHTML =
+    results.length ?
+
+    results.map(product => {
+
+        const seller =
+        getSeller(product.sellerId);
+
+
+        return `
+        <tr>
+
+            <td>
+                <b>${product.name}</b>
+            </td>
+
+            <td>
+                ${seller?.business || "-"}
+            </td>
+
+            <td>
+                ${product.sku || "-"}
+            </td>
+
+            <td>
+                ${product.category || "-"}
+            </td>
+
+            <td>
+                ₹${product.value.toLocaleString()}
+            </td>
+
+            <td>
+                ${product.qty}
+            </td>
+
+            <td>
+
+                ${
+                    product.link
+                    ?
+                    `
+                    <button
+                    class="btn btn-outline btn-small"
+                    onclick="window.open('${product.link}')">
+
+                        Open
+
+                    </button>
+                    `
+                    :
+                    "-"
+                }
+
+            </td>
+
+        </tr>
+        `;
+
+    }).join("")
+
+    :
+
+    `
+    <tr>
+        <td colspan="7" class="empty">
+            No products available
+        </td>
+    </tr>
+    `;
+
+}
+
+
+/* =====================================================
+   CUSTOMERS
+===================================================== */
+
+function renderCustomers() {
+
+    const search =
+    (
+        document
+        .getElementById("customerSearch")
+        ?.value || ""
+    )
+    .toLowerCase();
+
+
+    const results =
+    db.customers.filter(customer => {
+
+        return [
+            customer.name,
+            customer.phone,
+            customer.address
+        ]
+        .join(" ")
+        .toLowerCase()
+        .includes(search);
+
+    });
+
+
+    document
+    .getElementById("customerTable")
+    .innerHTML =
+    results.length ?
+
+    results.map(customer => {
+
+        const shipments =
+        db.shipments.filter(
+            shipment =>
+            shipment.customerId === customer.id
+        );
+
+
+        const sellers =
+        new Set(
+            shipments.map(
+                shipment =>
+                shipment.sellerId
+            )
+        );
+
+
+        return `
+        <tr>
+
+            <td>
+                <b>${customer.name}</b>
+            </td>
+
+            <td>
+                ${customer.phone}
+                ${customer.whatsapp ? "🟢" : ""}
+            </td>
+
+            <td>
+                ${customer.address || "-"}
+            </td>
+
+            <td>
+                ${sellers.size}
+            </td>
+
+            <td>
+                ${shipments.length}
+            </td>
+
+            <td>
+
+                <button
+                class="btn btn-outline btn-small"
+                onclick="customerHistory('${customer.id}')">
+
+                    View
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+    }).join("")
+
+    :
+
+    `
+    <tr>
+        <td colspan="6" class="empty">
+            No customers available
+        </td>
+    </tr>
+    `;
+
+}
+
+
+/* =====================================================
+   SHIPMENT MANAGEMENT
+===================================================== */
+
+function manageShipment(id) {
+
+    const shipment =
+    db.shipments.find(
+        item =>
+        item.id === id
+    );
+
+
+    const seller =
+    getSeller(shipment.sellerId);
+
+
+    const customer =
+    getCustomer(shipment.customerId);
+
+
+    document
+    .getElementById("detailContent")
+    .innerHTML = `
+
+    <h2>
+        ${shipment.id}
+    </h2>
+
+    <p>
+
+        <b>Seller:</b>
+        ${seller?.business || "-"}
+
+        <br>
+
+        <b>Customer:</b>
+        ${customer?.name || "-"}
+
+        <br>
+
+        <b>Tracking ID:</b>
+        ${shipment.tracking || "-"}
+
+    </p>
+
+
+    <div class="form-group">
+
+        <label>Update Shipment Status</label>
+
+        <select
+        class="form-control"
+        id="newShipmentStatus">
+
+            ${shipmentStatuses.map(status => {
+
+                return `
+                <option
+                ${status === shipment.status ? "selected" : ""}>
+
+                    ${status}
+
+                </option>
+                `;
+
+            }).join("")}
+
+        </select>
+
+    </div>
+
+    <br>
+
+
+    <div class="form-group">
+
+        <label>
+            Admin Update / Tracking Note
+        </label>
+
+        <textarea
+        class="form-control"
+        id="shipmentNote"
+        placeholder="
+Warehouse inspection, package update,
+dispatch information or delivery note..."></textarea>
+
+    </div>
+
+    <br>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+        <button
+        class="btn btn-primary"
+        onclick="updateShipment('${shipment.id}')">
+
+            Save Update
+
+        </button>
+
+        <button
+        class="btn btn-danger"
+        onclick="markShipmentIssue('${shipment.id}')">
+
+            Mark Issue / Hold
+
+        </button>
+
+    </div>
+
+
+    <h3 style="margin-top:25px">
+        Tracking & Audit Logs
+    </h3>
+
+
+    <div class="timeline">
+
+        ${
+            (shipment.logs || [])
+            .slice()
+            .reverse()
+            .map(log => {
+
+                return `
+
+                <div class="timeline-item">
+
+                    <b>
+                        ${log.status}
+                    </b>
+
+                    <br>
+
+                    <span class="muted">
+                        ${new Date(
+                            log.date
+                        ).toLocaleString()}
+                    </span>
+
+                    <br>
+
+                    ${log.note || ""}
+
+                </div>
+
+                `;
+
+            })
+            .join("")
+        }
+
+    </div>
+
+    `;
+
+
+    document
+    .getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+function updateShipment(id) {
+
+    const shipment =
+    db.shipments.find(
+        item =>
+        item.id === id
+    );
+
+
+    shipment.status =
+    document
+    .getElementById(
+        "newShipmentStatus"
+    ).value;
+
+
+    shipment.logs =
+    shipment.logs || [];
+
+
+    shipment.logs.push({
+
+        date:
+        new Date().toISOString(),
+
+        status:
+        shipment.status,
+
+        note:
+        document
+        .getElementById(
+            "shipmentNote"
+        ).value
+        ||
+        "Updated by Admin"
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("detailModal");
+
+    renderAll();
+
+    showToast(
+        "Shipment updated successfully"
+    );
+
+}
+
+
+function markShipmentIssue(id) {
+
+    const note =
+    prompt(
+        "Enter issue details"
+    );
+
+
+    if (note === null) return;
+
+
+    const shipment =
+    db.shipments.find(
+        item =>
+        item.id === id
+    );
+
+
+    shipment.status =
+    "Issue Found / Hold";
+
+
+    shipment.logs =
+    shipment.logs || [];
+
+
+    shipment.logs.push({
+
+        date:
+        new Date().toISOString(),
+
+        status:
+        shipment.status,
+
+        note:
+        note ||
+        "Issue reported by Admin"
+
+    });
+
+
+    saveDatabase();
+
+    closeModal("detailModal");
+
+    renderAll();
+
+    showToast(
+        "Shipment moved to Issue / Hold"
+    );
+
+}
+
+
+/* =====================================================
+   CUSTOMER HISTORY
+===================================================== */
+
+function customerHistory(id) {
+
+    const customer =
+    getCustomer(id);
+
+
+    const shipments =
+    db.shipments.filter(
+        shipment =>
+        shipment.customerId === id
+    );
+
+
+    document
+    .getElementById("detailContent")
+    .innerHTML = `
+
+    <h2>
+        ${customer.name}
+    </h2>
+
+    <p>
+
+        ${customer.phone}
+
+        <br>
+
+        ${customer.address || "-"}
+
+    </p>
+
+    <h3>Shipment History</h3>
+
+    <div class="timeline">
+
+        ${
+            shipments.length
+
+            ?
+
+            shipments.map(shipment => {
+
+                const seller =
+                getSeller(
+                    shipment.sellerId
+                );
+
+                return `
+
+                <div class="timeline-item">
+
+                    <b>
+                        ${shipment.id}
+                    </b>
+
+                    •
+                    ${seller?.business || "-"}
+
+                    <br>
+
+                    ${getBadge(
+                        shipment.status
+                    )}
+
+                </div>
+
+                `;
+
+            }).join("")
+
+            :
+
+            "No shipment history available"
+
+        }
+
+    </div>
+
+    `;
+
+
+    document
+    .getElementById("detailModal")
+    .classList.add("show");
+
+}
+
+
+/* =====================================================
+   WAREHOUSE
+===================================================== */
+
+function renderWarehouse() {
+
+    const india =
+    db.shipments.filter(
+        shipment =>
+        shipment.status.includes(
+            "India Warehouse"
+        )
+        ||
+        shipment.status.includes(
+            "Warehouse Inspection"
+        )
+        ||
+        shipment.status.includes(
+            "Processing"
+        )
+    );
+
+
+    const nepal =
+    db.shipments.filter(
+        shipment =>
+        shipment.status.includes(
+            "Nepal Warehouse"
+        )
+        ||
+        shipment.status.includes(
+            "Ready for Delivery"
+        )
+        ||
+        shipment.status.includes(
+            "Out for Delivery"
+        )
+    );
+
+
+    const stats = [
+
+        [
+            "India Warehouse",
+            india.length
+        ],
+
+        [
+            "Nepal Warehouse",
+            nepal.length
+        ],
+
+        [
+            "Ready Nepal Dispatch",
+
+            db.shipments.filter(
+                shipment =>
+                shipment.status ===
+                "Ready for Nepal Dispatch"
+            ).length
+        ],
+
+        [
+            "Delivered",
+
+            db.shipments.filter(
+                shipment =>
+                shipment.status ===
+                "Delivered"
+            ).length
+        ]
+
+    ];
+
+
+    document
+    .getElementById("warehouseStats")
+    .innerHTML =
+    stats.map(stat => {
+
+        return `
+
+        <div class="card">
+
+            <div class="muted">
+                ${stat[0]}
+            </div>
+
+            <div class="stat-number">
+                ${stat[1]}
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+
+    const queue =
+    [...india, ...nepal];
+
+
+    document
+    .getElementById("warehouseList")
+    .innerHTML =
+    queue.length
+
+    ?
+
+    queue.map(shipment => {
+
+        const seller =
+        getSeller(
+            shipment.sellerId
+        );
+
+        return `
+
+        <div class="notice">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                gap:10px
+            ">
+
+                <b>
+                    ${shipment.id}
+                    •
+                    ${seller?.business || "-"}
+                </b>
+
+                ${getBadge(
+                    shipment.status
+                )}
+
+            </div>
+
+            <div class="muted">
+
+                Tracking:
+                ${shipment.tracking || "-"}
+
+                • Weight:
+                ${shipment.weight || 0} kg
+
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("")
+
+    :
+
+    `<div class="empty">
+        Warehouse queue is empty
+    </div>`;
+
+}
+
+
+/* =====================================================
+   ISSUES
+===================================================== */
+
+function renderIssues() {
+
+    const issues =
+    db.shipments.filter(
+        shipment =>
+        shipment.status.includes(
+            "Issue"
+        )
+    );
+
+
+    document
+    .getElementById("issueList")
+    .innerHTML =
+    issues.length
+
+    ?
+
+    issues.map(shipment => {
+
+        const seller =
+        getSeller(
+            shipment.sellerId
+        );
+
+
+        const latestLog =
+        shipment.logs?.[
+            shipment.logs.length - 1
+        ];
+
+
+        return `
+
+        <div class="notice">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                gap:10px
+            ">
+
+                <b>
+
+                    ${shipment.id}
+
+                    •
+
+                    ${seller?.business || "-"}
+
+                </b>
+
+                <button
+                class="btn btn-success btn-small"
+                onclick="resolveIssue('${shipment.id}')">
+
+                    Resolve
+
+                </button>
+
+            </div>
+
+            <br>
+
+            ${latestLog?.note || ""}
+
+        </div>
+
+        `;
+
+    }).join("")
+
+    :
+
+    `<div class="empty">
+        No open shipment issues
+    </div>`;
+
+}
+
+
+function resolveIssue(id) {
+
+    const shipment =
+    db.shipments.find(
+        item =>
+        item.id === id
+    );
+
+
+    shipment.status =
+    "Processing Complete";
+
+
+    shipment.logs.push({
+
+        date:
+        new Date().toISOString(),
+
+        status:
+        shipment.status,
+
+        note:
+        "Issue resolved by Admin"
+
+    });
+
+
+    saveDatabase();
+
+    renderAll();
+
+    showToast(
+        "Issue resolved successfully"
+    );
+
+}
+
+
+/* =====================================================
+   REPORTS
+===================================================== */
+
+function renderReports() {
+
+    const totalValue =
+    db.shipments.reduce(
+        (total, shipment) =>
+        total + shipmentValue(shipment),
+        0
+    );
+
+
+    const stats = [
+
+        [
+            "Total Sellers",
+            db.sellers.length
+        ],
+
+        [
+            "Total Products",
+            db.products.length
+        ],
+
+        [
+            "Total Shipments",
+            db.shipments.length
+        ],
+
+        [
+            "Declared INR Value",
+            "₹" + totalValue.toLocaleString()
+        ]
+
+    ];
+
+
+    document
+    .getElementById("reportStats")
+    .innerHTML =
+    stats.map(stat => {
+
+        return `
+
+        <div class="card">
+
+            <div class="muted">
+                ${stat[0]}
+            </div>
+
+            <div class="stat-number">
+                ${stat[1]}
+            </div>
+
+        </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function saveSettings() {
+
+    db.settings.address =
+    document
+    .getElementById(
+        "warehouseAddress"
+    ).value;
+
+
+    saveDatabase();
+
+    showToast(
+        "Settings saved"
+    );
+
+}
+
+
+/* =====================================================
+   CSV EXPORT
+===================================================== */
+
+function downloadCSV(
+    fileName,
+    rows
+) {
+
+    const csv =
+    rows.map(row => {
+
+        return row.map(value => {
+
+            return `"${String(
+                value ?? ""
+            ).replace(/"/g,'""')}"`;
+
+        }).join(",");
+
+    }).join("\n");
+
+
+    const blob =
+    new Blob(
+        [csv],
+        {
+            type:
+            "text/csv"
+        }
+    );
+
+
+    const link =
+    document.createElement("a");
+
+
+    link.href =
+    URL.createObjectURL(blob);
+
+
+    link.download =
+    fileName;
+
+
+    link.click();
+
+}
+
+
+function exportShipments() {
+
+    const rows = [
+
+        [
+            "Shipment ID",
+            "Seller",
+            "Customer",
+            "Mobile",
+            "Tracking ID",
+            "Weight",
+            "Value INR",
+            "Status"
+        ]
+
+    ];
+
+
+    db.shipments.forEach(
+        shipment => {
+
+            const seller =
+            getSeller(
+                shipment.sellerId
+            );
+
+            const customer =
+            getCustomer(
+                shipment.customerId
+            );
+
+
+            rows.push([
+
+                shipment.id,
+
+                seller?.business,
+
+                customer?.name,
+
+                customer?.phone,
+
+                shipment.tracking,
+
+                shipment.weight,
+
+                shipmentValue(shipment),
+
+                shipment.status
+
+            ]);
+
+        }
+    );
+
+
+    downloadCSV(
+        "merowish-shipments.csv",
+        rows
+    );
+
+}
+
+
+function exportSellers() {
+
+    const rows = [
+
+        [
+            "Name",
+            "Business",
+            "Phone",
+            "Email",
+            "Status"
+        ],
+
+        ...db.sellers.map(
+            seller => [
+
+                seller.name,
+
+                seller.business,
+
+                seller.phone,
+
+                seller.email,
+
+                seller.status
+
+            ]
+        )
+
+    ];
+
+
+    downloadCSV(
+        "merowish-sellers.csv",
+        rows
+    );
+
+}
+
+
+function exportCustomers() {
+
+    const rows = [
+
+        [
+            "Name",
+            "Phone",
+            "Email",
+            "Address"
+        ],
+
+        ...db.customers.map(
+            customer => [
+
+                customer.name,
+
+                customer.phone,
+
+                customer.email,
+
+                customer.address
+
+            ]
+        )
+
+    ];
+
+
+    downloadCSV(
+        "merowish-customers.csv",
+        rows
+    );
+
+}
+
+
+/* =====================================================
+   RENDER EVERYTHING
+===================================================== */
+
+function renderAll() {
+
+    renderFilters();
+
+    renderDashboard();
+
+    renderShipments();
+
+    renderSellers();
+
+    renderProducts();
+
+    renderCustomers();
+
+    renderWarehouse();
+
+    renderIssues();
+
+    renderReports();
+
+}
+
+
+/* =====================================================
+   DEMO DATA
+===================================================== */
+
+function createDemoData() {
+
+    if (db.sellers.length > 0) return;
+
+
+    const sellerId =
+    generateId("SEL");
+
+
+    const customerId =
+    generateId("CUS");
+
+
+    const now =
+    new Date().toISOString();
+
+
+    db.sellers.push({
+
+        id:
+        sellerId,
+
+        name:
+        "Demo Seller",
+
+        business:
+        "Demo Fashion Store",
+
+        phone:
+        "9800000000",
+
+        email:
+        "seller@example.com",
+
+        type:
+        "Online Store",
+
+        status:
+        "Active",
+
+        address:
+        "Kathmandu, Nepal"
+
+    });
+
+
+    db.customers.push({
+
+        id:
+        customerId,
+
+        name:
+        "Demo Customer",
+
+        phone:
+        "9812345678",
+
+        email:
+        "",
+
+        address:
+        "Kathmandu, Nepal",
+
+        whatsapp:
+        true
+
+    });
+
+
+    db.products.push({
+
+        id:
+        generateId("PRD"),
+
+        sellerId:
+        sellerId,
+
+        name:
+        "Premium Shoes",
+
+        sku:
+        "SHOE-001",
+
+        category:
+        "Footwear",
+
+        value:
+        2500,
+
+        qty:
+        1,
+
+        link:
+        ""
+
+    });
+
+
+    db.shipments.push({
+
+        id:
+        generateId("SHP"),
+
+        sellerId:
+        sellerId,
+
+        customerId:
+        customerId,
+
+        tracking:
+        "DEMO123456",
+
+        weight:
+        0.8,
+
+        status:
+        "Arrived at India Warehouse",
+
+        items: [
+
+            {
+
+                name:
+                "Premium Shoes",
+
+                qty:
+                1,
+
+                value:
+                2500
+
+            }
+
+        ],
+
+        logs: [
+
+            {
+
+                date:
+                now,
+
+                status:
+                "Shipment Created",
+
+                note:
+                "Shipment created by seller"
+
+            },
+
+            {
+
+                date:
+                now,
+
+                status:
+                "Arrived at India Warehouse",
+
+                note:
+                "Package received at India warehouse"
+
+            }
+
+        ]
+
+    });
+
+
+    saveDatabase();
+
+}
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+createDemoData();
+
+
+document
+.getElementById("warehouseAddress")
+.value =
+db.settings.address
+||
+document
+.getElementById("warehouseAddress")
+.value;
+
+
+renderAll();
+
+</script>
+
+</body>
+</html>
