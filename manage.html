@@ -42,9 +42,69 @@
         textarea {
             font-family: inherit;
             font-size: inherit;
-            -webkit-appearance: none;
-            appearance: none;
         }
+        input[type="checkbox"] {
+            accent-color: var(--primary);
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: inline-block !important;
+            background: #fff !important;
+            border: 2px solid var(--gray300) !important;
+            border-radius: 4px !important;
+            appearance: auto !important;
+            -webkit-appearance: checkbox !important;
+            -moz-appearance: checkbox !important;
+            margin: 0;
+            position: relative;
+        }
+        input[type="checkbox"]:checked {
+            accent-color: var(--primary);
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+        }
+        input[type="checkbox"]:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+        .select-all-header input[type="checkbox"],
+        .select-all-wrap input[type="checkbox"],
+        .order-card input[type="checkbox"],
+        .orders-table input[type="checkbox"] {
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: inline-block !important;
+            width: 16px !important;
+            height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
+            appearance: auto !important;
+            -webkit-appearance: checkbox !important;
+            -moz-appearance: checkbox !important;
+            background: #fff !important;
+            border: 2px solid #cbd5e1 !important;
+            border-radius: 4px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            position: relative !important;
+            flex-shrink: 0 !important;
+        }
+        .select-all-header input[type="checkbox"]:checked,
+        .select-all-wrap input[type="checkbox"]:checked,
+        .order-card input[type="checkbox"]:checked,
+        .orders-table input[type="checkbox"]:checked {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            accent-color: var(--primary);
+        }
+        .select-all-header input[type="checkbox"]:indeterminate,
+        .select-all-wrap input[type="checkbox"]:indeterminate {
+            accent-color: var(--primary);
+        }
+
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -304,6 +364,58 @@
                 display: inline-flex !important;
             }
         }
+        /* Desktop: hamburger always visible, sidebar toggle via top bar button */
+        .top-bar .left .menu-btn {
+            display: inline-flex !important;
+            padding: 6px 8px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: #475569;
+            font-size: 20px;
+        }
+        .top-bar .left .menu-btn:hover {
+            background: var(--gray100);
+        }
+        @media (min-width: 1024px) {
+            /* sidebar overlay hidden on desktop */
+            #sidebarOverlay {
+                display: none !important;
+            }
+            /* sidebar always visible on desktop, but can be collapsed via toggle */
+            #sidebar {
+                transform: translateX(0) !important;
+            }
+            #sidebar:not(.expanded) {
+                width: 64px;
+            }
+            #sidebar.expanded {
+                width: 256px;
+            }
+            #mainContent {
+                margin-left: 64px;
+                transition: margin-left 0.3s ease;
+            }
+            #sidebar.expanded~#mainContent {
+                margin-left: 256px;
+            }
+        }
+        @media (max-width: 1023px) {
+            .top-bar .left .menu-btn {
+                display: inline-flex !important;
+            }
+            #sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+            }
+            #sidebar.expanded {
+                transform: translateX(0);
+                width: 280px;
+            }
+            #mainContent {
+                margin-left: 0;
+            }
+        }
 
         /* ─── MAIN CONTENT ──────────────────────────────────────────────── */
         #mainContent {
@@ -347,7 +459,7 @@
             gap: 8px;
         }
         .top-bar .left .menu-btn {
-            display: none;
+            display: inline-flex;
             padding: 6px 8px;
             border-radius: 8px;
             background: transparent;
@@ -502,11 +614,6 @@
             .top-bar {
                 padding: 6px 10px;
                 min-height: 48px;
-            }
-            .top-bar .left .menu-btn {
-                display: inline-flex;
-                padding: 4px 6px;
-                font-size: 18px;
             }
             .top-bar .left .page-title {
                 display: none;
@@ -1193,10 +1300,26 @@
             font-weight: 500;
         }
         .bulk-actions-bar .select-all-wrap input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 16px !important;
+            height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
             accent-color: var(--primary);
             cursor: pointer;
+            appearance: auto !important;
+            -webkit-appearance: checkbox !important;
+            -moz-appearance: checkbox !important;
+            background: #fff !important;
+            border: 2px solid #cbd5e1 !important;
+            border-radius: 4px !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .bulk-actions-bar .select-all-wrap input[type="checkbox"]:checked {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            accent-color: var(--primary);
         }
         .bulk-actions-bar .count-badge {
             background: var(--primary);
@@ -1276,8 +1399,10 @@
                 font-size: 10px;
             }
             .bulk-actions-bar .select-all-wrap input[type="checkbox"] {
-                width: 14px;
-                height: 14px;
+                width: 14px !important;
+                height: 14px !important;
+                min-width: 14px !important;
+                min-height: 14px !important;
             }
             .bulk-actions-bar .count-badge {
                 font-size: 10px;
@@ -1442,6 +1567,31 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+
+        .orders-table .select-all-header input[type="checkbox"],
+        .orders-table input[type="checkbox"] {
+            width: 16px !important;
+            height: 16px !important;
+            min-width: 16px !important;
+            min-height: 16px !important;
+            appearance: auto !important;
+            -webkit-appearance: checkbox !important;
+            -moz-appearance: checkbox !important;
+            background: #fff !important;
+            border: 2px solid #cbd5e1 !important;
+            border-radius: 4px !important;
+            accent-color: var(--primary);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .orders-table .select-all-header input[type="checkbox"]:checked,
+        .orders-table input[type="checkbox"]:checked {
+            background: var(--primary) !important;
+            border-color: var(--primary) !important;
+            accent-color: var(--primary);
         }
 
         .orders-table .product-img-wrap {
@@ -1896,6 +2046,7 @@
             filter: drop-shadow(0 0 6px rgba(205, 127, 50, 0.25));
         }
 
+        /* ─── EXPRESS TRUCK – MOBILE FIX ────────────────────────────────── */
         .orders-table .express-truck {
             display: inline-flex;
             align-items: center;
@@ -1947,6 +2098,51 @@
         }
         .orders-table .express-truck:hover .tooltip {
             opacity: 1;
+        }
+        /* mobile size adjust */
+        @media (max-width: 767px) {
+            .orders-table .express-truck .truck-icon {
+                font-size: 11px;
+            }
+            .orders-table .express-truck .days-sup {
+                font-size: 6px;
+                min-width: 10px;
+                height: 10px;
+                top: -3px;
+                right: -4px;
+            }
+            .order-card .express-truck .truck-icon {
+                font-size: 11px;
+            }
+            .order-card .express-truck .days-sup {
+                font-size: 6px;
+                min-width: 10px;
+                height: 10px;
+                top: -3px;
+                right: -4px;
+            }
+        }
+        @media (max-width: 480px) {
+            .orders-table .express-truck .truck-icon {
+                font-size: 10px;
+            }
+            .orders-table .express-truck .days-sup {
+                font-size: 5px;
+                min-width: 9px;
+                height: 9px;
+                top: -3px;
+                right: -3px;
+            }
+            .order-card .express-truck .truck-icon {
+                font-size: 10px;
+            }
+            .order-card .express-truck .days-sup {
+                font-size: 5px;
+                min-width: 9px;
+                height: 9px;
+                top: -3px;
+                right: -3px;
+            }
         }
 
         .orders-table .stage-tag {
@@ -2918,20 +3114,23 @@
         .cost-modal .discount-row {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             background: #f5f9ff;
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: var(--radius);
         }
         .cost-modal .discount-row .field {
-            flex: 1;
-            min-width: 100px;
+            flex: 2 1 120px;
+            min-width: 80px;
+        }
+        .cost-modal .discount-row .field input {
+            width: 100%;
         }
         .cost-modal .discount-badge {
             background: #e6f0ff;
             color: #1a5adf;
-            padding: 3px 14px;
+            padding: 3px 12px;
             border-radius: 40px;
             font-size: 11px;
             font-weight: 600;
@@ -2939,27 +3138,54 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            flex: 0 1 auto;
         }
         .cost-modal .discount-badge .apply-btn {
             background: var(--primary);
             color: #fff;
             border: none;
             border-radius: 30px;
-            padding: 2px 12px;
+            padding: 2px 10px;
             font-size: 10px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
+            white-space: nowrap;
         }
         .cost-modal .discount-badge .apply-btn:hover {
             background: var(--primaryDark);
         }
         .cost-modal .discount-hint {
-            font-size: 11px;
+            font-size: 10px;
             color: #3d5a7a;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
+            flex: 0 1 auto;
+        }
+        @media (max-width: 480px) {
+            .cost-modal .discount-row {
+                gap: 6px;
+                padding: 6px 10px;
+                flex-wrap: wrap;
+            }
+            .cost-modal .discount-row .field {
+                flex: 1 1 100%;
+                min-width: 60px;
+            }
+            .cost-modal .discount-badge {
+                font-size: 10px;
+                padding: 2px 10px;
+                flex: 0 1 auto;
+            }
+            .cost-modal .discount-hint {
+                font-size: 9px;
+                flex: 0 1 auto;
+            }
+            .cost-modal .discount-badge .apply-btn {
+                font-size: 9px;
+                padding: 1px 8px;
+            }
         }
 
         .cost-modal .cost-table {
@@ -3151,8 +3377,9 @@
                 gap: 8px;
             }
             .cost-modal .discount-row {
-                flex-direction: column;
-                align-items: stretch;
+                flex-direction: row;
+                align-items: center;
+                flex-wrap: wrap;
             }
             .cost-modal .grand-total {
                 flex-direction: column;
@@ -4280,7 +4507,7 @@
             <!-- ─── ORDERS TABLE / CARDS ───────────────────────────────────── -->
             <div class="orders-container">
                 <div class="orders-header">
-                    <div><span class="title"><i class="fas fa-list" style="color:var(--primary);margin-right:6px;"></i>Order List</span><span class="count" id="resultCount">Showing 8 orders</span></div>
+                    <div><span class="title"><i class="fas fa-list" style="color:var(--primary);margin-right:6px;"></i>Order List</span><span class="count" id="resultCount">Showing 10 orders</span></div>
                     <div class="controls">
                         <div class="legend hidden-xs">
                             <span><span class="dot green"></span> Delivered</span>
@@ -4305,7 +4532,7 @@
                     <table class="orders-table" id="ordersTable">
                         <thead>
                             <tr>
-                                <th style="width:28px;text-align:center;" class="select-all-header"><input type="checkbox" id="selectAllDesktop" onchange="toggleSelectAllDesktop()" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;" /></th>
+                                <th style="width:28px;text-align:center;" class="select-all-header"><input type="checkbox" id="selectAllDesktop" onchange="toggleSelectAllDesktop()" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;min-width:16px;min-height:16px;" /></th>
                                 <th style="white-space:nowrap;width:130px;">Action</th>
                                 <th style="white-space:nowrap;width:44px;">Cost</th>
                                 <th style="white-space:nowrap;width:60px;">Product</th>
@@ -4642,10 +4869,12 @@
                 'Bikash Thapa': { tier: 'Gold', mobile: '+977-984-567-8901', icon: '🥇' },
                 'Anita Rai': { tier: 'Silver', mobile: '+977-985-678-9012', icon: '🥈' },
                 'Kiran Bhandari': { tier: 'Bronze', mobile: '+977-986-789-0123', icon: '🥉' },
-                'Maya Devi': { tier: 'Gold', mobile: '+977-987-890-1234', icon: '🥇' }
+                'Maya Devi': { tier: 'Gold', mobile: '+977-987-890-1234', icon: '🥇' },
+                'Seller User 1': { tier: 'Gold', mobile: '+977-988-111-2222', icon: '🥇' },
+                'Seller User 2': { tier: 'Silver', mobile: '+977-988-333-4444', icon: '🥈' }
             };
 
-            // ─── ORDERS DATA ──────────────────────────────────────────────
+            // ─── ORDERS DATA (including 2 Seller Orders) ──────────────────
             const ordersData = [{
                 id: 'MW2026224456',
                 user: 'Damodar Bhattarai',
@@ -4672,6 +4901,7 @@
                 orderStage: 'Delivered',
                 internalRemarks: 'Customer is a VIP. Expedite delivery. 🚀',
                 expressDays: null,
+                warehouseId: 'WID: 70002600',
                 costLogs: []
             }, {
                 id: 'MW2026224458',
@@ -4698,6 +4928,7 @@
                 orderStage: 'Shipped',
                 internalRemarks: '',
                 expressDays: null,
+                warehouseId: 'WID: 70002601',
                 costLogs: []
             }, {
                 id: 'MW2026224451',
@@ -4724,6 +4955,7 @@
                 orderStage: 'Arrived at Nepal WH',
                 internalRemarks: 'High-value item. Insurance required. 📦',
                 expressDays: 3,
+                warehouseId: 'WID: 70002602',
                 costLogs: []
             }, {
                 id: 'MW2026224453',
@@ -4750,6 +4982,7 @@
                 orderStage: 'Custom Clearance',
                 internalRemarks: 'Customs clearance in progress. All docs submitted.',
                 expressDays: null,
+                warehouseId: 'WID: 70002603',
                 costLogs: []
             }, {
                 id: 'MW2026224412',
@@ -4777,6 +5010,7 @@
                 orderStage: 'Custom Hold',
                 internalRemarks: '📞 Called customer for invoice. Waiting for response.',
                 expressDays: null,
+                warehouseId: 'WID: 70002604',
                 costLogs: []
             }, {
                 id: 'MW2026224432',
@@ -4803,6 +5037,7 @@
                 orderStage: 'Order Created',
                 internalRemarks: '',
                 expressDays: null,
+                warehouseId: 'WID: 70002605',
                 costLogs: []
             }, {
                 id: 'MW2026224433',
@@ -4829,6 +5064,7 @@
                 orderStage: 'Cancelled',
                 internalRemarks: 'Refund processed on 01 May 2026.',
                 expressDays: null,
+                warehouseId: 'WID: 70002606',
                 costLogs: []
             }, {
                 id: 'MW2026224456',
@@ -4856,8 +5092,68 @@
                 orderStage: 'Incoming Shipment',
                 internalRemarks: '',
                 expressDays: null,
+                warehouseId: 'WID: 70002607',
                 costLogs: []
-            }];
+            },
+            // ─── TWO SELLER ORDERS ──────────────────────────────────────────
+            {
+                id: 'MW2026224490',
+                user: 'Seller User 1',
+                dateTime: '07 May 2026 10:00',
+                paymentReceivedDateTime: '07 May 2026 10:15',
+                etaDeliveryDate: '18 May 2026',
+                type: 'Seller Order',
+                status: 'Order Approved',
+                paymentSummary: { total: 'NPR 8,200.00', advance: 'NPR 3,000.00', gateway: 'Fonepay(1003281885)',
+                    cod: 'NPR 5,200.00', invoiceValue: 'INR 2,100.00', approxWeight: '3.20 KG',
+                    gross: 'NPR 8,500.00', discount: 'NPR 300.00', final: 'NPR 8,200.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/701',
+                productImage: 'https://picsum.photos/seed/prod9/200/200',
+                qty: 2,
+                productName: 'Smart LED TV 55 inch - 4K',
+                totalAmount: 'NPR 8,200.00',
+                comment: 'Seller order - bulk purchase. Requires special handling.',
+                currentStageIndex: 3,
+                customerImage: null,
+                trackingNumber: 'TRK-2026-001238',
+                trackingUrl: 'https://track.dhl.com/TRK-2026-001238',
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '07 May 2026 10:15',
+                orderStage: 'Order Approved',
+                internalRemarks: 'High-value seller order. Priority processing.',
+                expressDays: 5,
+                warehouseId: 'WID: 70002608',
+                costLogs: []
+            }, {
+                id: 'MW2026224491',
+                user: 'Seller User 2',
+                dateTime: '07 May 2026 11:30',
+                paymentReceivedDateTime: '07 May 2026 11:45',
+                etaDeliveryDate: '20 May 2026',
+                type: 'Seller Order',
+                status: 'Payment Received',
+                paymentSummary: { total: 'NPR 3,450.00', advance: 'NPR 3,450.00', gateway: 'Fonepay(1003281886)',
+                    cod: 'NPR 0.00', invoiceValue: 'INR 880.00', approxWeight: '1.10 KG',
+                    gross: 'NPR 3,600.00', discount: 'NPR 150.00', final: 'NPR 3,450.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/702',
+                productImage: 'https://picsum.photos/seed/prod10/200/200',
+                qty: 3,
+                productName: 'Wireless Keyboard & Mouse Combo',
+                totalAmount: 'NPR 3,450.00',
+                comment: 'Seller order - ready for dispatch.',
+                currentStageIndex: 5,
+                customerImage: null,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Pokhara, Nepal',
+                lastUpdate: '07 May 2026 11:45',
+                orderStage: 'Incoming Shipment',
+                internalRemarks: 'Awaiting tracking from seller.',
+                expressDays: null,
+                warehouseId: 'WID: 70002609',
+                costLogs: []
+            }
+            ];
 
             // ─── STATE ──────────────────────────────────────────────────────
             let currentPage = 1;
@@ -5740,7 +6036,7 @@
                 html +=
                     '<div class="field full"><label>Dimensions (CM)</label><div class="dimensions-row"><div class="dim-field"><label>W</label><input type="number" step="0.1" value="0.5" id="costDimWidth" /></div><div class="dim-field"><label>H</label><input type="number" step="0.1" value="38.1" id="costDimHeight" /></div><div class="dim-field"><label>L</label><input type="number" step="0.1" value="27.9" id="costDimLength" /></div></div></div>';
                 html +=
-                    '<div class="field full"><div class="discount-row"><div class="field" style="flex:0 0 140px;"><label>Discount (NPR)</label><input type="number" value="0" id="costDiscount" min="0" step="0.01" /></div><div class="discount-badge"><span>💡 Suggested 6.53%</span><button class="apply-btn" onclick="applySuggestedDiscount()">Apply</button></div><span class="discount-hint">ℹ️ Click to apply</span></div></div>';
+                    '<div class="field full"><div class="discount-row"><div class="field" style="flex:2 1 120px;min-width:80px;"><label>Discount (NPR)</label><input type="number" value="0" id="costDiscount" min="0" step="0.01" /></div><div class="discount-badge"><span>💡 Suggested 6.53%</span><button class="apply-btn" onclick="applySuggestedDiscount()">Apply</button></div><span class="discount-hint">ℹ️ Click to apply</span></div></div>';
                 html += '</div>';
 
                 html +=
@@ -5989,6 +6285,9 @@
                         '<span class="internal-remark-badge"><i class="fas fa-pen"></i></span>' : '';
                     var expressIcon = renderExpressTruck(order.expressDays);
 
+                    // Warehouse ID line
+                    var warehouseLine = order.warehouseId ? '<div style="font-size:8px;color:var(--gray500);margin-top:1px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
+
                     var statusCell =
                         '<div class="status-cell-wrap"><div class="status-row"><span class="status-badge ' +
                         statusColor + ' ' + pulseClass + '" onclick="openTimelineModal(\'' + order.id +
@@ -6061,7 +6360,7 @@
                         '<td style="text-align:center;width:28px;"><input type="checkbox" id="' + getCheckboxId(
                             order.id, 'desktop') + '" ' + (isSelected ? 'checked' : '') +
                         ' onchange="toggleOrderSelection(\'' + order.id +
-                        '\', this.checked)" style="accent-color:var(--primary);cursor:pointer;width:14px;height:14px;" /></td>' +
+                        '\', this.checked)" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;min-width:16px;min-height:16px;" /></td>' +
                         '<td style="white-space:nowrap;">' + actionHtml + '</td>' +
                         '<td style="white-space:nowrap;"><button onclick="openCostModal(\'' + order.id +
                         '\')" class="action-btn-icon emerald" title="Cost Calculation"><i class="fas fa-calculator"></i><span class="tooltip-text">Cost</span></button></td>' +
@@ -6086,6 +6385,7 @@
                         (order.trackingNumber ?
                             '<div style="margin-top:1px;font-size:8px;color:#2563eb;"><i class="fas fa-link"></i> ' +
                             order.trackingNumber + '</div>' : '') +
+                        warehouseLine +
                         (hasInternalRemark ?
                             '<div style="margin-top:1px;font-size:8px;color:#8B5CF6;"><span class="internal-remarks-trigger" onclick="openInternalRemarksModal(\'' +
                             order.id +
@@ -6179,6 +6479,9 @@
                         order.user.replace(/'/g, '\\\'') + '\');">' + order.user + '</span>';
                     var expressIcon = renderExpressTruck(order.expressDays);
 
+                    // Warehouse ID for mobile
+                    var warehouseLineMobile = order.warehouseId ? '<div style="font-size:9px;color:var(--gray500);margin-top:2px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
+
                     var customerImgBadge = '';
                     if (order.type === 'Self Order' && order.customerImage) {
                         customerImgBadge =
@@ -6238,7 +6541,7 @@
                         '<input type="checkbox" id="' + getCheckboxId(order.id, 'mobile') + '" ' + (isSelected ?
                             'checked' : '') +
                         ' onchange="toggleOrderSelection(\'' + order.id +
-                        '\', this.checked)" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;flex-shrink:0;" />' +
+                        '\', this.checked)" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;min-width:16px;min-height:16px;flex-shrink:0;" />' +
                         '<span class="order-id">' + order.id + '</span> ' + expressIcon +
                         '</div>' +
                         '<div class="right">' +
@@ -6276,6 +6579,8 @@
                         commentHtml +
                         internalHtml +
                         '</div>' +
+                        // Warehouse ID line
+                        warehouseLineMobile +
                         '</div>' +
                         '</div>' +
                         // Divider
@@ -6560,7 +6865,7 @@
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(function() {
                     var csv =
-                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days\n';
+                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID\n';
                     filteredOrders.forEach(function(o) {
                         var tierData = getUserTier(o.user);
                         var remarks = (o.internalRemarks || '').replace(/,/g, ';').replace(/\n/g, ' ');
@@ -6572,7 +6877,8 @@
                             o.paymentSummary.approxWeight + '","' + o.dateTime + '","' + (o
                             .paymentReceivedDateTime || '') + '","' + (o.etaDeliveryDate || '') +
                             '","' + (o.lastUpdate || '') + '","' + (o.orderStage || o.status) +
-                            '","' + remarks + '",' + (o.expressDays || '') + '\n';
+                            '","' + remarks + '",' + (o.expressDays || '') + ',"' + (o.warehouseId ||
+                                '') + '"\n';
                     });
                     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     var a = document.createElement('a');
@@ -6621,9 +6927,11 @@
                 var sidebar = document.getElementById('sidebar');
                 var overlay = document.getElementById('sidebarOverlay');
                 if (window.innerWidth < 1024) {
+                    // mobile: toggle overlay and sidebar transform
                     sidebar.classList.toggle('expanded');
                     overlay.classList.toggle('visible');
                 } else {
+                    // desktop: toggle expanded class (collapse/expand)
                     sidebar.classList.toggle('expanded');
                 }
             }
