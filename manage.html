@@ -1177,7 +1177,6 @@
         .type-tab.active-seller:hover {
             background: #FDE68A;
         }
-        /* ─── Manual Order ────────────────────────────────── */
         .type-tab.active-manual {
             background: #FCE7F3;
             color: #BE185D;
@@ -1792,7 +1791,6 @@
             color: #92400E;
             border: 1px solid #FCD34D;
         }
-        /* ─── Manual Order type badge ──────────────────────────────── */
         .orders-table .type-badge.manual {
             background: #FCE7F3;
             color: #BE185D;
@@ -2159,7 +2157,6 @@
                 right: -3px;
             }
         }
-        /* ─── Mobile card express-truck (moved below order-id) ──────────── */
         .order-card .express-truck-mobile {
             display: inline-flex;
             align-items: center;
@@ -2470,7 +2467,6 @@
             color: #92400E;
             border: 1px solid #FCD34D;
         }
-        /* ─── Manual Order type badge for mobile ────────────────────── */
         .order-card .card-body .product-row .prod-info .qty .type-badge.manual {
             background: #FCE7F3;
             color: #BE185D;
@@ -4133,7 +4129,6 @@
             color: var(--gray400);
             margin-top: 3px;
         }
-        /* ─── Warehouse ETA field in ordered modal ──────────────────── */
         .ordered-modal .ordered-fields .warehouse-eta-field {
             margin-top: 10px;
         }
@@ -4289,6 +4284,206 @@
         }
         .internal-remarks .btn-row .btn-close:hover {
             background: var(--gray200);
+        }
+
+        /* ─── ADD MANUAL ORDER MODAL ────────────────────────────────────── */
+        .add-manual-order .field-group {
+            margin-bottom: 12px;
+        }
+        .add-manual-order .field-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gray500);
+            margin-bottom: 3px;
+        }
+        .add-manual-order .field-group input,
+        .add-manual-order .field-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid var(--gray200);
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .add-manual-order .field-group input:focus,
+        .add-manual-order .field-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.06);
+        }
+        .add-manual-order .field-group .input-with-suffix {
+            position: relative;
+        }
+        .add-manual-order .field-group .input-with-suffix input {
+            padding-right: 40px;
+        }
+        .add-manual-order .field-group .input-with-suffix .suffix {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray500);
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .add-manual-order .user-search-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .add-manual-order .user-search-row input {
+            flex: 1;
+        }
+        .add-manual-order .user-search-row button {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+            white-space: nowrap;
+        }
+        .add-manual-order .user-search-row button:hover {
+            background: var(--primaryDark);
+        }
+        .add-manual-order .user-search-results {
+            background: #fff;
+            border: 1px solid var(--gray200);
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 4px;
+            display: none;
+        }
+        .add-manual-order .user-search-results .result-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray100);
+            transition: 0.1s;
+            font-size: 13px;
+        }
+        .add-manual-order .user-search-results .result-item:hover {
+            background: var(--gray50);
+        }
+        .add-manual-order .user-search-results .result-item .phone {
+            color: var(--gray500);
+            font-size: 11px;
+        }
+        .add-manual-order .user-details {
+            background: var(--gray50);
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--gray200);
+            margin: 6px 0 10px;
+            display: none;
+        }
+        .add-manual-order .user-details .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 2px 0;
+            font-size: 13px;
+        }
+        .add-manual-order .user-details .detail-row .lbl {
+            color: var(--gray500);
+            font-weight: 500;
+        }
+        .add-manual-order .user-details .detail-row .val {
+            font-weight: 600;
+            color: var(--gray800);
+        }
+        .add-manual-order .user-details .whatsapp-btn {
+            margin-top: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #25D366;
+            color: #fff;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .add-manual-order .user-details .whatsapp-btn:hover {
+            background: #1ebe5c;
+        }
+        .add-manual-order .cost-breakdown {
+            background: var(--gray50);
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--gray200);
+            margin: 6px 0 10px;
+        }
+        .add-manual-order .cost-breakdown .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 13px;
+        }
+        .add-manual-order .cost-breakdown .row .lbl {
+            color: var(--gray600);
+            font-weight: 500;
+        }
+        .add-manual-order .cost-breakdown .row .val {
+            font-weight: 600;
+            color: var(--gray800);
+        }
+        .add-manual-order .cost-breakdown .row.total {
+            border-top: 1px solid var(--gray300);
+            margin-top: 4px;
+            padding-top: 6px;
+            font-weight: 700;
+        }
+        .add-manual-order .cost-breakdown .row.due-cod {
+            color: var(--danger);
+        }
+        .add-manual-order .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            justify-content: flex-end;
+        }
+        .add-manual-order .btn-row button {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .add-manual-order .btn-row .btn-save {
+            background: var(--primary);
+            color: #fff;
+        }
+        .add-manual-order .btn-row .btn-save:hover {
+            background: var(--primaryDark);
+        }
+        .add-manual-order .btn-row .btn-close {
+            background: var(--gray100);
+            color: var(--gray700);
+        }
+        .add-manual-order .btn-row .btn-close:hover {
+            background: var(--gray200);
+        }
+
+        @media (max-width: 480px) {
+            .add-manual-order .user-search-row {
+                flex-wrap: wrap;
+            }
+            .add-manual-order .user-search-row input {
+                flex: 1 1 100%;
+            }
+            .add-manual-order .cost-breakdown .row {
+                font-size: 12px;
+            }
         }
 
         /* ─── RESPONSIVE HELPERS ────────────────────────────────────────── */
@@ -4573,6 +4768,9 @@
                     <div class="universal-search">
                         <input type="text" id="universalSearchInput" placeholder="🔍 Universal Search..." oninput="filterOrders()" />
                     </div>
+                    <button onclick="openAddManualOrderModal()" style="margin-left:auto;padding:4px 12px;border-radius:16px;border:none;background:var(--primary);color:#fff;font-weight:600;font-size:10px;cursor:pointer;white-space:nowrap;">
+                        <i class="fas fa-plus"></i> Add Manual Order
+                    </button>
                 </div>
                 <div class="tabs-scroll" id="typeTabsContainer">
                     <button class="type-tab active-all" data-type="all" onclick="filterByType('all')"><i class="fas fa-th-list"></i> All</button>
@@ -4580,7 +4778,6 @@
                     <button class="type-tab" data-type="Buy For Me" onclick="filterByType('Buy For Me')"><i class="fas fa-shopping-bag"></i> Buy For Me</button>
                     <button class="type-tab" data-type="Self Order" onclick="filterByType('Self Order')"><i class="fas fa-box"></i> Self Order</button>
                     <button class="type-tab" data-type="Seller Order" onclick="filterByType('Seller Order')"><i class="fas fa-store"></i> Seller Orders</button>
-                    <!-- ─── Manual Order tab ─────────────────────────── -->
                     <button class="type-tab" data-type="Manual Order" onclick="filterByType('Manual Order')"><i class="fas fa-pen"></i> Manual Order</button>
                 </div>
             </div>
@@ -4824,7 +5021,7 @@
         </div>
     </div>
 
-    <!-- ─── ORDERED MODAL (with Warehouse ETA) ──────────────────────────── -->
+    <!-- ORDERED MODAL -->
     <div id="orderedModal" class="modal-overlay">
         <div class="modal-backdrop" onclick="closeOrderedModal()"></div>
         <div class="modal-box max-w-md ordered-modal">
@@ -4850,7 +5047,6 @@
                         <input type="number" id="orderedInrAmount" placeholder="Enter INR amount" step="0.01" min="0" />
                         <p class="inr-hint">This amount will be recorded as the invoice value in INR.</p>
                     </div>
-                    <!-- ─── Warehouse ETA Date Selector ────────────────── -->
                     <div class="warehouse-eta-field">
                         <label class="field-label">Warehouse ETA (India)</label>
                         <input type="date" id="orderedWarehouseEta" />
@@ -4881,6 +5077,98 @@
         </div>
     </div>
 
+    <!-- ─── ADD MANUAL ORDER MODAL ──────────────────────────────────────── -->
+    <div id="addManualOrderModal" class="modal-overlay">
+        <div class="modal-backdrop" onclick="closeAddManualOrderModal()"></div>
+        <div class="modal-box max-w-2xl add-manual-order">
+            <div class="modal-header"><span class="title"><i class="fas fa-pen" style="color:var(--primary);margin-right:8px;"></i>Add Manual Order</span><button class="close-btn" onclick="closeAddManualOrderModal()"><i class="fas fa-times"></i></button></div>
+            <div class="modal-body">
+                <!-- User Search -->
+                <div class="field-group">
+                    <label>Search User by Mobile</label>
+                    <div class="user-search-row">
+                        <input type="text" id="manualUserSearch" placeholder="Enter 10-digit mobile number" />
+                        <button onclick="searchUsers()"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                    <div class="user-search-results" id="userSearchResults"></div>
+                </div>
+
+                <!-- User Details (auto-filled) -->
+                <div class="user-details" id="manualUserDetails">
+                    <div class="detail-row"><span class="lbl">Name</span><span class="val" id="manualUserName">—</span></div>
+                    <div class="detail-row"><span class="lbl">Phone</span><span class="val" id="manualUserPhone">—</span></div>
+                    <div class="detail-row"><span class="lbl">Address</span><span class="val" id="manualUserAddress">—</span></div>
+                    <div class="detail-row"><span class="lbl">Tier</span><span class="val" id="manualUserTier">—</span></div>
+                    <button class="whatsapp-btn" id="manualWhatsAppBtn" onclick="shareWhatsApp()" style="display:none;"><i class="fab fa-whatsapp"></i> Share Order Status via WhatsApp</button>
+                </div>
+
+                <!-- Product Details -->
+                <div class="field-group">
+                    <label>Product Name</label>
+                    <input type="text" id="manualProductName" placeholder="Enter product name" />
+                </div>
+                <div class="field-group">
+                    <label>Product Link</label>
+                    <input type="url" id="manualProductLink" placeholder="https://example.com/product" />
+                </div>
+                <div class="field-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label>Quantity</label>
+                        <input type="number" id="manualQty" value="1" min="1" />
+                    </div>
+                    <div>
+                        <label>ETA Delivery Date</label>
+                        <input type="date" id="manualEta" />
+                    </div>
+                </div>
+
+                <!-- Cost Breakdown -->
+                <div class="field-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label>INR Price</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="manualInrPrice" placeholder="0.00" step="0.01" min="0" />
+                            <span class="suffix">INR</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Weight (KG)</label>
+                        <input type="number" id="manualWeight" placeholder="0.00" step="0.01" min="0" />
+                    </div>
+                </div>
+                <div class="field-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                        <label>Final Cost (NPR)</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="manualFinalCost" placeholder="0.00" step="0.01" min="0" oninput="calculateDueCOD()" />
+                            <span class="suffix">NPR</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Advance (NPR)</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="manualAdvance" placeholder="0.00" step="0.01" min="0" oninput="calculateDueCOD()" />
+                            <span class="suffix">NPR</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Due COD Display -->
+                <div class="cost-breakdown" id="manualCostBreakdown">
+                    <div class="row"><span class="lbl">Final Cost</span><span class="val" id="manualDisplayFinal">NPR 0.00</span></div>
+                    <div class="row"><span class="lbl">Advance</span><span class="val" id="manualDisplayAdvance">NPR 0.00</span></div>
+                    <div class="row total due-cod"><span class="lbl">Due COD</span><span class="val" id="manualDisplayDueCOD">NPR 0.00</span></div>
+                </div>
+
+                <!-- Actions -->
+                <div class="btn-row">
+                    <button class="btn-close" onclick="closeAddManualOrderModal()">Cancel</button>
+                    <button class="btn-save" onclick="saveManualOrder()"><i class="fas fa-save"></i> Save Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ─── TOAST ──────────────────────────────────────────────────────────── -->
     <div id="toast">
         <div class="toast-inner"><span class="icon" id="toastIcon">✅</span><span id="toastMessage">Action completed!</span></div>
@@ -4890,6 +5178,35 @@
     <script>
         (function() {
             'use strict';
+
+            // ─── USER DATABASE ──────────────────────────────────────────────
+            const usersDB = [
+                { id: 1, name: 'Damodar Bhattarai', phone: '9801234567', address: 'Kathmandu, Nepal', tier: 'Diamond',
+                    icon: '💎' },
+                { id: 2, name: 'Sita Sharma', phone: '9812345678', address: 'Pokhara, Nepal', tier: 'Silver',
+                    icon: '🥈' },
+                { id: 3, name: 'Ramesh Adhikari', phone: '9823456789', address: 'Biratnagar, Nepal', tier: 'Gold',
+                    icon: '🥇' },
+                { id: 4, name: 'Priya Gurung', phone: '9834567890', address: 'Lalitpur, Nepal', tier: 'Silver',
+                    icon: '🥈' },
+                { id: 5, name: 'Bikash Thapa', phone: '9845678901', address: 'Butwal, Nepal', tier: 'Gold', icon: '🥇' },
+                { id: 6, name: 'Anita Rai', phone: '9856789012', address: 'Dharan, Nepal', tier: 'Silver',
+                    icon: '🥈' },
+                { id: 7, name: 'Kiran Bhandari', phone: '9867890123', address: 'Nepalgunj, Nepal', tier: 'Bronze',
+                    icon: '🥉' },
+                { id: 8, name: 'Maya Devi', phone: '9878901234', address: 'Janakpur, Nepal', tier: 'Gold',
+                    icon: '🥇' },
+                { id: 9, name: 'Seller User 1', phone: '9881112222', address: 'Kathmandu, Nepal', tier: 'Gold',
+                    icon: '🥇' },
+                { id: 10, name: 'Seller User 2', phone: '9883334444', address: 'Pokhara, Nepal', tier: 'Silver',
+                    icon: '🥈' },
+                { id: 11, name: 'Manual User 1', phone: '9805551234', address: 'Kathmandu, Nepal', tier: 'Silver',
+                    icon: '🥈' },
+                { id: 12, name: 'Manual User 2', phone: '9816665678', address: 'Lalitpur, Nepal', tier: 'Bronze',
+                    icon: '🥉' },
+                { id: 13, name: 'New Customer', phone: '9827778901', address: 'Kathmandu, Nepal', tier: 'Silver',
+                    icon: '🥈' }
+            ];
 
             // ─── STATUS TABS ────────────────────────────────────────────────
             const NEW_STATUS_TABS = [
@@ -4982,10 +5299,11 @@
                 'Seller User 1': { tier: 'Gold', mobile: '+977-988-111-2222', icon: '🥇' },
                 'Seller User 2': { tier: 'Silver', mobile: '+977-988-333-4444', icon: '🥈' },
                 'Manual User 1': { tier: 'Silver', mobile: '+977-980-555-1234', icon: '🥈' },
-                'Manual User 2': { tier: 'Bronze', mobile: '+977-981-666-5678', icon: '🥉' }
+                'Manual User 2': { tier: 'Bronze', mobile: '+977-981-666-5678', icon: '🥉' },
+                'New Customer': { tier: 'Silver', mobile: '+977-982-777-8901', icon: '🥈' }
             };
 
-            // ─── ORDERS DATA (including 2 Seller Orders + 2 Manual Orders) ─
+            // ─── ORDERS DATA ──────────────────────────────────────────────
             const ordersData = [{
                 id: 'MW2026224456',
                 user: 'Damodar Bhattarai',
@@ -5014,7 +5332,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002600',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9801234567'
             }, {
                 id: 'MW2026224458',
                 user: 'Sita Sharma',
@@ -5042,7 +5361,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002601',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9812345678'
             }, {
                 id: 'MW2026224451',
                 user: 'Ramesh Adhikari',
@@ -5070,7 +5390,8 @@
                 expressDays: 3,
                 warehouseId: 'WID: 70002602',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9823456789'
             }, {
                 id: 'MW2026224453',
                 user: 'Priya Gurung',
@@ -5098,7 +5419,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002603',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9834567890'
             }, {
                 id: 'MW2026224412',
                 user: 'Bikash Thapa',
@@ -5127,7 +5449,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002604',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9845678901'
             }, {
                 id: 'MW2026224432',
                 user: 'Anita Rai',
@@ -5155,7 +5478,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002605',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9856789012'
             }, {
                 id: 'MW2026224433',
                 user: 'Kiran Bhandari',
@@ -5183,7 +5507,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002606',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9867890123'
             }, {
                 id: 'MW2026224456',
                 user: 'Maya Devi',
@@ -5212,10 +5537,9 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002607',
                 costLogs: [],
-                warehouseEta: null
-            },
-            // ─── SELLER ORDERS ──────────────────────────────────────────────
-            {
+                warehouseEta: null,
+                phone: '9878901234'
+            }, {
                 id: 'MW2026224490',
                 user: 'Seller User 1',
                 dateTime: '07 May 2026 10:00',
@@ -5243,7 +5567,8 @@
                 expressDays: 5,
                 warehouseId: 'WID: 70002608',
                 costLogs: [],
-                warehouseEta: null
+                warehouseEta: null,
+                phone: '9881112222'
             }, {
                 id: 'MW2026224491',
                 user: 'Seller User 2',
@@ -5272,10 +5597,9 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002609',
                 costLogs: [],
-                warehouseEta: null
-            },
-            // ─── TWO MANUAL ORDERS ──────────────────────────────────────────
-            {
+                warehouseEta: null,
+                phone: '9883334444'
+            }, {
                 id: 'MW2026224500',
                 user: 'Manual User 1',
                 dateTime: '08 May 2026 09:00',
@@ -5303,7 +5627,8 @@
                 expressDays: null,
                 warehouseId: 'WID: 70002610',
                 costLogs: [],
-                warehouseEta: '2026-05-15'
+                warehouseEta: '2026-05-15',
+                phone: '9805551234'
             }, {
                 id: 'MW2026224501',
                 user: 'Manual User 2',
@@ -5332,9 +5657,9 @@
                 expressDays: 4,
                 warehouseId: 'WID: 70002611',
                 costLogs: [],
-                warehouseEta: '2026-05-18'
-            }
-            ];
+                warehouseEta: '2026-05-18',
+                phone: '9816665678'
+            }];
 
             // ─── STATE ──────────────────────────────────────────────────────
             let currentPage = 1;
@@ -5350,6 +5675,7 @@
             let manualConfirmOrderId = null;
             let orderedModalOrderId = null;
             let currentCostOrderId = null;
+            let selectedUser = null; // for manual order
 
             // ─── PARTNER SETTINGS ──────────────────────────────────────────
             const PARTNER_KEY = 'MeroWish_logistic_partners';
@@ -5461,7 +5787,6 @@
                     days + '</sup><span class="tooltip">⚡ Express ' + days + 'd</span></span>';
             }
 
-            // ─── Mobile Express Truck (rendered below order-id) ────────────
             function renderMobileExpressTruck(days) {
                 if (!days || days < 2 || days > 7) return '';
                 return '<div class="express-truck-mobile" title="Express Delivery: ' + days + ' days"><i class="fas fa-truck truck-icon"></i><sup class="days-sup">' +
@@ -5554,7 +5879,6 @@
                 if (prepaidRadio) prepaidRadio.checked = true;
                 if (codRadio) codRadio.checked = false;
                 document.getElementById('orderedInrAmount').value = '';
-                // Set warehouse ETA to existing value or today+7 days
                 const etaInput = document.getElementById('orderedWarehouseEta');
                 if (order.warehouseEta) {
                     etaInput.value = order.warehouseEta;
@@ -5610,8 +5934,6 @@
                 const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
                 if (!selected) { showToast('⚠️', 'Please select a payment type'); return; }
                 const isPrepaid = selected.value === 'PREPAID';
-
-                // ─── Capture Warehouse ETA ──────────────────────────────────
                 const etaInput = document.getElementById('orderedWarehouseEta');
                 const warehouseEta = etaInput.value || null;
                 order.warehouseEta = warehouseEta;
@@ -6497,9 +6819,7 @@
                         '<span class="internal-remark-badge"><i class="fas fa-pen"></i></span>' : '';
                     var expressIcon = renderExpressTruck(order.expressDays);
 
-                    // Warehouse ID line
                     var warehouseLine = order.warehouseId ? '<div style="font-size:8px;color:var(--gray500);margin-top:1px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
-                    // Warehouse ETA line
                     var warehouseEtaLine = order.warehouseEta ? '<div style="font-size:8px;color:var(--gray500);margin-top:1px;"><i class="fas fa-calendar-alt"></i> ETA: ' + order.warehouseEta + '</div>' : '';
 
                     var statusCell =
@@ -6531,7 +6851,6 @@
                             '\')" class="action-btn-icon green" title="Verify Payment" style="min-width:44px;gap:2px;font-size:10px;font-weight:500;padding:0 6px;"><i class="fas fa-check"></i><span style="font-size:8px;">Verify</span></button>';
                     }
 
-                    // ---- Compact Action Icons ----
                     var actionHtml =
                         '<div class="action-group">' +
                         '<button onclick="openTrackingModal(\'' + order.id +
@@ -6551,7 +6870,6 @@
                         '\')" class="action-btn-icon amber" title="Print Invoice"><i class="fas fa-file-invoice"></i><span class="tooltip-text">Invoice</span></button>' +
                         '</div>';
 
-                    // Build arrival badges
                     var arrivalBadges = '';
                     if (nepalCount > 0) {
                         arrivalBadges +=
@@ -6693,12 +7011,9 @@
                     var userNameHtml = '<span class="user-link" onclick="viewUserProfile(\'' +
                         order.user.replace(/'/g, '\\\'') + '\');">' + order.user + '</span>';
 
-                    // ─── Mobile Express Truck (moved below order-id) ──────
                     var mobileExpressHtml = renderMobileExpressTruck(order.expressDays);
 
-                    // Warehouse ID for mobile
                     var warehouseLineMobile = order.warehouseId ? '<div style="font-size:9px;color:var(--gray500);margin-top:2px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
-                    // Warehouse ETA for mobile
                     var warehouseEtaMobile = order.warehouseEta ? '<div style="font-size:9px;color:var(--gray500);margin-top:1px;"><i class="fas fa-calendar-alt"></i> ETA: ' + order.warehouseEta + '</div>' : '';
 
                     var customerImgBadge = '';
@@ -6731,7 +7046,6 @@
                             '</span> at India WH</span> ';
                     }
 
-                    // Build comment and internal remark snippets
                     var commentHtml = '';
                     if (hasComment) {
                         var commentText = order.comment;
@@ -6754,7 +7068,6 @@
                     var card = document.createElement('div');
                     card.className = 'order-card';
                     card.innerHTML =
-                        // ─── HEADER (no express truck here) ──────────────────
                         '<div class="card-header">' +
                         '<div class="left">' +
                         '<input type="checkbox" id="' + getCheckboxId(order.id, 'mobile') + '" ' + (isSelected ?
@@ -6773,11 +7086,8 @@
                         '</span>' +
                         '</div>' +
                         '</div>' +
-                        // ─── BODY (express truck placed below order-id) ─────
                         '<div class="card-body">' +
-                        // ─── Express Truck (moved here) ─────────────────────
                         mobileExpressHtml +
-                        // Product row
                         '<div class="product-row">' +
                         '<div class="prod-img-wrap">' +
                         '<img src="' + order.productImage +
@@ -6800,14 +7110,11 @@
                         commentHtml +
                         internalHtml +
                         '</div>' +
-                        // Warehouse ID + ETA
                         warehouseLineMobile +
                         warehouseEtaMobile +
                         '</div>' +
                         '</div>' +
-                        // Divider
                         '<hr class="divider">' +
-                        // Info grid
                         '<div class="info-grid">' +
                         '<div class="item"><span class="lbl">👤 User</span><span class="val"><span class="tier-icon">' +
                         tierIcon + '</span> ' + userNameHtml +
@@ -6827,7 +7134,6 @@
                         '<div class="item"><span class="lbl">🕐 Last Update</span><span class="val" style="font-size:9px;color:var(--gray500);">' +
                         (order.lastUpdate || '—') + '</span></div>' +
                         '</div>' +
-                        // Payment row
                         '<div class="payment-row">' +
                         '<span class="total"><span class="currency">NPR</span> ' + parseFloat(order
                             .totalAmount.replace(/[^0-9.]/g, '')).toFixed(2) + '</span>' +
@@ -6842,7 +7148,6 @@
                             .paymentSummary.extraCOD + '</span>' : '') +
                         '</span>' +
                         '</div>' +
-                        // Status controls
                         '<div class="status-controls">' +
                         '<select onchange="updateOrderStatus(\'' + order.id +
                         '\", this.value)" class="status-select"><option value="">Move to...</option>' +
@@ -6854,7 +7159,6 @@
                         '\')" class="manual-confirm-btn-mobile" title="Manual Payment"><i class="fas fa-check-circle icon-sm"></i> Confirm</button>' +
                         '</div>' +
                         '</div>' +
-                        // ─── ACTION BAR ─────────────────────────────────────
                         '<div class="card-actions">' +
                         '<button onclick="openTrackingModal(\'' + order.id +
                         '\')" class="action-btn cyan" title="Track"><i class="fas fa-tag"></i> <span class="btn-label">Track</span></button>' +
@@ -7149,11 +7453,9 @@
                 var sidebar = document.getElementById('sidebar');
                 var overlay = document.getElementById('sidebarOverlay');
                 if (window.innerWidth < 1024) {
-                    // mobile: toggle overlay and sidebar transform
                     sidebar.classList.toggle('expanded');
                     overlay.classList.toggle('visible');
                 } else {
-                    // desktop: toggle expanded class (collapse/expand)
                     sidebar.classList.toggle('expanded');
                 }
             }
@@ -7271,6 +7573,200 @@
             }
             window.saveSettings = saveSettings;
 
+            // ─── ADD MANUAL ORDER FUNCTIONS ──────────────────────────────────
+            function openAddManualOrderModal() {
+                document.getElementById('addManualOrderModal').classList.add('visible');
+                document.body.style.overflow = 'hidden';
+                // reset form
+                document.getElementById('manualUserSearch').value = '';
+                document.getElementById('userSearchResults').style.display = 'none';
+                document.getElementById('manualUserDetails').style.display = 'none';
+                document.getElementById('manualProductName').value = '';
+                document.getElementById('manualProductLink').value = '';
+                document.getElementById('manualQty').value = 1;
+                document.getElementById('manualEta').value = '';
+                document.getElementById('manualInrPrice').value = '';
+                document.getElementById('manualWeight').value = '';
+                document.getElementById('manualFinalCost').value = '';
+                document.getElementById('manualAdvance').value = '';
+                document.getElementById('manualDisplayFinal').textContent = 'NPR 0.00';
+                document.getElementById('manualDisplayAdvance').textContent = 'NPR 0.00';
+                document.getElementById('manualDisplayDueCOD').textContent = 'NPR 0.00';
+                selectedUser = null;
+                document.getElementById('manualWhatsAppBtn').style.display = 'none';
+            }
+            window.openAddManualOrderModal = openAddManualOrderModal;
+
+            function closeAddManualOrderModal() {
+                document.getElementById('addManualOrderModal').classList.remove('visible');
+                document.body.style.overflow = '';
+                selectedUser = null;
+            }
+            window.closeAddManualOrderModal = closeAddManualOrderModal;
+
+            function searchUsers() {
+                var query = document.getElementById('manualUserSearch').value.trim();
+                var resultsContainer = document.getElementById('userSearchResults');
+                if (!query) {
+                    resultsContainer.style.display = 'none';
+                    return;
+                }
+                var matches = usersDB.filter(u => u.phone.includes(query) || u.name.toLowerCase().includes(query
+                .toLowerCase()));
+                if (matches.length === 0) {
+                    resultsContainer.innerHTML = '<div class="result-item" style="color:var(--gray500);">No users found</div>';
+                    resultsContainer.style.display = 'block';
+                    return;
+                }
+                var html = '';
+                matches.forEach(function(u) {
+                    html += '<div class="result-item" onclick="selectUser(' + u.id + ')">' + u.name +
+                        ' <span class="phone">(' + u.phone + ')</span></div>';
+                });
+                resultsContainer.innerHTML = html;
+                resultsContainer.style.display = 'block';
+            }
+            window.searchUsers = searchUsers;
+
+            function selectUser(userId) {
+                var user = usersDB.find(u => u.id === userId);
+                if (!user) return;
+                selectedUser = user;
+                document.getElementById('manualUserName').textContent = user.name;
+                document.getElementById('manualUserPhone').textContent = user.phone;
+                document.getElementById('manualUserAddress').textContent = user.address || 'N/A';
+                document.getElementById('manualUserTier').textContent = user.tier + ' ' + (user.icon || '');
+                document.getElementById('manualUserDetails').style.display = 'block';
+                document.getElementById('userSearchResults').style.display = 'none';
+                document.getElementById('manualWhatsAppBtn').style.display = 'inline-flex';
+                // Pre-fill WhatsApp share with order details later
+                document.getElementById('manualWhatsAppBtn').onclick = function() {
+                    shareWhatsApp();
+                };
+                showToast('👤', 'User ' + user.name + ' selected');
+            }
+            window.selectUser = selectUser;
+
+            function calculateDueCOD() {
+                var finalCost = parseFloat(document.getElementById('manualFinalCost').value) || 0;
+                var advance = parseFloat(document.getElementById('manualAdvance').value) || 0;
+                var due = Math.max(0, finalCost - advance);
+                document.getElementById('manualDisplayFinal').textContent = 'NPR ' + finalCost.toFixed(2);
+                document.getElementById('manualDisplayAdvance').textContent = 'NPR ' + advance.toFixed(2);
+                document.getElementById('manualDisplayDueCOD').textContent = 'NPR ' + due.toFixed(2);
+                return due;
+            }
+            window.calculateDueCOD = calculateDueCOD;
+
+            function generateOrderId() {
+                // Find max numeric part from existing IDs (MW2026...)
+                var maxNum = 0;
+                ordersData.forEach(function(o) {
+                    var num = parseInt(o.id.replace('MW', ''), 10);
+                    if (!isNaN(num) && num > maxNum) maxNum = num;
+                });
+                // If no orders, start from 2026000001
+                if (maxNum < 2026000000) maxNum = 2026000000;
+                var next = maxNum + 1;
+                return 'MW' + next;
+            }
+
+            function saveManualOrder() {
+                if (!selectedUser) { showToast('⚠️', 'Please select a user first'); return; }
+                var productName = document.getElementById('manualProductName').value.trim();
+                if (!productName) { showToast('⚠️', 'Product name is required'); return; }
+                var qty = parseInt(document.getElementById('manualQty').value) || 1;
+                if (qty < 1) { showToast('⚠️', 'Quantity must be at least 1'); return; }
+                var eta = document.getElementById('manualEta').value || '';
+                var inrPrice = parseFloat(document.getElementById('manualInrPrice').value) || 0;
+                var weight = parseFloat(document.getElementById('manualWeight').value) || 0;
+                var finalCost = parseFloat(document.getElementById('manualFinalCost').value) || 0;
+                var advance = parseFloat(document.getElementById('manualAdvance').value) || 0;
+                var due = Math.max(0, finalCost - advance);
+
+                // Generate order ID
+                var orderId = generateOrderId();
+
+                // Build payment summary
+                var paymentSummary = {
+                    total: 'NPR ' + finalCost.toFixed(2),
+                    advance: 'NPR ' + advance.toFixed(2),
+                    gateway: 'Manual Entry',
+                    cod: 'NPR ' + due.toFixed(2),
+                    invoiceValue: 'INR ' + inrPrice.toFixed(2),
+                    approxWeight: weight.toFixed(2) + ' KG',
+                    gross: 'NPR ' + (finalCost + (advance * 0.05)).toFixed(2), // placeholder
+                    discount: 'NPR 0.00',
+                    final: 'NPR ' + finalCost.toFixed(2),
+                    extraCOD: 'NPR 0.00'
+                };
+
+                var newOrder = {
+                    id: orderId,
+                    user: selectedUser.name,
+                    dateTime: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                    paymentReceivedDateTime: '',
+                    etaDeliveryDate: eta || '',
+                    type: 'Manual Order',
+                    status: 'Order Created',
+                    paymentSummary: paymentSummary,
+                    productLink: document.getElementById('manualProductLink').value.trim() || '#',
+                    productImage: 'https://picsum.photos/seed/' + orderId + '/200/200',
+                    qty: qty,
+                    productName: productName,
+                    totalAmount: 'NPR ' + finalCost.toFixed(2),
+                    comment: 'Manual order added via admin panel',
+                    currentStageIndex: 0,
+                    customerImage: null,
+                    trackingNumber: '',
+                    trackingUrl: '',
+                    address: selectedUser.address || '',
+                    lastUpdate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
+                        year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                    orderStage: 'Order Created',
+                    internalRemarks: '',
+                    expressDays: null,
+                    warehouseId: 'WID: ' + (70002600 + ordersData.length),
+                    costLogs: [],
+                    warehouseEta: null,
+                    phone: selectedUser.phone
+                };
+
+                ordersData.push(newOrder);
+                filteredOrders = [...ordersData]; // refresh filter
+                updateStats();
+                filterOrders();
+                closeAddManualOrderModal();
+                showToast('✅', 'Manual Order ' + orderId + ' created successfully!');
+            }
+            window.saveManualOrder = saveManualOrder;
+
+            function shareWhatsApp() {
+                if (!selectedUser) { showToast('⚠️', 'No user selected'); return; }
+                // Use the most recent manual order (or any order) for sharing
+                var manualOrders = ordersData.filter(o => o.type === 'Manual Order' && o.user === selectedUser.name);
+                var order = manualOrders.length > 0 ? manualOrders[manualOrders.length - 1] : null;
+                if (!order) { showToast('⚠️', 'No order found for this user to share.'); return; }
+                var message = '📦 *Order Details*\n';
+                message += 'Order ID: ' + order.id + '\n';
+                message += 'Product: ' + order.productName + '\n';
+                message += 'Quantity: ' + order.qty + '\n';
+                message += 'Total: ' + order.totalAmount + '\n';
+                message += 'Status: ' + order.status + '\n';
+                if (order.trackingNumber) {
+                    message += 'Tracking: ' + order.trackingNumber + '\n';
+                    message += 'Track: ' + order.trackingUrl + '\n';
+                }
+                message += 'ETA: ' + (order.etaDeliveryDate || 'N/A') + '\n';
+                message += 'Thank you for choosing MeroWish!';
+
+                var phone = selectedUser.phone.replace(/[^0-9]/g, '');
+                var url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+                window.open(url, '_blank');
+            }
+            window.shareWhatsApp = shareWhatsApp;
+
             // ─── KEYBOARD SHORTCUTS ─────────────────────────────────────────
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
@@ -7286,6 +7782,7 @@
                     closeManualConfirmModal();
                     closeOrderedModal();
                     closeInternalRemarksModal();
+                    closeAddManualOrderModal();
                 }
             });
 
