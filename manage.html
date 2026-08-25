@@ -1177,6 +1177,15 @@
         .type-tab.active-seller:hover {
             background: #FDE68A;
         }
+        /* ─── Manual Order ────────────────────────────────── */
+        .type-tab.active-manual {
+            background: #FCE7F3;
+            color: #BE185D;
+            border-color: #F9A8D4;
+        }
+        .type-tab.active-manual:hover {
+            background: #FBCFE8;
+        }
 
         @media (max-width: 480px) {
             .tabs-section {
@@ -1783,6 +1792,12 @@
             color: #92400E;
             border: 1px solid #FCD34D;
         }
+        /* ─── Manual Order type badge ──────────────────────────────── */
+        .orders-table .type-badge.manual {
+            background: #FCE7F3;
+            color: #BE185D;
+            border: 1px solid #F9A8D4;
+        }
 
         .orders-table .comment-trigger {
             cursor: pointer;
@@ -2144,6 +2159,63 @@
                 right: -3px;
             }
         }
+        /* ─── Mobile card express-truck (moved below order-id) ──────────── */
+        .order-card .express-truck-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            position: relative;
+            cursor: default;
+            margin: 2px 0 4px 0;
+            font-size: 12px;
+            font-weight: 500;
+            color: #D97706;
+        }
+        .order-card .express-truck-mobile .truck-icon {
+            font-size: 12px;
+            color: #F59E0B;
+            filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.2));
+        }
+        .order-card .express-truck-mobile .days-sup {
+            font-size: 7px;
+            font-weight: 700;
+            color: #D97706;
+            position: absolute;
+            top: -4px;
+            right: -6px;
+            background: #FFFBEB;
+            border: 1px solid #FDE68A;
+            border-radius: 50%;
+            min-width: 12px;
+            height: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            padding: 0 2px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .order-card .express-truck-mobile .label-text {
+            font-size: 9px;
+            font-weight: 600;
+            color: #D97706;
+            margin-left: 2px;
+        }
+        @media (max-width: 480px) {
+            .order-card .express-truck-mobile .truck-icon {
+                font-size: 10px;
+            }
+            .order-card .express-truck-mobile .days-sup {
+                font-size: 5px;
+                min-width: 9px;
+                height: 9px;
+                top: -3px;
+                right: -4px;
+            }
+            .order-card .express-truck-mobile .label-text {
+                font-size: 8px;
+            }
+        }
 
         .orders-table .stage-tag {
             display: inline-block;
@@ -2397,6 +2469,12 @@
             background: #FEF3C7;
             color: #92400E;
             border: 1px solid #FCD34D;
+        }
+        /* ─── Manual Order type badge for mobile ────────────────────── */
+        .order-card .card-body .product-row .prod-info .qty .type-badge.manual {
+            background: #FCE7F3;
+            color: #BE185D;
+            border: 1px solid #F9A8D4;
         }
         .order-card .card-body .product-row .prod-info .meta-links {
             font-size: 10px;
@@ -4055,6 +4133,29 @@
             color: var(--gray400);
             margin-top: 3px;
         }
+        /* ─── Warehouse ETA field in ordered modal ──────────────────── */
+        .ordered-modal .ordered-fields .warehouse-eta-field {
+            margin-top: 10px;
+        }
+        .ordered-modal .ordered-fields .warehouse-eta-field input[type="date"] {
+            width: 100%;
+            padding: 8px 14px;
+            border: 1.5px solid var(--gray200);
+            border-radius: 10px;
+            font-size: 14px;
+            background: #fafcff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .ordered-modal .ordered-fields .warehouse-eta-field input[type="date"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.06);
+        }
+        .ordered-modal .ordered-fields .warehouse-eta-field .eta-hint {
+            font-size: 11px;
+            color: var(--gray400);
+            margin-top: 3px;
+        }
         .ordered-modal .btn-row {
             display: flex;
             gap: 10px;
@@ -4479,6 +4580,8 @@
                     <button class="type-tab" data-type="Buy For Me" onclick="filterByType('Buy For Me')"><i class="fas fa-shopping-bag"></i> Buy For Me</button>
                     <button class="type-tab" data-type="Self Order" onclick="filterByType('Self Order')"><i class="fas fa-box"></i> Self Order</button>
                     <button class="type-tab" data-type="Seller Order" onclick="filterByType('Seller Order')"><i class="fas fa-store"></i> Seller Orders</button>
+                    <!-- ─── Manual Order tab ─────────────────────────── -->
+                    <button class="type-tab" data-type="Manual Order" onclick="filterByType('Manual Order')"><i class="fas fa-pen"></i> Manual Order</button>
                 </div>
             </div>
 
@@ -4721,7 +4824,7 @@
         </div>
     </div>
 
-    <!-- ORDERED MODAL -->
+    <!-- ─── ORDERED MODAL (with Warehouse ETA) ──────────────────────────── -->
     <div id="orderedModal" class="modal-overlay">
         <div class="modal-backdrop" onclick="closeOrderedModal()"></div>
         <div class="modal-box max-w-md ordered-modal">
@@ -4746,6 +4849,12 @@
                         <label class="field-label">INR Amount to Collect</label>
                         <input type="number" id="orderedInrAmount" placeholder="Enter INR amount" step="0.01" min="0" />
                         <p class="inr-hint">This amount will be recorded as the invoice value in INR.</p>
+                    </div>
+                    <!-- ─── Warehouse ETA Date Selector ────────────────── -->
+                    <div class="warehouse-eta-field">
+                        <label class="field-label">Warehouse ETA (India)</label>
+                        <input type="date" id="orderedWarehouseEta" />
+                        <p class="eta-hint">📦 Expected arrival date at India warehouse.</p>
                     </div>
                 </div>
                 <div class="btn-row"><button class="btn-save" onclick="saveOrderedConfirmation()"><i class="fas fa-save"></i> Save</button><button class="btn-cancel" onclick="closeOrderedModal()">Cancel</button></div>
@@ -4871,10 +4980,12 @@
                 'Kiran Bhandari': { tier: 'Bronze', mobile: '+977-986-789-0123', icon: '🥉' },
                 'Maya Devi': { tier: 'Gold', mobile: '+977-987-890-1234', icon: '🥇' },
                 'Seller User 1': { tier: 'Gold', mobile: '+977-988-111-2222', icon: '🥇' },
-                'Seller User 2': { tier: 'Silver', mobile: '+977-988-333-4444', icon: '🥈' }
+                'Seller User 2': { tier: 'Silver', mobile: '+977-988-333-4444', icon: '🥈' },
+                'Manual User 1': { tier: 'Silver', mobile: '+977-980-555-1234', icon: '🥈' },
+                'Manual User 2': { tier: 'Bronze', mobile: '+977-981-666-5678', icon: '🥉' }
             };
 
-            // ─── ORDERS DATA (including 2 Seller Orders) ──────────────────
+            // ─── ORDERS DATA (including 2 Seller Orders + 2 Manual Orders) ─
             const ordersData = [{
                 id: 'MW2026224456',
                 user: 'Damodar Bhattarai',
@@ -4902,7 +5013,8 @@
                 internalRemarks: 'Customer is a VIP. Expedite delivery. 🚀',
                 expressDays: null,
                 warehouseId: 'WID: 70002600',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224458',
                 user: 'Sita Sharma',
@@ -4929,7 +5041,8 @@
                 internalRemarks: '',
                 expressDays: null,
                 warehouseId: 'WID: 70002601',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224451',
                 user: 'Ramesh Adhikari',
@@ -4956,7 +5069,8 @@
                 internalRemarks: 'High-value item. Insurance required. 📦',
                 expressDays: 3,
                 warehouseId: 'WID: 70002602',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224453',
                 user: 'Priya Gurung',
@@ -4983,7 +5097,8 @@
                 internalRemarks: 'Customs clearance in progress. All docs submitted.',
                 expressDays: null,
                 warehouseId: 'WID: 70002603',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224412',
                 user: 'Bikash Thapa',
@@ -5011,7 +5126,8 @@
                 internalRemarks: '📞 Called customer for invoice. Waiting for response.',
                 expressDays: null,
                 warehouseId: 'WID: 70002604',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224432',
                 user: 'Anita Rai',
@@ -5038,7 +5154,8 @@
                 internalRemarks: '',
                 expressDays: null,
                 warehouseId: 'WID: 70002605',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224433',
                 user: 'Kiran Bhandari',
@@ -5065,7 +5182,8 @@
                 internalRemarks: 'Refund processed on 01 May 2026.',
                 expressDays: null,
                 warehouseId: 'WID: 70002606',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224456',
                 user: 'Maya Devi',
@@ -5093,9 +5211,10 @@
                 internalRemarks: '',
                 expressDays: null,
                 warehouseId: 'WID: 70002607',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             },
-            // ─── TWO SELLER ORDERS ──────────────────────────────────────────
+            // ─── SELLER ORDERS ──────────────────────────────────────────────
             {
                 id: 'MW2026224490',
                 user: 'Seller User 1',
@@ -5123,7 +5242,8 @@
                 internalRemarks: 'High-value seller order. Priority processing.',
                 expressDays: 5,
                 warehouseId: 'WID: 70002608',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
             }, {
                 id: 'MW2026224491',
                 user: 'Seller User 2',
@@ -5151,7 +5271,68 @@
                 internalRemarks: 'Awaiting tracking from seller.',
                 expressDays: null,
                 warehouseId: 'WID: 70002609',
-                costLogs: []
+                costLogs: [],
+                warehouseEta: null
+            },
+            // ─── TWO MANUAL ORDERS ──────────────────────────────────────────
+            {
+                id: 'MW2026224500',
+                user: 'Manual User 1',
+                dateTime: '08 May 2026 09:00',
+                paymentReceivedDateTime: '08 May 2026 09:20',
+                etaDeliveryDate: '22 May 2026',
+                type: 'Manual Order',
+                status: 'Order Created',
+                paymentSummary: { total: 'NPR 2,750.00', advance: 'NPR 0.00', gateway: 'Manual Entry',
+                    cod: 'NPR 2,750.00', invoiceValue: 'INR 700.00', approxWeight: '1.80 KG',
+                    gross: 'NPR 2,900.00', discount: 'NPR 150.00', final: 'NPR 2,750.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/801',
+                productImage: 'https://picsum.photos/seed/prod11/200/200',
+                qty: 2,
+                productName: 'Premium Cotton T-Shirt (Pack of 2)',
+                totalAmount: 'NPR 2,750.00',
+                comment: 'Manual order entry. Customer called directly.',
+                currentStageIndex: 0,
+                customerImage: null,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Kathmandu, Nepal',
+                lastUpdate: '08 May 2026 09:20',
+                orderStage: 'Order Created',
+                internalRemarks: 'Manual order - awaiting payment confirmation.',
+                expressDays: null,
+                warehouseId: 'WID: 70002610',
+                costLogs: [],
+                warehouseEta: '2026-05-15'
+            }, {
+                id: 'MW2026224501',
+                user: 'Manual User 2',
+                dateTime: '08 May 2026 14:30',
+                paymentReceivedDateTime: '08 May 2026 14:45',
+                etaDeliveryDate: '25 May 2026',
+                type: 'Manual Order',
+                status: 'Quotation Sent',
+                paymentSummary: { total: 'NPR 1,890.00', advance: 'NPR 0.00', gateway: 'Manual Entry',
+                    cod: 'NPR 1,890.00', invoiceValue: 'INR 480.00', approxWeight: '0.75 KG',
+                    gross: 'NPR 1,980.00', discount: 'NPR 90.00', final: 'NPR 1,890.00', extraCOD: 'NPR 0.00' },
+                productLink: 'https://example.com/product/802',
+                productImage: 'https://picsum.photos/seed/prod12/200/200',
+                qty: 1,
+                productName: 'Bluetooth Speaker - Portable',
+                totalAmount: 'NPR 1,890.00',
+                comment: 'Manual order - quotation sent to customer via email.',
+                currentStageIndex: 2,
+                customerImage: null,
+                trackingNumber: '',
+                trackingUrl: '',
+                address: 'Lalitpur, Nepal',
+                lastUpdate: '08 May 2026 14:45',
+                orderStage: 'Quotation Sent',
+                internalRemarks: 'Customer requested quotation. Sent on 08 May.',
+                expressDays: 4,
+                warehouseId: 'WID: 70002611',
+                costLogs: [],
+                warehouseEta: '2026-05-18'
             }
             ];
 
@@ -5213,6 +5394,7 @@
                     'Order Approved': { bg: 'green', text: 'text-green-700', dot: 'bg-green-500' },
                     'Wrong Product Received': { bg: 'orange', text: 'text-orange-700', dot: 'bg-orange-500' },
                     'Return to Seller': { bg: 'rose', text: 'text-rose-700', dot: 'bg-rose-500' },
+                    'Quotation Sent': { bg: 'purple', text: 'text-purple-700', dot: 'bg-purple-500' }
                 };
                 return map[status] || { bg: 'gray', text: 'text-gray-700', dot: 'bg-gray-400' };
             }
@@ -5227,7 +5409,8 @@
                     'Quick Order': 'quick',
                     'Buy For Me': 'buy',
                     'Self Order': 'self',
-                    'Seller Order': 'seller'
+                    'Seller Order': 'seller',
+                    'Manual Order': 'manual'
                 };
                 return map[type] || 'gray';
             }
@@ -5276,6 +5459,13 @@
                 if (!days || days < 2 || days > 7) return '';
                 return '<span class="express-truck" title="Express Delivery: ' + days + ' days"><i class="fas fa-truck" style="color:#F59E0B;font-size:13px;filter:drop-shadow(0 0 4px rgba(245,158,11,0.2));"></i><sup class="days-sup">' +
                     days + '</sup><span class="tooltip">⚡ Express ' + days + 'd</span></span>';
+            }
+
+            // ─── Mobile Express Truck (rendered below order-id) ────────────
+            function renderMobileExpressTruck(days) {
+                if (!days || days < 2 || days > 7) return '';
+                return '<div class="express-truck-mobile" title="Express Delivery: ' + days + ' days"><i class="fas fa-truck truck-icon"></i><sup class="days-sup">' +
+                    days + '</sup><span class="label-text">⚡ Express ' + days + 'd</span></div>';
             }
 
             // ─── STATS ──────────────────────────────────────────────────────
@@ -5364,6 +5554,15 @@
                 if (prepaidRadio) prepaidRadio.checked = true;
                 if (codRadio) codRadio.checked = false;
                 document.getElementById('orderedInrAmount').value = '';
+                // Set warehouse ETA to existing value or today+7 days
+                const etaInput = document.getElementById('orderedWarehouseEta');
+                if (order.warehouseEta) {
+                    etaInput.value = order.warehouseEta;
+                } else {
+                    const d = new Date();
+                    d.setDate(d.getDate() + 7);
+                    etaInput.value = d.toISOString().split('T')[0];
+                }
                 const lp = document.getElementById('orderedLabelPrepaid');
                 const lc = document.getElementById('orderedLabelCod');
                 if (lp) { lp.className = 'active-prepaid'; }
@@ -5411,6 +5610,12 @@
                 const selected = document.querySelector('input[name="orderedPaymentType"]:checked');
                 if (!selected) { showToast('⚠️', 'Please select a payment type'); return; }
                 const isPrepaid = selected.value === 'PREPAID';
+
+                // ─── Capture Warehouse ETA ──────────────────────────────────
+                const etaInput = document.getElementById('orderedWarehouseEta');
+                const warehouseEta = etaInput.value || null;
+                order.warehouseEta = warehouseEta;
+
                 if (isPrepaid) {
                     order.status = 'Order Approved';
                     order.currentStageIndex = 3;
@@ -5425,6 +5630,9 @@
                     order.comment = order.comment ? order.comment + ' | Order placed as PREPAID (' + new Date()
                         .toLocaleString() + ')' : 'Order placed as PREPAID (' + new Date().toLocaleString() +
                         ')';
+                    if (warehouseEta) {
+                        order.comment += ' | Warehouse ETA: ' + warehouseEta;
+                    }
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     showToast('✅', 'Order ' + orderedModalOrderId + ' marked as PREPAID (Order Approved)');
@@ -5446,6 +5654,9 @@
                     order.comment = order.comment ? order.comment + ' | Order placed as COD (INR ' + inrAmount
                         .toFixed(2) + ') (' + new Date().toLocaleString() + ')' : 'Order placed as COD (INR ' +
                         inrAmount.toFixed(2) + ') (' + new Date().toLocaleString() + ')';
+                    if (warehouseEta) {
+                        order.comment += ' | Warehouse ETA: ' + warehouseEta;
+                    }
                     order.lastUpdate = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     showToast('✅', 'Order ' + orderedModalOrderId + ' marked as COD (Order Approved)');
@@ -5711,6 +5922,7 @@
                         else if (type === 'Buy For Me') tab.classList.add('active-buy');
                         else if (type === 'Self Order') tab.classList.add('active-self');
                         else if (type === 'Seller Order') tab.classList.add('active-seller');
+                        else if (type === 'Manual Order') tab.classList.add('active-manual');
                     }
                 });
                 filterOrders();
@@ -6287,6 +6499,8 @@
 
                     // Warehouse ID line
                     var warehouseLine = order.warehouseId ? '<div style="font-size:8px;color:var(--gray500);margin-top:1px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
+                    // Warehouse ETA line
+                    var warehouseEtaLine = order.warehouseEta ? '<div style="font-size:8px;color:var(--gray500);margin-top:1px;"><i class="fas fa-calendar-alt"></i> ETA: ' + order.warehouseEta + '</div>' : '';
 
                     var statusCell =
                         '<div class="status-cell-wrap"><div class="status-row"><span class="status-badge ' +
@@ -6386,6 +6600,7 @@
                             '<div style="margin-top:1px;font-size:8px;color:#2563eb;"><i class="fas fa-link"></i> ' +
                             order.trackingNumber + '</div>' : '') +
                         warehouseLine +
+                        warehouseEtaLine +
                         (hasInternalRemark ?
                             '<div style="margin-top:1px;font-size:8px;color:#8B5CF6;"><span class="internal-remarks-trigger" onclick="openInternalRemarksModal(\'' +
                             order.id +
@@ -6477,10 +6692,14 @@
                     }).join('');
                     var userNameHtml = '<span class="user-link" onclick="viewUserProfile(\'' +
                         order.user.replace(/'/g, '\\\'') + '\');">' + order.user + '</span>';
-                    var expressIcon = renderExpressTruck(order.expressDays);
+
+                    // ─── Mobile Express Truck (moved below order-id) ──────
+                    var mobileExpressHtml = renderMobileExpressTruck(order.expressDays);
 
                     // Warehouse ID for mobile
                     var warehouseLineMobile = order.warehouseId ? '<div style="font-size:9px;color:var(--gray500);margin-top:2px;"><i class="fas fa-warehouse"></i> ' + order.warehouseId + '</div>' : '';
+                    // Warehouse ETA for mobile
+                    var warehouseEtaMobile = order.warehouseEta ? '<div style="font-size:9px;color:var(--gray500);margin-top:1px;"><i class="fas fa-calendar-alt"></i> ETA: ' + order.warehouseEta + '</div>' : '';
 
                     var customerImgBadge = '';
                     if (order.type === 'Self Order' && order.customerImage) {
@@ -6535,14 +6754,14 @@
                     var card = document.createElement('div');
                     card.className = 'order-card';
                     card.innerHTML =
-                        // ─── HEADER ──────────────────────────────────────────
+                        // ─── HEADER (no express truck here) ──────────────────
                         '<div class="card-header">' +
                         '<div class="left">' +
                         '<input type="checkbox" id="' + getCheckboxId(order.id, 'mobile') + '" ' + (isSelected ?
                             'checked' : '') +
                         ' onchange="toggleOrderSelection(\'' + order.id +
                         '\', this.checked)" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;min-width:16px;min-height:16px;flex-shrink:0;" />' +
-                        '<span class="order-id">' + order.id + '</span> ' + expressIcon +
+                        '<span class="order-id">' + order.id + '</span>' +
                         '</div>' +
                         '<div class="right">' +
                         '<span class="status-badge-card ' + statusColor + ' ' + pulseClass +
@@ -6554,8 +6773,10 @@
                         '</span>' +
                         '</div>' +
                         '</div>' +
-                        // ─── BODY ────────────────────────────────────────────
+                        // ─── BODY (express truck placed below order-id) ─────
                         '<div class="card-body">' +
+                        // ─── Express Truck (moved here) ─────────────────────
+                        mobileExpressHtml +
                         // Product row
                         '<div class="product-row">' +
                         '<div class="prod-img-wrap">' +
@@ -6579,8 +6800,9 @@
                         commentHtml +
                         internalHtml +
                         '</div>' +
-                        // Warehouse ID line
+                        // Warehouse ID + ETA
                         warehouseLineMobile +
+                        warehouseEtaMobile +
                         '</div>' +
                         '</div>' +
                         // Divider
@@ -6623,7 +6845,7 @@
                         // Status controls
                         '<div class="status-controls">' +
                         '<select onchange="updateOrderStatus(\'' + order.id +
-                        '\', this.value)" class="status-select"><option value="">Move to...</option>' +
+                        '\", this.value)" class="status-select"><option value="">Move to...</option>' +
                         statusOpts +
                         '</select>' +
                         '<button onclick="setOrdered(\'' + order.id +
@@ -6865,7 +7087,7 @@
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(function() {
                     var csv =
-                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID\n';
+                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID,Warehouse ETA\n';
                     filteredOrders.forEach(function(o) {
                         var tierData = getUserTier(o.user);
                         var remarks = (o.internalRemarks || '').replace(/,/g, ';').replace(/\n/g, ' ');
@@ -6878,7 +7100,7 @@
                             .paymentReceivedDateTime || '') + '","' + (o.etaDeliveryDate || '') +
                             '","' + (o.lastUpdate || '') + '","' + (o.orderStage || o.status) +
                             '","' + remarks + '",' + (o.expressDays || '') + ',"' + (o.warehouseId ||
-                                '') + '"\n';
+                                '') + '","' + (o.warehouseEta || '') + '"\n';
                     });
                     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     var a = document.createElement('a');
@@ -7096,6 +7318,7 @@
             window.getTypeBadge = getTypeBadge;
             window.getStatusDotColor = getStatusDotColor;
             window.renderExpressTruck = renderExpressTruck;
+            window.renderMobileExpressTruck = renderMobileExpressTruck;
 
         })();
     </script>
