@@ -4299,7 +4299,8 @@
             margin-bottom: 3px;
         }
         .add-manual-order .field-group input,
-        .add-manual-order .field-group select {
+        .add-manual-order .field-group select,
+        .add-manual-order .field-group textarea {
             width: 100%;
             padding: 8px 12px;
             border: 1.5px solid var(--gray200);
@@ -4308,11 +4309,17 @@
             background: #fafcff;
             outline: none;
             transition: 0.2s;
+            font-family: inherit;
         }
         .add-manual-order .field-group input:focus,
-        .add-manual-order .field-group select:focus {
+        .add-manual-order .field-group select:focus,
+        .add-manual-order .field-group textarea:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.06);
+        }
+        .add-manual-order .field-group textarea {
+            min-height: 70px;
+            resize: vertical;
         }
         .add-manual-order .field-group .input-with-suffix {
             position: relative;
@@ -5132,10 +5139,22 @@
                         </div>
                     </div>
                     <div>
-                        <label>Weight (KG)</label>
-                        <input type="number" id="manualWeight" placeholder="0.00" step="0.01" min="0" />
+                        <label>Weight (KG) <span style="font-weight:400;color:var(--gray500);">(default 0.5)</span></label>
+                        <input type="number" id="manualWeight" placeholder="0.5" step="0.01" min="0" value="0.5" />
                     </div>
                 </div>
+
+                <!-- Payment Method Dropdown -->
+                <div class="field-group">
+                    <label>Payment Method</label>
+                    <select id="manualPaymentMethod">
+                        <option value="Esewa">Esewa</option>
+                        <option value="Khalti">Khalti</option>
+                        <option value="FonePay QR">FonePay QR</option>
+                        <option value="Bank QR">Bank QR</option>
+                    </select>
+                </div>
+
                 <div class="field-group" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
                     <div>
                         <label>Final Cost (NPR)</label>
@@ -5158,6 +5177,12 @@
                     <div class="row"><span class="lbl">Final Cost</span><span class="val" id="manualDisplayFinal">NPR 0.00</span></div>
                     <div class="row"><span class="lbl">Advance</span><span class="val" id="manualDisplayAdvance">NPR 0.00</span></div>
                     <div class="row total due-cod"><span class="lbl">Due COD</span><span class="val" id="manualDisplayDueCOD">NPR 0.00</span></div>
+                </div>
+
+                <!-- Comment Box -->
+                <div class="field-group">
+                    <label>User Comment</label>
+                    <textarea id="manualComment" placeholder="Add any notes: multiple product links, sizes, special instructions, etc."></textarea>
                 </div>
 
                 <!-- Actions -->
@@ -7586,9 +7611,10 @@
                 document.getElementById('manualQty').value = 1;
                 document.getElementById('manualEta').value = '';
                 document.getElementById('manualInrPrice').value = '';
-                document.getElementById('manualWeight').value = '';
+                document.getElementById('manualWeight').value = '0.5';
                 document.getElementById('manualFinalCost').value = '';
                 document.getElementById('manualAdvance').value = '';
+                document.getElementById('manualComment').value = '';
                 document.getElementById('manualDisplayFinal').textContent = 'NPR 0.00';
                 document.getElementById('manualDisplayAdvance').textContent = 'NPR 0.00';
                 document.getElementById('manualDisplayDueCOD').textContent = 'NPR 0.00';
@@ -7639,7 +7665,6 @@
                 document.getElementById('manualUserDetails').style.display = 'block';
                 document.getElementById('userSearchResults').style.display = 'none';
                 document.getElementById('manualWhatsAppBtn').style.display = 'inline-flex';
-                // Pre-fill WhatsApp share with order details later
                 document.getElementById('manualWhatsAppBtn').onclick = function() {
                     shareWhatsApp();
                 };
@@ -7659,13 +7684,11 @@
             window.calculateDueCOD = calculateDueCOD;
 
             function generateOrderId() {
-                // Find max numeric part from existing IDs (MW2026...)
                 var maxNum = 0;
                 ordersData.forEach(function(o) {
                     var num = parseInt(o.id.replace('MW', ''), 10);
                     if (!isNaN(num) && num > maxNum) maxNum = num;
                 });
-                // If no orders, start from 2026000001
                 if (maxNum < 2026000000) maxNum = 2026000000;
                 var next = maxNum + 1;
                 return 'MW' + next;
@@ -7683,19 +7706,19 @@
                 var finalCost = parseFloat(document.getElementById('manualFinalCost').value) || 0;
                 var advance = parseFloat(document.getElementById('manualAdvance').value) || 0;
                 var due = Math.max(0, finalCost - advance);
+                var paymentMethod = document.getElementById('manualPaymentMethod').value;
+                var comment = document.getElementById('manualComment').value.trim();
 
-                // Generate order ID
                 var orderId = generateOrderId();
 
-                // Build payment summary
                 var paymentSummary = {
                     total: 'NPR ' + finalCost.toFixed(2),
                     advance: 'NPR ' + advance.toFixed(2),
-                    gateway: 'Manual Entry',
+                    gateway: paymentMethod,
                     cod: 'NPR ' + due.toFixed(2),
                     invoiceValue: 'INR ' + inrPrice.toFixed(2),
                     approxWeight: weight.toFixed(2) + ' KG',
-                    gross: 'NPR ' + (finalCost + (advance * 0.05)).toFixed(2), // placeholder
+                    gross: 'NPR ' + (finalCost + (advance * 0.05)).toFixed(2),
                     discount: 'NPR 0.00',
                     final: 'NPR ' + finalCost.toFixed(2),
                     extraCOD: 'NPR 0.00'
@@ -7716,7 +7739,7 @@
                     qty: qty,
                     productName: productName,
                     totalAmount: 'NPR ' + finalCost.toFixed(2),
-                    comment: 'Manual order added via admin panel',
+                    comment: comment || 'Manual order added via admin panel',
                     currentStageIndex: 0,
                     customerImage: null,
                     trackingNumber: '',
@@ -7734,7 +7757,7 @@
                 };
 
                 ordersData.push(newOrder);
-                filteredOrders = [...ordersData]; // refresh filter
+                filteredOrders = [...ordersData];
                 updateStats();
                 filterOrders();
                 closeAddManualOrderModal();
@@ -7744,7 +7767,6 @@
 
             function shareWhatsApp() {
                 if (!selectedUser) { showToast('⚠️', 'No user selected'); return; }
-                // Use the most recent manual order (or any order) for sharing
                 var manualOrders = ordersData.filter(o => o.type === 'Manual Order' && o.user === selectedUser.name);
                 var order = manualOrders.length > 0 ? manualOrders[manualOrders.length - 1] : null;
                 if (!order) { showToast('⚠️', 'No order found for this user to share.'); return; }
