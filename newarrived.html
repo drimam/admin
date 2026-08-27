@@ -18,7 +18,6 @@
         }
         html {
             font-size: 13px;
-            /* reduced base font size */
             -webkit-text-size-adjust: 100%;
         }
         body {
@@ -2632,148 +2631,124 @@
             opacity: 1;
         }
 
-        /* ─── MOBILE APP BOTTOM NAV ─── */
-        .mobile-bottom-nav {
-            display: none;
+        /* ─── SCANNER OVERLAY (full-screen) ─── */
+        .scanner-overlay {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #fff;
-            border-top: 1px solid #e2e8f0;
-            z-index: 40;
-            padding: 2px 0 env(safe-area-inset-bottom, 6px) 0;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
-        }
-        .mobile-bottom-nav .nav-items {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        .mobile-bottom-nav .nav-item {
-            display: flex;
+            inset: 0;
+            z-index: 200;
+            background: #000;
+            display: none;
             flex-direction: column;
             align-items: center;
-            gap: 1px;
-            padding: 4px 8px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            font-size: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-width: 44px;
-            position: relative;
+            justify-content: center;
         }
-        .mobile-bottom-nav .nav-item i {
-            font-size: 18px;
-            transition: all 0.2s;
+        .scanner-overlay.active {
+            display: flex;
         }
-        .mobile-bottom-nav .nav-item.active {
-            color: #4f46e5;
-        }
-        .mobile-bottom-nav .nav-item.active i {
-            transform: scale(1.1);
-        }
-        .mobile-bottom-nav .nav-item .badge-dot {
+        .scanner-overlay .scanner-header {
             position: absolute;
-            top: 2px;
-            right: 4px;
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 2px solid #fff;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+            z-index: 10;
         }
-        .mobile-bottom-nav .nav-item .nav-label {
-            font-size: 7px;
-            letter-spacing: 0.2px;
-            text-transform: uppercase;
-        }
-
-        @media (max-width:767px) {
-            .mobile-bottom-nav {
-                display: block;
-            }
-            #mainContent {
-                padding-bottom: 64px;
-            }
-            .top-bar {
-                padding: 4px 10px;
-            }
-            .top-bar h1 {
-                font-size: 13px;
-            }
-        }
-
-        /* ─── SCAN BUTTON ON MOBILE TAB HEADERS ─── */
-        .tab-scan-btn-mobile {
-            display: none;
-            background: #4f46e5;
+        .scanner-overlay .scanner-header h3 {
             color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .scanner-overlay .scanner-header .close-scanner {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-            flex-shrink: 0;
-        }
-        .tab-scan-btn-mobile:hover {
-            transform: scale(1.05);
-            background: #4338ca;
-        }
-        .tab-scan-btn-mobile:active {
-            transform: scale(0.95);
-        }
-
-        @media (max-width:767px) {
-            .tab-scan-btn-mobile {
-                display: inline-flex;
-            }
-        }
-
-        /* ─── SORT INDICATOR ─── */
-        .sort-asc::after {
-            content: ' ↑';
-            font-size: 9px;
-        }
-        .sort-desc::after {
-            content: ' ↓';
-            font-size: 9px;
-        }
-
-        /* ─── WHATSAPP CHAT ─── */
-        .wa-chat-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #25D366;
-            color: #fff;
-            border: none;
-            border-radius: 20px;
-            padding: 2px 8px 2px 4px;
-            font-size: 10px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .scanner-overlay .scanner-header .close-scanner:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .scanner-overlay #scanner-video {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1/1;
+            background: #111;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        .scanner-overlay #scanner-video video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .scanner-overlay .scanner-status {
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 16px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px);
+            z-index: 10;
             white-space: nowrap;
         }
-        .wa-chat-btn:hover {
-            background: #1DA85E;
-            transform: scale(1.03);
+        .scanner-overlay .scanner-footer {
+            position: absolute;
+            bottom: 40px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 0 20px;
+            z-index: 10;
         }
-        .wa-chat-btn i {
-            font-size: 12px;
+        .scanner-overlay .scanner-footer button {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            min-width: 60px;
+            justify-content: center;
         }
-
+        .scanner-overlay .scanner-footer .flash-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .scanner-overlay .scanner-footer .flash-toggle.active {
+            background: #fbbf24;
+            color: #1e293b;
+        }
+        .scanner-overlay .scanner-footer .stop-scan {
+            background: #ef4444;
+            color: #fff;
+        }
+        .scanner-overlay .scanner-footer .stop-scan:hover {
+            background: #dc2626;
+        }
         /* ─── RESPONSIVE FIXES ─── */
         @media (max-width:480px) {
             .stats-grid {
@@ -2876,6 +2851,15 @@
         }
         .icon-gray {
             color: #64748b;
+        }
+        /* ─── UNIFORM SEARCH BARS ─── */
+        .filter-group input {
+            height: 34px;
+        }
+        @media (max-width:480px) {
+            .filter-group input {
+                height: 30px;
+            }
         }
     </style>
 </head>
@@ -3083,11 +3067,11 @@
                     <div style="background:#fff;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.05);border:1px solid #f1f5f9;padding:14px 20px;">
                         <div style="display:flex;flex-direction:column;gap:10px;" class="sm:flex-row sm:items-center">
                             <div style="flex:1;width:100%;" class="scan-input-wrapper">
-                                <input type="text" id="stockBarcodeInput" placeholder="Scan Tracking to mark Arrived at India WH..." />
-                                <button onclick="processStockScan()" class="scan-btn"><i class="fas fa-box" style="color:#fff;"></i> Arrive</button>
+                                <input type="text" id="stockBarcodeInput" placeholder="Scan Tracking to Dispatch..." />
+                                <button onclick="processStockDispatch()" class="scan-btn" style="background:#f97316;"><i class="fas fa-paper-plane" style="color:#fff;"></i> Dispatch</button>
                             </div>
                             <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-                                <span id="stockScanStatus" style="font-size:11px;color:#059669;display:none;"><i class="fas fa-check-circle"></i> Arrived!</span>
+                                <span id="stockScanStatus" style="font-size:11px;color:#059669;display:none;"><i class="fas fa-check-circle"></i> Dispatched!</span>
                             </div>
                         </div>
                     </div>
@@ -3097,7 +3081,7 @@
                         <div class="filter-section">
                             <div class="filter-group" style="flex:1;min-width:100px;">
                                 <label style="font-size:9px;font-weight:600;color:#64748b;text-transform:uppercase;white-space:nowrap;"><i class="fas fa-search" style="color:#4f46e5;"></i></label>
-                                <input type="text" id="stockSearch" placeholder="Search Product, Tracking, Order..." style="flex:1;min-width:70px;font-size:11px;" oninput="filterStock()" />
+                                <input type="text" id="stockSearch" placeholder="Search Product, Tracking, Barcode..." style="flex:1;min-width:70px;font-size:11px;" oninput="filterStock()" />
                             </div>
                             <div class="filter-group">
                                 <label style="font-size:9px;font-weight:600;color:#64748b;text-transform:uppercase;white-space:nowrap;">From:</label>
@@ -3396,7 +3380,7 @@
             <button class="close-scanner" onclick="closeMobileScanner()"><i class="fas fa-times"></i></button>
         </div>
         <div id="scanner-video">
-            <video id="scannerVideo" autoplay playsinline muted></video>
+            <div id="qr-reader" style="width:100%;height:100%;"></div>
         </div>
         <div class="scanner-status" id="scannerStatus">📷 Scanning...</div>
         <div class="scanner-footer">
@@ -3475,7 +3459,7 @@
                     <label style="font-size:10px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:0.3px;display:block;margin-bottom:4px;">Warehouse Barcode</label>
                     <div style="display:flex;gap:8px;">
                         <input type="text" id="whBarcodeInput" placeholder="Enter or scan barcode..." style="flex:1;padding:12px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:14px;font-family:monospace;letter-spacing:1px;outline:none;transition:all 0.2s;" />
-                        <button onclick="simulateWhBarcodeScan()" style="padding:12px 16px;background:#10b981;color:#fff;border:none;border-radius:12px;font-weight:600;cursor:pointer;transition:background 0.15s;white-space:nowrap;"><i class="fas fa-camera"></i> Scan</button>
+                        <button onclick="openMobileScannerForWhBarcode()" style="padding:12px 16px;background:#10b981;color:#fff;border:none;border-radius:12px;font-weight:600;cursor:pointer;transition:background 0.15s;white-space:nowrap;"><i class="fas fa-camera"></i> Scan</button>
                     </div>
                     <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
                         <div style="font-size:12px;color:#64748b;display:flex;align-items:center;gap:6px;background:#f8fafc;padding:6px 12px;border-radius:8px;border:1px dashed #cbd5e1;">
@@ -3556,32 +3540,6 @@
             <span id="toastMessage">Action completed!</span>
         </div>
     </div>
-
-    <!-- ─── MOBILE BOTTOM NAV ─── -->
-    <nav class="mobile-bottom-nav" id="mobileBottomNav">
-        <div class="nav-items">
-            <button class="nav-item active" data-tab="shipped" onclick="switchTab('shipped')">
-                <i class="fas fa-truck" style="color:#14b8a6;"></i>
-                <span class="nav-label">Shipped</span>
-            </button>
-            <button class="nav-item" data-tab="stock" onclick="switchTab('stock')">
-                <i class="fas fa-boxes" style="color:#f59e0b;"></i>
-                <span class="nav-label">Stock</span>
-            </button>
-            <button class="nav-item" data-tab="dispatched" onclick="switchTab('dispatched')">
-                <i class="fas fa-paper-plane" style="color:#f97316;"></i>
-                <span class="nav-label">Dispatch</span>
-            </button>
-            <button class="nav-item" data-tab="scan" onclick="switchTab('scan')">
-                <i class="fas fa-qrcode" style="color:#8b5cf6;"></i>
-                <span class="nav-label">Scan</span>
-            </button>
-            <button class="nav-item" data-tab="pending" onclick="switchTab('pending')">
-                <i class="fas fa-clock" style="color:#7c3aed;"></i>
-                <span class="nav-label">Pending</span>
-            </button>
-        </div>
-    </nav>
 
     <script>
         (function() {
@@ -3873,10 +3831,10 @@
             let sortState = {};
 
             // ─── MOBILE SCANNER ────────────────────────────────────────────
-            let mobileScannerStream = null;
+            let html5QrCodeScanner = null;
             let isFlashOn = false;
-            let mobileScannerActive = false;
             let scannerTabContext = 'shipped';
+            let isWhBarcodeScan = false;
 
             const COLUMN_DEFS = {
                 pending: [
@@ -4191,39 +4149,15 @@
                 }
             }
 
-            function simulateWhBarcodeScan() {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let code = 'WH-';
-                for (let i = 0; i < 10; i++) {
-                    code += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                document.getElementById('whBarcodeInput').value = code;
-                document.getElementById('whBarcodePreview').innerHTML =
-                    `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(code)}</span>`;
-                showToast('📷', 'Barcode scanned: ' + code);
-                playBeep();
-            }
-
-            function generateRandomWhBarcode() {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let code = 'WH-';
-                for (let i = 0; i < 10; i++) {
-                    code += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                document.getElementById('whBarcodeInput').value = code;
-                document.getElementById('whBarcodePreview').innerHTML =
-                    `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(code)}</span>`;
-            }
-
             // ─── SCAN FUNCTIONS ─────────────────────────────────────────────
 
-            async function processStockScan() {
-                const input = document.getElementById('stockBarcodeInput');
+            async function processStockArrive() {
+                // This is for Shipped -> Stock (assign warehouse barcode)
+                const input = document.getElementById('shippedSearch'); // we use the search input from Shipped tab
                 const tracking = input.value.trim();
-                if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
+                if (!tracking) { showToast('⚠️', 'Please enter a tracking number in search'); return; }
                 const idx = shippedItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
-                if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); input.value = '';
-                    input.focus(); return; }
+                if (idx === -1) { showToast('❌', `No shipment found for tracking: ${tracking}`); return; }
                 const item = shippedItems[idx];
 
                 try {
@@ -4245,20 +4179,50 @@
                     renderAll();
                     showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH (Barcode: ${barcode})`);
                     playBeep();
-                    input.value = '';
-                    input.focus();
-                    const statusEl = document.getElementById('stockScanStatus');
-                    statusEl.style.display = 'block';
-                    statusEl.textContent = `✅ ${tracking} arrived! Barcode: ${barcode}`;
-                    setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+                    input.value = ''; // clear search
+                    filterShipped(); // refresh list
                 } catch (err) {
                     showToast('⏹️', 'Operation cancelled');
-                    input.value = '';
-                    input.focus();
                 }
             }
 
+            // New: processStockDispatch - for Stock -> Dispatched
+            function processStockDispatch() {
+                const input = document.getElementById('stockBarcodeInput');
+                const tracking = input.value.trim();
+                if (!tracking) { showToast('⚠️', 'Please enter a tracking number'); return; }
+                const idx = stockItems.findIndex(s => s.trackingNumber.toLowerCase() === tracking.toLowerCase());
+                if (idx === -1) { showToast('❌', `No stock item found for tracking: ${tracking}`); input.value = '';
+                    input.focus(); return; }
+                const item = stockItems[idx];
+                stockItems.splice(idx, 1);
+                const dispatched = {
+                    ...item,
+                    status: 'dispatched',
+                    dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    comment: item.comment || '',
+                    warehouseBarcode: item.warehouseBarcode || '',
+                    paymentType: item.paymentType || 'PREPAID',
+                    codAmount: item.codAmount || 0,
+                    expressDays: item.expressDays || null,
+                    orderType: item.orderType || 'Manual Order',
+                };
+                dispatchedItems.push(dispatched);
+                renderAll();
+                showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
+                playBeep();
+                input.value = '';
+                input.focus();
+                const statusEl = document.getElementById('stockScanStatus');
+                statusEl.style.display = 'block';
+                statusEl.textContent = `✅ ${tracking} Dispatched!`;
+                setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+                switchTab('dispatched');
+            }
+
             function dispatchShipment(tracking) {
+                // kept for compatibility with table button
                 const idx = stockItems.findIndex(s => s.trackingNumber === tracking);
                 if (idx === -1) { showToast('❌', 'Shipment not found in India WH stock'); return; }
                 const item = stockItems[idx];
@@ -4279,6 +4243,7 @@
                 renderAll();
                 showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
                 playBeep();
+                switchTab('dispatched');
             }
 
             function processScan() {
@@ -4334,93 +4299,103 @@
                 statusEl.style.display = 'block';
                 statusEl.textContent = `✅ Received! (${displayVal})`;
                 setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+                switchTab('scan');
             }
 
             // ─── MOBILE SCANNER ──────────────────────────────────────────
 
             function openMobileScanner(context) {
                 if (context) scannerTabContext = context;
+                else {
+                    // Determine context from current tab
+                    if (currentTab === 'shipped') scannerTabContext = 'shipped';
+                    else if (currentTab === 'stock') scannerTabContext = 'stock';
+                    else if (currentTab === 'dispatched') scannerTabContext = 'dispatched';
+                    else if (currentTab === 'scan') scannerTabContext = 'scan';
+                    else if (currentTab === 'pending') scannerTabContext = 'pending';
+                    else scannerTabContext = 'shipped';
+                }
+                isWhBarcodeScan = false;
                 const overlay = document.getElementById('mobileScannerOverlay');
                 overlay.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                startMobileScanner();
+                startScanner();
             }
 
-            function closeMobileScanner() {
+            function openMobileScannerForWhBarcode() {
+                isWhBarcodeScan = true;
                 const overlay = document.getElementById('mobileScannerOverlay');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-                stopMobileScanner();
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                startScanner();
             }
 
-            function startMobileScanner() {
-                const video = document.getElementById('scannerVideo');
-                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 640 },
-                            height: { ideal: 480 } } })
-                        .then(function(stream) {
-                            mobileScannerStream = stream;
-                            video.srcObject = stream;
-                            video.play();
-                            mobileScannerActive = true;
-                            document.getElementById('scannerStatus').textContent = '📷 Scanning...';
-                            scanLoop();
-                        })
-                        .catch(function(err) {
-                            showToast('⚠️', 'Camera access denied: ' + err.message);
-                            closeMobileScanner();
-                        });
-                } else {
-                    showToast('⚠️', 'Camera not supported on this device');
-                    closeMobileScanner();
+            function startScanner() {
+                if (html5QrCodeScanner) {
+                    html5QrCodeScanner.clear();
+                    html5QrCodeScanner = null;
                 }
-            }
+                const readerElement = document.getElementById('qr-reader');
+                readerElement.innerHTML = ''; // clear previous
 
-            function stopMobileScanner() {
-                mobileScannerActive = false;
-                if (mobileScannerStream) {
-                    mobileScannerStream.getTracks().forEach(track => track.stop());
-                    mobileScannerStream = null;
-                }
-                const video = document.getElementById('scannerVideo');
-                video.srcObject = null;
-                isFlashOn = false;
-                document.getElementById('flashToggleBtn').classList.remove('active');
-                document.getElementById('flashToggleBtn').innerHTML = '<i class="fas fa-bolt"></i> Flash';
-            }
-
-            function scanLoop() {
-                if (!mobileScannerActive) return;
-                const video = document.getElementById('scannerVideo');
-                if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const code = jsQR(imageData.data, canvas.width, canvas.height, {
-                        inversionAttempts: 'dontInvert',
-                    });
-                    if (code && code.data) {
-                        const result = code.data;
-                        document.getElementById('scannerStatus').textContent = '✅ Scanned: ' + result;
+                html5QrCodeScanner = new Html5Qrcode("qr-reader");
+                const config = {
+                    fps: 15,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0,
+                    formatsToSupport: [
+                        Html5QrcodeSupportedFormats.QR_CODE,
+                        Html5QrcodeSupportedFormats.CODE_128,
+                        Html5QrcodeSupportedFormats.CODE_39,
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.EAN_8,
+                        Html5QrcodeSupportedFormats.UPC_A,
+                        Html5QrcodeSupportedFormats.UPC_E,
+                        Html5QrcodeSupportedFormats.ISBN,
+                        Html5QrcodeSupportedFormats.ISSN,
+                        Html5QrcodeSupportedFormats.CODE_93,
+                        Html5QrcodeSupportedFormats.PDF_417
+                    ]
+                };
+                html5QrCodeScanner.start({ facingMode: "environment" },
+                    config,
+                    function(decodedText) {
                         playBeep();
-                        handleScanResult(result);
-                        setTimeout(() => {
-                            document.getElementById('scannerStatus').textContent = '📷 Scanning...';
-                        }, 1000);
-                        return;
+                        if (isWhBarcodeScan) {
+                            // For warehouse barcode modal
+                            document.getElementById('whBarcodeInput').value = decodedText;
+                            document.getElementById('whBarcodePreview').innerHTML =
+                                `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(decodedText)}</span>`;
+                            closeMobileScanner();
+                            showToast('📷', 'Barcode scanned: ' + decodedText);
+                            isWhBarcodeScan = false;
+                        } else {
+                            // Normal scanner: handle based on context
+                            handleScanResult(decodedText);
+                            closeMobileScanner();
+                        }
+                    },
+                    function(error) {
+                        // ignore
                     }
-                }
-                requestAnimationFrame(scanLoop);
+                ).catch(function(err) {
+                    showToast('⚠️', 'Camera access denied: ' + err);
+                    closeMobileScanner();
+                });
             }
 
             function handleScanResult(result) {
                 const context = scannerTabContext;
                 if (context === 'shipped') {
-                    document.getElementById('stockBarcodeInput').value = result;
-                    processStockScan();
+                    document.getElementById('shippedSearch').value = result;
+                    filterShipped();
+                    // Trigger arrival: we'll open warehouse barcode modal for the first matching item
+                    const idx = shippedItems.findIndex(s => s.trackingNumber.toLowerCase() === result.toLowerCase());
+                    if (idx > -1) {
+                        processStockArrive();
+                    } else {
+                        showToast('❌', 'No shipped item found for: ' + result);
+                    }
                 } else if (context === 'stock') {
                     const idx = stockItems.findIndex(s => s.trackingNumber.toLowerCase() === result.toLowerCase());
                     if (idx > -1) {
@@ -4442,45 +4417,51 @@
                         showToast('❌', 'No pending order found for: ' + result);
                     }
                 } else {
-                    let found = false;
-                    const checkList = (list, label, fn) => {
-                        const it = list.find(i => i.trackingNumber === result || i.orderId === result);
-                        if (it) { found = true;
-                            fn(it); return true; }
-                        return false;
-                    };
-                    if (!found) checkList(shippedItems, 'Shipped', (it) => {
-                        document.getElementById('stockBarcodeInput').value = result;
-                        processStockScan();
-                    });
-                    if (!found) checkList(stockItems, 'Stock', (it) => { dispatchShipment(result); });
-                    if (!found) checkList(dispatchedItems, 'Dispatched', (it) => {
-                        document.getElementById('barcodeInput').value = result;
-                        processScan();
-                    });
-                    if (!found) checkList(pendingItems, 'Pending', (it) => { openTrackingAssignModal(it.orderId); });
-                    if (!found) showToast('❌', 'No matching item found for: ' + result);
+                    showToast('❌', 'No context for scan');
                 }
-                setTimeout(() => closeMobileScanner(), 800);
+            }
+
+            function closeMobileScanner() {
+                const overlay = document.getElementById('mobileScannerOverlay');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                if (html5QrCodeScanner) {
+                    html5QrCodeScanner.stop().then(function() {
+                        html5QrCodeScanner.clear();
+                        html5QrCodeScanner = null;
+                    }).catch(function(err) {});
+                }
+                isFlashOn = false;
+                document.getElementById('flashToggleBtn').classList.remove('active');
+                document.getElementById('flashToggleBtn').innerHTML = '<i class="fas fa-bolt"></i> Flash';
             }
 
             function toggleFlash() {
                 const btn = document.getElementById('flashToggleBtn');
-                if (mobileScannerStream) {
-                    const track = mobileScannerStream.getVideoTracks()[0];
-                    if (track && track.getCapabilities().torch) {
-                        isFlashOn = !isFlashOn;
-                        track.applyConstraints({ advanced: [{ torch: isFlashOn }] })
-                            .then(() => {
-                                btn.classList.toggle('active');
-                                btn.innerHTML = isFlashOn ? '<i class="fas fa-bolt"></i> Flash ON' :
-                                    '<i class="fas fa-bolt"></i> Flash';
-                            })
-                            .catch(() => {
-                                showToast('⚠️', 'Flash not supported');
-                            });
+                if (html5QrCodeScanner) {
+                    // Toggle flash via the scanner instance if supported
+                    const track = html5QrCodeScanner.getRunningTrackSettings?.();
+                    // Not directly supported, we'll use a workaround: use the video element
+                    const videoElement = document.querySelector('#qr-reader video');
+                    if (videoElement && videoElement.srcObject) {
+                        const stream = videoElement.srcObject;
+                        const track = stream.getVideoTracks()[0];
+                        if (track && track.getCapabilities().torch) {
+                            isFlashOn = !isFlashOn;
+                            track.applyConstraints({ advanced: [{ torch: isFlashOn }] })
+                                .then(() => {
+                                    btn.classList.toggle('active');
+                                    btn.innerHTML = isFlashOn ? '<i class="fas fa-bolt"></i> Flash ON' :
+                                        '<i class="fas fa-bolt"></i> Flash';
+                                })
+                                .catch(() => {
+                                    showToast('⚠️', 'Flash not supported');
+                                });
+                        } else {
+                            showToast('⚠️', 'Flash not supported on this camera');
+                        }
                     } else {
-                        showToast('⚠️', 'Flash not supported on this camera');
+                        showToast('⚠️', 'No video track found');
                     }
                 }
             }
@@ -4577,7 +4558,6 @@
                 else if (currentTab === 'stock') filterStock();
                 else if (currentTab === 'dispatched') filterDispatched();
                 else if (currentTab === 'scan') filterScan();
-                updateBottomNav();
             }
 
             function generateCards(data, statusKey, actionButtons, context) {
@@ -4654,7 +4634,7 @@
             }
 
             function shippedActionButtons(item) {
-                return `<button onclick="processStockScanManual('${item.trackingNumber}')" class="action-btn success-btn btn-sm" style="font-size:10px;padding:2px 8px;"><i class="fas fa-box" style="color:#fff;"></i> Arrive</button>`;
+                return `<button onclick="processStockArriveFromButton('${item.trackingNumber}')" class="action-btn success-btn btn-sm" style="font-size:10px;padding:2px 8px;"><i class="fas fa-box" style="color:#fff;"></i> Arrive</button>`;
             }
 
             function stockActionButtons(item) {
@@ -4876,9 +4856,10 @@
                 updateShippedPagination();
             }
 
-            function processStockScanManual(tracking) {
-                document.getElementById('stockBarcodeInput').value = tracking;
-                processStockScan();
+            function processStockArriveFromButton(tracking) {
+                // called from table button
+                document.getElementById('shippedSearch').value = tracking;
+                processStockArrive();
             }
 
             function updateShippedPagination() {
@@ -5273,10 +5254,6 @@
                 document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
                 document.getElementById(`tab-${tab}`).classList.add('active');
 
-                document.querySelectorAll('.mobile-bottom-nav .nav-item').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tab);
-                });
-
                 if (tab === 'pending') { filterPending();
                     setTimeout(() => document.getElementById('pendingSearch')?.focus(), 100); } else if (tab === 'shipped') {
                     filterShipped();
@@ -5285,12 +5262,6 @@
                     setTimeout(() => document.getElementById('stockBarcodeInput')?.focus(), 100); } else if (tab ===
                     'dispatched') { filterDispatched(); } else if (tab === 'scan') { filterScan();
                     setTimeout(() => document.getElementById('barcodeInput')?.focus(), 100); }
-            }
-
-            function updateBottomNav() {
-                document.querySelectorAll('.mobile-bottom-nav .nav-item').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === currentTab);
-                });
             }
 
             // ─── EXPORT ────────────────────────────────────────────────────
@@ -5476,7 +5447,7 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && document.activeElement === document.getElementById('stockBarcodeInput')) {
                     e.preventDefault();
-                    processStockScan();
+                    processStockDispatch();
                 }
                 if (e.key === 'Enter' && document.activeElement === document.getElementById('barcodeInput')) {
                     e.preventDefault();
@@ -5501,8 +5472,9 @@
 
             // ─── GLOBAL EXPOSURE ──────────────────────────────────────────
 
-            window.processStockScan = processStockScan;
-            window.processStockScanManual = processStockScanManual;
+            window.processStockArrive = processStockArrive;
+            window.processStockArriveFromButton = processStockArriveFromButton;
+            window.processStockDispatch = processStockDispatch;
             window.processScan = processScan;
             window.dispatchShipment = dispatchShipment;
             window.manualReceive = manualReceive;
@@ -5535,13 +5507,13 @@
             window.closeCommentModal = closeCommentModal;
             window.closeWhBarcodeModal = closeWhBarcodeModal;
             window.saveWhBarcode = saveWhBarcode;
-            window.simulateWhBarcodeScan = simulateWhBarcodeScan;
             window.generateRandomWhBarcode = generateRandomWhBarcode;
             window.openTrackingAssignModal = openTrackingAssignModal;
             window.closeTrackingAssignModal = closeTrackingAssignModal;
             window.saveTrackingAssign = saveTrackingAssign;
             window.generateRandomTracking = generateRandomTracking;
             window.openMobileScanner = openMobileScanner;
+            window.openMobileScannerForWhBarcode = openMobileScannerForWhBarcode;
             window.closeMobileScanner = closeMobileScanner;
             window.toggleFlash = toggleFlash;
             window.sortTable = sortTable;
@@ -5549,10 +5521,18 @@
 
             // ─── INIT ──────────────────────────────────────────────────────
 
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
-            script.onload = function() { console.log('jsQR loaded for mobile scanner'); };
-            document.head.appendChild(script);
+            // Ensure generateRandomWhBarcode is defined
+            function generateRandomWhBarcode() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = 'WH-';
+                for (let i = 0; i < 10; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                document.getElementById('whBarcodeInput').value = code;
+                document.getElementById('whBarcodePreview').innerHTML =
+                    `<span style="font-family:monospace;font-size:18px;letter-spacing:2px;">${escapeHtml(code)}</span>`;
+            }
+            window.generateRandomWhBarcode = generateRandomWhBarcode;
 
             const demoArrive = ['TRK-2026-001234', 'TRK-2026-001235'];
             demoArrive.forEach(tracking => {
