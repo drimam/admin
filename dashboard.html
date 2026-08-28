@@ -761,6 +761,64 @@
   .pc143 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 }
 
+
+
+        /* ─── COMPACT & READABLE DESKTOP OPTIMIZATION ─── */
+        @media (min-width: 1024px) {
+            body { font-size: 14px; }
+            .top-bar { min-height: 54px; padding: 10px 18px !important; }
+            .top-bar h1 { font-size: 18px !important; }
+            #mainContent > div { padding: 16px 18px !important; gap: 14px !important; }
+
+            .filter-section { gap: 8px; }
+            .filter-section .filter-group { gap: 5px; }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select { font-size: 12px; padding: 5px 9px; }
+            .filter-section label { font-size: 10px !important; }
+
+            .period-toggle button { font-size: 11px; padding: 4px 12px; }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm { font-size: 12px; padding: 5px 12px; }
+
+            .stats-grid { gap: 8px !important; }
+            .stats-grid-extra { gap: 8px !important; }
+            .stats-grid .stat-card,
+            .stats-grid-extra .stat-card { padding: 10px !important; min-height: 64px; }
+            .stat-card .stat-icon { width: 32px; height: 32px; border-radius: 9px; font-size: 14px; }
+            .stat-label-one { font-size: 9px !important; }
+            .stat-value-sm { font-size: 17px !important; line-height: 1.15; }
+            .stat-card .stat-value { font-size: 17px !important; line-height: 1.15; }
+            .stat-card .stat-label { font-size: 9px !important; }
+
+            .dashboard-charts-grid { gap: 14px !important; }
+            .dashboard-charts-grid > div { padding: 14px !important; }
+            .dashboard-charts-grid h3 { font-size: 13px !important; }
+            .chart-container { height: 210px; }
+            .chart-container-sm { height: 180px; }
+            .chart-container-xs { height: 150px; }
+
+            .valuable-customers-table td,
+            .valuable-customers-table th { font-size: 11px !important; padding: 5px 9px !important; }
+            .recent-orders-table td,
+            .recent-orders-table th { font-size: 10px !important; padding: 5px 7px !important; }
+            .valuable-customers-table .user-avatar-sm { width: 26px; height: 26px; font-size: 9px; }
+
+            .view-all-btn { font-size: 10px; padding: 4px 11px; }
+
+            .sidebar nav a,
+            .sidebar .sidebar-section-header,
+            .sidebar nav > div { font-size: 13px; }
+            .sidebar nav { padding-top: 10px; padding-bottom: 10px; }
+            .sidebar .sidebar-section-header,
+            .sidebar nav a { padding-top: 9px !important; padding-bottom: 9px !important; }
+            .sidebar .sidebar-section-content a { font-size: 12px !important; padding-top: 7px !important; padding-bottom: 7px !important; }
+        }
+
+        @media (min-width: 1440px) {
+            #mainContent > div { padding-left: 22px !important; padding-right: 22px !important; }
+            .stat-value-sm, .stat-card .stat-value { font-size: 18px !important; }
+            .chart-container { height: 220px; }
+        }
 </style>
 </head>
 <body class="pc001 pc002 pc003 pc004 pc005 pc006">
