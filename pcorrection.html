@@ -53,9 +53,10 @@
             --gray-900: #0f172a;
         }
 
-        /* ─── UTILITY CLASSES (replaces Tailwind) ─── */
-
-        /* Display & Layout */
+        /* ─── UTILITY CLASSES ─── */
+        .hidden {
+            display: none !important;
+        }
         .flex {
             display: flex;
         }
@@ -67,9 +68,6 @@
         }
         .inline-block {
             display: inline-block;
-        }
-        .hidden {
-            display: none !important;
         }
         .flex-1 {
             flex: 1 1 0%;
@@ -289,7 +287,7 @@
             z-index: 100;
         }
 
-        /* Transitions & transforms */
+        /* Transitions */
         .transition-transform {
             transition: transform 0.3s ease;
         }
@@ -465,9 +463,6 @@
         .shadow-2xl {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
-        .border-b-3 {
-            border-bottom-width: 3px;
-        }
 
         /* Background colors */
         .bg-transparent {
@@ -582,6 +577,9 @@
         }
         .text-amber-700 {
             color: #B45309;
+        }
+        .text-emerald-700 {
+            color: #065F46;
         }
 
         /* Font */
@@ -704,12 +702,7 @@
             box-shadow: 0 0 0 2px var(--primary);
         }
 
-        /* List */
-        .list-none {
-            list-style: none;
-        }
-
-        /* Responsive helpers - using media queries for common breakpoints */
+        /* Responsive */
         @media (min-width: 768px) {
             .lg\:ml-64 {
                 margin-left: 16rem;
@@ -755,7 +748,7 @@
             }
         }
 
-        /* Additional custom components that were using Tailwind classes */
+        /* ─── COMPONENT STYLES ─── */
 
         /* Sidebar scrollbar */
         .sidebar-scroll::-webkit-scrollbar {
@@ -770,7 +763,7 @@
             scrollbar-color: #475569 transparent;
         }
 
-        /* Scrollbar for table containers */
+        /* Table scroll */
         .table-container::-webkit-scrollbar {
             height: 6px;
         }
@@ -1911,7 +1904,7 @@
             }
         }
 
-        /* Sidebar section header */
+        /* Sidebar section */
         .sidebar-section-header {
             cursor: pointer;
             user-select: none;
@@ -1938,7 +1931,7 @@
             scrollbar-color: #475569 transparent;
         }
 
-        /* General table styling for corrections */
+        /* Table styling */
         .corrections-table {
             width: 100%;
             border-collapse: collapse;
@@ -1977,7 +1970,7 @@
             margin: 0 2px;
         }
 
-        /* Utility for top bar */
+        /* Top bar */
         .top-bar {
             background: #fff;
             border-bottom: 1px solid var(--gray-200);
@@ -2011,7 +2004,7 @@
             }
         }
 
-        /* Additional responsiveness for small screens */
+        /* Additional responsiveness */
         @media (max-width: 480px) {
             .corrections-table td,
             .corrections-table th {
@@ -2077,7 +2070,7 @@
             }
         }
 
-        /* Filter bar container */
+        /* Filter bar */
         .filter-bar {
             background: #fff;
             border-radius: 16px;
@@ -2160,6 +2153,109 @@
             background: #f1f5f9;
             padding: 2px 12px;
             border-radius: 20px;
+        }
+
+        /* App header */
+        .app-header {
+            background: #ffffff;
+            border-bottom: 1px solid #eef2f6;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+        .app-header .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-header .header-left .brand {
+            font-weight: 800;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        .app-header .header-left .brand span {
+            color: #4F46E5;
+        }
+        .app-header .header-left .brand-sub {
+            font-size: 9px;
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-left: 2px;
+        }
+        .app-header .header-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .app-header .header-actions .icon-btn {
+            padding: 8px;
+            border-radius: 12px;
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+        .app-header .header-actions .icon-btn:active {
+            transform: scale(0.92);
+            background: #e2e8f0;
+        }
+
+        /* History filter */
+        .history-filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .history-filter-section .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .history-filter-section .filter-group input,
+        .history-filter-section .filter-group select {
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            outline: none;
+            background: #fff;
+        }
+        .history-filter-section .filter-group input:focus,
+        .history-filter-section .filter-group select:focus {
+            border-color: #4F46E5;
+        }
+        @media (max-width: 480px) {
+            .history-filter-section .filter-group input,
+            .history-filter-section .filter-group select {
+                font-size: 10px;
+                padding: 3px 6px;
+                min-width: 50px;
+            }
+            .history-filter-section .filter-group label {
+                font-size: 9px;
+            }
+        }
+
+        /* ─── MODAL FIX: ensure hidden class controls visibility ─── */
+        #reviewModal {
+            display: none !important; /* will be overridden by class removal */
+        }
+        #reviewModal:not(.hidden) {
+            display: flex !important;
         }
     </style>
 </head>
@@ -2413,7 +2509,7 @@
             <div id="tab-history" class="tab-content" style="display:none;">
                 <!-- History Filters -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
-                    <div class="history-filter-section flex flex-wrap gap-2 items-center">
+                    <div class="history-filter-section">
                         <div class="filter-group flex-1 min-w-[100px]">
                             <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
                             <input type="text" id="searchHistory" placeholder="User, Product, ID..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterHistory()" />
@@ -3699,23 +3795,28 @@
                 const actions = document.getElementById('reviewModalActions');
                 if (mode === 'pending') {
                     actions.innerHTML = `
-                        <button class="btn-cancel flex-1 sm:flex-none" onclick="closeReviewModal()">Cancel</button>
-                        <button class="btn-approve flex-1 sm:flex-none" onclick="approveCorrection()">✅ Approve</button>
-                        <button class="btn-approve-correction flex-1 sm:flex-none" onclick="approveAndCorrect()">📌 Approve & Correct</button>
+                        <button class="btn-cancel flex-1" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-approve flex-1" onclick="approveCorrection()">✅ Approve</button>
+                        <button class="btn-approve-correction flex-1" onclick="approveAndCorrect()">📌 Approve & Correct</button>
                     `;
                 } else {
                     actions.innerHTML = `
-                        <button class="btn-cancel flex-1 sm:flex-none" onclick="closeReviewModal()">Cancel</button>
-                        <button class="btn-update-cart flex-1 sm:flex-none" onclick="updateLiveCartItem()">💾 Update</button>
+                        <button class="btn-cancel flex-1" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-update-cart flex-1" onclick="updateLiveCartItem()">💾 Update</button>
                     `;
                 }
 
-                document.getElementById('reviewModal').style.display = 'flex';
+                // --- FIX: Show modal by removing hidden class and setting display ---
+                const modal = document.getElementById('reviewModal');
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
 
             function closeReviewModal() {
-                document.getElementById('reviewModal').style.display = 'none';
+                const modal = document.getElementById('reviewModal');
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
                 document.body.style.overflow = '';
                 selectedRequestId = null;
             }
