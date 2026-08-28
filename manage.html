@@ -3510,6 +3510,78 @@
             background: var(--primaryDark);
         }
 
+        /* Insurance checkbox - compact */
+        .cost-modal .insurance-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0f9ff;
+            border-radius: 8px;
+            border: 1px solid #b8d9f0;
+            padding: 4px 10px;
+        }
+        .cost-modal .insurance-row label {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #1a5adf;
+            cursor: pointer;
+        }
+        .cost-modal .insurance-row input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            margin: 0;
+        }
+        .cost-modal .insurance-row .insurance-note {
+            font-size: 10px;
+            color: var(--gray500);
+            margin-left: 2px;
+        }
+
+        /* Express + Insurance row compact */
+        .cost-modal .express-insurance-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px 12px;
+            margin-top: 2px;
+        }
+        .cost-modal .express-insurance-wrap .express-group {
+            flex: 2 1 160px;
+            min-width: 120px;
+        }
+        .cost-modal .express-insurance-wrap .express-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #3d4f6f;
+            letter-spacing: 0.3px;
+        }
+        .cost-modal .express-insurance-wrap .express-group select {
+            width: 100%;
+            padding: 4px 8px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 8px;
+            font-size: 12px;
+            background: #fafcff;
+            outline: none;
+        }
+        .cost-modal .express-insurance-wrap .express-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.06);
+        }
+        .cost-modal .express-insurance-wrap .express-group .hint {
+            font-size: 10px;
+            color: var(--gray400);
+            display: block;
+            margin-top: 1px;
+        }
+
         @media (max-width: 640px) {
             .cost-modal .form-grid {
                 grid-template-columns: 1fr;
@@ -3527,6 +3599,14 @@
             }
             .cost-modal .grand-total .total-right {
                 justify-content: center;
+            }
+            .cost-modal .express-insurance-wrap {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            .cost-modal .insurance-row {
+                padding: 4px 8px;
             }
         }
 
@@ -5424,7 +5504,8 @@
                 warehouseId: 'WID: 70002600',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9801234567'
+                phone: '9801234567',
+                insurance: false
             }, {
                 id: 'MW2026224458',
                 user: 'Sita Sharma',
@@ -5454,7 +5535,8 @@
                 warehouseId: 'WID: 70002601',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9812345678'
+                phone: '9812345678',
+                insurance: false
             }, {
                 id: 'MW2026224451',
                 user: 'Ramesh Adhikari',
@@ -5484,7 +5566,8 @@
                 warehouseId: 'WID: 70002602',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9823456789'
+                phone: '9823456789',
+                insurance: false
             }, {
                 id: 'MW2026224453',
                 user: 'Priya Gurung',
@@ -5514,7 +5597,8 @@
                 warehouseId: 'WID: 70002603',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9834567890'
+                phone: '9834567890',
+                insurance: false
             }, {
                 id: 'MW2026224412',
                 user: 'Bikash Thapa',
@@ -5545,7 +5629,8 @@
                 warehouseId: 'WID: 70002604',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9845678901'
+                phone: '9845678901',
+                insurance: false
             }, {
                 id: 'MW2026224432',
                 user: 'Anita Rai',
@@ -5575,7 +5660,8 @@
                 warehouseId: 'WID: 70002605',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9856789012'
+                phone: '9856789012',
+                insurance: false
             }, {
                 id: 'MW2026224433',
                 user: 'Kiran Bhandari',
@@ -5605,7 +5691,8 @@
                 warehouseId: 'WID: 70002606',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9867890123'
+                phone: '9867890123',
+                insurance: false
             }, {
                 id: 'MW2026224457',
                 user: 'Maya Devi',
@@ -5636,7 +5723,8 @@
                 warehouseId: 'WID: 70002607',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9878901234'
+                phone: '9878901234',
+                insurance: false
             }, {
                 id: 'MW2026224490',
                 user: 'Seller User 1',
@@ -5667,7 +5755,8 @@
                 warehouseId: 'WID: 70002608',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9881112222'
+                phone: '9881112222',
+                insurance: false
             }, {
                 id: 'MW2026224491',
                 user: 'Seller User 2',
@@ -5698,7 +5787,8 @@
                 warehouseId: 'WID: 70002609',
                 costLogs: [],
                 warehouseEta: null,
-                phone: '9883334444'
+                phone: '9883334444',
+                insurance: false
             }, {
                 id: 'MW2026224500',
                 user: 'Manual User 1',
@@ -5729,7 +5819,8 @@
                 warehouseId: 'WID: 70002610',
                 costLogs: [],
                 warehouseEta: '2026-05-15',
-                phone: '9805551234'
+                phone: '9805551234',
+                insurance: false
             }, {
                 id: 'MW2026224501',
                 user: 'Manual User 2',
@@ -5760,7 +5851,8 @@
                 warehouseId: 'WID: 70002611',
                 costLogs: [],
                 warehouseEta: '2026-05-18',
-                phone: '9816665678'
+                phone: '9816665678',
+                insurance: false
             }];
 
             // ─── STATE ──────────────────────────────────────────────────────
@@ -6718,7 +6810,7 @@
                 showToast('📝', 'Internal remark saved for ' + internalRemarksOrderId);
             };
 
-            // ─── COST MODAL WITH UPDATE LOG ────────────────────────────────
+            // ─── COST MODAL WITH UPDATE LOG & INSURANCE ──────────────────
             function openCostModal(orderId) {
                 const order = ordersData.find(o => o.id === orderId);
                 if (!order) return;
@@ -6729,6 +6821,9 @@
                     var sel = (order.expressDays === d) ? 'selected' : '';
                     exprOpts += '<option value="' + d + '" ' + sel + '>' + d + ' days</option>';
                 }
+
+                // Insurance checkbox state
+                var insChecked = order.insurance ? 'checked' : '';
 
                 var logHtml = '';
                 var logs = order.costLogs || [];
@@ -6774,9 +6869,18 @@
                 html +=
                     '<div class="field"><label>ETA Date</label><input type="date" value="' + (order
                         .etaDeliveryDate || '') + '" id="costArrivalDate" /></div>';
-                html += '<div class="field full"><label>Express Delivery (Days)</label><select id="costExpressDays" onchange="handleExpressDaysChange(\'' +
+
+                // Express Delivery + Insurance in a compact row
+                html += '<div class="field full"><div class="express-insurance-wrap">';
+                html +=
+                    '<div class="express-group"><label>Express Delivery (Days)</label><select id="costExpressDays" onchange="handleExpressDaysChange(\'' +
                     order.id + '\')">' + exprOpts +
-                    '</select><span style="font-size:10px;color:var(--gray400);margin-top:2px;display:block;">Select 2-7 days for Express Delivery. Truck icon will appear in Status column.</span></div>';
+                    '</select><span class="hint">Select 2-7 days</span></div>';
+                html +=
+                    '<div class="insurance-row"><label><input type="checkbox" id="costInsuranceCheck" ' +
+                    insChecked + ' onchange="toggleInsurance()" /> 🛡️ Add Insurance</label><span class="insurance-note">(+2% premium)</span></div>';
+                html += '</div></div>';
+
                 html +=
                     '<div class="field full"><label>Dimensions (CM)</label><div class="dimensions-row"><div class="dim-field"><label>W</label><input type="number" step="0.1" value="0.5" id="costDimWidth" /></div><div class="dim-field"><label>H</label><input type="number" step="0.1" value="38.1" id="costDimHeight" /></div><div class="dim-field"><label>L</label><input type="number" step="0.1" value="27.9" id="costDimLength" /></div></div></div>';
                 html +=
@@ -6802,6 +6906,8 @@
                     '<div class="row"><span class="label">VAT <span class="pct-badge" id="costVatPct">13%</span></span><span class="value" id="costDispVat">NPR 134.40</span></div>';
                 html +=
                     '<div class="row"><span class="label">INTL. SHIPPING</span><span class="value" id="costDispShipping">NPR 280.00</span></div>';
+                html +=
+                    '<div class="row"><span class="label">INSURANCE (2%)</span><span class="value" id="costDispInsurance">NPR 0.00</span></div>';
                 html +=
                     '<div class="row"><span class="label">DISCOUNT</span><span class="value" id="costDispDiscount">NPR 0.00</span></div>';
                 html += '</div>';
@@ -6840,6 +6946,8 @@
                     var priceINR = getVal('costProductPrice');
                     var wt = getVal('costWeight');
                     var discNPR = getVal('costDiscount');
+                    var insuranceChecked = document.getElementById('costInsuranceCheck') ? document.getElementById(
+                        'costInsuranceCheck').checked : false;
                     var priceNPR = priceINR * INR_TO_NPR;
                     var IMPORT_DUTY_RATE = 0.15,
                         EXCISE_DUTY_RATE = 0,
@@ -6853,7 +6961,10 @@
                     var shipping = Math.ceil(wt / 0.5) * shippingBase;
                     var subtotal = priceNPR + importDuty + exciseDuty + serviceFees + vat + shipping;
                     var discountApplied = Math.min(discNPR, subtotal);
-                    var total = subtotal - discountApplied;
+                    var totalAfterDiscount = subtotal - discountApplied;
+                    // Insurance = 2% of totalAfterDiscount if checked
+                    var insurance = insuranceChecked ? totalAfterDiscount * 0.02 : 0;
+                    var total = totalAfterDiscount + insurance;
                     var advance = total * 0.25;
                     var pending = total - advance;
 
@@ -6866,6 +6977,7 @@
                     el('costDispService', formatNPR(serviceFees));
                     el('costDispVat', formatNPR(vat));
                     el('costDispShipping', formatNPR(shipping));
+                    el('costDispInsurance', formatNPR(insurance));
                     el('costDispDiscount', formatNPR(discountApplied));
                     el('costGrandTotal', formatNPR(total));
                     el('costFinalCost', formatNPR(total));
@@ -6891,7 +7003,9 @@
                         serviceFees: serviceFees,
                         vat: vat,
                         shipping: shipping,
-                        discountApplied: discountApplied
+                        discountApplied: discountApplied,
+                        insurance: insurance,
+                        insuranceChecked: insuranceChecked
                     };
                 }
 
@@ -6902,6 +7016,9 @@
                         calc); });
                 ['costCategory', 'costSubcategory'].forEach(function(id) { var el = document.getElementById(id); if (el)
                         el.addEventListener('change', calc); });
+                // Insurance checkbox change
+                var insCheck = document.getElementById('costInsuranceCheck');
+                if (insCheck) insCheck.addEventListener('change', calc);
 
                 window.applySuggestedDiscount = function() {
                     var price = getVal('costProductPrice');
@@ -6911,6 +7028,15 @@
                         calc(); }
                 };
 
+                window.toggleInsurance = function() {
+                    var cb = document.getElementById('costInsuranceCheck');
+                    if (cb) {
+                        var order = ordersData.find(o => o.id === currentCostOrderId);
+                        if (order) order.insurance = cb.checked;
+                        calc();
+                    }
+                };
+
                 window.updateEstimateWithLog = function() {
                     var exprSel = document.getElementById('costExpressDays');
                     if (exprSel) {
@@ -6918,12 +7044,17 @@
                         if (val >= 2 && val <= 7) { order.expressDays = val; } else { order.expressDays = null; }
                         renderPaginatedOrders();
                     }
+                    // Save insurance state
+                    var insCb = document.getElementById('costInsuranceCheck');
+                    if (insCb) order.insurance = insCb.checked;
+
                     calc();
 
                     var snap = window._costSnapshot || {};
                     var detail = 'Qty:' + (snap.qty || 0) + ', Price: INR ' + (snap.priceINR || 0).toFixed(2) +
                         ', Weight: ' + (snap.wt || 0).toFixed(2) + 'KG, Discount: NPR ' + (snap.discNPR || 0)
-                        .toFixed(2) + ', Total: NPR ' + (snap.total || 0).toFixed(2);
+                        .toFixed(2) + ', Insurance: ' + (snap.insuranceChecked ? 'Yes' : 'No') + ', Total: NPR ' +
+                        (snap.total || 0).toFixed(2);
                     var time = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short',
                         year: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -7610,7 +7741,7 @@
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(function() {
                     var csv =
-                        'Order ID,User,Mobile,Platform,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID,Warehouse ETA\n';
+                        'Order ID,User,Mobile,Platform,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID,Warehouse ETA,Insurance\n';
                     filteredOrders.forEach(function(o) {
                         var tierData = getUserTier(o.user);
                         var remarks = (o.internalRemarks || '').replace(/,/g, ';').replace(/\n/g, ' ');
@@ -7624,7 +7755,7 @@
                             (o.etaDeliveryDate || '') + '","' + (o.lastUpdate || '') + '","' + (o
                                 .orderStage || o.status) + '","' + remarks + '",' + (o.expressDays ||
                                 '') + ',"' + (o.warehouseId || '') + '","' + (o.warehouseEta || '') +
-                            '"\n';
+                            '","' + (o.insurance ? 'Yes' : 'No') + '"\n';
                     });
                     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     var a = document.createElement('a');
@@ -7952,7 +8083,8 @@
                     warehouseId: 'WID: ' + (70002600 + ordersData.length),
                     costLogs: [],
                     warehouseEta: null,
-                    phone: selectedUser.phone
+                    phone: selectedUser.phone,
+                    insurance: false
                 };
 
                 ordersData.push(newOrder);
