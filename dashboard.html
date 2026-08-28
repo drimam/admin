@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>MeroWish | Main Dashboard</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js">
@@ -541,282 +539,504 @@
         .sidebar .bg-sidebarActive {
             background: #4F46E5;
         }
-    </style>
+    
+
+/* Plain CSS replacements for former utility classes */
+.hidden{display:none!important}
+.pc001{background-color:#f9fafb}
+.pc002{min-height:100vh}
+.pc003{display:flex}
+.pc004{flex-direction:column}
+.pc005{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.pc006{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.pc007{position:fixed}
+.pc008{inset:0}
+.pc009{background-color:rgba(0,0,0,.5)}
+.pc010{z-index:40}
+@media (min-width:1024px){.pc011{display:none!important}}
+.pc012{top:0}
+.pc013{left:0}
+.pc014{height:100%}
+.pc015{width:16rem}
+.pc016{background-color:#1E293B}
+.pc017{color:#fff}
+.pc018{z-index:50}
+.pc019{transform:translateZ(0)}
+.pc020{transform:translateX(-100%)}
+@media (min-width:1024px){.pc021{transform:translateX(0)}}
+.pc022{transition-property:transform}
+.pc023{transition-duration:.3s}
+.pc024{box-shadow:0 25px 50px -12px rgb(0 0 0 / .25)}
+.pc025{align-items:center}
+.pc026{justify-content:space-between}
+.pc027{padding-left:1.25rem;padding-right:1.25rem}
+.pc028{padding-top:1rem;padding-bottom:1rem}
+.pc029{border-bottom:1px solid #e5e7eb}
+.pc030{border-color:#37415199}
+.pc031{flex-shrink:0}
+.pc032{gap:0.75rem}
+.pc033{width:2.25rem}
+.pc034{height:2.25rem}
+.pc035{background-color:#4F46E5}
+.pc036{border-radius:.5rem}
+.pc037{justify-content:center}
+.pc038{font-weight:700}
+.pc039{font-size:.875rem}
+.pc040{width:1.25rem}
+.pc041{height:1.25rem}
+.pc042{font-size:1rem}
+.pc043{letter-spacing:-.025em}
+.pc044{display:block}
+.pc045{font-size:10px}
+.pc046{color:#9ca3af}
+.pc047{margin-top:-0.125rem}
+.pc048:hover{color:#fff}
+.pc049{padding:0.25rem}
+.pc050{flex:1 1 0%}
+.pc051{overflow-y:auto}
+.pc052{padding-top:0.75rem;padding-bottom:0.75rem}
+.pc053{padding-left:0.75rem;padding-right:0.75rem}
+.pc054> :not([hidden]) ~ :not([hidden]){margin-top:0.125rem}
+.pc055{padding-top:0.625rem;padding-bottom:0.625rem}
+.pc056{color:#d1d5db}
+.pc057:hover{background-color:#334155}
+.pc058{margin-top:0.25rem}
+.pc059{background-color:#4F46E5}
+.pc060{font-weight:500}
+.pc061{cursor:pointer}
+.pc062{margin-left:auto}
+.pc063{background-color:rgba(255,255,255,.2)}
+.pc064{font-size:.75rem}
+.pc065{padding-left:0.5rem;padding-right:0.5rem}
+.pc066{padding-top:0.125rem;padding-bottom:0.125rem}
+.pc067{border-radius:9999px}
+.pc068{font-weight:600}
+.pc069{width:1rem}
+.pc070{height:1rem}
+.pc071{max-height:0}
+.pc072{padding-left:2.75rem}
+.pc073{padding-right:0.75rem}
+.pc074{padding-top:0.5rem;padding-bottom:0.5rem}
+.pc075{background-color:#ef4444}
+.pc076{margin-top:0.5rem;margin-bottom:0.5rem}
+.pc077{border-top:1px solid #e5e7eb}
+.pc078{border-color:#37415180}
+.pc079{padding-left:1rem;padding-right:1rem}
+.pc080{width:2rem}
+.pc081{height:2rem}
+.pc082{background-color:#10b981}
+.pc083{min-width:0}
+.pc084{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (min-width:1024px){.pc085{margin-left:16rem}}
+.pc086{transition:all .3s ease}
+.pc087{position:sticky}
+.pc088{z-index:30}
+.pc089{background-color:#fff}
+.pc090{border-color:#e5e7eb}
+@media (min-width:640px){.pc091{padding-left:1rem;padding-right:1rem}}
+@media (min-width:1024px){.pc092{padding-left:1.5rem;padding-right:1.5rem}}
+@media (min-width:640px){.pc093{padding-top:0.75rem;padding-bottom:0.75rem}}
+.pc094{gap:0.5rem}
+.pc095{box-shadow:0 1px 2px 0 rgb(0 0 0 / .05)}
+@media (min-width:640px){.pc096{gap:0.75rem}}
+.pc097{padding:0.375rem}
+@media (min-width:640px){.pc098{padding:0.5rem}}
+.pc099:hover{background-color:#f3f4f6}
+.pc100{color:#4b5563}
+@media (min-width:640px){.pc101{font-size:1.25rem}}
+.pc102{color:#1f2937}
+@media (min-width:480px){.pc103{display:block}}
+@media (min-width:640px){.pc104{font-size:.875rem}}
+@media (min-width:480px){.pc105{display:none!important}}
+.pc106{gap:0.25rem}
+@media (min-width:640px){.pc107{gap:0.5rem}}
+.pc108{background-color:#dc2626}
+.pc109{padding-top:0.375rem;padding-bottom:0.375rem}
+@media (min-width:640px){.pc110{padding-top:0.5rem;padding-bottom:0.5rem}}
+.pc111:hover{background-color:#b91c1c}
+.pc112{transition-property:color,background-color,border-color,fill,stroke;transition-duration:.15s}
+.pc113{white-space:nowrap}
+.pc114{width:0.75rem}
+.pc115{height:0.75rem}
+@media (min-width:640px){.pc116{width:1rem}}
+@media (min-width:640px){.pc117{height:1rem}}
+.pc118{background-color:#f3f4f6}
+.pc119{color:#374151}
+.pc120:hover{background-color:#e5e7eb}
+.pc121{padding:0.5rem}
+@media (min-width:640px){.pc122{padding:0.75rem}}
+@media (min-width:1024px){.pc123{padding:1.5rem}}
+.pc124> :not([hidden]) ~ :not([hidden]){margin-top:0.75rem}
+@media (min-width:640px){.pc125> :not([hidden]) ~ :not([hidden]){margin-top:1rem}}
+@media (min-width:1024px){.pc126> :not([hidden]) ~ :not([hidden]){margin-top:1.25rem}}
+.pc127{border-radius:.75rem}
+.pc128{border:1px solid #e5e7eb}
+.pc129{border-color:#f3f4f6}
+.pc130{padding:0.75rem}
+@media (min-width:640px){.pc131{padding:1rem}}
+@media (min-width:640px){.pc132{font-size:.75rem}}
+.pc133{color:#6b7280}
+.pc134{text-transform:uppercase}
+.pc135{flex-wrap:wrap}
+.pc136{margin-top:0.5rem}
+.pc137{margin-bottom:0.25rem}
+@media (min-width:640px){.pc138{margin-bottom:0.5rem}}
+@media (min-width:640px){.pc139{display:none!important}}
+.pc140{display:grid}
+.pc141{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:640px){.pc142{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1024px){.pc143{grid-template-columns:repeat(6,minmax(0,1fr))}}
+.pc144{background-color:#eff6ff}
+.pc145{color:#2563eb}
+.pc146{font-size:8px}
+@media (min-width:640px){.pc147{font-size:10px}}
+.pc148{letter-spacing:.025em}
+@media (min-width:640px){.pc149{font-size:1rem}}
+@media (min-width:1024px){.pc150{font-size:1.125rem}}
+.pc151{background-color:#faf5ff}
+.pc152{color:#9333ea}
+.pc153{background-color:#ecfdf5}
+.pc154{color:#059669}
+.pc155{background-color:#f0fdf4}
+.pc156{color:#16a34a}
+.pc157{background-color:#fffbeb}
+.pc158{color:#d97706}
+.pc159{background-color:#fff1f2}
+.pc160{color:#e11d48}
+@media (min-width:640px){.pc161{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pc162{background-color:#eef2ff}
+.pc163{color:#4f46e5}
+.pc164{background-color:#f5f3ff}
+.pc165{color:#7c3aed}
+.pc166{background-color:#ecfeff}
+.pc167{color:#0891b2}
+.pc168{background-color:#f0fdfa}
+.pc169{color:#0d9488}
+.pc170{background-color:#fdf2f8}
+.pc171{color:#db2777}
+.pc172{background-color:#fff7ed}
+.pc173{color:#ea580c}
+.pc174{background-color:#fef2f2}
+.pc175{color:#dc2626}
+.pc176{background-color:#fee2e2}
+.pc177{grid-template-columns:repeat(1,minmax(0,1fr))}
+@media (min-width:1024px){.pc178{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:640px){.pc179{gap:1rem}}
+.pc180{margin-bottom:0.5rem}
+@media (min-width:1024px){.pc181{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pc182{overflow:hidden}
+.pc183{background-color:#f9fafb7f}
+.pc184{margin-left:0.5rem}
+.pc185{width:100%}
+.pc186{letter-spacing:.05em}
+.pc187{text-align:left}
+.pc188{text-align:center}
+.pc189{z-index:100}
+.pc190{background-color:#111827}
+@media (min-width:640px){.pc191{padding-left:1.25rem;padding-right:1.25rem}}
+.pc192{display:inline-flex}
+.pc193{padding-top:0.25rem;padding-bottom:0.25rem}
+.pc194{color:#b45309}
+.pc195:hover{color:#ef4444}
+.pc196{margin-left:0.25rem}
+.pc197{color:#1d4ed8}
+.pc198{padding-top:1.5rem;padding-bottom:1.5rem}
+.pc199:hover{background-color:#f9fafb}
+.pc200{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.pc201{color:#4F46E5}
+.pc202{max-width:100px}
+
+/* ─── DESKTOP LAYOUT STABILITY FIX ─── */
+@media (min-width: 1024px) {
+  #sidebar { width: 16rem !important; }
+  #mainContent { margin-left: 16rem !important; width: calc(100% - 16rem); min-width: 0; }
+  .dashboard-charts-grid { min-width: 0; }
+  .stat-card { min-width: 0; }
+  .stat-card > div { min-width: 0; }
+  .stat-card p { min-width: 0; }
+  .chart-container { min-width: 0; }
+  .table-container { width: 100%; overflow-x: auto; }
+}
+@media (min-width: 1280px) {
+  .pc143 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+</style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+<body class="pc001 pc002 pc003 pc004 pc005 pc006">
 
     <!-- ─── SIDEBAR OVERLAY ─── -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+    <div id="sidebarOverlay" class="pc007 pc008 pc009 pc010 hidden pc011" onclick="toggleSidebar()"></div>
 
     <!-- ─── SIDEBAR (ORIGINAL FROM SHIPMENT PAGE) ─── -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
-        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+    <aside id="sidebar" class="pc007 pc012 pc013 pc014 pc015 pc016 pc017 pc018 pc019 pc020 pc021 pc022 pc023 pc003 pc004 pc024" style="background:#1E293B;">
+        <div class="pc003 pc025 pc026 pc027 pc028 pc029 pc030 pc031">
+            <div class="pc003 pc025 pc032">
+                <div class="pc033 pc034 pc035 pc036 pc003 pc025 pc037 pc038 pc039">
+                    <svg class="pc040 pc041" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                 </div>
-                <div><span class="font-bold text-base tracking-tight">MeroWish</span><span class="block text-[10px] text-gray-400 -mt-0.5">Admin Panel v2.3</span></div>
+                <div><span class="pc038 pc042 pc043">MeroWish</span><span class="pc044 pc045 pc046 pc047">Admin Panel v2.3</span></div>
             </div>
-            <button onclick="toggleSidebar()" class="lg:hidden text-gray-400 hover:text-white p-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+            <button onclick="toggleSidebar()" class="pc011 pc046 pc048 pc049"><svg class="pc040 pc041" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
         </div>
-        <nav class="flex-1 overflow-y-auto sidebar-scroll py-3 px-3 space-y-0.5">
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
-            <div class="mt-1"><div class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-sidebarActive text-white font-medium cursor-pointer"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="ml-auto bg-white/20 text-xs px-2 py-0.5 rounded-full font-semibold">142</span></div></div>
-            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Manage Addresses</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Add New</a></div></div>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="ml-auto bg-red-500 text-xs px-2 py-0.5 rounded-full font-semibold">5</span></a>
-            <div class="my-2 border-t border-gray-700/50"></div>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
-            <div class="my-2 border-t border-gray-700/50"></div>
-            <div class="sidebar-section"><div class="sidebar-section-header flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white" onclick="toggleSidebarSection(this)"><svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="w-4 h-4 ml-auto transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content max-h-0"><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Track Delivery</a><a href="#" class="block pl-11 pr-3 py-2 text-sm text-gray-400 hover:text-white hover:bg-sidebarHover rounded-lg">Delivery Partners</a></div></div>
+        <nav class="pc050 pc051 sidebar-scroll pc052 pc053 pc054">
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/></svg>User</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Application Staff</a>
+            <div class="pc058"><div class="pc003 pc025 pc032 pc053 pc055 pc036 pc059 pc017 pc060 pc061"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>Orders<span class="pc062 pc063 pc064 pc065 pc066 pc067 pc068">142</span></div></div>
+            <div class="sidebar-section"><div class="sidebar-section-header pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048" onclick="toggleSidebarSection(this)"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Address Structure<svg class="pc069 pc070 pc062 pc022 pc023" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content pc071"><a href="#" class="pc044 pc072 pc073 pc074 pc039 pc046 pc048 pc057 pc036">Manage Addresses</a><a href="#" class="pc044 pc072 pc073 pc074 pc039 pc046 pc048 pc057 pc036">Add New</a></div></div>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>Categories</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>Subscription</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>Feedback & Ticket<span class="pc062 pc075 pc064 pc065 pc066 pc067 pc068">5</span></a>
+            <div class="pc076 pc077 pc078"></div>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>Report</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Master</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Security</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>Calculator Settings</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>Testimonials</a>
+            <a href="#" class="pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>Blog</a>
+            <div class="pc076 pc077 pc078"></div>
+            <div class="sidebar-section"><div class="sidebar-section-header pc003 pc025 pc032 pc053 pc055 pc036 pc056 pc057 pc048" onclick="toggleSidebarSection(this)"><svg class="pc040 pc041 pc031" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>Delivery<svg class="pc069 pc070 pc062 pc022 pc023" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></div><div class="sidebar-section-content pc071"><a href="#" class="pc044 pc072 pc073 pc074 pc039 pc046 pc048 pc057 pc036">Track Delivery</a><a href="#" class="pc044 pc072 pc073 pc074 pc039 pc046 pc048 pc057 pc036">Delivery Partners</a></div></div>
         </nav>
-        <div class="flex-shrink-0 border-t border-gray-700/60 px-4 py-3">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center text-xs font-bold">A</div>
-                <div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">Admin User</p><p class="text-xs text-gray-400 truncate">admin@merowish.com</p></div>
-                <button class="text-gray-400 hover:text-white p-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
+        <div class="pc031 pc077 pc030 pc079 pc052">
+            <div class="pc003 pc025 pc032">
+                <div class="pc080 pc081 pc082 pc067 pc003 pc025 pc037 pc064 pc038">A</div>
+                <div class="pc050 pc083"><p class="pc039 pc060 pc084">Admin User</p><p class="pc064 pc046 pc084">admin@merowish.com</p></div>
+                <button class="pc046 pc048 pc049"><svg class="pc069 pc070" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></button>
             </div>
         </div>
     </aside>
 
     <!-- ─── MAIN CONTENT ─── -->
-    <main id="mainContent" class="flex-1 lg:ml-64 transition-all duration-300 min-h-screen">
+    <main id="mainContent" class="pc050 pc085 pc086 pc023 pc002">
         <!-- Top Bar -->
-        <header class="top-bar sticky top-0 z-30 bg-white border-b border-gray-200 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 flex items-center justify-between gap-2 shadow-sm">
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 sm:p-2 rounded-lg hover:bg-gray-100 text-gray-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
-                <h1 class="text-base sm:text-xl font-bold text-gray-800 hidden xs:block">📊 Main Dashboard</h1>
-                <span class="text-xs sm:text-sm font-bold text-gray-800 xs:hidden">📊 Dashboard</span>
+        <header class="top-bar pc087 pc012 pc088 pc089 pc029 pc090 pc053 pc091 pc092 pc074 pc093 pc003 pc025 pc026 pc094 pc095">
+            <div class="pc003 pc025 pc094 pc096">
+                <button onclick="toggleSidebar()" class="pc011 pc097 pc098 pc036 pc099 pc100"><svg class="pc040 pc041" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+                <h1 class="pc042 pc101 pc038 pc102 hidden pc103">📊 Main Dashboard</h1>
+                <span class="pc064 pc104 pc038 pc102 pc105">📊 Dashboard</span>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="exportPDF()" class="flex items-center gap-1 sm:gap-2 bg-red-600 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-red-700 transition-colors whitespace-nowrap no-print">
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <div class="pc003 pc025 pc094 pc096">
+                <button onclick="exportPDF()" class="pc003 pc025 pc106 pc107 pc108 pc017 pc065 pc091 pc109 pc110 pc036 pc064 pc104 pc068 pc111 pc112 pc113 no-print">
+                    <svg class="pc114 pc115 pc116 pc117" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="hidden xs:inline">PDF</span>
                 </button>
-                <button onclick="refreshDashboard()" class="flex items-center gap-1 sm:gap-2 bg-gray-100 text-gray-700 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold hover:bg-gray-200 transition-colors whitespace-nowrap no-print">
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button onclick="refreshDashboard()" class="pc003 pc025 pc106 pc107 pc118 pc119 pc065 pc091 pc109 pc110 pc036 pc064 pc104 pc068 pc120 pc112 pc113 no-print">
+                    <svg class="pc114 pc115 pc116 pc117" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     <span class="hidden xs:inline">Refresh</span>
                 </button>
             </div>
         </header>
 
-        <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
+        <div class="pc121 pc122 pc123 pc124 pc125 pc126">
 
             <!-- ─── FILTERS ─── -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
+            <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131 no-print">
                 <div class="filter-section">
                     <div class="filter-group">
-                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Date Range:</label>
-                        <input type="date" id="filterDateFrom" class="text-xs sm:text-sm" onchange="applyFilters()" />
-                        <span class="text-gray-400 text-xs">–</span>
-                        <input type="date" id="filterDateTo" class="text-xs sm:text-sm" onchange="applyFilters()" />
+                        <label class="pc045 pc132 pc068 pc133 pc134 pc113">Date Range:</label>
+                        <input type="date" id="filterDateFrom" class="pc064 pc104" onchange="applyFilters()" />
+                        <span class="pc046 pc064">–</span>
+                        <input type="date" id="filterDateTo" class="pc064 pc104" onchange="applyFilters()" />
                     </div>
                     <div class="filter-group">
-                        <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">View:</label>
+                        <label class="pc045 pc132 pc068 pc133 pc134 pc113">View:</label>
                         <div class="period-toggle" id="periodToggle">
                             <button class="active" data-period="daily" onclick="setPeriod('daily')">Daily</button>
                             <button data-period="weekly" onclick="setPeriod('weekly')">Weekly</button>
                             <button data-period="monthly" onclick="setPeriod('monthly')">Monthly</button>
                         </div>
                     </div>
-                    <div class="filter-actions ml-auto flex items-center gap-1 sm:gap-2 no-print">
-                        <button onclick="clearFilters()" class="btn-outline text-xs sm:text-sm">Clear</button>
-                        <button onclick="applyFilters()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
+                    <div class="filter-actions pc062 pc003 pc025 pc106 pc107 no-print">
+                        <button onclick="clearFilters()" class="btn-outline pc064 pc104">Clear</button>
+                        <button onclick="applyFilters()" class="btn-primary-sm pc064 pc104">Apply</button>
                     </div>
                 </div>
-                <div id="activeDashboardFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                <div id="activeDashboardFilters" class="pc003 pc135 pc106 pc107 pc136"></div>
             </div>
 
             <!-- ─── TOP STATS ─── -->
             <div>
-                <div class="flex items-center justify-between mb-1 sm:mb-2">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs sm:text-sm font-semibold text-gray-700 hidden sm:inline">📊 Key Metrics</span>
-                        <span class="text-xs font-semibold text-gray-700 sm:hidden">📊 Metrics</span>
+                <div class="pc003 pc025 pc026 pc137 pc138">
+                    <div class="pc003 pc025 pc094">
+                        <span class="pc064 pc104 pc068 pc119 hidden sm:inline">📊 Key Metrics</span>
+                        <span class="pc064 pc068 pc119 pc139">📊 Metrics</span>
                     </div>
                     <button class="stats-toggle-btn" onclick="toggleStats()" aria-label="Toggle stats">
-                        <span class="stats-toggle-label sm:hidden">Show Stats</span>
+                        <span class="stats-toggle-label pc139">Show Stats</span>
                         <span class="arrow collapsed" id="statsArrow">▼</span>
                     </button>
                 </div>
                 <div class="stats-collapsible-wrapper collapsed" id="statsWrapper">
                     <!-- Row 1: Main KPIs -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 stats-grid">
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-blue-50 text-blue-600">👥</div>
+                    <div class="pc140 pc141 pc142 pc143 pc094 stats-grid">
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc144 pc145">👥</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Users</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-800 stat-value-sm" id="statTotalUsers">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Total Users</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc102 stat-value-sm" id="statTotalUsers">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-purple-50 text-purple-600">📦</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc151 pc152">📦</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Orders</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-gray-800 stat-value-sm" id="statTotalOrders">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Total Orders</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc102 stat-value-sm" id="statTotalOrders">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-emerald-50 text-emerald-600">💰</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc153 pc154">💰</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Total Revenue</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-emerald-600 stat-value-sm" id="statTotalRevenue">NPR 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Total Revenue</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc154 stat-value-sm" id="statTotalRevenue">NPR 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc155 pc156">✅</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Active Users</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-green-600 stat-value-sm" id="statActiveUsers">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Active Users</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc156 stat-value-sm" id="statActiveUsers">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-amber-50 text-amber-600">🆕</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc157 pc158">🆕</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">New (Month)</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-amber-600 stat-value-sm" id="statNewUsers">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">New (Month)</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc158 stat-value-sm" id="statNewUsers">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-rose-50 text-rose-600">🚚</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc159 pc160">🚚</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">In Transit</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-rose-600 stat-value-sm" id="statInTransit">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">In Transit</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc160 stat-value-sm" id="statInTransit">0</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Row 2: Financial Metrics -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2 stats-grid-extra">
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-indigo-50 text-indigo-600">🏛️</div>
+                    <div class="pc140 pc141 pc161 pc143 pc094 pc136 stats-grid-extra">
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc162 pc163">🏛️</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Import Duty</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-indigo-600 stat-value-sm" id="statImportDuty">NPR 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Import Duty</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc163 stat-value-sm" id="statImportDuty">NPR 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-violet-50 text-violet-600">📊</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc164 pc165">📊</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">VAT Collected</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-violet-600 stat-value-sm" id="statVAT">NPR 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">VAT Collected</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc165 stat-value-sm" id="statVAT">NPR 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-cyan-50 text-cyan-600">✈️</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc166 pc167">✈️</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Shipping Fees</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-cyan-600 stat-value-sm" id="statShippingFees">NPR 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Shipping Fees</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc167 stat-value-sm" id="statShippingFees">NPR 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-teal-50 text-teal-600">📅</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc168 pc169">📅</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Month Orders</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-teal-600 stat-value-sm" id="statMonthOrders">NPR 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Month Orders</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc169 stat-value-sm" id="statMonthOrders">NPR 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-pink-50 text-pink-600">📦</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc170 pc171">📦</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Today Shipments</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-pink-600 stat-value-sm" id="statTodayShipments">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Today Shipments</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc171 stat-value-sm" id="statTodayShipments">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-orange-50 text-orange-600">👤</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc172 pc173">👤</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">New Joined</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-orange-600 stat-value-sm" id="statNewJoined">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">New Joined</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc173 stat-value-sm" id="statNewJoined">0</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Row 3: Today's Metrics -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-2 stats-grid-extra">
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-red-50 text-red-600">🇮🇳</div>
+                    <div class="pc140 pc141 pc161 pc143 pc094 pc136 stats-grid-extra">
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc174 pc175">🇮🇳</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">India WH Today</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-red-600 stat-value-sm" id="statIndiaWHToday">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">India WH Today</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc175 stat-value-sm" id="statIndiaWHToday">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-purple-50 text-purple-600">🇳🇵</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc151 pc152">🇳🇵</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Nepal WH Today</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-purple-600 stat-value-sm" id="statNepalWHToday">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Nepal WH Today</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc152 stat-value-sm" id="statNepalWHToday">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-green-50 text-green-600">✅</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc155 pc156">✅</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Quotes Confirmed</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-green-600 stat-value-sm" id="statQuotesConfirmed">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Quotes Confirmed</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc156 stat-value-sm" id="statQuotesConfirmed">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-red-100 text-red-600">❌</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc176 pc175">❌</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Quotes Rejected</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-red-600 stat-value-sm" id="statQuotesRejected">0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Quotes Rejected</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc175 stat-value-sm" id="statQuotesRejected">0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-blue-50 text-blue-600">💳</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc144 pc145">💳</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">Prepaid Amt/Units</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-blue-600 stat-value-sm" id="statPrepaid">NPR 0 / 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">Prepaid Amt/Units</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc145 stat-value-sm" id="statPrepaid">NPR 0 / 0</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-white rounded-xl p-2 sm:p-3 shadow-sm border border-gray-100 stat-card">
-                            <div class="flex items-center gap-2">
-                                <div class="stat-icon bg-amber-50 text-amber-600">💵</div>
+                        <div class="pc089 pc127 pc121 pc122 pc095 pc128 pc129 stat-card">
+                            <div class="pc003 pc025 pc094">
+                                <div class="stat-icon pc157 pc158">💵</div>
                                 <div>
-                                    <p class="text-[8px] sm:text-[10px] text-gray-500 font-medium uppercase tracking-wide stat-label-one">COD Pending</p>
-                                    <p class="text-sm sm:text-base lg:text-lg font-bold text-amber-600 stat-value-sm" id="statCODPending">NPR 0 / 0</p>
+                                    <p class="pc146 pc147 pc133 pc060 pc134 pc148 stat-label-one">COD Pending</p>
+                                    <p class="pc039 pc149 pc150 pc038 pc158 stat-value-sm" id="statCODPending">NPR 0 / 0</p>
                                 </div>
                             </div>
                         </div>
@@ -825,12 +1045,12 @@
             </div>
 
             <!-- ─── CHARTS ROW 1 ─── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 dashboard-charts-grid">
+            <div class="pc140 pc177 pc178 pc032 pc179 dashboard-charts-grid">
                 <!-- Revenue Chart -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">📈 Revenue Trend</h3>
-                        <span class="text-[10px] text-gray-400" id="revenuePeriodLabel">Daily</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">📈 Revenue Trend</h3>
+                        <span class="pc045 pc046" id="revenuePeriodLabel">Daily</span>
                     </div>
                     <div class="chart-container">
                         <canvas id="revenueChart"></canvas>
@@ -838,10 +1058,10 @@
                 </div>
 
                 <!-- Order Status Distribution -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">📊 Order Status</h3>
-                        <span class="text-[10px] text-gray-400">Distribution</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">📊 Order Status</h3>
+                        <span class="pc045 pc046">Distribution</span>
                     </div>
                     <div class="chart-container">
                         <canvas id="statusChart"></canvas>
@@ -850,12 +1070,12 @@
             </div>
 
             <!-- ─── CHARTS ROW 2 ─── -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 dashboard-charts-grid">
+            <div class="pc140 pc177 pc181 pc032 pc179 dashboard-charts-grid">
                 <!-- User Tier Distribution -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">🏅 User Tiers</h3>
-                        <span class="text-[10px] text-gray-400">Count</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">🏅 User Tiers</h3>
+                        <span class="pc045 pc046">Count</span>
                     </div>
                     <div class="chart-container-sm chart-container">
                         <canvas id="tierChart"></canvas>
@@ -863,10 +1083,10 @@
                 </div>
 
                 <!-- Order Type Distribution -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">📋 Order Types</h3>
-                        <span class="text-[10px] text-gray-400">Distribution</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">📋 Order Types</h3>
+                        <span class="pc045 pc046">Distribution</span>
                     </div>
                     <div class="chart-container-sm chart-container">
                         <canvas id="typeChart"></canvas>
@@ -874,10 +1094,10 @@
                 </div>
 
                 <!-- Shipped Weight by Category -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">⚖️ Shipped Weight by Category</h3>
-                        <span class="text-[10px] text-gray-400">KG</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">⚖️ Shipped Weight by Category</h3>
+                        <span class="pc045 pc046">KG</span>
                     </div>
                     <div class="chart-container-sm chart-container">
                         <canvas id="weightChart"></canvas>
@@ -886,12 +1106,12 @@
             </div>
 
             <!-- ─── CHARTS ROW 3 ─── -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 dashboard-charts-grid">
+            <div class="pc140 pc177 pc178 pc032 pc179 dashboard-charts-grid">
                 <!-- Delivered Shipment by Category -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">📦 Delivered Shipments by Category</h3>
-                        <span class="text-[10px] text-gray-400">Count</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">📦 Delivered Shipments by Category</h3>
+                        <span class="pc045 pc046">Count</span>
                     </div>
                     <div class="chart-container">
                         <canvas id="deliveredCategoryChart"></canvas>
@@ -899,10 +1119,10 @@
                 </div>
 
                 <!-- Delivered Cities (BAR CHART) -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <h3 class="text-sm font-semibold text-gray-700">📍 Delivered Cities</h3>
-                        <span class="text-[10px] text-gray-400">Count</span>
+                <div class="pc089 pc127 pc095 pc128 pc129 pc130 pc131">
+                    <div class="pc003 pc025 pc026 pc180">
+                        <h3 class="pc039 pc068 pc119">📍 Delivered Cities</h3>
+                        <span class="pc045 pc046">Count</span>
                     </div>
                     <div class="chart-container">
                         <canvas id="deliveredCityChart"></canvas>
@@ -911,24 +1131,24 @@
             </div>
 
             <!-- ─── VALUABLE CUSTOMERS ─── -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50">
+            <div class="pc089 pc127 pc095 pc128 pc129 pc182">
+                <div class="pc053 pc091 pc074 pc093 pc029 pc129 pc003 pc135 pc025 pc026 pc094 pc183">
                     <div>
-                        <span class="text-xs sm:text-sm font-semibold text-gray-700">⭐ Valuable Customers</span>
-                        <span class="text-[10px] sm:text-xs text-gray-500 ml-2">Based on Paid Orders Count</span>
+                        <span class="pc064 pc104 pc068 pc119">⭐ Valuable Customers</span>
+                        <span class="pc045 pc132 pc133 pc184">Based on Paid Orders Count</span>
                     </div>
-                    <span class="text-[10px] text-gray-400">Top customers</span>
+                    <span class="pc045 pc046">Top customers</span>
                 </div>
                 <div class="table-container">
-                    <table class="valuable-customers-table w-full text-xs" id="valuableCustomersTable">
+                    <table class="valuable-customers-table pc185 pc064" id="valuableCustomersTable">
                         <thead>
-                            <tr class="bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wider">
-                                <th class="px-3 py-2 text-left">#</th>
-                                <th class="px-3 py-2 text-left">User</th>
-                                <th class="px-3 py-2 text-left">Email</th>
-                                <th class="px-3 py-2 text-center">Orders</th>
-                                <th class="px-3 py-2 text-center">Total Spent</th>
-                                <th class="px-3 py-2 text-left">Tier</th>
+                            <tr class="pc118 pc100 pc045 pc068 pc134 pc186">
+                                <th class="pc053 pc074 pc187">#</th>
+                                <th class="pc053 pc074 pc187">User</th>
+                                <th class="pc053 pc074 pc187">Email</th>
+                                <th class="pc053 pc074 pc188">Orders</th>
+                                <th class="pc053 pc074 pc188">Total Spent</th>
+                                <th class="pc053 pc074 pc187">Tier</th>
                             </tr>
                         </thead>
                         <tbody id="valuableCustomersBody"></tbody>
@@ -937,31 +1157,31 @@
             </div>
 
             <!-- ─── RECENT ORDERS ─── -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-2 bg-gray-50/50">
+            <div class="pc089 pc127 pc095 pc128 pc129 pc182">
+                <div class="pc053 pc091 pc074 pc093 pc029 pc129 pc003 pc135 pc025 pc026 pc094 pc183">
                     <div>
-                        <span class="text-xs sm:text-sm font-semibold text-gray-700">📋 Recent Orders</span>
-                        <span class="text-[10px] sm:text-xs text-gray-500 ml-2" id="recentOrdersCount">0 orders</span>
+                        <span class="pc064 pc104 pc068 pc119">📋 Recent Orders</span>
+                        <span class="pc045 pc132 pc133 pc184" id="recentOrdersCount">0 orders</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-[10px] text-gray-400 hidden sm:inline">Showing latest 5</span>
+                    <div class="pc003 pc025 pc094">
+                        <span class="pc045 pc046 hidden sm:inline">Showing latest 5</span>
                         <button onclick="viewAllOrders()" class="view-all-btn">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                            <svg class="pc114 pc115" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                             View All
                         </button>
                     </div>
                 </div>
                 <div class="table-container">
-                    <table class="recent-orders-table w-full text-xs" id="recentOrdersTable">
+                    <table class="recent-orders-table pc185 pc064" id="recentOrdersTable">
                         <thead>
-                            <tr class="bg-gray-100 text-gray-600 text-[10px] font-semibold uppercase tracking-wider">
-                                <th class="px-2 py-2 text-left">Order ID</th>
-                                <th class="px-2 py-2 text-left">User</th>
-                                <th class="px-2 py-2 text-left">Product</th>
-                                <th class="px-2 py-2 text-center">QTY</th>
-                                <th class="px-2 py-2 text-center">Amount</th>
-                                <th class="px-2 py-2 text-left">Status</th>
-                                <th class="px-2 py-2 text-left">Date</th>
+                            <tr class="pc118 pc100 pc045 pc068 pc134 pc186">
+                                <th class="pc065 pc074 pc187">Order ID</th>
+                                <th class="pc065 pc074 pc187">User</th>
+                                <th class="pc065 pc074 pc187">Product</th>
+                                <th class="pc065 pc074 pc188">QTY</th>
+                                <th class="pc065 pc074 pc188">Amount</th>
+                                <th class="pc065 pc074 pc187">Status</th>
+                                <th class="pc065 pc074 pc187">Date</th>
                             </tr>
                         </thead>
                         <tbody id="recentOrdersBody"></tbody>
@@ -970,15 +1190,15 @@
             </div>
 
             <!-- ─── FOOTER PRINT INFO ─── -->
-            <div class="text-center text-[10px] text-gray-400 py-2 print-only">
+            <div class="pc188 pc045 pc046 pc074 print-only">
                 <p>Generated on: <span id="printDate"></span> | MeroWish Admin Dashboard</p>
             </div>
         </div>
     </main>
 
     <!-- ─── TOAST ─── -->
-    <div id="toast" class="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[100] hidden">
-        <div class="bg-gray-900 text-white px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl shadow-2xl flex items-center gap-2 sm:gap-3 text-xs sm:text-sm font-medium">
+    <div id="toast" class="pc007 bottom-4 sm:bottom-6 right-3 sm:right-6 pc189 hidden">
+        <div class="pc190 pc017 pc053 pc191 pc055 pc093 pc127 pc024 pc003 pc025 pc094 pc096 pc064 pc104 pc060">
             <span id="toastIcon">✅</span>
             <span id="toastMessage">Action completed!</span>
         </div>
@@ -1709,12 +1929,12 @@
                     else if (dateFrom) dateStr = `From ${dateFrom}`;
                     else dateStr = `Until ${dateTo}`;
                     html +=
-                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${dateStr} <button onclick="clearFilters()" class="hover:text-red-500 ml-1">×</button></span>`;
+                        `<span class="pc192 pc025 pc106 pc065 pc193 pc157 pc194 pc067 pc064 pc060">📅 ${dateStr} <button onclick="clearFilters()" class="pc195 pc196">×</button></span>`;
                 }
                 const periodLabel = currentPeriod.charAt(0).toUpperCase() + currentPeriod.slice(1);
                 html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">📊 ${periodLabel} View</span>`;
-                container.innerHTML = html || '<span class="text-xs text-gray-400">No active filters</span>';
+                    `<span class="pc192 pc025 pc106 pc065 pc193 pc144 pc197 pc067 pc064 pc060">📊 ${periodLabel} View</span>`;
+                container.innerHTML = html || '<span class="pc064 pc046">No active filters</span>';
             }
 
             function setPeriod(period) {
@@ -1776,7 +1996,7 @@
                 const tbody = document.getElementById('valuableCustomersBody');
                 if (valuableCustomers.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="6" class="px-4 py-6 text-center text-gray-400 text-xs">No valuable customers found</td></tr>`;
+                        `<tr><td colspan="6" class="pc079 pc198 pc188 pc046 pc064">No valuable customers found</td></tr>`;
                     return;
                 }
 
@@ -1787,18 +2007,18 @@
                     const color = getAvatarColor(c.name);
                     const tierIcon = getTierIcon(c.tier);
                     return `
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                            <td class="px-3 py-2 text-center text-gray-500 font-semibold">${idx + 1}</td>
-                            <td class="px-3 py-2">
-                                <div class="flex items-center gap-2">
+                        <tr class="pc029 pc129 pc199">
+                            <td class="pc053 pc074 pc188 pc133 pc068">${idx + 1}</td>
+                            <td class="pc053 pc074">
+                                <div class="pc003 pc025 pc094">
                                     <div class="user-avatar-sm" style="background:${color}">${initials}</div>
-                                    <span class="font-medium text-gray-800">${c.name}</span>
+                                    <span class="pc060 pc102">${c.name}</span>
                                 </div>
                             </td>
-                            <td class="px-3 py-2 text-gray-600 text-xs">${c.email}</td>
-                            <td class="px-3 py-2 text-center font-semibold text-gray-700">${c.orders}</td>
-                            <td class="px-3 py-2 text-center text-gray-600">NPR ${c.spent.toLocaleString()}</td>
-                            <td class="px-3 py-2"><span class="text-sm font-semibold">${tierIcon} ${c.tier}</span></td>
+                            <td class="pc053 pc074 pc100 pc064">${c.email}</td>
+                            <td class="pc053 pc074 pc188 pc068 pc119">${c.orders}</td>
+                            <td class="pc053 pc074 pc188 pc100">NPR ${c.spent.toLocaleString()}</td>
+                            <td class="pc053 pc074"><span class="pc039 pc068">${tierIcon} ${c.tier}</span></td>
                         </tr>
                     `;
                 }).join('');
@@ -1816,21 +2036,21 @@
 
                 if (recent.length === 0) {
                     tbody.innerHTML =
-                        `<tr><td colspan="7" class="px-4 py-6 text-center text-gray-400 text-xs">No orders found</td></tr>`;
+                        `<tr><td colspan="7" class="pc079 pc198 pc188 pc046 pc064">No orders found</td></tr>`;
                     return;
                 }
 
                 tbody.innerHTML = recent.map(o => {
                     const sc = getStatusColor(o.status);
                     return `
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                            <td class="px-2 py-2 font-mono text-primary font-semibold text-xs">${o.id}</td>
-                            <td class="px-2 py-2 text-gray-700 text-xs">${o.user}</td>
-                            <td class="px-2 py-2 text-gray-600 text-xs truncate max-w-[100px]" title="${o.productName}">${o.productName}</td>
-                            <td class="px-2 py-2 text-center font-semibold text-xs">${o.qty}</td>
-                            <td class="px-2 py-2 text-center font-semibold text-xs">${o.totalAmount}</td>
-                            <td class="px-2 py-2"><span class="status-badge ${sc.bg} ${sc.text}"><span class="dot ${sc.dot}"></span> ${o.status}</span></td>
-                            <td class="px-2 py-2 text-gray-500 text-xs">${o.dateTime}</td>
+                        <tr class="pc029 pc129 pc199">
+                            <td class="pc065 pc074 pc200 pc201 pc068 pc064">${o.id}</td>
+                            <td class="pc065 pc074 pc119 pc064">${o.user}</td>
+                            <td class="pc065 pc074 pc100 pc064 pc084 pc202" title="${o.productName}">${o.productName}</td>
+                            <td class="pc065 pc074 pc188 pc068 pc064">${o.qty}</td>
+                            <td class="pc065 pc074 pc188 pc068 pc064">${o.totalAmount}</td>
+                            <td class="pc065 pc074"><span class="status-badge ${sc.bg} ${sc.text}"><span class="dot ${sc.dot}"></span> ${o.status}</span></td>
+                            <td class="pc065 pc074 pc133 pc064">${o.dateTime}</td>
                         </tr>
                     `;
                 }).join('');
