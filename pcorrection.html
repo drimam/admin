@@ -4,61 +4,760 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>MeroWish | Price Corrections</title>
-    <script src="https://cdn.tailwindcss.com">
-    </script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#4F46E5',
-                        primaryDark: '#3730A3',
-                        sidebar: '#1E293B',
-                        sidebarHover: '#334155',
-                        sidebarActive: '#4F46E5',
-                        success: '#10B981',
-                        warning: '#F59E0B',
-                        danger: '#EF4444',
-                        info: '#3B82F6',
-                        darkBg: '#0F172A',
-                        cardBg: '#FFFFFF',
-                        borderLight: '#E2E8F0',
-                    },
-                    animation: {
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'fade-in': 'fadeIn 0.2s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        slideIn: { '0%': { transform: 'translateX(-10px)', opacity: '0' }, '100%': { transform: 'translateX(0)',
-                                opacity: '1' } },
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                    },
-                },
-            },
-        }
-    </script>
     <style>
-        /* ─── SCROLLBAR ─── */
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
+        /* ─── GLOBAL RESET & VARIABLES ─── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        ::-webkit-scrollbar-track {
+        html {
+            font-size: 16px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             background: #f1f5f9;
-            border-radius: 10px;
+            color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding-bottom: 0;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
+        /* ─── COLOR PALETTE ─── */
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #3730A3;
+            --sidebar: #1E293B;
+            --sidebar-hover: #334155;
+            --sidebar-active: #4F46E5;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --info: #3B82F6;
+            --dark-bg: #0F172A;
+            --card-bg: #FFFFFF;
+            --border-light: #E2E8F0;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+
+        /* ─── UTILITY CLASSES (replaces Tailwind) ─── */
+
+        /* Display & Layout */
+        .flex {
+            display: flex;
         }
-        .sidebar-scroll {
-            scrollbar-width: thin;
-            scrollbar-color: #475569 transparent;
+        .inline-flex {
+            display: inline-flex;
         }
+        .block {
+            display: block;
+        }
+        .inline-block {
+            display: inline-block;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .flex-1 {
+            flex: 1 1 0%;
+        }
+        .flex-shrink-0 {
+            flex-shrink: 0;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .items-stretch {
+            align-items: stretch;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .justify-center {
+            justify-content: center;
+        }
+        .justify-end {
+            justify-content: flex-end;
+        }
+        .self-center {
+            align-self: center;
+        }
+        .gap-1 {
+            gap: 0.25rem;
+        }
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        .gap-3 {
+            gap: 0.75rem;
+        }
+        .gap-4 {
+            gap: 1rem;
+        }
+        .space-y-0\.5>*+* {
+            margin-top: 0.125rem;
+        }
+        .space-y-3>*+* {
+            margin-top: 0.75rem;
+        }
+        .space-y-4>*+* {
+            margin-top: 1rem;
+        }
+        .space-y-5>*+* {
+            margin-top: 1.25rem;
+        }
+        .ml-auto {
+            margin-left: auto;
+        }
+        .mr-auto {
+            margin-right: auto;
+        }
+        .mx-3 {
+            margin-left: 0.75rem;
+            margin-right: 0.75rem;
+        }
+        .mx-4 {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+        .my-2 {
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .mt-1 {
+            margin-top: 0.25rem;
+        }
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+        .mt-3 {
+            margin-top: 0.75rem;
+        }
+        .mb-3 {
+            margin-bottom: 0.75rem;
+        }
+        .mb-4 {
+            margin-bottom: 1rem;
+        }
+        .ml-1 {
+            margin-left: 0.25rem;
+        }
+        .ml-2 {
+            margin-left: 0.5rem;
+        }
+        .ml-3 {
+            margin-left: 0.75rem;
+        }
+        .-mt-0\.5 {
+            margin-top: -0.125rem;
+        }
+
+        /* Sizing */
+        .w-full {
+            width: 100%;
+        }
+        .w-64 {
+            width: 16rem;
+        }
+        .w-9 {
+            width: 2.25rem;
+        }
+        .w-5 {
+            width: 1.25rem;
+        }
+        .w-4 {
+            width: 1rem;
+        }
+        .w-8 {
+            width: 2rem;
+        }
+        .w-3 {
+            width: 0.75rem;
+        }
+        .min-w-0 {
+            min-width: 0;
+        }
+        .min-w-\[80px\] {
+            min-width: 80px;
+        }
+        .min-w-\[70px\] {
+            min-width: 70px;
+        }
+        .min-w-\[100px\] {
+            min-width: 100px;
+        }
+        .min-w-\[120px\] {
+            min-width: 120px;
+        }
+        .h-full {
+            height: 100%;
+        }
+        .h-9 {
+            height: 2.25rem;
+        }
+        .h-5 {
+            height: 1.25rem;
+        }
+        .h-4 {
+            height: 1rem;
+        }
+        .h-8 {
+            height: 2rem;
+        }
+        .min-h-screen {
+            min-height: 100vh;
+        }
+        .max-h-0 {
+            max-height: 0;
+        }
+        .max-h-\[200px\] {
+            max-height: 200px;
+        }
+        .max-h-\[95vh\] {
+            max-height: 95vh;
+        }
+        .overflow-y-auto {
+            overflow-y: auto;
+        }
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        /* Positioning */
+        .relative {
+            position: relative;
+        }
+        .absolute {
+            position: absolute;
+        }
+        .fixed {
+            position: fixed;
+        }
+        .sticky {
+            position: sticky;
+        }
+        .inset-0 {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        .top-0 {
+            top: 0;
+        }
+        .left-0 {
+            left: 0;
+        }
+        .right-0 {
+            right: 0;
+        }
+        .bottom-0 {
+            bottom: 0;
+        }
+        .z-10 {
+            z-index: 10;
+        }
+        .z-30 {
+            z-index: 30;
+        }
+        .z-40 {
+            z-index: 40;
+        }
+        .z-50 {
+            z-index: 50;
+        }
+        .z-\[100\] {
+            z-index: 100;
+        }
+
+        /* Transitions & transforms */
+        .transition-transform {
+            transition: transform 0.3s ease;
+        }
+        .transition-colors {
+            transition: background-color 0.15s ease, color 0.15s ease;
+        }
+        .transition-all {
+            transition: all 0.2s ease;
+        }
+        .duration-300 {
+            transition-duration: 300ms;
+        }
+        .transform {
+            transform: var(--tw-transform, none);
+        }
+        .-translate-x-full {
+            --tw-transform: translateX(-100%);
+            transform: var(--tw-transform);
+        }
+        .translate-x-0 {
+            --tw-transform: translateX(0);
+            transform: var(--tw-transform);
+        }
+        .rotate-180 {
+            --tw-transform: rotate(180deg);
+            transform: var(--tw-transform);
+        }
+
+        /* Padding & margin */
+        .p-1 {
+            padding: 0.25rem;
+        }
+        .p-1\.5 {
+            padding: 0.375rem;
+        }
+        .p-2 {
+            padding: 0.5rem;
+        }
+        .p-3 {
+            padding: 0.75rem;
+        }
+        .p-4 {
+            padding: 1rem;
+        }
+        .p-5 {
+            padding: 1.25rem;
+        }
+        .p-6 {
+            padding: 1.5rem;
+        }
+        .px-1 {
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+        }
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        .px-3 {
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        .px-5 {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+        .py-0\.5 {
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem;
+        }
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        .py-1\.5 {
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .py-2\.5 {
+            padding-top: 0.625rem;
+            padding-bottom: 0.625rem;
+        }
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .py-8 {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .pl-11 {
+            padding-left: 2.75rem;
+        }
+        .pr-3 {
+            padding-right: 0.75rem;
+        }
+
+        /* Borders */
+        .border {
+            border: 1px solid var(--border-light);
+        }
+        .border-t {
+            border-top: 1px solid var(--border-light);
+        }
+        .border-b {
+            border-bottom: 1px solid var(--border-light);
+        }
+        .border-l {
+            border-left: 1px solid var(--border-light);
+        }
+        .border-r {
+            border-right: 1px solid var(--border-light);
+        }
+        .border-gray-100 {
+            border-color: var(--gray-100);
+        }
+        .border-gray-200 {
+            border-color: var(--gray-200);
+        }
+        .border-gray-300 {
+            border-color: var(--gray-300);
+        }
+        .border-gray-700\/60 {
+            border-color: rgba(51, 65, 85, 0.6);
+        }
+        .border-primary {
+            border-color: var(--primary);
+        }
+        .border-transparent {
+            border-color: transparent;
+        }
+        .rounded {
+            border-radius: 0.25rem;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .rounded-xl {
+            border-radius: 0.75rem;
+        }
+        .rounded-2xl {
+            border-radius: 1rem;
+        }
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        .rounded-t-2xl {
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+        .rounded-b-2xl {
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+        }
+        .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .shadow-xl {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .border-b-3 {
+            border-bottom-width: 3px;
+        }
+
+        /* Background colors */
+        .bg-transparent {
+            background: transparent;
+        }
+        .bg-white {
+            background: #ffffff;
+        }
+        .bg-gray-50 {
+            background: var(--gray-50);
+        }
+        .bg-gray-100 {
+            background: var(--gray-100);
+        }
+        .bg-gray-200 {
+            background: var(--gray-200);
+        }
+        .bg-gray-900 {
+            background: var(--gray-900);
+        }
+        .bg-sidebar {
+            background: var(--sidebar);
+        }
+        .bg-sidebarHover {
+            background: var(--sidebar-hover);
+        }
+        .bg-sidebarActive {
+            background: var(--sidebar-active);
+        }
+        .bg-primary {
+            background: var(--primary);
+        }
+        .bg-emerald-500 {
+            background: #10B981;
+        }
+        .bg-yellow-100 {
+            background: #FEF3C7;
+        }
+        .bg-blue-100 {
+            background: #DBEAFE;
+        }
+        .bg-green-100 {
+            background: #D1FAE5;
+        }
+        .bg-red-100 {
+            background: #FEE2E2;
+        }
+        .bg-purple-100 {
+            background: #F3E8FF;
+        }
+        .bg-indigo-100 {
+            background: #E0E7FF;
+        }
+        .bg-amber-100 {
+            background: #FEF3C7;
+        }
+        .bg-emerald-100 {
+            background: #D1FAE5;
+        }
+        .bg-black\/50 {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .bg-white\/20 {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Text colors */
+        .text-white {
+            color: #ffffff;
+        }
+        .text-gray-300 {
+            color: var(--gray-300);
+        }
+        .text-gray-400 {
+            color: var(--gray-400);
+        }
+        .text-gray-500 {
+            color: var(--gray-500);
+        }
+        .text-gray-600 {
+            color: var(--gray-600);
+        }
+        .text-gray-700 {
+            color: var(--gray-700);
+        }
+        .text-gray-800 {
+            color: var(--gray-800);
+        }
+        .text-gray-900 {
+            color: var(--gray-900);
+        }
+        .text-primary {
+            color: var(--primary);
+        }
+        .text-yellow-700 {
+            color: #B45309;
+        }
+        .text-blue-700 {
+            color: #1D4ED8;
+        }
+        .text-green-700 {
+            color: #065F46;
+        }
+        .text-red-700 {
+            color: #991B1B;
+        }
+        .text-purple-700 {
+            color: #6B21A8;
+        }
+        .text-indigo-700 {
+            color: #3730A3;
+        }
+        .text-amber-700 {
+            color: #B45309;
+        }
+
+        /* Font */
+        .font-sans {
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .font-bold {
+            font-weight: 700;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .font-medium {
+            font-weight: 500;
+        }
+        .font-normal {
+            font-weight: 400;
+        }
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        .text-base {
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+        .text-lg {
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+        .text-\[10px\] {
+            font-size: 10px;
+        }
+        .text-\[11px\] {
+            font-size: 11px;
+        }
+        .text-\[9px\] {
+            font-size: 9px;
+        }
+        .tracking-tight {
+            letter-spacing: -0.025em;
+        }
+        .tracking-wider {
+            letter-spacing: 0.05em;
+        }
+        .uppercase {
+            text-transform: uppercase;
+        }
+        .antialiased {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .whitespace-nowrap {
+            white-space: nowrap;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+
+        /* Hover states */
+        .hover\:bg-sidebarHover:hover {
+            background: var(--sidebar-hover);
+        }
+        .hover\:bg-gray-100:hover {
+            background: var(--gray-100);
+        }
+        .hover\:bg-gray-200:hover {
+            background: var(--gray-200);
+        }
+        .hover\:bg-gray-50:hover {
+            background: var(--gray-50);
+        }
+        .hover\:text-white:hover {
+            color: #ffffff;
+        }
+        .hover\:text-gray-700:hover {
+            color: var(--gray-700);
+        }
+        .hover\:border-gray-300:hover {
+            border-color: var(--gray-300);
+        }
+        .hover\:shadow-md:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .hover\:scale-105:hover {
+            transform: scale(1.05);
+        }
+
+        /* Focus */
+        .focus\:outline-none:focus {
+            outline: none;
+        }
+        .focus\:ring-2:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+        .focus\:ring-primary:focus {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        /* List */
+        .list-none {
+            list-style: none;
+        }
+
+        /* Responsive helpers - using media queries for common breakpoints */
+        @media (min-width: 768px) {
+            .lg\:ml-64 {
+                margin-left: 16rem;
+            }
+            .lg\:translate-x-0 {
+                transform: translateX(0);
+            }
+            .lg\:block {
+                display: block;
+            }
+            .lg\:hidden {
+                display: none !important;
+            }
+            .lg\:flex {
+                display: flex;
+            }
+            .lg\:p-6 {
+                padding: 1.5rem;
+            }
+            .lg\:px-6 {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+            .lg\:space-y-5>*+* {
+                margin-top: 1.25rem;
+            }
+        }
+        @media (max-width: 767px) {
+            .xs\:hidden {
+                display: none !important;
+            }
+            .xs\:inline {
+                display: inline !important;
+            }
+            .xs\:block {
+                display: block !important;
+            }
+            .xs\:text-sm {
+                font-size: 0.875rem;
+            }
+            .xs\:text-xs {
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Additional custom components that were using Tailwind classes */
+
+        /* Sidebar scrollbar */
         .sidebar-scroll::-webkit-scrollbar {
             width: 3px;
         }
@@ -66,11 +765,12 @@
             background: #475569;
             border-radius: 3px;
         }
-        .table-container {
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
         }
+
+        /* Scrollbar for table containers */
         .table-container::-webkit-scrollbar {
             height: 6px;
         }
@@ -79,48 +779,7 @@
             border-radius: 6px;
         }
 
-        .toast {
-            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
-        }
-        @keyframes toastIn {
-            from {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        @keyframes toastOut {
-            from {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(30px);
-                opacity: 0;
-            }
-        }
-
-        .modal-backdrop {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-        }
-
-        .sidebar-section-header {
-            cursor: pointer;
-            user-select: none;
-            transition: all 0.2s;
-        }
-        .sidebar-section-header:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .sidebar-section-content {
-            overflow: hidden;
-            transition: max-height 0.35s ease;
-        }
-
+        /* Correction row */
         .correction-row {
             transition: all 0.15s ease;
         }
@@ -129,6 +788,7 @@
             box-shadow: inset 3px 0 0 #4F46E5;
         }
 
+        /* Status badge */
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -165,7 +825,68 @@
         .status-badge .dot.indigo {
             background: #4F46E5;
         }
+        .status-badge .dot.orange {
+            background: #F97316;
+        }
+        .status-badge .dot.teal {
+            background: #14B8A6;
+        }
+        .status-badge.bg-yellow-100 {
+            background: #FEF3C7;
+        }
+        .status-badge.bg-yellow-100.text-yellow-700 {
+            color: #B45309;
+        }
+        .status-badge.bg-blue-100 {
+            background: #DBEAFE;
+        }
+        .status-badge.bg-blue-100.text-blue-700 {
+            color: #1D4ED8;
+        }
+        .status-badge.bg-green-100 {
+            background: #D1FAE5;
+        }
+        .status-badge.bg-green-100.text-green-700 {
+            color: #065F46;
+        }
+        .status-badge.bg-red-100 {
+            background: #FEE2E2;
+        }
+        .status-badge.bg-red-100.text-red-700 {
+            color: #991B1B;
+        }
+        .status-badge.bg-purple-100 {
+            background: #F3E8FF;
+        }
+        .status-badge.bg-purple-100.text-purple-700 {
+            color: #6B21A8;
+        }
+        .status-badge.bg-gray-100 {
+            background: #F1F5F9;
+        }
+        .status-badge.bg-gray-100.text-gray-700 {
+            color: #475569;
+        }
+        .status-badge.bg-indigo-100 {
+            background: #E0E7FF;
+        }
+        .status-badge.bg-indigo-100.text-indigo-700 {
+            color: #3730A3;
+        }
+        .status-badge.bg-amber-100 {
+            background: #FEF3C7;
+        }
+        .status-badge.bg-amber-100.text-amber-700 {
+            color: #B45309;
+        }
+        .status-badge.bg-emerald-100 {
+            background: #D1FAE5;
+        }
+        .status-badge.bg-emerald-100.text-emerald-700 {
+            color: #065F46;
+        }
 
+        /* Action icon buttons */
         .action-icon-btn {
             padding: 2px 8px;
             border-radius: 6px;
@@ -197,11 +918,8 @@
             color: #D97706;
             background: #FFFBEB;
         }
-        .action-icon-btn.purple:hover {
-            color: #7C3AED;
-            background: #F5F3FF;
-        }
 
+        /* Filter section */
         .filter-section {
             display: flex;
             flex-wrap: wrap;
@@ -228,7 +946,6 @@
             border-color: #4F46E5;
             box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
         }
-
         .filter-actions .btn-outline {
             background: transparent;
             border: 1px solid #d1d5db;
@@ -259,165 +976,95 @@
             background: #4338CA;
         }
 
-        .detail-field {
-            margin-bottom: 14px;
+        /* Product image wrapper */
+        .product-img-wrapper {
+            position: relative;
+            display: inline-block;
+            overflow: visible !important;
+            vertical-align: middle;
+            margin-right: 8px;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
         }
-        .detail-field label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            display: block;
-            margin-bottom: 3px;
-        }
-        .detail-field .value-box {
-            padding: 8px 12px;
-            background: #f8fafc;
+        .product-img-wrapper .product-thumb {
+            width: 48px;
+            height: 48px;
             border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            font-size: 14px;
-            color: #0f172a;
-        }
-        .detail-field input,
-        .detail-field select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1.5px solid #dce3ef;
-            border-radius: 10px;
-            font-size: 13px;
-            background: #fafcff;
-            transition: 0.2s;
-            outline: none;
-        }
-        .detail-field input:focus,
-        .detail-field select:focus {
-            border-color: #2a6df4;
-            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
-        }
-
-        .review-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px 20px;
-        }
-        .review-grid .detail-field {
-            margin-bottom: 0;
-        }
-
-        @media (max-width: 767px) {
-            .review-grid {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-            .corrections-table td,
-            .corrections-table th {
-                padding: 4px 6px !important;
-                font-size: 10px !important;
-            }
-            .action-icon-btn {
-                font-size: 11px !important;
-                padding: 1px 4px !important;
-            }
-            .filter-section .filter-group input,
-            .filter-section .filter-group select {
-                font-size: 11px;
-                padding: 4px 8px;
-                min-width: 70px;
-            }
-            .filter-actions .btn-outline,
-            .filter-actions .btn-primary-sm {
-                font-size: 11px;
-                padding: 4px 10px;
-            }
-            .status-badge {
-                font-size: 9px;
-                padding: 1px 8px;
-            }
-            .detail-field .value-box {
-                font-size: 12px;
-                padding: 6px 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .corrections-table td,
-            .corrections-table th {
-                padding: 3px 4px !important;
-                font-size: 9px !important;
-            }
-            .action-icon-btn {
-                font-size: 10px !important;
-                padding: 0 3px !important;
-            }
-            .filter-section .filter-group input,
-            .filter-section .filter-group select {
-                font-size: 10px;
-                padding: 3px 6px;
-                min-width: 55px;
-            }
-            .filter-actions .btn-outline,
-            .filter-actions .btn-primary-sm {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-            .status-badge {
-                font-size: 8px;
-                padding: 1px 6px;
-            }
-            .detail-field .value-box {
-                font-size: 11px;
-                padding: 5px 8px;
-            }
-            .review-grid {
-                gap: 8px;
-            }
-        }
-
-        /* Tabs */
-        .tab-btn {
-            padding: 8px 20px;
-            border-radius: 10px 10px 0 0;
-            font-size: 13px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
             transition: all 0.2s;
-            background: transparent;
-            color: #64748b;
-            border-bottom: 3px solid transparent;
-        }
-        .tab-btn.active {
-            color: #4F46E5;
-            border-bottom-color: #4F46E5;
-            background: #f8fafc;
-        }
-        .tab-btn:hover:not(.active) {
+            aspect-ratio: 1/1;
             background: #f1f5f9;
-            color: #475569;
         }
-        @media (max-width: 480px) {
-            .tab-btn {
-                font-size: 11px;
-                padding: 6px 12px;
+        .product-img-wrapper:hover .product-thumb {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+        .product-img-zoom {
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) scale(0.9);
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            background: #fff;
+            border: 3px solid #4F46E5;
+            aspect-ratio: 1/1;
+        }
+        .product-img-wrapper:hover .product-img-zoom {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
+        }
+        @media (max-width: 767px) {
+            .product-img-wrapper {
+                width: 38px;
+                height: 38px;
+            }
+            .product-img-wrapper .product-thumb {
+                width: 38px;
+                height: 38px;
+            }
+            .product-img-zoom {
+                left: 50%;
+                top: auto;
+                bottom: calc(100% + 8px);
+                transform: translateX(-50%) scale(0.9);
+                width: 140px;
+                height: 140px;
+            }
+            .product-img-wrapper:hover .product-img-zoom {
+                transform: translateX(-50%) scale(1);
             }
         }
 
-        .tab-content {
-            display: none;
+        .item-cell {
+            display: flex;
+            align-items: center;
         }
-        .tab-content.active {
-            display: block;
+        .item-cell .item-info {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
         }
-
-        /* Product link */
-        .product-link {
+        .item-cell .item-info .item-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        .item-cell .item-info .item-name a {
             color: #4F46E5;
             text-decoration: underline;
-            cursor: pointer;
-            font-weight: 500;
         }
-        .product-link:hover {
+        .item-cell .item-info .item-name a:hover {
             color: #3730A3;
         }
 
@@ -430,43 +1077,65 @@
             text-decoration: underline;
         }
 
-        .compact-number {
-            font-size: 11px;
-            font-weight: 500;
-            text-align: center;
+        .whatsapp-link {
+            color: #25D366;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 16px;
+            transition: transform 0.1s;
+            margin-left: 2px;
+        }
+        .whatsapp-link:hover {
+            transform: scale(1.15);
+        }
+        .whatsapp-link svg {
+            width: 16px;
+            height: 16px;
+            fill: #25D366;
+        }
+        .phone-with-wa {
+            display: inline-flex;
+            align-items: center;
             white-space: nowrap;
         }
 
-        .price-diff {
-            font-weight: 600;
-        }
-        .price-diff.increase {
-            color: #EF4444;
-        }
-        .price-diff.decrease {
-            color: #10B981;
-        }
-        .price-diff.same {
-            color: #6B7280;
-        }
-
-        .review-card {
+        /* Cost breakdown */
+        .cost-breakdown {
             background: #f8fafc;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid #e2e8f0;
-            padding: 16px;
+            padding: 12px 16px;
         }
-        .review-card .review-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+        .cost-breakdown .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .review-card .review-value {
-            font-size: 14px;
-            font-weight: 600;
+        .cost-breakdown .cost-row:last-child {
+            border-bottom: none;
+        }
+        .cost-breakdown .cost-row .lbl {
+            color: #64748b;
+        }
+        .cost-breakdown .cost-row .val {
+            font-weight: 500;
             color: #0f172a;
+        }
+        .cost-breakdown .cost-row.total-row {
+            font-weight: 700;
+            font-size: 15px;
+            border-top: 2px solid #dce3ef;
+            padding-top: 6px;
+            margin-top: 2px;
+        }
+        .cost-breakdown .cost-row.total-row .lbl {
+            color: #4338CA;
+        }
+        .cost-breakdown .cost-row.total-row .val {
+            color: #3730A3;
         }
 
         .grand-total-box {
@@ -488,18 +1157,6 @@
             font-size: 24px;
             font-weight: 800;
             color: #3730A3;
-        }
-
-        @media (max-width: 480px) {
-            .grand-total-box .amount {
-                font-size: 18px;
-            }
-            .grand-total-box .label {
-                font-size: 12px;
-            }
-            .review-card .review-value {
-                font-size: 12px;
-            }
         }
 
         .btn-approve {
@@ -568,234 +1225,6 @@
         .btn-update-cart:hover {
             background: #4338CA;
         }
-
-        .history-filter-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-        }
-        .history-filter-section .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .history-filter-section .filter-group input,
-        .history-filter-section .filter-group select {
-            font-size: 12px;
-            padding: 4px 8px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            outline: none;
-            background: #fff;
-        }
-        .history-filter-section .filter-group input:focus,
-        .history-filter-section .filter-group select:focus {
-            border-color: #4F46E5;
-        }
-
-        @media (max-width: 480px) {
-            .history-filter-section .filter-group input,
-            .history-filter-section .filter-group select {
-                font-size: 10px;
-                padding: 3px 6px;
-                min-width: 50px;
-            }
-            .history-filter-section .filter-group label {
-                font-size: 9px;
-            }
-        }
-
-        /* ─── PRODUCT IMAGE HOVER ─── */
-        .product-img-wrapper {
-            position: relative;
-            display: inline-block;
-            overflow: visible !important;
-            vertical-align: middle;
-            margin-right: 8px;
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-        }
-        .product-img-wrapper .product-thumb {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid #e2e8f0;
-            transition: all 0.2s;
-            aspect-ratio: 1 / 1;
-            background: #f1f5f9;
-        }
-        .product-img-wrapper:hover .product-thumb {
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-        }
-        .product-img-zoom {
-            position: absolute;
-            left: calc(100% + 12px);
-            top: 50%;
-            transform: translateY(-50%) scale(0.9);
-            z-index: 9999;
-            pointer-events: none;
-            opacity: 0;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-            width: 180px;
-            height: 180px;
-            object-fit: cover;
-            background: #fff;
-            border: 3px solid #4F46E5;
-            aspect-ratio: 1 / 1;
-        }
-        .product-img-wrapper:hover .product-img-zoom {
-            opacity: 1;
-            transform: translateY(-50%) scale(1);
-        }
-        @media (max-width: 767px) {
-            .product-img-wrapper {
-                width: 38px;
-                height: 38px;
-            }
-            .product-img-wrapper .product-thumb {
-                width: 38px;
-                height: 38px;
-            }
-            .product-img-zoom {
-                left: 50%;
-                top: auto;
-                bottom: calc(100% + 8px);
-                transform: translateX(-50%) scale(0.9);
-                width: 140px;
-                height: 140px;
-            }
-            .product-img-wrapper:hover .product-img-zoom {
-                transform: translateX(-50%) scale(1);
-            }
-        }
-        @media (max-width: 480px) {
-            .product-img-wrapper {
-                width: 32px;
-                height: 32px;
-            }
-            .product-img-wrapper .product-thumb {
-                width: 32px;
-                height: 32px;
-            }
-            .product-img-zoom {
-                width: 120px;
-                height: 120px;
-            }
-        }
-
-        .whatsapp-link {
-            color: #25D366;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            font-size: 16px;
-            transition: transform 0.1s;
-            margin-left: 2px;
-        }
-        .whatsapp-link:hover {
-            transform: scale(1.15);
-        }
-        .whatsapp-link svg {
-            width: 16px;
-            height: 16px;
-            fill: #25D366;
-        }
-        .phone-with-wa {
-            display: inline-flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-
-        .item-cell {
-            display: flex;
-            align-items: center;
-        }
-        .item-cell .item-info {
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-        }
-        .item-cell .item-info .item-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 13px;
-            line-height: 1.3;
-        }
-        .item-cell .item-info .item-name a {
-            color: #4F46E5;
-            text-decoration: underline;
-        }
-        .item-cell .item-info .item-name a:hover {
-            color: #3730A3;
-        }
-
-        @media (max-width: 480px) {
-            .item-cell .item-info .item-name {
-                font-size: 11px;
-            }
-        }
-
-        /* ─── COST BREAKDOWN ─── */
-        .cost-breakdown {
-            background: #f8fafc;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            padding: 12px 16px;
-        }
-        .cost-breakdown .cost-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 0;
-            font-size: 13px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .cost-breakdown .cost-row:last-child {
-            border-bottom: none;
-        }
-        .cost-breakdown .cost-row .lbl {
-            color: #64748b;
-        }
-        .cost-breakdown .cost-row .val {
-            font-weight: 500;
-            color: #0f172a;
-        }
-        .cost-breakdown .cost-row.total-row {
-            font-weight: 700;
-            font-size: 15px;
-            border-top: 2px solid #dce3ef;
-            padding-top: 6px;
-            margin-top: 2px;
-        }
-        .cost-breakdown .cost-row.total-row .lbl {
-            color: #4338CA;
-        }
-        .cost-breakdown .cost-row.total-row .val {
-            color: #3730A3;
-        }
-        .cost-breakdown .cost-row.highlight {
-            background: #f1f5f9;
-            border-radius: 4px;
-            padding: 4px 8px;
-            margin: 2px 0;
-        }
-
-        /* Live cart status badges */
-        .status-badge .dot.teal {
-            background: #14B8A6;
-        }
-        .status-badge .dot.orange {
-            background: #F97316;
-        }
-        .status-badge .dot.pink {
-            background: #EC4899;
-        }
-
         .btn-view-cart {
             background: #4F46E5;
             color: #fff;
@@ -810,7 +1239,6 @@
         .btn-view-cart:hover {
             background: #4338CA;
         }
-
         .btn-remove-cart {
             background: #FEF2F2;
             color: #DC2626;
@@ -825,7 +1253,6 @@
         .btn-remove-cart:hover {
             background: #FEE2E2;
         }
-
         .btn-review-cart {
             background: #F59E0B;
             color: #fff;
@@ -840,15 +1267,909 @@
         .btn-review-cart:hover {
             background: #D97706;
         }
+        .btn-confirm-order {
+            background: #10B981;
+            color: #fff;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-confirm-order:hover {
+            background: #059669;
+        }
+
+        /* Toast */
+        .toast {
+            animation: toastIn 0.4s ease-out, toastOut 0.3s ease-in 2.5s forwards;
+        }
+        @keyframes toastIn {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes toastOut {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+        }
+
+        /* Modal backdrop */
+        .modal-backdrop {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Detail field */
+        .detail-field {
+            margin-bottom: 14px;
+        }
+        .detail-field label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+            margin-bottom: 3px;
+        }
+        .detail-field .value-box {
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            color: #0f172a;
+        }
+        .detail-field input,
+        .detail-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1.5px solid #dce3ef;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            transition: 0.2s;
+            outline: none;
+        }
+        .detail-field input:focus,
+        .detail-field select:focus {
+            border-color: #2a6df4;
+            box-shadow: 0 0 0 4px rgba(42, 109, 244, 0.08);
+        }
+        .review-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+        }
+        .review-grid .detail-field {
+            margin-bottom: 0;
+        }
+        @media (max-width: 480px) {
+            .review-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
+        /* Mobile card view */
+        .correction-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid #eef2f6;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .correction-card:active {
+            transform: scale(0.99);
+        }
+        .correction-card .card-body {
+            padding: 14px 16px;
+        }
+        .correction-card .card-top {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .correction-card .card-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f1f5f9;
+            border: 2px solid #eef2f6;
+            flex-shrink: 0;
+        }
+        .correction-card .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .correction-card .card-info .product-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: #0f172a;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .correction-card .card-info .product-name a {
+            color: #4F46E5;
+            text-decoration: underline;
+        }
+        .correction-card .card-info .user-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+            margin-top: 3px;
+            font-size: 12px;
+            color: #475569;
+        }
+        .correction-card .card-info .user-row .user-name {
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+        }
+        .correction-card .card-info .user-row .user-name:active {
+            opacity: 0.6;
+        }
+        .correction-card .card-info .user-row .phone {
+            color: #64748b;
+            font-size: 11px;
+        }
+        .correction-card .card-info .user-row .wa-link {
+            color: #25D366;
+            display: inline-flex;
+            align-items: center;
+            transition: transform 0.15s;
+        }
+        .correction-card .card-info .user-row .wa-link:active {
+            transform: scale(1.2);
+        }
+        .correction-card .card-info .user-row .wa-link svg {
+            width: 16px;
+            height: 16px;
+            fill: #25D366;
+        }
+        .correction-card .card-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 12px;
+            color: #475569;
+        }
+        .correction-card .card-meta .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .correction-card .card-meta .meta-item .label {
+            color: #94a3b8;
+            font-weight: 500;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .correction-card .card-meta .meta-item .value {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .correction-card .card-meta .meta-item .value.price {
+            color: #4F46E5;
+            font-size: 14px;
+        }
+        .correction-card .card-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .correction-card .card-actions .btn {
+            flex: 1;
+            min-width: 70px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-align: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .correction-card .card-actions .btn:active {
+            transform: scale(0.94);
+        }
+        .correction-card .card-actions .btn-primary {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .correction-card .card-actions .btn-primary:active {
+            background: #3730A3;
+        }
+        .correction-card .card-actions .btn-success {
+            background: #10B981;
+            color: #fff;
+        }
+        .correction-card .card-actions .btn-success:active {
+            background: #059669;
+        }
+        .correction-card .card-actions .btn-danger {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+        .correction-card .card-actions .btn-danger:active {
+            background: #FEE2E2;
+        }
+        .correction-card .card-actions .btn-outline {
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .correction-card .card-actions .btn-outline:active {
+            background: #e2e8f0;
+        }
+
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .status-chip .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-chip.pending {
+            background: #FEF3C7;
+            color: #B45309;
+        }
+        .status-chip.pending .dot {
+            background: #F59E0B;
+        }
+        .status-chip.reviewed {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+        .status-chip.reviewed .dot {
+            background: #3B82F6;
+        }
+        .status-chip.approved,
+        .status-chip.booked {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .status-chip.approved .dot,
+        .status-chip.booked .dot {
+            background: #10B981;
+        }
+        .status-chip.rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+        .status-chip.rejected .dot {
+            background: #EF4444;
+        }
+        .status-chip.active {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .status-chip.active .dot {
+            background: #10B981;
+        }
+        .status-chip.abandoned {
+            background: #FEF3C7;
+            color: #B45309;
+        }
+        .status-chip.abandoned .dot {
+            background: #F59E0B;
+        }
+        .status-chip.checkout {
+            background: #E0E7FF;
+            color: #3730A3;
+        }
+        .status-chip.checkout .dot {
+            background: #4F46E5;
+        }
+        .status-chip.cart {
+            background: #DBEAFE;
+            color: #1D4ED8;
+        }
+        .status-chip.cart .dot {
+            background: #3B82F6;
+        }
+        .status-chip.removed {
+            background: #F1F5F9;
+            color: #475569;
+        }
+        .status-chip.removed .dot {
+            background: #9CA3AF;
+        }
+
+        /* Filter chips */
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .filter-chips .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            background: #EEF2FF;
+            color: #4F46E5;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .filter-chips .chip .remove {
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            opacity: 0.6;
+            transition: opacity 0.15s;
+        }
+        .filter-chips .chip .remove:active {
+            opacity: 1;
+        }
+
+        /* Pagination */
+        .pagination-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 0 4px 0;
+            font-size: 12px;
+            color: #64748b;
+        }
+        .pagination-bar .page-btns {
+            display: flex;
+            gap: 4px;
+        }
+        .pagination-bar .page-btns .page-btn {
+            padding: 4px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s;
+            min-width: 32px;
+            text-align: center;
+        }
+        .pagination-bar .page-btns .page-btn:active {
+            transform: scale(0.92);
+        }
+        .pagination-bar .page-btns .page-btn.active {
+            background: #4F46E5;
+            color: #fff;
+            border-color: #4F46E5;
+        }
+        .pagination-bar .per-page {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+        }
+        .pagination-bar .per-page select {
+            padding: 3px 6px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 12px;
+            background: #fff;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+        .empty-state .title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #475569;
+        }
+        .empty-state .sub {
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        /* Price diff */
+        .price-diff {
+            font-weight: 600;
+        }
+        .price-diff.increase {
+            color: #EF4444;
+        }
+        .price-diff.decrease {
+            color: #10B981;
+        }
+        .price-diff.same {
+            color: #6B7280;
+        }
+
+        /* Mobile bottom tabs */
+        .mobile-bottom-tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 40;
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+            display: none;
+            justify-content: space-around;
+            align-items: stretch;
+            height: 68px;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+        .mobile-bottom-tabs .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            font-size: 10px;
+            font-weight: 600;
+            color: #94a3b8;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.15s;
+            position: relative;
+            padding: 4px 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .mobile-bottom-tabs .tab-item:active {
+            transform: scale(0.94);
+        }
+        .mobile-bottom-tabs .tab-item .tab-icon {
+            font-size: 22px;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+        .mobile-bottom-tabs .tab-item.active .tab-icon {
+            transform: translateY(-2px) scale(1.05);
+        }
+        .mobile-bottom-tabs .tab-item.active {
+            color: #4F46E5;
+        }
+        .mobile-bottom-tabs .tab-item .tab-badge {
+            position: absolute;
+            top: 4px;
+            right: 50%;
+            transform: translateX(calc(50% + 16px));
+            background: #EF4444;
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+        }
+
+        /* Desktop tabs */
+        .desktop-tabs {
+            display: flex;
+            gap: 4px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 4px;
+            border: 1px solid #eef2f6;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+        .desktop-tabs .dtab {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 13px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .desktop-tabs .dtab.active {
+            background: #4F46E5;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+        .desktop-tabs .dtab:active {
+            transform: scale(0.96);
+        }
+
+        /* Responsive visibility */
+        .mobile-view {
+            display: none;
+        }
+        .desktop-view {
+            display: block;
+        }
+
+        @media (max-width: 767px) {
+            .desktop-view {
+                display: none !important;
+            }
+            .mobile-view {
+                display: block !important;
+            }
+            .desktop-tabs {
+                display: none !important;
+            }
+            .mobile-bottom-tabs {
+                display: flex !important;
+            }
+            body {
+                padding-bottom: 80px;
+            }
+            .filter-section .filter-group input,
+            .filter-section .filter-group select {
+                font-size: 12px;
+                padding: 4px 8px;
+                min-width: 70px;
+            }
+            .filter-actions .btn-outline,
+            .filter-actions .btn-primary-sm {
+                font-size: 11px;
+                padding: 4px 10px;
+            }
+            .app-header .header-left .brand {
+                font-size: 16px;
+            }
+            .app-header .header-left .brand-sub {
+                font-size: 8px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .mobile-bottom-tabs {
+                display: none !important;
+            }
+            .desktop-tabs {
+                display: flex !important;
+            }
+        }
+
+        /* Sidebar overlay */
+        #sidebarOverlay {
+            display: none;
+        }
+        #sidebarOverlay.show {
+            display: block;
+        }
+        @media (max-width: 767px) {
+            #sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+            #sidebarOverlay.show {
+                display: block;
+            }
+        }
+        @media (min-width: 768px) {
+            #sidebar {
+                transform: translateX(0) !important;
+            }
+            #sidebarOverlay {
+                display: none !important;
+            }
+        }
+
+        /* Sidebar section header */
+        .sidebar-section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        .sidebar-section-header:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .sidebar-section-content {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+        }
+
+        /* Scrollbar for sidebar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 3px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        .sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #475569 transparent;
+        }
+
+        /* General table styling for corrections */
+        .corrections-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        .corrections-table th {
+            padding: 0.25rem 0.5rem;
+            text-align: left;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+        }
+        .corrections-table td {
+            padding: 0.25rem 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+
+        /* Button styles for table actions */
+        .btn-review-cart,
+        .btn-confirm-order,
+        .btn-remove-cart,
+        .btn-approve-correction {
+            padding: 4px 10px;
+            font-size: 10px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-block;
+            margin: 0 2px;
+        }
+
+        /* Utility for top bar */
+        .top-bar {
+            background: #fff;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (min-width: 640px) {
+            .top-bar {
+                padding: 0.75rem 1rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .top-bar {
+                padding: 0.75rem 1.5rem;
+            }
+        }
+
+        /* Modal animation */
+        .animate-fade-in {
+            animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Additional responsiveness for small screens */
+        @media (max-width: 480px) {
+            .corrections-table td,
+            .corrections-table th {
+                padding: 3px 4px !important;
+                font-size: 9px !important;
+            }
+            .action-icon-btn {
+                font-size: 10px !important;
+                padding: 0 3px !important;
+            }
+            .status-badge {
+                font-size: 8px;
+                padding: 1px 6px;
+            }
+            .detail-field .value-box {
+                font-size: 11px;
+                padding: 5px 8px;
+            }
+            .review-grid {
+                gap: 8px;
+            }
+            .grand-total-box .amount {
+                font-size: 18px;
+            }
+            .grand-total-box .label {
+                font-size: 12px;
+            }
+            .correction-card .card-body {
+                padding: 10px 12px;
+            }
+            .correction-card .card-img {
+                width: 48px;
+                height: 48px;
+            }
+            .correction-card .card-info .product-name {
+                font-size: 13px;
+            }
+            .correction-card .card-actions .btn {
+                font-size: 10px;
+                padding: 6px 10px;
+                min-width: 56px;
+            }
+            .filter-bar .filter-row .filter-input,
+            .filter-bar .filter-row .filter-select {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+            .filter-bar .filter-row .filter-btn {
+                font-size: 10px;
+                padding: 6px 10px;
+            }
+            .app-header .header-left .brand {
+                font-size: 15px;
+            }
+            .mobile-bottom-tabs .tab-item .tab-label {
+                font-size: 8px;
+            }
+            .mobile-bottom-tabs .tab-item .tab-icon {
+                font-size: 18px;
+            }
+            .mobile-bottom-tabs {
+                height: 60px;
+            }
+        }
+
+        /* Filter bar container */
+        .filter-bar {
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 14px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #eef2f6;
+            margin-bottom: 14px;
+        }
+        .filter-bar .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .filter-bar .filter-row .filter-input {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .filter-bar .filter-row .filter-input:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+        .filter-bar .filter-row .filter-select {
+            padding: 8px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 13px;
+            background: #fafcff;
+            outline: none;
+            min-width: 90px;
+        }
+        .filter-bar .filter-row .filter-select:focus {
+            border-color: #4F46E5;
+        }
+        .filter-bar .filter-row .filter-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: #f1f5f9;
+            color: #475569;
+        }
+        .filter-bar .filter-row .filter-btn:active {
+            transform: scale(0.94);
+        }
+        .filter-bar .filter-row .filter-btn.primary {
+            background: #4F46E5;
+            color: #fff;
+        }
+        .filter-bar .filter-row .filter-btn.primary:active {
+            background: #3730A3;
+        }
+
+        /* Section title */
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 0 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .section-title .count {
+            font-size: 12px;
+            font-weight: 600;
+            color: #94a3b8;
+            background: #f1f5f9;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col font-sans antialiased">
+<body>
 
     <!-- ─── SIDEBAR OVERLAY ─── -->
-    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden" onclick="toggleSidebar()"></div>
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40" onclick="toggleSidebar()"></div>
 
     <!-- ─── SIDEBAR ─── -->
-    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl" style="background:#1E293B;">
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-sidebar text-white z-50 flex flex-col shadow-2xl" style="background:#1E293B;">
         <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700/60 flex-shrink-0">
             <div class="flex items-center gap-3">
                 <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center font-bold text-sm">
@@ -906,17 +2227,15 @@
 
         <div class="p-2 sm:p-3 lg:p-6 space-y-3 sm:space-y-4 lg:space-y-5">
 
-            <!-- ─── TABS ─── -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-3 no-print">
-                <div class="flex flex-wrap gap-1 border-b border-gray-200">
-                    <button class="tab-btn active" data-tab="pending" onclick="switchTab('pending')">📋 Pending Requests</button>
-                    <button class="tab-btn" data-tab="livecart" onclick="switchTab('livecart')">🛒 Live Cart</button>
-                    <button class="tab-btn" data-tab="history" onclick="switchTab('history')">📜 Correction History</button>
-                </div>
+            <!-- ─── DESKTOP TABS ─── -->
+            <div class="desktop-tabs no-print">
+                <button class="dtab active" data-tab="pending" onclick="switchTab('pending')">📋 Pending Requests</button>
+                <button class="dtab" data-tab="livecart" onclick="switchTab('livecart')">🛒 Live Cart</button>
+                <button class="dtab" data-tab="history" onclick="switchTab('history')">📜 Correction History</button>
             </div>
 
             <!-- ─── TAB: PENDING REQUESTS ─── -->
-            <div id="tab-pending" class="tab-content active">
+            <div id="tab-pending" class="tab-content">
                 <!-- Filters -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                     <div class="filter-section">
@@ -939,15 +2258,15 @@
                             <button onclick="filterPending()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
                         </div>
                     </div>
-                    <div id="activePendingFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                    <div id="activePendingFilters" class="filter-chips"></div>
                 </div>
 
-                <!-- Pending Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Pending Table (Desktop) -->
+                <div class="desktop-view bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
                             <span class="text-xs sm:text-sm font-semibold text-gray-700">Pending Correction Requests</span>
-                            <span id="pendingResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                            <span id="pendingResultCountDesktop" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
@@ -981,14 +2300,29 @@
                     </div>
 
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
-                        <div class="text-gray-500" id="pendingPaginationInfo">Page 1 of 1</div>
-                        <div class="flex gap-1" id="pendingPaginationButtons"></div>
+                        <div class="text-gray-500" id="pendingPaginationInfoDesktop">Page 1 of 1</div>
+                        <div class="flex gap-1" id="pendingPaginationButtonsDesktop"></div>
                     </div>
+                </div>
+
+                <!-- Pending Cards (Mobile) -->
+                <div class="mobile-view" id="pendingContainerMobile"></div>
+                <div class="mobile-view pagination-bar" id="pendingPaginationMobile">
+                    <span id="pendingPaginationInfoMobile">Page 1 of 1</span>
+                    <div class="per-page">
+                        <span>Show</span>
+                        <select id="pendingPageSizeMobile" onchange="changePendingPageSizeMobile()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                        </select>
+                    </div>
+                    <div class="page-btns" id="pendingPaginationButtonsMobile"></div>
                 </div>
             </div>
 
             <!-- ─── TAB: LIVE CART ─── -->
-            <div id="tab-livecart" class="tab-content">
+            <div id="tab-livecart" class="tab-content" style="display:none;">
                 <!-- Filters -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
                     <div class="filter-section">
@@ -1010,15 +2344,15 @@
                             <button onclick="filterLiveCart()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
                         </div>
                     </div>
-                    <div id="activeLiveCartFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                    <div id="activeLiveCartFilters" class="filter-chips"></div>
                 </div>
 
-                <!-- Live Cart Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- Live Cart Table (Desktop) -->
+                <div class="desktop-view bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
                             <span class="text-xs sm:text-sm font-semibold text-gray-700">🛒 Live Cart Items</span>
-                            <span id="liveCartResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                            <span id="liveCartResultCountDesktop" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
@@ -1054,17 +2388,32 @@
                     </div>
 
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
-                        <div class="text-gray-500" id="liveCartPaginationInfo">Page 1 of 1</div>
-                        <div class="flex gap-1" id="liveCartPaginationButtons"></div>
+                        <div class="text-gray-500" id="liveCartPaginationInfoDesktop">Page 1 of 1</div>
+                        <div class="flex gap-1" id="liveCartPaginationButtonsDesktop"></div>
                     </div>
+                </div>
+
+                <!-- Live Cart Cards (Mobile) -->
+                <div class="mobile-view" id="liveCartContainerMobile"></div>
+                <div class="mobile-view pagination-bar" id="liveCartPaginationMobile">
+                    <span id="liveCartPaginationInfoMobile">Page 1 of 1</span>
+                    <div class="per-page">
+                        <span>Show</span>
+                        <select id="liveCartPageSizeMobile" onchange="changeLiveCartPageSizeMobile()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                        </select>
+                    </div>
+                    <div class="page-btns" id="liveCartPaginationButtonsMobile"></div>
                 </div>
             </div>
 
             <!-- ─── TAB: HISTORY ─── -->
-            <div id="tab-history" class="tab-content">
+            <div id="tab-history" class="tab-content" style="display:none;">
                 <!-- History Filters -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 sm:p-4 no-print">
-                    <div class="history-filter-section">
+                    <div class="history-filter-section flex flex-wrap gap-2 items-center">
                         <div class="filter-group flex-1 min-w-[100px]">
                             <label class="text-[10px] sm:text-xs font-semibold text-gray-500 uppercase whitespace-nowrap">Search:</label>
                             <input type="text" id="searchHistory" placeholder="User, Product, ID..." class="flex-1 min-w-[70px] text-xs sm:text-sm" oninput="filterHistory()" />
@@ -1089,15 +2438,15 @@
                             <button onclick="filterHistory()" class="btn-primary-sm text-xs sm:text-sm">Apply</button>
                         </div>
                     </div>
-                    <div id="activeHistoryFilters" class="flex flex-wrap gap-1 sm:gap-2 mt-2"></div>
+                    <div id="activeHistoryFilters" class="filter-chips"></div>
                 </div>
 
-                <!-- History Table -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                <!-- History Table (Desktop) -->
+                <div class="desktop-view bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-b border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50">
                         <div>
                             <span class="text-xs sm:text-sm font-semibold text-gray-700">Price Correction History</span>
-                            <span id="historyResultCount" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
+                            <span id="historyResultCountDesktop" class="text-[10px] sm:text-xs text-gray-500 ml-1 sm:ml-2">Showing 0 entries</span>
                         </div>
                         <div class="flex items-center gap-1 sm:gap-3">
                             <div class="flex items-center gap-1 sm:gap-2">
@@ -1133,14 +2482,46 @@
                     </div>
 
                     <div class="px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-1 sm:gap-2 bg-gray-50/50 text-xs sm:text-sm">
-                        <div class="text-gray-500" id="historyPaginationInfo">Page 1 of 1</div>
-                        <div class="flex gap-1" id="historyPaginationButtons"></div>
+                        <div class="text-gray-500" id="historyPaginationInfoDesktop">Page 1 of 1</div>
+                        <div class="flex gap-1" id="historyPaginationButtonsDesktop"></div>
                     </div>
+                </div>
+
+                <!-- History Cards (Mobile) -->
+                <div class="mobile-view" id="historyContainerMobile"></div>
+                <div class="mobile-view pagination-bar" id="historyPaginationMobile">
+                    <span id="historyPaginationInfoMobile">Page 1 of 1</span>
+                    <div class="per-page">
+                        <span>Show</span>
+                        <select id="historyPageSizeMobile" onchange="changeHistoryPageSizeMobile()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50" selected>50</option>
+                        </select>
+                    </div>
+                    <div class="page-btns" id="historyPaginationButtonsMobile"></div>
                 </div>
             </div>
 
         </div>
     </main>
+
+    <!-- ─── MOBILE BOTTOM TABS ─── -->
+    <div class="mobile-bottom-tabs no-print">
+        <button class="tab-item active" data-tab="pending" onclick="switchTab('pending')">
+            <span class="tab-icon">📋</span>
+            <span class="tab-label">Pending</span>
+        </button>
+        <button class="tab-item" data-tab="livecart" onclick="switchTab('livecart')">
+            <span class="tab-icon">🛒</span>
+            <span class="tab-label">Live Cart</span>
+            <span class="tab-badge" id="liveCartBadge">0</span>
+        </button>
+        <button class="tab-item" data-tab="history" onclick="switchTab('history')">
+            <span class="tab-icon">📜</span>
+            <span class="tab-label">History</span>
+        </button>
+    </div>
 
     <!-- ─── REVIEW MODAL ─── -->
     <div id="reviewModal" class="fixed inset-0 z-50 hidden items-center justify-center">
@@ -1172,14 +2553,11 @@
             'use strict';
 
             // ─── DATA ──────────────────────────────────────────────────────
-
-            // Helper to generate product image URL
             function getProductImage(productName) {
                 const seed = productName.replace(/\s/g, '').toLowerCase();
                 return `https://picsum.photos/seed/${seed}/200/200`;
             }
 
-            // Pending correction requests
             let pendingRequests = [{
                 id: 1,
                 productName: 'Raiyani Fashion Anarkali Gown',
@@ -1287,7 +2665,6 @@
                 previousWeight: '0.50 kg - 10.00 W x 15.00 H x 5.00 L'
             }];
 
-            // ─── LIVE CART DATA ───────────────────────────────────────────
             let liveCartItems = [{
                 id: 101,
                 productName: 'Apple iPhone 15 Pro Max',
@@ -1442,7 +2819,6 @@
                 cartStatus: 'checkout'
             }];
 
-            // ─── HISTORY DATA with dates ─────────────────────────────────
             let historyRecords = [{
                 id: 1,
                 userId: 101,
@@ -1564,7 +2940,7 @@
             let historySize = 50;
 
             let selectedRequestId = null;
-            let currentReviewMode = 'pending'; // 'pending' or 'livecart'
+            let currentReviewMode = 'pending';
 
             // ─── HELPERS ────────────────────────────────────────────────────
             function escapeHtml(text) {
@@ -1592,10 +2968,10 @@
             }
 
             function getDiff(prev, curr) {
-                const diff = curr - prev;
-                if (diff === 0) return '<span class="price-diff same">±0.00</span>';
-                if (diff > 0) return `<span class="price-diff increase">+${diff.toFixed(2)}</span>`;
-                return `<span class="price-diff decrease">${diff.toFixed(2)}</span>`;
+                const d = curr - prev;
+                if (d === 0) return '<span class="price-diff same">±0.00</span>';
+                if (d > 0) return `<span class="price-diff increase">+${d.toFixed(2)}</span>`;
+                return `<span class="price-diff decrease">${d.toFixed(2)}</span>`;
             }
 
             function getWhatsAppLink(phone) {
@@ -1604,42 +2980,47 @@
             }
 
             function getWhatsAppIcon() {
-                return `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+                return `<svg viewBox="0 0 24 24" width="16" height="16"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
             }
 
-            // ─── PRODUCT IMAGE HTML ──────────────────────────────────────
             function productImageHtml(item, size) {
-                const thumbSize = size || 48;
+                const s = size || 48;
                 return `
-                    <div class="product-img-wrapper" style="display:inline-block;vertical-align:middle;margin-right:8px;width:${thumbSize}px;height:${thumbSize}px;">
-                        <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="product-thumb" style="width:${thumbSize}px;height:${thumbSize}px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22${thumbSize}%22 height=%22${thumbSize}%22><rect fill=%22%23f1f5f9%22 width=%22${thumbSize}%22 height=%22${thumbSize}%22 rx=%228%22/><text x=%22${thumbSize/2}%22 y=%22${thumbSize/2+5}%22 text-anchor=%22middle%22 font-size=%22${thumbSize/2}%22 fill=%22%2394a3b8%22>📦</text></svg>'">
+                    <div class="product-img-wrapper" style="display:inline-block;vertical-align:middle;margin-right:8px;width:${s}px;height:${s}px;">
+                        <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="product-thumb" style="width:${s}px;height:${s}px;border-radius:8px;object-fit:cover;border:2px solid #e2e8f0;" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22${s}%22 height=%22${s}%22><rect fill=%22%23f1f5f9%22 width=%22${s}%22 height=%22${s}%22 rx=%228%22/><text x=%22${s/2}%22 y=%22${s/2+5}%22 text-anchor=%22middle%22 font-size=%22${s/2}%22 fill=%22%2394a3b8%22>📦</text></svg>'">
                         <img src="${item.productImage}" alt="Zoom" class="product-img-zoom" style="width:180px;height:180px;object-fit:cover;border-radius:12px;border:3px solid #4F46E5;" loading="lazy" onerror="this.style.display='none'">
                     </div>
                 `;
             }
 
-            // ─── FILTER PENDING ────────────────────────────────────────────
+            function getStatusChip(status) {
+                const map = {
+                    'pending': { cls: 'pending', label: 'Pending' },
+                    'reviewed': { cls: 'reviewed', label: 'Reviewed' },
+                    'approved': { cls: 'approved', label: 'Approved' },
+                    'rejected': { cls: 'rejected', label: 'Rejected' },
+                    'booked': { cls: 'booked', label: 'Booked' },
+                    'cart': { cls: 'cart', label: 'In Cart' },
+                    'removed': { cls: 'removed', label: 'Removed' },
+                    'active': { cls: 'active', label: 'Active' },
+                    'abandoned': { cls: 'abandoned', label: 'Abandoned' },
+                    'checkout': { cls: 'checkout', label: 'Checkout' },
+                };
+                const m = map[status] || map.pending;
+                return `<span class="status-chip ${m.cls}"><span class="dot"></span>${m.label}</span>`;
+            }
+
+            // ─── FILTERS ──────────────────────────────────────────────────
             function filterPending() {
                 const search = document.getElementById('searchPending').value.toLowerCase().trim();
                 const status = document.getElementById('statusPendingFilter').value;
-
-                let filtered = [...pendingRequests];
-
-                if (search) {
-                    filtered = filtered.filter(item =>
-                        item.productName.toLowerCase().includes(search) ||
-                        item.user.toLowerCase().includes(search) ||
-                        item.id.toString().includes(search)
-                    );
-                }
-
-                if (status !== 'all') {
-                    filtered = filtered.filter(item => item.status === status);
-                }
-
-                pendingFiltered = filtered;
+                let f = [...pendingRequests];
+                if (search) f = f.filter(i => i.productName.toLowerCase().includes(search) || i.user.toLowerCase()
+                    .includes(search) || i.id.toString().includes(search));
+                if (status !== 'all') f = f.filter(i => i.status === status);
+                pendingFiltered = f;
                 pendingPage = 1;
-                renderPendingTable();
+                renderPending();
                 updateActivePendingFilters();
             }
 
@@ -1650,113 +3031,40 @@
             }
 
             function updateActivePendingFilters() {
-                const container = document.getElementById('activePendingFilters');
+                const c = document.getElementById('activePendingFilters');
                 let html = '';
-                const search = document.getElementById('searchPending').value.trim();
-                const status = document.getElementById('statusPendingFilter').value;
-                if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchPending').value='';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (status !== 'all') html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusPendingFilter').value='all';filterPending();" class="hover:text-red-500 ml-1">×</button></span>`;
-                container.innerHTML = html || '';
+                const s = document.getElementById('searchPending').value.trim();
+                const st = document.getElementById('statusPendingFilter').value;
+                if (s) html +=
+                    `<span class="chip">🔍 ${escapeHtml(s)} <span class="remove" onclick="document.getElementById('searchPending').value='';filterPending();">✕</span></span>`;
+                if (st !== 'all') html +=
+                    `<span class="chip">Status: ${st} <span class="remove" onclick="document.getElementById('statusPendingFilter').value='all';filterPending();">✕</span></span>`;
+                c.innerHTML = html || '';
             }
 
             function changePendingPageSize() {
                 pendingSize = parseInt(document.getElementById('pendingPageSize').value, 10);
                 pendingPage = 1;
-                renderPendingTable();
+                renderPending();
             }
 
-            // ─── RENDER PENDING ────────────────────────────────────────────
-            function renderPendingTable() {
-                const start = (pendingPage - 1) * pendingSize;
-                const end = Math.min(start + pendingSize, pendingFiltered.length);
-                const pageData = pendingFiltered.slice(start, end);
-                const tbody = document.getElementById('pendingTableBody');
-
-                if (pageData.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="8" class="px-4 py-8 text-center text-gray-400 text-sm">No pending correction requests found</td></tr>`;
-                    document.getElementById('pendingResultCount').textContent = 'Showing 0 entries';
-                    updatePendingPagination();
-                    return;
-                }
-
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="correction-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
-                            <div class="item-cell">
-                                ${productImageHtml(item)}
-                                <div class="item-info">
-                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
-                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
-                            <div class="phone-with-wa text-[10px] text-gray-400">
-                                ${item.mobile}
-                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
-                            </div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedAt}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
-                            ${item.status === 'pending' ? `
-                                <button onclick="openReviewModal(${item.id}, 'pending')" class="btn-approve-correction" style="padding:4px 14px;font-size:11px;border-radius:6px;">Review</button>
-                            ` : getStatusBadge(item.status)}
-                        </td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('pendingResultCount').textContent =
-                    `Showing ${pageData.length} of ${pendingFiltered.length} entries`;
-                updatePendingPagination();
+            function changePendingPageSizeMobile() {
+                pendingSize = parseInt(document.getElementById('pendingPageSizeMobile').value, 10);
+                pendingPage = 1;
+                renderPending();
             }
 
-            function updatePendingPagination() {
-                const totalPages = Math.ceil(pendingFiltered.length / pendingSize) || 1;
-                document.getElementById('pendingPaginationInfo').textContent =
-                    `Page ${pendingPage} of ${totalPages} (${pendingFiltered.length} entries)`;
-                const btnContainer = document.getElementById('pendingPaginationButtons');
-                btnContainer.innerHTML = '';
-                if (totalPages <= 1) return;
-                for (let i = 1; i <= totalPages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === pendingPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
-                    btn.textContent = i;
-                    btn.onclick = () => { pendingPage = i;
-                        renderPendingTable(); };
-                    btnContainer.appendChild(btn);
-                }
-            }
-
-            // ─── FILTER LIVE CART ──────────────────────────────────────────
+            // ─── LIVE CART FILTERS ────────────────────────────────────────
             function filterLiveCart() {
                 const search = document.getElementById('searchLiveCart').value.toLowerCase().trim();
                 const status = document.getElementById('statusLiveCartFilter').value;
-
-                let filtered = [...liveCartItems];
-
-                if (search) {
-                    filtered = filtered.filter(item =>
-                        item.productName.toLowerCase().includes(search) ||
-                        item.user.toLowerCase().includes(search) ||
-                        item.id.toString().includes(search)
-                    );
-                }
-
-                if (status !== 'all') {
-                    filtered = filtered.filter(item => item.cartStatus === status);
-                }
-
-                liveCartFiltered = filtered;
+                let f = [...liveCartItems];
+                if (search) f = f.filter(i => i.productName.toLowerCase().includes(search) || i.user.toLowerCase()
+                    .includes(search) || i.id.toString().includes(search));
+                if (status !== 'all') f = f.filter(i => i.cartStatus === status);
+                liveCartFiltered = f;
                 liveCartPage = 1;
-                renderLiveCartTable();
+                renderLiveCart();
                 updateActiveLiveCartFilters();
             }
 
@@ -1767,141 +3075,86 @@
             }
 
             function updateActiveLiveCartFilters() {
-                const container = document.getElementById('activeLiveCartFilters');
+                const c = document.getElementById('activeLiveCartFilters');
                 let html = '';
-                const search = document.getElementById('searchLiveCart').value.trim();
-                const status = document.getElementById('statusLiveCartFilter').value;
-                if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchLiveCart').value='';filterLiveCart();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (status !== 'all') html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusLiveCartFilter').value='all';filterLiveCart();" class="hover:text-red-500 ml-1">×</button></span>`;
-                container.innerHTML = html || '';
+                const s = document.getElementById('searchLiveCart').value.trim();
+                const st = document.getElementById('statusLiveCartFilter').value;
+                if (s) html +=
+                    `<span class="chip">🔍 ${escapeHtml(s)} <span class="remove" onclick="document.getElementById('searchLiveCart').value='';filterLiveCart();">✕</span></span>`;
+                if (st !== 'all') html +=
+                    `<span class="chip">Status: ${st} <span class="remove" onclick="document.getElementById('statusLiveCartFilter').value='all';filterLiveCart();">✕</span></span>`;
+                c.innerHTML = html || '';
             }
 
             function changeLiveCartPageSize() {
                 liveCartSize = parseInt(document.getElementById('liveCartPageSize').value, 10);
                 liveCartPage = 1;
-                renderLiveCartTable();
+                renderLiveCart();
             }
 
-            // ─── RENDER LIVE CART ──────────────────────────────────────────
-            function renderLiveCartTable() {
-                const start = (liveCartPage - 1) * liveCartSize;
-                const end = Math.min(start + liveCartSize, liveCartFiltered.length);
-                const pageData = liveCartFiltered.slice(start, end);
-                const tbody = document.getElementById('liveCartTableBody');
-
-                if (pageData.length === 0) {
-                    tbody.innerHTML =
-                        `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No live cart items found</td></tr>`;
-                    document.getElementById('liveCartResultCount').textContent = 'Showing 0 entries';
-                    updateLiveCartPagination();
-                    return;
-                }
-
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="correction-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
-                            <div class="item-cell">
-                                ${productImageHtml(item)}
-                                <div class="item-info">
-                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
-                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
-                            <div class="phone-with-wa text-[10px] text-gray-400">
-                                ${item.mobile}
-                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
-                            </div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.addedAt}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm font-medium">${item.quantity}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.cartStatus)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
-                            <button onclick="openReviewModal(${item.id}, 'livecart')" class="btn-review-cart">Review</button>
-                            <button onclick="removeFromLiveCart(${item.id})" class="btn-remove-cart ml-1">Remove</button>
-                        </td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('liveCartResultCount').textContent =
-                    `Showing ${pageData.length} of ${liveCartFiltered.length} entries`;
-                updateLiveCartPagination();
-            }
-
-            function updateLiveCartPagination() {
-                const totalPages = Math.ceil(liveCartFiltered.length / liveCartSize) || 1;
-                document.getElementById('liveCartPaginationInfo').textContent =
-                    `Page ${liveCartPage} of ${totalPages} (${liveCartFiltered.length} entries)`;
-                const btnContainer = document.getElementById('liveCartPaginationButtons');
-                btnContainer.innerHTML = '';
-                if (totalPages <= 1) return;
-                for (let i = 1; i <= totalPages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === liveCartPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
-                    btn.textContent = i;
-                    btn.onclick = () => { liveCartPage = i;
-                        renderLiveCartTable(); };
-                    btnContainer.appendChild(btn);
-                }
+            function changeLiveCartPageSizeMobile() {
+                liveCartSize = parseInt(document.getElementById('liveCartPageSizeMobile').value, 10);
+                liveCartPage = 1;
+                renderLiveCart();
             }
 
             function removeFromLiveCart(id) {
                 const item = liveCartItems.find(i => i.id === id);
                 if (!item) return;
-                if (confirm(`Remove "${item.productName}" from live cart?`)) {
-                    liveCartItems = liveCartItems.filter(i => i.id !== id);
-                    filterLiveCart();
-                    showToast('🗑️', `Removed "${item.productName}" from live cart`);
-                }
+                if (!confirm(`Remove "${item.productName}" from live cart?`)) return;
+                liveCartItems = liveCartItems.filter(i => i.id !== id);
+                filterLiveCart();
+                showToast('🗑️', `Removed "${item.productName}"`);
+            }
+
+            function confirmOrder(id) {
+                const item = liveCartItems.find(i => i.id === id);
+                if (!item) return;
+                if (!confirm(`Confirm order for "${item.productName}" (${item.user})?`)) return;
+                historyRecords.push({
+                    id: historyRecords.length + 1,
+                    userId: item.userId || 999,
+                    user: item.user,
+                    mobile: item.mobile || '+977-XXX-XXXX',
+                    productName: item.productName,
+                    productLink: item.productLink,
+                    productImage: item.productImage || getProductImage(item.productName),
+                    previousPrice: item.priceINR,
+                    newPrice: item.priceINR,
+                    status: 'booked',
+                    requestedDate: item.addedAt,
+                    sentDate: item.addedAt,
+                    bookedDate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit' }),
+                    category: item.category || '',
+                    subCategory: item.subCategory || '',
+                    weight: item.weight || 0,
+                    width: item.width || 0,
+                    height: item.height || 0,
+                    length: item.length || 0,
+                    quantity: item.quantity || 1
+                });
+                liveCartItems = liveCartItems.filter(i => i.id !== id);
+                filterLiveCart();
+                filterHistory();
+                showToast('✅', `Order confirmed for "${item.productName}"`);
             }
 
             // ─── HISTORY FILTERS ──────────────────────────────────────────
             function filterHistory() {
                 const search = document.getElementById('searchHistory').value.toLowerCase().trim();
                 const status = document.getElementById('statusHistoryFilter').value;
-                const dateFrom = document.getElementById('historyDateFrom').value;
-                const dateTo = document.getElementById('historyDateTo').value;
-
-                let filtered = [...historyRecords];
-
-                if (search) {
-                    filtered = filtered.filter(item =>
-                        item.user.toLowerCase().includes(search) ||
-                        item.productName.toLowerCase().includes(search) ||
-                        item.id.toString().includes(search) ||
-                        item.userId.toString().includes(search)
-                    );
-                }
-
-                if (status !== 'all') {
-                    filtered = filtered.filter(item => item.status === status);
-                }
-
-                if (dateFrom) {
-                    filtered = filtered.filter(item => {
-                        const d = new Date(item.requestedDate);
-                        return d >= new Date(dateFrom);
-                    });
-                }
-
-                if (dateTo) {
-                    filtered = filtered.filter(item => {
-                        const d = new Date(item.requestedDate);
-                        return d <= new Date(dateTo + 'T23:59:59');
-                    });
-                }
-
-                historyFiltered = filtered;
+                const from = document.getElementById('historyDateFrom').value;
+                const to = document.getElementById('historyDateTo').value;
+                let f = [...historyRecords];
+                if (search) f = f.filter(i => i.user.toLowerCase().includes(search) || i.productName.toLowerCase()
+                    .includes(search) || i.id.toString().includes(search) || i.userId.toString().includes(search));
+                if (status !== 'all') f = f.filter(i => i.status === status);
+                if (from) f = f.filter(i => new Date(i.requestedDate) >= new Date(from));
+                if (to) f = f.filter(i => new Date(i.requestedDate) <= new Date(to + 'T23:59:59'));
+                historyFiltered = f;
                 historyPage = 1;
-                renderHistoryTable();
+                renderHistory();
                 updateActiveHistoryFilters();
             }
 
@@ -1914,99 +3167,412 @@
             }
 
             function updateActiveHistoryFilters() {
-                const container = document.getElementById('activeHistoryFilters');
+                const c = document.getElementById('activeHistoryFilters');
                 let html = '';
-                const search = document.getElementById('searchHistory').value.trim();
-                const status = document.getElementById('statusHistoryFilter').value;
-                const dateFrom = document.getElementById('historyDateFrom').value;
-                const dateTo = document.getElementById('historyDateTo').value;
-
-                if (search) html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">🔍 ${escapeHtml(search)} <button onclick="document.getElementById('searchHistory').value='';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (status !== 'all') html +=
-                    `<span class="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium">Status: ${status} <button onclick="document.getElementById('statusHistoryFilter').value='all';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
-                if (dateFrom || dateTo) {
-                    let dateStr = '';
-                    if (dateFrom && dateTo) dateStr = `${dateFrom} → ${dateTo}`;
-                    else if (dateFrom) dateStr = `From ${dateFrom}`;
-                    else dateStr = `Until ${dateTo}`;
+                const s = document.getElementById('searchHistory').value.trim();
+                const st = document.getElementById('statusHistoryFilter').value;
+                const f = document.getElementById('historyDateFrom').value;
+                const t = document.getElementById('historyDateTo').value;
+                if (s) html +=
+                    `<span class="chip">🔍 ${escapeHtml(s)} <span class="remove" onclick="document.getElementById('searchHistory').value='';filterHistory();">✕</span></span>`;
+                if (st !== 'all') html +=
+                    `<span class="chip">Status: ${st} <span class="remove" onclick="document.getElementById('statusHistoryFilter').value='all';filterHistory();">✕</span></span>`;
+                if (f || t) {
+                    let label = '';
+                    if (f && t) label = `${f} → ${t}`;
+                    else if (f) label = `From ${f}`;
+                    else label = `Until ${t}`;
                     html +=
-                        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">📅 ${dateStr} <button onclick="document.getElementById('historyDateFrom').value='';document.getElementById('historyDateTo').value='';filterHistory();" class="hover:text-red-500 ml-1">×</button></span>`;
+                        `<span class="chip">📅 ${label} <span class="remove" onclick="document.getElementById('historyDateFrom').value='';document.getElementById('historyDateTo').value='';filterHistory();">✕</span></span>`;
                 }
-                container.innerHTML = html || '';
+                c.innerHTML = html || '';
             }
 
             function changeHistoryPageSize() {
                 historySize = parseInt(document.getElementById('historyPageSize').value, 10);
                 historyPage = 1;
-                renderHistoryTable();
+                renderHistory();
             }
 
-            // ─── RENDER HISTORY ────────────────────────────────────────────
-            function renderHistoryTable() {
+            function changeHistoryPageSizeMobile() {
+                historySize = parseInt(document.getElementById('historyPageSizeMobile').value, 10);
+                historyPage = 1;
+                renderHistory();
+            }
+
+            // ─── RENDER: PENDING ──────────────────────────────────────────
+            function renderPending() {
+                const start = (pendingPage - 1) * pendingSize;
+                const end = Math.min(start + pendingSize, pendingFiltered.length);
+                const pageData = pendingFiltered.slice(start, end);
+
+                // Desktop table
+                const tbody = document.getElementById('pendingTableBody');
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="8" class="px-4 py-8 text-center text-gray-400 text-sm">No pending correction requests found</td></tr>`;
+                    document.getElementById('pendingResultCountDesktop').textContent = '0';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="correction-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
+                                <div class="item-cell">
+                                    ${productImageHtml(item)}
+                                    <div class="item-info">
+                                        <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                                <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                                <div class="phone-with-wa text-[10px] text-gray-400">
+                                    ${item.mobile}
+                                    <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedAt}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                                ${item.status === 'pending' ? `
+                                    <button onclick="openReviewModal(${item.id}, 'pending')" class="btn-approve-correction" style="padding:4px 14px;font-size:11px;border-radius:6px;">Review</button>
+                                ` : getStatusBadge(item.status)}
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('pendingResultCountDesktop').textContent = pendingFiltered.length;
+                }
+                updatePendingPaginationDesktop();
+
+                // Mobile cards
+                const containerMobile = document.getElementById('pendingContainerMobile');
+                if (pageData.length === 0) {
+                    containerMobile.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <div class="title">No pending requests</div>
+                            <div class="sub">All caught up! 🎉</div>
+                        </div>
+                    `;
+                } else {
+                    containerMobile.innerHTML = pageData.map(item => `
+                        <div class="correction-card">
+                            <div class="card-body">
+                                <div class="card-top">
+                                    <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23f1f5f9%22 width=%2260%22 height=%2260%22 rx=%2212%22/%3E%3Ctext x=%2230%22 y=%2238%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22%2394a3b8%22%3E📦%3C/text%3E%3C/svg%3E'" />
+                                    <div class="card-info">
+                                        <div class="product-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
+                                        <div class="user-row">
+                                            <span class="user-name" onclick="showToast('👤','${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                                            <span class="phone">${item.mobile}</span>
+                                            <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="wa-link" title="WhatsApp">${getWhatsAppIcon()}</a>
+                                        </div>
+                                        <div style="margin-top:2px;font-size:11px;color:#94a3b8;">${item.requestedAt}</div>
+                                    </div>
+                                </div>
+                                <div class="card-meta">
+                                    <span class="meta-item"><span class="label">Price</span><span class="value price">INR ${item.priceINR.toFixed(2)}</span></span>
+                                    <span class="meta-item"><span class="label">Weight</span><span class="value">${item.weight.toFixed(2)} kg</span></span>
+                                    <span class="meta-item"><span class="label">Qty</span><span class="value">${item.quantity}</span></span>
+                                    <span class="meta-item"><span class="label">Category</span><span class="value">${item.category || '—'}</span></span>
+                                    <span class="meta-item"><span class="label">Sub</span><span class="value">${item.subCategory || '—'}</span></span>
+                                    <span class="meta-item" style="margin-left:auto;">${getStatusChip(item.status)}</span>
+                                </div>
+                                <div class="card-actions">
+                                    ${item.status === 'pending' ? `
+                                        <button class="btn btn-primary" onclick="openReviewModal(${item.id}, 'pending')">📋 Review</button>
+                                    ` : `
+                                        <button class="btn btn-outline" onclick="showToast('ℹ️','Status: ${item.status}')">${item.status}</button>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                updatePendingPaginationMobile();
+            }
+
+            function updatePendingPaginationDesktop() {
+                const total = Math.ceil(pendingFiltered.length / pendingSize) || 1;
+                document.getElementById('pendingPaginationInfoDesktop').textContent = `Page ${pendingPage} of ${total}`;
+                const btns = document.getElementById('pendingPaginationButtonsDesktop');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === pendingPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { pendingPage = i;
+                        renderPending(); };
+                    btns.appendChild(b);
+                }
+            }
+
+            function updatePendingPaginationMobile() {
+                const total = Math.ceil(pendingFiltered.length / pendingSize) || 1;
+                document.getElementById('pendingPaginationInfoMobile').textContent = `Page ${pendingPage} of ${total}`;
+                const btns = document.getElementById('pendingPaginationButtonsMobile');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === pendingPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { pendingPage = i;
+                        renderPending(); };
+                    btns.appendChild(b);
+                }
+            }
+
+            // ─── RENDER: LIVE CART ─────────────────────────────────────────
+            function renderLiveCart() {
+                const start = (liveCartPage - 1) * liveCartSize;
+                const end = Math.min(start + liveCartSize, liveCartFiltered.length);
+                const pageData = liveCartFiltered.slice(start, end);
+
+                // Desktop table
+                const tbody = document.getElementById('liveCartTableBody');
+                if (pageData.length === 0) {
+                    tbody.innerHTML =
+                        `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No live cart items found</td></tr>`;
+                    document.getElementById('liveCartResultCountDesktop').textContent = '0';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="correction-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 text-gray-800 font-medium text-xs sm:text-sm">
+                                <div class="item-cell">
+                                    ${productImageHtml(item)}
+                                    <div class="item-info">
+                                        <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                                <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                                <div class="phone-with-wa text-[10px] text-gray-400">
+                                    ${item.mobile}
+                                    <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.addedAt}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.priceINR.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-700 text-xs sm:text-sm font-medium">${item.quantity}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.weight.toFixed(2)} kg</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.category || '—'}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">${item.subCategory || '—'}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center">${getStatusBadge(item.cartStatus)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center whitespace-nowrap">
+                                <button onclick="openReviewModal(${item.id}, 'livecart')" class="btn-review-cart" style="padding:4px 10px;font-size:10px;">Review</button>
+                                <button onclick="confirmOrder(${item.id})" class="btn-confirm-order" style="padding:4px 10px;font-size:10px;">Confirm</button>
+                                <button onclick="removeFromLiveCart(${item.id})" class="btn-remove-cart" style="padding:4px 10px;font-size:10px;">Remove</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('liveCartResultCountDesktop').textContent = liveCartFiltered.length;
+                }
+                updateLiveCartPaginationDesktop();
+
+                // Mobile cards
+                const containerMobile = document.getElementById('liveCartContainerMobile');
+                if (pageData.length === 0) {
+                    containerMobile.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">🛒</div>
+                            <div class="title">Live cart is empty</div>
+                            <div class="sub">No items in cart right now</div>
+                        </div>
+                    `;
+                } else {
+                    containerMobile.innerHTML = pageData.map(item => `
+                        <div class="correction-card">
+                            <div class="card-body">
+                                <div class="card-top">
+                                    <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23f1f5f9%22 width=%2260%22 height=%2260%22 rx=%2212%22/%3E%3Ctext x=%2230%22 y=%2238%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22%2394a3b8%22%3E📦%3C/text%3E%3C/svg%3E'" />
+                                    <div class="card-info">
+                                        <div class="product-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
+                                        <div class="user-row">
+                                            <span class="user-name" onclick="showToast('👤','${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                                            <span class="phone">${item.mobile}</span>
+                                            <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="wa-link" title="WhatsApp">${getWhatsAppIcon()}</a>
+                                        </div>
+                                        <div style="margin-top:2px;font-size:11px;color:#94a3b8;">${item.addedAt}</div>
+                                    </div>
+                                </div>
+                                <div class="card-meta">
+                                    <span class="meta-item"><span class="label">Price</span><span class="value price">INR ${item.priceINR.toFixed(2)}</span></span>
+                                    <span class="meta-item"><span class="label">Qty</span><span class="value">${item.quantity}</span></span>
+                                    <span class="meta-item"><span class="label">Weight</span><span class="value">${item.weight.toFixed(2)} kg</span></span>
+                                    <span class="meta-item"><span class="label">Category</span><span class="value">${item.category || '—'}</span></span>
+                                    <span class="meta-item"><span class="label">Sub</span><span class="value">${item.subCategory || '—'}</span></span>
+                                    <span class="meta-item" style="margin-left:auto;">${getStatusChip(item.cartStatus)}</span>
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary" onclick="openReviewModal(${item.id}, 'livecart')">📋 Review</button>
+                                    <button class="btn btn-success" onclick="confirmOrder(${item.id})">✅ Confirm</button>
+                                    <button class="btn btn-danger" onclick="removeFromLiveCart(${item.id})">🗑️ Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                document.getElementById('liveCartBadge').textContent = liveCartFiltered.length;
+                updateLiveCartPaginationMobile();
+            }
+
+            function updateLiveCartPaginationDesktop() {
+                const total = Math.ceil(liveCartFiltered.length / liveCartSize) || 1;
+                document.getElementById('liveCartPaginationInfoDesktop').textContent = `Page ${liveCartPage} of ${total}`;
+                const btns = document.getElementById('liveCartPaginationButtonsDesktop');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === liveCartPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { liveCartPage = i;
+                        renderLiveCart(); };
+                    btns.appendChild(b);
+                }
+            }
+
+            function updateLiveCartPaginationMobile() {
+                const total = Math.ceil(liveCartFiltered.length / liveCartSize) || 1;
+                document.getElementById('liveCartPaginationInfoMobile').textContent = `Page ${liveCartPage} of ${total}`;
+                const btns = document.getElementById('liveCartPaginationButtonsMobile');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === liveCartPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { liveCartPage = i;
+                        renderLiveCart(); };
+                    btns.appendChild(b);
+                }
+            }
+
+            // ─── RENDER: HISTORY ──────────────────────────────────────────
+            function renderHistory() {
                 const start = (historyPage - 1) * historySize;
                 const end = Math.min(start + historySize, historyFiltered.length);
                 const pageData = historyFiltered.slice(start, end);
-                const tbody = document.getElementById('historyTableBody');
 
+                // Desktop table
+                const tbody = document.getElementById('historyTableBody');
                 if (pageData.length === 0) {
                     tbody.innerHTML =
                         `<tr><td colspan="10" class="px-4 py-8 text-center text-gray-400 text-sm">No history records found</td></tr>`;
-                    document.getElementById('historyResultCount').textContent = 'Showing 0 entries';
-                    updateHistoryPagination();
-                    return;
+                    document.getElementById('historyResultCountDesktop').textContent = '0';
+                } else {
+                    tbody.innerHTML = pageData.map(item => `
+                        <tr class="correction-row border-b border-gray-100">
+                            <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
+                                <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)} (ID: ${item.userId})')">${escapeHtml(item.user)}</span>
+                                <div class="text-[8px] sm:text-[10px] text-gray-400">ID: ${item.userId}</div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
+                                <span class="phone-with-wa">
+                                    ${item.mobile}
+                                    <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
+                                </span>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-800 text-xs sm:text-sm">
+                                <div class="item-cell">
+                                    ${productImageHtml(item, 38)}
+                                    <div class="item-info">
+                                        <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.previousPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.newPrice.toFixed(2)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-center text-xs sm:text-sm">${getDiff(item.previousPrice, item.newPrice)}</td>
+                            <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedDate}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.sentDate || '—'}</td>
+                            <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.bookedDate || '—'}</td>
+                        </tr>
+                    `).join('');
+                    document.getElementById('historyResultCountDesktop').textContent = historyFiltered.length;
                 }
+                updateHistoryPaginationDesktop();
 
-                tbody.innerHTML = pageData.map(item => `
-                    <tr class="correction-row border-b border-gray-100">
-                        <td class="px-2 py-1 sm:py-2 text-gray-700 text-xs sm:text-sm">
-                            <span class="user-clickable" onclick="showToast('👤','User: ${escapeHtml(item.user)} (ID: ${item.userId})')">${escapeHtml(item.user)}</span>
-                            <div class="text-[8px] sm:text-[10px] text-gray-400">ID: ${item.userId}</div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-600 text-xs sm:text-sm">
-                            <span class="phone-with-wa">
-                                ${item.mobile}
-                                <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="whatsapp-link" title="Chat on WhatsApp">${getWhatsAppIcon()}</a>
-                            </span>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-800 text-xs sm:text-sm">
-                            <div class="item-cell">
-                                ${productImageHtml(item, 38)}
-                                <div class="item-info">
-                                    <span class="item-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></span>
+                // Mobile cards
+                const containerMobile = document.getElementById('historyContainerMobile');
+                if (pageData.length === 0) {
+                    containerMobile.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📜</div>
+                            <div class="title">No history records</div>
+                            <div class="sub">Correction history will appear here</div>
+                        </div>
+                    `;
+                } else {
+                    containerMobile.innerHTML = pageData.map(item => `
+                        <div class="correction-card">
+                            <div class="card-body">
+                                <div class="card-top">
+                                    <img src="${item.productImage}" alt="${escapeHtml(item.productName)}" class="card-img" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22%3E%3Crect fill=%22%23f1f5f9%22 width=%2260%22 height=%2260%22 rx=%2212%22/%3E%3Ctext x=%2230%22 y=%2238%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22%2394a3b8%22%3E📦%3C/text%3E%3C/svg%3E'" />
+                                    <div class="card-info">
+                                        <div class="product-name"><a href="${item.productLink}" target="_blank">${escapeHtml(item.productName)}</a></div>
+                                        <div class="user-row">
+                                            <span class="user-name" onclick="showToast('👤','${escapeHtml(item.user)}')">${escapeHtml(item.user)}</span>
+                                            <span class="phone">${item.mobile}</span>
+                                            <a href="${getWhatsAppLink(item.mobile)}" target="_blank" class="wa-link" title="WhatsApp">${getWhatsAppIcon()}</a>
+                                        </div>
+                                        <div style="margin-top:2px;font-size:11px;color:#94a3b8;">Requested: ${item.requestedDate}</div>
+                                    </div>
+                                </div>
+                                <div class="card-meta">
+                                    <span class="meta-item"><span class="label">Prev</span><span class="value">INR ${item.previousPrice.toFixed(2)}</span></span>
+                                    <span class="meta-item"><span class="label">New</span><span class="value price">INR ${item.newPrice.toFixed(2)}</span></span>
+                                    <span class="meta-item"><span class="label">Diff</span><span class="value">${getDiff(item.previousPrice, item.newPrice)}</span></span>
+                                    <span class="meta-item"><span class="label">Qty</span><span class="value">${item.quantity}</span></span>
+                                    <span class="meta-item"><span class="label">Category</span><span class="value">${item.category || '—'}</span></span>
+                                    <span class="meta-item" style="margin-left:auto;">${getStatusChip(item.status)}</span>
+                                </div>
+                                <div style="display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:6px;font-size:11px;color:#94a3b8;border-top:1px solid #f1f5f9;padding-top:8px;">
+                                    <span>📤 Sent: ${item.sentDate || '—'}</span>
+                                    <span>📌 Booked: ${item.bookedDate || '—'}</span>
                                 </div>
                             </div>
-                        </td>
-                        <td class="px-2 py-1 sm:py-2 text-center text-gray-600 text-xs sm:text-sm">${item.previousPrice.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center font-semibold text-gray-800 text-xs sm:text-sm">${item.newPrice.toFixed(2)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-center text-xs sm:text-sm">${getDiff(item.previousPrice, item.newPrice)}</td>
-                        <td class="px-2 py-1 sm:py-2">${getStatusBadge(item.status)}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.requestedDate}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.sentDate || '—'}</td>
-                        <td class="px-2 py-1 sm:py-2 text-gray-500 text-xs sm:text-sm whitespace-nowrap">${item.bookedDate || '—'}</td>
-                    </tr>
-                `).join('');
-
-                document.getElementById('historyResultCount').textContent =
-                    `Showing ${pageData.length} of ${historyFiltered.length} entries`;
-                updateHistoryPagination();
+                        </div>
+                    `).join('');
+                }
+                updateHistoryPaginationMobile();
             }
 
-            function updateHistoryPagination() {
-                const totalPages = Math.ceil(historyFiltered.length / historySize) || 1;
-                document.getElementById('historyPaginationInfo').textContent =
-                    `Page ${historyPage} of ${totalPages} (${historyFiltered.length} entries)`;
-                const btnContainer = document.getElementById('historyPaginationButtons');
-                btnContainer.innerHTML = '';
-                if (totalPages <= 1) return;
-                for (let i = 1; i <= totalPages; i++) {
-                    const btn = document.createElement('button');
-                    btn.className =
-                        `px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm ${i === historyPage ? 'bg-primary text-white' : 'bg-white hover:bg-gray-50 text-gray-600'}`;
-                    btn.textContent = i;
-                    btn.onclick = () => { historyPage = i;
-                        renderHistoryTable(); };
-                    btnContainer.appendChild(btn);
+            function updateHistoryPaginationDesktop() {
+                const total = Math.ceil(historyFiltered.length / historySize) || 1;
+                document.getElementById('historyPaginationInfoDesktop').textContent = `Page ${historyPage} of ${total}`;
+                const btns = document.getElementById('historyPaginationButtonsDesktop');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === historyPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { historyPage = i;
+                        renderHistory(); };
+                    btns.appendChild(b);
+                }
+            }
+
+            function updateHistoryPaginationMobile() {
+                const total = Math.ceil(historyFiltered.length / historySize) || 1;
+                document.getElementById('historyPaginationInfoMobile').textContent = `Page ${historyPage} of ${total}`;
+                const btns = document.getElementById('historyPaginationButtonsMobile');
+                btns.innerHTML = '';
+                if (total <= 1) return;
+                for (let i = 1; i <= total; i++) {
+                    const b = document.createElement('button');
+                    b.className = `page-btn ${i === historyPage ? 'active' : ''}`;
+                    b.textContent = i;
+                    b.onclick = () => { historyPage = i;
+                        renderHistory(); };
+                    btns.appendChild(b);
                 }
             }
 
@@ -2014,259 +3580,201 @@
             function openReviewModal(id, mode) {
                 currentReviewMode = mode;
                 let item;
-                if (mode === 'pending') {
-                    item = pendingRequests.find(r => r.id === id);
-                } else {
-                    item = liveCartItems.find(r => r.id === id);
-                }
+                if (mode === 'pending') item = pendingRequests.find(r => r.id === id);
+                else item = liveCartItems.find(r => r.id === id);
                 if (!item) return;
                 selectedRequestId = id;
 
-                const categoryOptions = [
-                    'Select category',
-                    'Food & FMCG Products',
-                    'Electronics',
-                    'Fashion',
-                    'Home & Living',
-                    'Sports & Fitness',
-                    'Beauty & Personal Care',
-                    'Automotive'
-                ].map(cat => `<option value="${cat}" ${cat === item.category ? 'selected' : ''}>${cat}</option>`).join('');
+                const catOpts = [
+                    'Select category', 'Food & FMCG Products', 'Electronics', 'Fashion',
+                    'Home & Living', 'Sports & Fitness', 'Beauty & Personal Care', 'Automotive'
+                ].map(c => `<option value="${c}" ${c === item.category ? 'selected' : ''}>${c}</option>`).join('');
 
-                const subCategoryOptions = [
-                    '-',
-                    'Daily Consumables',
-                    'Beverages',
-                    'Smartphones',
-                    'Laptops',
-                    'Men Apparel',
-                    'Women Apparel',
-                    'Furniture',
-                    'Kitchen Appliances',
-                    'Fitness Equipment',
-                    'Skincare',
-                    'Car Accessories',
-                    'Bike Accessories'
-                ].map(sub => `<option value="${sub}" ${sub === item.subCategory ? 'selected' : ''}>${sub}</option>`).join('');
+                const subOpts = [
+                    '-', 'Daily Consumables', 'Beverages', 'Smartphones', 'Laptops',
+                    'Men Apparel', 'Women Apparel', 'Furniture', 'Kitchen Appliances',
+                    'Fitness Equipment', 'Skincare', 'Car Accessories', 'Bike Accessories'
+                ].map(s => `<option value="${s}" ${s === item.subCategory ? 'selected' : ''}>${s}</option>`).join('');
 
-                // Calculate cost breakdown
                 const price = item.priceINR;
                 const qty = item.quantity || 1;
                 const weight = item.weight || 0;
-                const width = item.width || 0;
-                const height = item.height || 0;
-                const length = item.length || 0;
-                const volumetric = (width * height * length) / 5000;
-                const maxWeight = Math.max(weight, volumetric);
-                const chargeable = maxWeight * qty;
-                const baseCost = price * qty;
-                const importDuty = baseCost * 0.15;
-                const vat = (baseCost + importDuty) * 0.13;
-                const shipping = chargeable * 50;
-                const total = baseCost + importDuty + vat + shipping;
+                const w = item.width || 0;
+                const h = item.height || 0;
+                const l = item.length || 0;
+                const vol = (w * h * l) / 5000;
+                const maxW = Math.max(weight, vol);
+                const chg = maxW * qty;
+                const base = price * qty;
+                const duty = base * 0.15;
+                const vat = (base + duty) * 0.13;
+                const ship = chg * 50;
+                const total = base + duty + vat + ship;
 
                 const title = mode === 'pending' ?
-                    `📋 Cart Price Correction Review - ${escapeHtml(item.productName)}` :
-                    `🛒 Live Cart Review - ${escapeHtml(item.productName)}`;
+                    `📋 Review — ${escapeHtml(item.productName)}` :
+                    `🛒 Live Cart — ${escapeHtml(item.productName)}`;
 
                 document.getElementById('reviewModalTitle').textContent = title;
 
                 const content = document.getElementById('reviewModalContent');
                 content.innerHTML = `
-                    <div class="mb-4">
-                        <h4 class="text-lg font-bold text-gray-800">${escapeHtml(item.productName)}</h4>
-                        <p class="text-sm text-gray-500">
-                            ${escapeHtml(item.user)} - ${mode === 'pending' ? 'Requested ' + item.requestedAt : 'Added ' + item.addedAt}
-                            <a href="${item.productLink}" target="_blank" class="product-link ml-2" style="font-size:12px;">🔗 View Product</a>
-                        </p>
-                    </div>
-
-                    <div class="review-card mb-4">
-                        <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div>
-                                <span class="status-badge ${mode === 'pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-blue-100 text-blue-700'}"><span class="dot ${mode === 'pending' ? 'yellow' : 'blue'}"></span>${mode === 'pending' ? 'Pending' : 'Live Cart'}</span>
-                            </div>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="text-xs text-gray-500">Item | Price INR ${item.priceINR.toFixed(2)}</span>
-                                <span class="text-xs text-gray-500">| Sub-category ${item.subCategory || '—'}</span>
-                                <span class="text-xs text-gray-500">| Weight ${item.weight.toFixed(2)} kg</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="detail-field">
-                        <label>Item details</label>
+                    <div class="mb-3">
+                        <p class="text-sm text-gray-500">${escapeHtml(item.user)} · ${mode === 'pending' ? item.requestedAt : item.addedAt}</p>
+                        <a href="${item.productLink}" target="_blank" class="text-primary text-sm font-semibold underline">🔗 View Product</a>
                     </div>
 
                     <div class="review-grid">
                         <div class="detail-field">
                             <label>Category</label>
-                            <select id="reviewCategory">${categoryOptions}</select>
+                            <select id="reviewCategory">${catOpts}</select>
                         </div>
                         <div class="detail-field">
                             <label>Sub-category</label>
-                            <select id="reviewSubCategory">${subCategoryOptions}</select>
+                            <select id="reviewSubCategory">${subOpts}</select>
                         </div>
-                        <div class="detail-field">
-                            <label>Estimated Cost</label>
-                            <div class="value-box">Default rates (no matching sub-category)</div>
-                        </div>
-                        <div class="detail-field">
-                            <label>Quantity</label>
-                            <input type="number" id="reviewQuantity" value="${item.quantity}" min="1" />
-                        </div>
-                    </div>
-
-                    <div class="review-grid mt-2">
                         <div class="detail-field">
                             <label>Price INR</label>
                             <input type="number" id="reviewPrice" value="${item.priceINR}" step="0.01" min="0" />
                         </div>
                         <div class="detail-field">
-                            <label>Actual Weight (kg)</label>
+                            <label>Quantity</label>
+                            <input type="number" id="reviewQuantity" value="${item.quantity}" min="1" />
+                        </div>
+                        <div class="detail-field">
+                            <label>Weight (kg)</label>
                             <input type="number" id="reviewWeight" value="${item.weight}" step="0.01" min="0" />
                         </div>
-                    </div>
-
-                    <div class="review-grid mt-2">
                         <div class="detail-field">
-                            <label>Width (optional)</label>
+                            <label>Width (cm)</label>
                             <input type="number" id="reviewWidth" value="${item.width || 0}" step="0.1" min="0" />
                         </div>
                         <div class="detail-field">
-                            <label>Height (optional)</label>
+                            <label>Height (cm)</label>
                             <input type="number" id="reviewHeight" value="${item.height || 0}" step="0.1" min="0" />
                         </div>
                         <div class="detail-field">
-                            <label>Length (optional)</label>
+                            <label>Length (cm)</label>
                             <input type="number" id="reviewLength" value="${item.length || 0}" step="0.1" min="0" />
                         </div>
+                    </div>
+
+                    <div class="review-grid" style="margin-top:4px;">
                         <div class="detail-field">
-                            <label>Volumetric Weight (kg)</label>
-                            <div class="value-box" id="reviewVolumetricWeight">0.000 kg</div>
+                            <label>Volumetric Weight</label>
+                            <div class="value-box" id="reviewVolumetricWeight">${vol.toFixed(3)} kg</div>
+                        </div>
+                        <div class="detail-field">
+                            <label>Chargeable Weight</label>
+                            <div class="value-box" id="reviewChargeableWeight">${chg.toFixed(2)} kg</div>
                         </div>
                     </div>
 
-                    <div class="review-grid mt-2">
-                        <div class="detail-field">
-                            <label>Maximum Weight (kg)</label>
-                            <div class="value-box" id="reviewMaxWeight">${item.weight.toFixed(2)} kg</div>
-                        </div>
-                        <div class="detail-field">
-                            <label>Chargeable Weight (total) (kg)</label>
-                            <div class="value-box" id="reviewChargeableWeight">${item.weight.toFixed(2)} kg</div>
-                        </div>
-                    </div>
-
-                    <!-- ─── COST BREAKDOWN ─── -->
-                    <div class="detail-field mt-3">
+                    <div class="detail-field">
                         <label>Cost Breakdown</label>
                         <div class="cost-breakdown" id="costBreakdownContainer">
-                            <div class="cost-row"><span class="lbl">Base Price (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${baseCost.toFixed(2)}</span></div>
-                            <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${importDuty.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">Base (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${base.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${duty.toFixed(2)}</span></div>
                             <div class="cost-row"><span class="lbl">VAT (13%)</span><span class="val">NPR ${vat.toFixed(2)}</span></div>
-                            <div class="cost-row"><span class="lbl">Shipping (${chargeable.toFixed(2)} kg × 50)</span><span class="val">NPR ${shipping.toFixed(2)}</span></div>
-                            <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val" id="costBreakdownTotal">NPR ${total.toFixed(2)}</span></div>
+                            <div class="cost-row"><span class="lbl">Shipping (${chg.toFixed(2)} kg × 50)</span><span class="val">NPR ${ship.toFixed(2)}</span></div>
+                            <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val">NPR ${total.toFixed(2)}</span></div>
                         </div>
                     </div>
 
-                    <div class="grand-total-box mt-2">
+                    <div class="grand-total-box">
                         <span class="label">GRAND TOTAL</span>
                         <span class="amount" id="reviewGrandTotal">NPR ${total.toFixed(2)}</span>
                     </div>
                 `;
 
-                // Calculate volumetric weight on input change
-                const inputs = ['reviewWeight', 'reviewWidth', 'reviewHeight', 'reviewLength', 'reviewPrice', 'reviewQuantity'];
-                inputs.forEach(id => {
-                    document.getElementById(id)?.addEventListener('input', updateReviewCalculations);
+                ['reviewPrice', 'reviewQuantity', 'reviewWeight', 'reviewWidth', 'reviewHeight', 'reviewLength',
+                    'reviewCategory', 'reviewSubCategory'
+                ].forEach(id => {
+                    document.getElementById(id)?.addEventListener('input', updateReviewCalc);
+                    document.getElementById(id)?.addEventListener('change', updateReviewCalc);
                 });
-                document.getElementById('reviewCategory')?.addEventListener('change', updateReviewCalculations);
-                document.getElementById('reviewSubCategory')?.addEventListener('change', updateReviewCalculations);
 
-                updateReviewCalculations();
+                updateReviewCalc();
 
-                // Set modal actions based on mode
-                const actionsDiv = document.getElementById('reviewModalActions');
+                const actions = document.getElementById('reviewModalActions');
                 if (mode === 'pending') {
-                    actionsDiv.innerHTML = `
-                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
-                        <button onclick="approveCorrection()" class="btn-approve flex-1 sm:flex-none">Approve</button>
-                        <button onclick="approveAndCorrect()" class="btn-approve-correction flex-1 sm:flex-none">Approve &amp; Correct</button>
+                    actions.innerHTML = `
+                        <button class="btn-cancel flex-1 sm:flex-none" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-approve flex-1 sm:flex-none" onclick="approveCorrection()">✅ Approve</button>
+                        <button class="btn-approve-correction flex-1 sm:flex-none" onclick="approveAndCorrect()">📌 Approve & Correct</button>
                     `;
                 } else {
-                    actionsDiv.innerHTML = `
-                        <button onclick="closeReviewModal()" class="btn-cancel flex-1 sm:flex-none">Cancel</button>
-                        <button onclick="updateLiveCartItem()" class="btn-update-cart flex-1 sm:flex-none">Update Cart Item</button>
+                    actions.innerHTML = `
+                        <button class="btn-cancel flex-1 sm:flex-none" onclick="closeReviewModal()">Cancel</button>
+                        <button class="btn-update-cart flex-1 sm:flex-none" onclick="updateLiveCartItem()">💾 Update</button>
                     `;
                 }
 
-                document.getElementById('reviewModal').classList.add('flex');
-                document.getElementById('reviewModal').classList.remove('hidden');
+                document.getElementById('reviewModal').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
 
-            function updateReviewCalculations() {
-                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
-                const width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
-                const height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
-                const length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
-                const price = parseFloat(document.getElementById('reviewPrice')?.value) || 0;
-                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
-
-                const volumetric = (width * height * length) / 5000;
-                const maxWeight = Math.max(weight, volumetric);
-                const chargeable = maxWeight * qty;
-
-                document.getElementById('reviewVolumetricWeight').textContent = volumetric.toFixed(3) + ' kg';
-                document.getElementById('reviewMaxWeight').textContent = maxWeight.toFixed(2) + ' kg';
-                document.getElementById('reviewChargeableWeight').textContent = chargeable.toFixed(2) + ' kg';
-
-                const baseCost = price * qty;
-                const importDuty = baseCost * 0.15;
-                const vat = (baseCost + importDuty) * 0.13;
-                const shipping = chargeable * 50;
-                const total = baseCost + importDuty + vat + shipping;
-
-                document.getElementById('reviewGrandTotal').textContent = `NPR ${total.toFixed(2)}`;
-
-                const container = document.getElementById('costBreakdownContainer');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="cost-row"><span class="lbl">Base Price (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${baseCost.toFixed(2)}</span></div>
-                        <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${importDuty.toFixed(2)}</span></div>
-                        <div class="cost-row"><span class="lbl">VAT (13%)</span><span class="val">NPR ${vat.toFixed(2)}</span></div>
-                        <div class="cost-row"><span class="lbl">Shipping (${chargeable.toFixed(2)} kg × 50)</span><span class="val">NPR ${shipping.toFixed(2)}</span></div>
-                        <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val" id="costBreakdownTotal">NPR ${total.toFixed(2)}</span></div>
-                    `;
-                }
-            }
-
             function closeReviewModal() {
-                document.getElementById('reviewModal').classList.add('hidden');
+                document.getElementById('reviewModal').style.display = 'none';
                 document.body.style.overflow = '';
                 selectedRequestId = null;
             }
 
+            function updateReviewCalc() {
+                const price = parseFloat(document.getElementById('reviewPrice')?.value) || 0;
+                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
+                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
+                const w = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
+                const h = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
+                const l = parseFloat(document.getElementById('reviewLength')?.value) || 0;
+
+                const vol = (w * h * l) / 5000;
+                const maxW = Math.max(weight, vol);
+                const chg = maxW * qty;
+                const base = price * qty;
+                const duty = base * 0.15;
+                const vat = (base + duty) * 0.13;
+                const ship = chg * 50;
+                const total = base + duty + vat + ship;
+
+                const vw = document.getElementById('reviewVolumetricWeight');
+                if (vw) vw.textContent = vol.toFixed(3) + ' kg';
+                const cw = document.getElementById('reviewChargeableWeight');
+                if (cw) cw.textContent = chg.toFixed(2) + ' kg';
+                const gt = document.getElementById('reviewGrandTotal');
+                if (gt) gt.textContent = 'NPR ' + total.toFixed(2);
+
+                const container = document.getElementById('costBreakdownContainer');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="cost-row"><span class="lbl">Base (${qty} × INR ${price.toFixed(2)})</span><span class="val">NPR ${base.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">Import Duty (15%)</span><span class="val">NPR ${duty.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">VAT (13%)</span><span class="val">NPR ${vat.toFixed(2)}</span></div>
+                        <div class="cost-row"><span class="lbl">Shipping (${chg.toFixed(2)} kg × 50)</span><span class="val">NPR ${ship.toFixed(2)}</span></div>
+                        <div class="cost-row total-row"><span class="lbl">GRAND TOTAL</span><span class="val">NPR ${total.toFixed(2)}</span></div>
+                    `;
+                }
+            }
+
             function approveCorrection() {
                 if (selectedRequestId === null || currentReviewMode !== 'pending') return;
-                const request = pendingRequests.find(r => r.id === selectedRequestId);
-                if (!request) return;
-                request.status = 'approved';
-                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || request.priceINR;
+                const req = pendingRequests.find(r => r.id === selectedRequestId);
+                if (!req) return;
+                req.status = 'approved';
+                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || req.priceINR;
                 historyRecords.push({
                     id: historyRecords.length + 1,
-                    userId: request.userId || 999,
-                    user: request.user,
-                    mobile: request.mobile || '+977-XXX-XXXX',
-                    productName: request.productName,
-                    productLink: request.productLink,
-                    productImage: request.productImage || getProductImage(request.productName),
-                    previousPrice: request.priceINR,
+                    userId: req.userId || 999,
+                    user: req.user,
+                    mobile: req.mobile || '+977-XXX-XXXX',
+                    productName: req.productName,
+                    productLink: req.productLink,
+                    productImage: req.productImage || getProductImage(req.productName),
+                    previousPrice: req.priceINR,
                     newPrice: newPrice,
                     status: 'booked',
-                    requestedDate: request.requestedAt,
-                    sentDate: request.sentAt || request.requestedAt,
+                    requestedDate: req.requestedAt,
+                    sentDate: req.sentAt || req.requestedAt,
                     bookedDate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
                         hour: '2-digit', minute: '2-digit' }),
                     category: document.getElementById('reviewCategory')?.value || '',
@@ -2280,127 +3788,98 @@
                 closeReviewModal();
                 filterPending();
                 filterHistory();
-                showToast('✅', 'Correction approved successfully!');
+                showToast('✅', 'Correction approved!');
             }
 
             function approveAndCorrect() {
                 if (selectedRequestId === null || currentReviewMode !== 'pending') return;
-                const request = pendingRequests.find(r => r.id === selectedRequestId);
-                if (!request) return;
-                request.status = 'approved';
-
-                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || request.priceINR;
-                const category = document.getElementById('reviewCategory')?.value || '';
-                const subCategory = document.getElementById('reviewSubCategory')?.value || '';
+                const req = pendingRequests.find(r => r.id === selectedRequestId);
+                if (!req) return;
+                req.status = 'approved';
+                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || req.priceINR;
+                const cat = document.getElementById('reviewCategory')?.value || '';
+                const sub = document.getElementById('reviewSubCategory')?.value || '';
                 const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
                 const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
 
-                request.priceINR = newPrice;
-                request.category = category;
-                request.subCategory = subCategory;
-                request.weight = weight;
-                request.quantity = qty;
-                request.width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
-                request.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
-                request.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
+                req.priceINR = newPrice;
+                req.category = cat;
+                req.subCategory = sub;
+                req.weight = weight;
+                req.quantity = qty;
+                req.width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
+                req.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
+                req.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
 
                 historyRecords.push({
                     id: historyRecords.length + 1,
-                    userId: request.userId || 999,
-                    user: request.user,
-                    mobile: request.mobile || '+977-XXX-XXXX',
-                    productName: request.productName,
-                    productLink: request.productLink,
-                    productImage: request.productImage || getProductImage(request.productName),
-                    previousPrice: request.priceINR,
+                    userId: req.userId || 999,
+                    user: req.user,
+                    mobile: req.mobile || '+977-XXX-XXXX',
+                    productName: req.productName,
+                    productLink: req.productLink,
+                    productImage: req.productImage || getProductImage(req.productName),
+                    previousPrice: req.priceINR,
                     newPrice: newPrice,
                     status: 'booked',
-                    requestedDate: request.requestedAt,
-                    sentDate: request.sentAt || request.requestedAt,
+                    requestedDate: req.requestedAt,
+                    sentDate: req.sentAt || req.requestedAt,
                     bookedDate: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
                         hour: '2-digit', minute: '2-digit' }),
-                    category: category,
-                    subCategory: subCategory,
+                    category: cat,
+                    subCategory: sub,
                     weight: weight,
-                    width: request.width,
-                    height: request.height,
-                    length: request.length,
+                    width: req.width,
+                    height: req.height,
+                    length: req.length,
                     quantity: qty
                 });
 
                 closeReviewModal();
                 filterPending();
                 filterHistory();
-                showToast('✅', 'Correction approved and applied successfully!');
+                showToast('✅', 'Correction approved & applied!');
             }
 
-            // ─── UPDATE LIVE CART ITEM ─────────────────────────────────────
             function updateLiveCartItem() {
                 if (selectedRequestId === null || currentReviewMode !== 'livecart') return;
                 const item = liveCartItems.find(r => r.id === selectedRequestId);
                 if (!item) return;
 
-                const newPrice = parseFloat(document.getElementById('reviewPrice')?.value) || item.priceINR;
-                const category = document.getElementById('reviewCategory')?.value || '';
-                const subCategory = document.getElementById('reviewSubCategory')?.value || '';
-                const weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
-                const qty = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
-
-                // Update item
-                item.priceINR = newPrice;
-                item.category = category;
-                item.subCategory = subCategory;
-                item.weight = weight;
-                item.quantity = qty;
+                item.priceINR = parseFloat(document.getElementById('reviewPrice')?.value) || item.priceINR;
+                item.category = document.getElementById('reviewCategory')?.value || '';
+                item.subCategory = document.getElementById('reviewSubCategory')?.value || '';
+                item.weight = parseFloat(document.getElementById('reviewWeight')?.value) || 0;
+                item.quantity = parseInt(document.getElementById('reviewQuantity')?.value) || 1;
                 item.width = parseFloat(document.getElementById('reviewWidth')?.value) || 0;
                 item.height = parseFloat(document.getElementById('reviewHeight')?.value) || 0;
                 item.length = parseFloat(document.getElementById('reviewLength')?.value) || 0;
 
                 closeReviewModal();
                 filterLiveCart();
-                showToast('✅', `Updated "${item.productName}" in live cart`);
+                showToast('💾', `Updated "${item.productName}"`);
             }
 
             // ─── TABS ──────────────────────────────────────────────────────
             function switchTab(tab) {
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.dtab').forEach(el => el.classList.remove('active'));
 
-                document.querySelector(`.tab-btn[data-tab="${tab}"]`).classList.add('active');
-                document.getElementById(`tab-${tab}`).classList.add('active');
+                document.getElementById(`tab-${tab}`).style.display = 'block';
+                document.querySelector(`.tab-item[data-tab="${tab}"]`)?.classList.add('active');
+                document.querySelector(`.dtab[data-tab="${tab}"]`)?.classList.add('active');
 
-                if (tab === 'history') {
-                    filterHistory();
-                } else if (tab === 'livecart') {
-                    filterLiveCart();
-                } else {
-                    filterPending();
-                }
+                if (tab === 'pending') { filterPending(); } else if (tab === 'livecart') { filterLiveCart(); } else if (tab ===
+                    'history') { filterHistory(); }
             }
 
-            // ─── REFRESH ──────────────────────────────────────────────────
-            function refreshData() {
-                filterPending();
-                filterLiveCart();
-                filterHistory();
-                showToast('🔄', 'Data refreshed');
-            }
-
-            // ─── TOAST ──────────────────────────────────────────────────────
-            function showToast(icon, msg) {
-                const t = document.getElementById('toast');
-                document.getElementById('toastIcon').textContent = icon;
-                document.getElementById('toastMessage').textContent = msg;
-                t.classList.remove('hidden');
-                t.classList.add('toast');
-                setTimeout(() => { t.classList.add('hidden');
-                    t.classList.remove('toast'); }, 2800);
-            }
-
-            // ─── SIDEBAR ────────────────────────────────────────────────────
+            // ─── SIDEBAR ──────────────────────────────────────────────────
             function toggleSidebar() {
-                document.getElementById('sidebar').classList.toggle('-translate-x-full');
-                document.getElementById('sidebarOverlay').classList.toggle('hidden');
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('show');
             }
 
             function toggleSidebarSection(header) {
@@ -2417,24 +3896,40 @@
                 }
             }
 
-            document.getElementById('sidebarOverlay').addEventListener('click', () => toggleSidebar());
-            document.addEventListener('keydown', e => {
-                if (e.key === 'Escape') {
-                    closeReviewModal();
-                }
-            });
+            // ─── REFRESH ──────────────────────────────────────────────────
+            function refreshData() {
+                filterPending();
+                filterLiveCart();
+                filterHistory();
+                showToast('🔄', 'Data refreshed');
+            }
 
-            // ─── EXPOSE GLOBALS ────────────────────────────────────────────
+            // ─── TOAST ────────────────────────────────────────────────────
+            function showToast(icon, msg) {
+                const t = document.getElementById('toast');
+                document.getElementById('toastIcon').textContent = icon;
+                document.getElementById('toastMessage').textContent = msg;
+                t.classList.remove('hidden');
+                t.classList.add('toast');
+                setTimeout(() => { t.classList.add('hidden');
+                    t.classList.remove('toast'); }, 3000);
+            }
+
+            // ─── GLOBALS ──────────────────────────────────────────────────
             window.filterPending = filterPending;
             window.clearPendingFilters = clearPendingFilters;
             window.changePendingPageSize = changePendingPageSize;
+            window.changePendingPageSizeMobile = changePendingPageSizeMobile;
             window.filterLiveCart = filterLiveCart;
             window.clearLiveCartFilters = clearLiveCartFilters;
             window.changeLiveCartPageSize = changeLiveCartPageSize;
+            window.changeLiveCartPageSizeMobile = changeLiveCartPageSizeMobile;
             window.removeFromLiveCart = removeFromLiveCart;
+            window.confirmOrder = confirmOrder;
             window.filterHistory = filterHistory;
             window.clearHistoryFilters = clearHistoryFilters;
             window.changeHistoryPageSize = changeHistoryPageSize;
+            window.changeHistoryPageSizeMobile = changeHistoryPageSizeMobile;
             window.openReviewModal = openReviewModal;
             window.closeReviewModal = closeReviewModal;
             window.approveCorrection = approveCorrection;
@@ -2445,16 +3940,21 @@
             window.toggleSidebar = toggleSidebar;
             window.toggleSidebarSection = toggleSidebarSection;
             window.showToast = showToast;
-            window.updateReviewCalculations = updateReviewCalculations;
+            window.updateReviewCalc = updateReviewCalc;
 
             // ─── INIT ──────────────────────────────────────────────────────
+            // Show pending by default
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.getElementById('tab-pending').style.display = 'block';
+
             filterPending();
             filterLiveCart();
             filterHistory();
 
-            showToast('✅', 'Price Corrections loaded successfully');
+            showToast('✅', 'Price Corrections loaded');
 
         })();
     </script>
+
 </body>
 </html>
