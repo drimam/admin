@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-  <title>MeroWish | Finance + Petty Cash (INR)</title>
+  <title>MeroWish | Finance + Petty Cash (NPR/INR)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
   </script>
   <style>
@@ -176,7 +176,6 @@
     .header-actions .menu-btn:hover {
       background: var(--gray100);
     }
-
     /* ===== SIDEBAR ===== */
     .sidebar-overlay {
       position: fixed;
@@ -1479,8 +1478,8 @@
         </div>
       </div>
       <div class="header-actions">
-        <!-- Petty Cash Badge -->
-        <div class="petty-badge" id="headerPettyBadge" title="Warehouse Cash Balance">
+        <!-- Petty Cash Badge (INR) -->
+        <div class="petty-badge" id="headerPettyBadge" title="Warehouse Cash Balance (INR)">
           <span class="icon">💰</span>
           <span>Petty:</span>
           <span class="amount" id="headerPettyAmount">INR 0</span>
@@ -1549,7 +1548,7 @@
         </button>
       </div>
 
-      <!-- ======== PAGE: SUMMARY ======== -->
+      <!-- ======== PAGE: SUMMARY (NPR) ======== -->
       <div class="page active" id="page-summary">
 
         <!-- Stats Toggle (mobile) -->
@@ -1559,27 +1558,27 @@
           </button>
         </div>
 
-        <!-- Stats Cards (collapsible) -->
+        <!-- Stats Cards (NPR) -->
         <div class="stats-collapsible" id="statsCollapsible">
           <div class="stat-grid" id="summaryCards">
-            <div class="stat-card"><div class="label">Total Revenue</div><div class="value" id="totalRevenue">INR 0</div></div>
-            <div class="stat-card"><div class="label">Advance</div><div class="value primary" id="totalAdvance">INR 0</div></div>
-            <div class="stat-card"><div class="label">Due COD</div><div class="value warning" id="totalCod">INR 0</div></div>
-            <div class="stat-card"><div class="label">Import + VAT</div><div class="value purple" id="totalImportVat">INR 0</div></div>
-            <div class="stat-card"><div class="label">Service Fees</div><div class="value teal" id="totalService">INR 0</div></div>
-            <div class="stat-card"><div class="label">Shipping Fees</div><div class="value orange" id="totalShipping">INR 0</div></div>
+            <div class="stat-card"><div class="label">Total Revenue</div><div class="value" id="totalRevenue">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Advance</div><div class="value primary" id="totalAdvance">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Due COD</div><div class="value warning" id="totalCod">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Import + VAT</div><div class="value purple" id="totalImportVat">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Service Fees</div><div class="value teal" id="totalService">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Shipping Fees</div><div class="value orange" id="totalShipping">NPR 0</div></div>
           </div>
           <div class="stat-grid" id="gatewayCards">
-            <div class="stat-card"><div class="label">Esewa</div><div class="value primary" id="totalEsewa">INR 0</div></div>
-            <div class="stat-card"><div class="label">Khalti</div><div class="value pink" id="totalKhalti">INR 0</div></div>
-            <div class="stat-card"><div class="label">FonePay QR</div><div class="value success" id="totalFonePay">INR 0</div></div>
+            <div class="stat-card"><div class="label">Esewa</div><div class="value primary" id="totalEsewa">NPR 0</div></div>
+            <div class="stat-card"><div class="label">Khalti</div><div class="value pink" id="totalKhalti">NPR 0</div></div>
+            <div class="stat-card"><div class="label">FonePay QR</div><div class="value success" id="totalFonePay">NPR 0</div></div>
           </div>
         </div>
 
-        <!-- Finance Table -->
+        <!-- Finance Table (NPR) -->
         <div class="card">
           <div class="card-header">
-            <span class="title"><span class="icon">📋</span> <span id="tableTitle">Monthly Financial Summary</span></span>
+            <span class="title"><span class="icon">📋</span> <span id="tableTitle">Monthly Financial Summary (NPR)</span></span>
             <div class="export-row">
               <button class="btn-export green" onclick="exportFinanceExcel()">⬇ Excel</button>
               <button class="btn-export gray" onclick="refreshFinance()">↻ Refresh</button>
@@ -1632,6 +1631,7 @@
               <li><strong>25% Advance</strong> – collected upfront.</li>
               <li><strong>75% COD</strong> – collected on delivery.</li>
               <li><strong>Net Revenue</strong> = Revenue − (Import + VAT + Service + Discount + Refund + Shipping).</li>
+              <li>All amounts in <strong>NPR</strong>.</li>
               <li>Click <span style="color:var(--primary);font-weight:600;">order count</span> to see order IDs.</li>
               <li>Click <span style="color:#DC2626;font-weight:600;">PDF</span> to download invoices.</li>
             </ul>
@@ -1639,23 +1639,23 @@
         </div>
       </div>
 
-      <!-- ======== PAGE: PETTY CASH ======== -->
+      <!-- ======== PAGE: PETTY CASH (INR) ======== -->
       <div class="page" id="page-petty">
         <div class="card" style="text-align:center;padding:24px 18px;">
           <div class="petty-balance">
-            <div class="label">🏦 Warehouse Cash Balance</div>
+            <div class="label">🏦 Warehouse Cash Balance (INR)</div>
             <div class="amount"><span class="currency">INR</span> <span id="pettyBalance">0</span></div>
             <div style="font-size:11px;color:var(--gray400);margin-top:2px;">Total cash available at warehouse</div>
           </div>
           <div class="petty-actions">
-            <button class="btn btn-primary" onclick="openTopupModal()">💰 Top-up</button>
+            <button class="btn btn-primary" onclick="openTopupModal()">💰 Top-up (INR)</button>
             <button class="btn btn-outline" onclick="refreshPetty()">↻ Refresh</button>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <span class="title"><span class="icon">📜</span> Transaction History</span>
+            <span class="title"><span class="icon">📜</span> Transaction History (INR)</span>
             <span style="font-size:11px;color:var(--gray400);" id="txCount">0 entries</span>
           </div>
           <div class="card-body" id="transactionList">
@@ -1664,11 +1664,11 @@
         </div>
       </div>
 
-      <!-- ======== PAGE: COD HISTORY ======== -->
+      <!-- ======== PAGE: COD HISTORY (INR) ======== -->
       <div class="page" id="page-cod">
         <div class="card">
           <div class="card-header">
-            <span class="title"><span class="icon">📦</span> COD Shipment History</span>
+            <span class="title"><span class="icon">📦</span> COD Shipment History (INR)</span>
             <span style="font-size:11px;color:var(--gray400);" id="codCount">0 orders</span>
           </div>
           <div class="cod-filters">
@@ -1687,11 +1687,11 @@
 
     <!-- ===== MODALS ===== -->
 
-    <!-- Top-up Modal -->
+    <!-- Top-up Modal (INR) -->
     <div class="modal-overlay" id="topupModal">
       <div class="modal-box">
-        <div class="modal-title">💰 Top-up Petty Cash</div>
-        <div class="modal-sub">Add cash to warehouse balance. This will increase your available petty cash.</div>
+        <div class="modal-title">💰 Top-up Petty Cash (INR)</div>
+        <div class="modal-sub">Add cash to warehouse balance. This will increase your available petty cash in INR.</div>
         <div class="form-group">
           <label>Current Balance</label>
           <div style="font-size:20px;font-weight:700;color:var(--gray800);" id="topupCurrentBalance">INR 0</div>
@@ -1713,17 +1713,17 @@
       </div>
     </div>
 
-    <!-- Refund Modal (from finance table) -->
+    <!-- Refund Modal (NPR) - finance adjustment -->
     <div class="modal-overlay" id="refundModal">
       <div class="modal-box">
-        <div class="modal-title">💸 Manual Refund Update</div>
+        <div class="modal-title">💸 Manual Refund Update (NPR)</div>
         <div class="modal-sub">Add refund amount for <span id="refundPeriodLabel" style="font-weight:600;color:var(--primary);">—</span></div>
         <div class="form-group">
-          <label>Current Refund</label>
-          <div style="font-size:16px;font-weight:600;" id="refundCurrentAmount">INR 0</div>
+          <label>Current Refund (NPR)</label>
+          <div style="font-size:16px;font-weight:600;" id="refundCurrentAmount">NPR 0</div>
         </div>
         <div class="form-group">
-          <label>Additional Refund (INR)</label>
+          <label>Additional Refund (NPR)</label>
           <input type="number" id="refundAmountInput" step="0.01" min="0" placeholder="0.00" />
         </div>
         <div class="btn-row">
@@ -1769,12 +1769,13 @@
     <div id="invoicePdfContainer"></div>
 
     <!-- ============================================================ -->
+
     <!-- ===== JAVASCRIPT ===== -->
     <script>
       (function() {
         'use strict';
 
-        // --- DOM helper (defined first to avoid TDZ) ---
+        // --- DOM helper ---
         const getEl = id => document.getElementById(id);
         const qs = (sel, ctx) => (ctx || document).querySelector(sel);
         const qsa = (sel, ctx) => (ctx || document).querySelectorAll(sel);
@@ -1802,10 +1803,13 @@
           { name: 'DJI Mini 4 Pro', price: 82000 }
         ];
 
+        // ─── NEPALI YEAR FIX: AD + 57 = BS ──────────────────────────
         function getNepaliYearMonth(engYear, engMonthIndex) {
-          let nepaliYear = engYear - 57;
-          if (engMonthIndex < 3) nepaliYear -= 1;
-          return { year: nepaliYear, month: NEPALI_MONTHS[engMonthIndex] };
+          // Simply add 57 to get BS year (commonly used approximation)
+          let nepaliYear = engYear + 57;
+          // Month name from NEPALI_MONTHS (based on English month index)
+          const nepaliMonth = NEPALI_MONTHS[engMonthIndex % 12];
+          return { year: nepaliYear, month: nepaliMonth };
         }
 
         function getRandomCustomer() { return CUSTOMER_NAMES[Math.floor(Math.random() * CUSTOMER_NAMES.length)]; }
@@ -1828,7 +1832,7 @@
           return items;
         }
 
-        // ─── FINANCE DATA ───────────────────────────────────────────
+        // ─── FINANCE DATA (values in NPR) ────────────────────────────
         function generateMonthlyData(year) {
           const data = [];
           for (let i = 0; i < 12; i++) {
@@ -1894,13 +1898,13 @@
           ...generateMonthlyData(2026)
         ];
 
-        // ─── PETTY CASH ─────────────────────────────────────────────
+        // ─── PETTY CASH (INR) ────────────────────────────────────────
         let pettyCash = {
           balance: 0,
           transactions: []
         };
 
-        // ─── COD ORDERS ─────────────────────────────────────────────
+        // ─── COD ORDERS (amounts in INR) ─────────────────────────────
         let codOrders = [];
 
         function generateCodOrders() {
@@ -1917,7 +1921,7 @@
                 id: od.id,
                 date: od.date,
                 customer: od.customer,
-                amount: codAmount,
+                amount: codAmount, // in INR (same as NPR value, but we treat as INR)
                 total: od.total,
                 status: status,
                 scannedAt: scannedAt,
@@ -2186,7 +2190,7 @@
           renderTable(grouped);
           updateSummary(grouped);
           getEl('tableTitle').textContent =
-            `${currentPeriod.charAt(0).toUpperCase()+currentPeriod.slice(1)} Financial Summary`;
+            `${currentPeriod.charAt(0).toUpperCase()+currentPeriod.slice(1)} Financial Summary (NPR)`;
         }
 
         function getWeekNumber(date) {
@@ -2197,6 +2201,7 @@
           return 1 + Math.round(((d - w1) / 86400000 - 3 + (w1.getDay() + 6) % 7) / 7);
         }
 
+        // ─── RENDER FINANCE TABLE (NPR) ──────────────────────────────
         function renderTable(data) {
           const tbody = getEl('financeTableBody');
           const tfoot = getEl('financeTableFoot');
@@ -2218,17 +2223,17 @@
             tr.innerHTML = `
                 <td><span class="period-cell"><span class="eng">${row.label}</span><span class="nep">${row.nepLabel||''}</span></span></td>
                 <td><span class="order-count-wrap"><span class="order-link" onclick="showOrders('${row.label.replace(/'/g,"\\'")}',${idx})">${orderCount}</span> <span class="pdf-link" onclick="downloadInvoicesPDF(${idx})">📄</span></span></td>
-                <td>INR ${row.totalRevenue.toLocaleString()}</td>
-                <td>INR ${row.advance.toLocaleString()}</td>
-                <td>INR ${row.cod.toLocaleString()}</td>
-                <td>INR ${row.importDuty.toLocaleString()}</td>
-                <td>INR ${row.vat.toLocaleString()}</td>
-                <td>INR ${row.serviceCharges.toLocaleString()}</td>
-                <td>INR ${row.discounts.toLocaleString()}</td>
-                <td>INR ${row.refunds.toLocaleString()}</td>
-                <td>INR ${row.shippingFees.toLocaleString()}</td>
-                <td style="font-weight:700;color:var(--primary);">INR ${row.netRevenue.toLocaleString()}</td>
-                <td style="font-weight:700;color:var(--danger);">${netLoss>0?'INR '+netLoss.toLocaleString():'—'}</td>
+                <td>NPR ${row.totalRevenue.toLocaleString()}</td>
+                <td>NPR ${row.advance.toLocaleString()}</td>
+                <td>NPR ${row.cod.toLocaleString()}</td>
+                <td>NPR ${row.importDuty.toLocaleString()}</td>
+                <td>NPR ${row.vat.toLocaleString()}</td>
+                <td>NPR ${row.serviceCharges.toLocaleString()}</td>
+                <td>NPR ${row.discounts.toLocaleString()}</td>
+                <td>NPR ${row.refunds.toLocaleString()}</td>
+                <td>NPR ${row.shippingFees.toLocaleString()}</td>
+                <td style="font-weight:700;color:var(--primary);">NPR ${row.netRevenue.toLocaleString()}</td>
+                <td style="font-weight:700;color:var(--danger);">${netLoss>0?'NPR '+netLoss.toLocaleString():'—'}</td>
                 <td>
                   <div class="action-group">
                     <button class="action-btn refund-btn" onclick="openRefundModal('${row.label.replace(/'/g,"\\'")}',${idx})">💸</button>
@@ -2257,22 +2262,23 @@
               <tr class="total-row">
                 <td>TOTAL</td>
                 <td>${totals.orders}</td>
-                <td>INR ${totals.totalRevenue.toLocaleString()}</td>
-                <td>INR ${totals.advance.toLocaleString()}</td>
-                <td>INR ${totals.cod.toLocaleString()}</td>
-                <td>INR ${totals.importDuty.toLocaleString()}</td>
-                <td>INR ${totals.vat.toLocaleString()}</td>
-                <td>INR ${totals.serviceCharges.toLocaleString()}</td>
-                <td>INR ${totals.discounts.toLocaleString()}</td>
-                <td>INR ${totals.refunds.toLocaleString()}</td>
-                <td>INR ${totals.shippingFees.toLocaleString()}</td>
-                <td style="color:var(--primary);">INR ${totals.netRevenue.toLocaleString()}</td>
-                <td style="color:var(--danger);">${totals.netLoss>0?'INR '+totals.netLoss.toLocaleString():'—'}</td>
+                <td>NPR ${totals.totalRevenue.toLocaleString()}</td>
+                <td>NPR ${totals.advance.toLocaleString()}</td>
+                <td>NPR ${totals.cod.toLocaleString()}</td>
+                <td>NPR ${totals.importDuty.toLocaleString()}</td>
+                <td>NPR ${totals.vat.toLocaleString()}</td>
+                <td>NPR ${totals.serviceCharges.toLocaleString()}</td>
+                <td>NPR ${totals.discounts.toLocaleString()}</td>
+                <td>NPR ${totals.refunds.toLocaleString()}</td>
+                <td>NPR ${totals.shippingFees.toLocaleString()}</td>
+                <td style="color:var(--primary);">NPR ${totals.netRevenue.toLocaleString()}</td>
+                <td style="color:var(--danger);">${totals.netLoss>0?'NPR '+totals.netLoss.toLocaleString():'—'}</td>
                 <td></td>
               </tr>
             `;
         }
 
+        // ─── UPDATE SUMMARY CARDS (NPR) ──────────────────────────────
         function updateSummary(data) {
           let totalRev = 0,
             totalAdv = 0,
@@ -2294,15 +2300,15 @@
             totalKhalti += row.khalti || 0;
             totalFonepay += row.fonepay || 0;
           });
-          getEl('totalRevenue').textContent = `INR ${totalRev.toLocaleString()}`;
-          getEl('totalAdvance').textContent = `INR ${totalAdv.toLocaleString()}`;
-          getEl('totalCod').textContent = `INR ${totalCod.toLocaleString()}`;
-          getEl('totalImportVat').textContent = `INR ${totalImportVat.toLocaleString()}`;
-          getEl('totalService').textContent = `INR ${totalService.toLocaleString()}`;
-          getEl('totalShipping').textContent = `INR ${totalShipping.toLocaleString()}`;
-          getEl('totalEsewa').textContent = `INR ${totalEse.toLocaleString()}`;
-          getEl('totalKhalti').textContent = `INR ${totalKhalti.toLocaleString()}`;
-          getEl('totalFonePay').textContent = `INR ${totalFonepay.toLocaleString()}`;
+          getEl('totalRevenue').textContent = `NPR ${totalRev.toLocaleString()}`;
+          getEl('totalAdvance').textContent = `NPR ${totalAdv.toLocaleString()}`;
+          getEl('totalCod').textContent = `NPR ${totalCod.toLocaleString()}`;
+          getEl('totalImportVat').textContent = `NPR ${totalImportVat.toLocaleString()}`;
+          getEl('totalService').textContent = `NPR ${totalService.toLocaleString()}`;
+          getEl('totalShipping').textContent = `NPR ${totalShipping.toLocaleString()}`;
+          getEl('totalEsewa').textContent = `NPR ${totalEse.toLocaleString()}`;
+          getEl('totalKhalti').textContent = `NPR ${totalKhalti.toLocaleString()}`;
+          getEl('totalFonePay').textContent = `NPR ${totalFonepay.toLocaleString()}`;
         }
 
         // ─── ORDERS MODAL ──────────────────────────────────────────
@@ -2329,12 +2335,12 @@
         };
         window.closeOrdersModal = function() { getEl('ordersModal').classList.remove('open'); };
 
-        // ─── REFUND MODAL ──────────────────────────────────────────
+        // ─── REFUND MODAL (NPR) ────────────────────────────────────
         window.openRefundModal = function(label, index) {
           refundTargetIndex = index;
           const row = filteredData[index];
           getEl('refundPeriodLabel').textContent = label;
-          getEl('refundCurrentAmount').textContent = `INR ${(row.refunds||0).toLocaleString()}`;
+          getEl('refundCurrentAmount').textContent = `NPR ${(row.refunds||0).toLocaleString()}`;
           getEl('refundAmountInput').value = '';
           getEl('refundModal').classList.add('open');
           setTimeout(() => getEl('refundAmountInput').focus(), 100);
@@ -2360,7 +2366,7 @@
           row.netRevenue = target.netRevenue;
           refreshView();
           closeRefundModal();
-          showToast('✅', `Added refund INR ${amount.toLocaleString()}`);
+          showToast('✅', `Added refund NPR ${amount.toLocaleString()}`);
         };
 
         // ─── DELETE ────────────────────────────────────────────────
@@ -2399,7 +2405,7 @@
           showToast('🗑️', `Deleted: ${row.label}`);
         };
 
-        // ─── PDF INVOICE ───────────────────────────────────────────
+        // ─── PDF INVOICE (NPR) ──────────────────────────────────────
         window.downloadInvoicesPDF = function(index) {
           const row = filteredData[index];
           if (!row) { showToast('⚠️', 'No data'); return; }
@@ -2424,10 +2430,10 @@
                   <div class="invoice-items">
                     <table>
                       <thead><tr><th>Item</th><th style="text-align:right;">Qty</th><th style="text-align:right;">Price</th><th style="text-align:right;">Total</th></tr></thead>
-                      <tbody>${items.map(it => `<tr><td>${it.name}</td><td style="text-align:right;">${it.qty}</td><td style="text-align:right;">INR ${it.price.toLocaleString()}</td><td style="text-align:right;">INR ${it.total.toLocaleString()}</td></tr>`).join('')}</tbody>
+                      <tbody>${items.map(it => `<tr><td>${it.name}</td><td style="text-align:right;">${it.qty}</td><td style="text-align:right;">NPR ${it.price.toLocaleString()}</td><td style="text-align:right;">NPR ${it.total.toLocaleString()}</td></tr>`).join('')}</tbody>
                     </table>
                   </div>
-                  <div class="invoice-total"><span>Grand Total</span><span>INR ${total.toLocaleString()}</span></div>
+                  <div class="invoice-total"><span>Grand Total</span><span>NPR ${total.toLocaleString()}</span></div>
                   <div class="invoice-footer">Thank you for your business! · MeroWish · ${date}</div>
                 </div>
               `;
@@ -2451,7 +2457,7 @@
             container.innerHTML = ''; });
         };
 
-        // ─── EXPORT EXCEL ──────────────────────────────────────────
+        // ─── EXPORT EXCEL (NPR) ──────────────────────────────────────
         window.exportFinanceExcel = function() {
           const data = filteredData;
           if (data.length === 0) { showToast('⚠️', 'No data'); return; }
@@ -2495,7 +2501,7 @@
         window.refreshFinance = function() { refreshView();
           showToast('🔄', 'Refreshed'); };
 
-        // ─── PETTY CASH ─────────────────────────────────────────────
+        // ─── PETTY CASH (INR) ────────────────────────────────────────
         function renderPetty() {
           const bal = pettyCash.balance;
           getEl('pettyBalance').textContent = bal.toLocaleString();
@@ -2569,7 +2575,7 @@
         window.refreshPetty = function() { renderPetty();
           showToast('🔄', 'Petty cash refreshed'); };
 
-        // ─── COD DEDUCTION ──────────────────────────────────────────
+        // ─── COD DEDUCTION (INR) ──────────────────────────────────────
         function deductPettyForCod(orderId, amount) {
           if (pettyCash.balance < amount) {
             showToast('⚠️', `Insufficient petty cash! Need INR ${amount.toLocaleString()}`);
@@ -2589,7 +2595,7 @@
           return true;
         }
 
-        // ─── COD HISTORY ────────────────────────────────────────────
+        // ─── COD HISTORY (INR) ────────────────────────────────────────
         function updateCodBadge() {
           const pending = codOrders.filter(o => o.status === 'pending').length;
           getEl('codTabBadge').textContent = pending;
@@ -2744,7 +2750,7 @@
             }
           });
 
-          console.log('✅ MeroWish Finance + Petty Cash ready (INR)');
+          console.log('✅ MeroWish Finance + Petty Cash ready (NPR/INR)');
         }
 
         // expose
