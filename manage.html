@@ -1539,6 +1539,24 @@
             padding: 8px 6px;
             text-align: left;
             white-space: nowrap;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+            position: relative;
+        }
+        .orders-table thead th:hover {
+            background: var(--gray200);
+        }
+        .orders-table thead th .sort-icon {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 9px;
+            color: var(--gray400);
+            transition: color 0.2s;
+        }
+        .orders-table thead th .sort-icon.active {
+            color: var(--primary);
+            font-weight: 700;
         }
         .orders-table thead th.center {
             text-align: center;
@@ -1763,6 +1781,7 @@
             }
         }
 
+        /* ─── TYPE BADGE (order type) ────────────────────────────────────── */
         .orders-table .type-badge {
             display: inline-flex;
             align-items: center;
@@ -1795,6 +1814,52 @@
             background: #FCE7F3;
             color: #BE185D;
             border: 1px solid #F9A8D4;
+        }
+
+        /* ─── PLATFORM BADGE (new) ───────────────────────────────────────── */
+        .orders-table .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 1px 6px 1px 4px;
+            border-radius: 12px;
+            font-size: 8px;
+            font-weight: 600;
+            white-space: nowrap;
+            margin-left: 2px;
+        }
+        .orders-table .platform-badge .plat-icon {
+            font-size: 9px;
+        }
+        .orders-table .platform-badge.android {
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #6EE7B7;
+        }
+        .orders-table .platform-badge.ios {
+            background: #E5E7EB;
+            color: #374151;
+            border: 1px solid #D1D5DB;
+        }
+        .orders-table .platform-badge.windows {
+            background: #DBEAFE;
+            color: #1D4ED8;
+            border: 1px solid #93C5FD;
+        }
+        .orders-table .platform-badge.mac {
+            background: #EDE9FE;
+            color: #5B21B6;
+            border: 1px solid #C4B5FD;
+        }
+        .orders-table .platform-badge.web {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FCD34D;
+        }
+        .orders-table .platform-badge.unknown {
+            background: #F1F5F9;
+            color: #64748B;
+            border: 1px solid #E2E8F0;
         }
 
         .orders-table .comment-trigger {
@@ -4842,15 +4907,15 @@
                                 <th style="width:28px;text-align:center;" class="select-all-header"><input type="checkbox" id="selectAllDesktop" onchange="toggleSelectAllDesktop()" style="accent-color:var(--primary);cursor:pointer;width:16px;height:16px;min-width:16px;min-height:16px;" /></th>
                                 <th style="white-space:nowrap;width:130px;">Action</th>
                                 <th style="white-space:nowrap;width:44px;">Cost</th>
-                                <th style="white-space:nowrap;width:60px;">Product</th>
-                                <th style="text-align:center;white-space:nowrap;width:36px;">QTY</th>
-                                <th style="white-space:nowrap;width:160px;">Product Details</th>
-                                <th style="white-space:nowrap;width:170px;">Status</th>
-                                <th style="white-space:nowrap;width:150px;">Date &amp; Time</th>
-                                <th style="white-space:nowrap;width:120px;">User</th>
-                                <th style="white-space:nowrap;width:80px;">Type</th>
+                                <th style="white-space:nowrap;width:60px;" class="sortable-header" data-sort="id" onclick="handleSort('id')">Order ID <span class="sort-icon" id="sort-icon-id">↕</span></th>
+                                <th style="text-align:center;white-space:nowrap;width:36px;" class="sortable-header" data-sort="qty" onclick="handleSort('qty')">QTY <span class="sort-icon" id="sort-icon-qty">↕</span></th>
+                                <th style="white-space:nowrap;width:160px;" class="sortable-header" data-sort="productName" onclick="handleSort('productName')">Product <span class="sort-icon" id="sort-icon-productName">↕</span></th>
+                                <th style="white-space:nowrap;width:170px;" class="sortable-header" data-sort="status" onclick="handleSort('status')">Status <span class="sort-icon" id="sort-icon-status">↕</span></th>
+                                <th style="white-space:nowrap;width:150px;" class="sortable-header" data-sort="dateTime" onclick="handleSort('dateTime')">Date &amp; Time <span class="sort-icon" id="sort-icon-dateTime">↕</span></th>
+                                <th style="white-space:nowrap;width:120px;" class="sortable-header" data-sort="user" onclick="handleSort('user')">User <span class="sort-icon" id="sort-icon-user">↕</span></th>
+                                <th style="white-space:nowrap;width:80px;" class="sortable-header" data-sort="type" onclick="handleSort('type')">Type <span class="sort-icon" id="sort-icon-type">↕</span></th>
                                 <th style="white-space:nowrap;width:150px;">Payment Summary</th>
-                                <th style="text-align:right;white-space:nowrap;width:110px;">Total Amount</th>
+                                <th style="text-align:right;white-space:nowrap;width:110px;" class="sortable-header" data-sort="totalAmount" onclick="handleSort('totalAmount')">Total Amount <span class="sort-icon" id="sort-icon-totalAmount">↕</span></th>
                             </tr>
                         </thead>
                         <tbody id="tableBodyDesktop"></tbody>
@@ -5328,7 +5393,7 @@
                 'New Customer': { tier: 'Silver', mobile: '+977-982-777-8901', icon: '🥈' }
             };
 
-            // ─── ORDERS DATA ──────────────────────────────────────────────
+            // ─── ORDERS DATA with platform field ──────────────────────────
             const ordersData = [{
                 id: 'MW2026224456',
                 user: 'Damodar Bhattarai',
@@ -5336,6 +5401,7 @@
                 paymentReceivedDateTime: '06 May 2026 21:15',
                 etaDeliveryDate: '12 May 2026',
                 type: 'Self Order',
+                platform: 'Android',
                 status: 'Delivered',
                 paymentSummary: { total: 'NPR 665.07', advance: 'NPR 281.86', gateway: 'Fonepay(1003281879)',
                     cod: 'NPR 383.21', invoiceValue: 'INR 176.00', approxWeight: '0.50 KG', gross: 'NPR 701.71',
@@ -5366,6 +5432,7 @@
                 paymentReceivedDateTime: '05 May 2026 14:45',
                 etaDeliveryDate: '10 May 2026',
                 type: 'Quick Order',
+                platform: 'iOS',
                 status: 'Shipped',
                 paymentSummary: { total: 'NPR 1,250.00', advance: 'NPR 500.00', gateway: 'Fonepay(1003281880)',
                     cod: 'NPR 750.00', invoiceValue: 'INR 320.00', approxWeight: '1.20 KG',
@@ -5395,6 +5462,7 @@
                 paymentReceivedDateTime: '04 May 2026 09:30',
                 etaDeliveryDate: '15 May 2026',
                 type: 'Buy For Me',
+                platform: 'Android',
                 status: 'Arrived at Nepal Warehouse',
                 paymentSummary: { total: 'NPR 3,420.50', advance: 'NPR 1,500.00', gateway: 'Fonepay(1003281881)',
                     cod: 'NPR 1,920.50', invoiceValue: 'INR 890.00', approxWeight: '2.80 KG',
@@ -5424,6 +5492,7 @@
                 paymentReceivedDateTime: '03 May 2026 17:00',
                 etaDeliveryDate: '09 May 2026',
                 type: 'Quick Order',
+                platform: 'Web',
                 status: 'Custom Clearance',
                 paymentSummary: { total: 'NPR 890.00', advance: 'NPR 890.00', gateway: 'Fonepay(1003281882)',
                     cod: 'NPR 0.00', invoiceValue: 'INR 225.00', approxWeight: '0.35 KG', gross: 'NPR 920.00',
@@ -5453,6 +5522,7 @@
                 paymentReceivedDateTime: '02 May 2026 11:20',
                 etaDeliveryDate: '20 May 2026',
                 type: 'Self Order',
+                platform: 'Windows',
                 status: 'Custom Hold',
                 paymentSummary: { total: 'NPR 5,100.00', advance: 'NPR 2,000.00', gateway: 'Fonepay(1003281883)',
                     cod: 'NPR 3,100.00', invoiceValue: 'INR 1,350.00', approxWeight: '4.50 KG',
@@ -5483,6 +5553,7 @@
                 paymentReceivedDateTime: '01 May 2026 08:50',
                 etaDeliveryDate: '14 May 2026',
                 type: 'Buy For Me',
+                platform: 'Android',
                 status: 'Order Created',
                 paymentSummary: { total: 'NPR 1,750.00', advance: 'NPR 0.00', gateway: 'Pending', cod: 'NPR 1,750.00',
                     invoiceValue: 'INR 450.00', approxWeight: '0.90 KG', gross: 'NPR 1,800.00',
@@ -5512,6 +5583,7 @@
                 paymentReceivedDateTime: '30 Apr 2026 19:35',
                 etaDeliveryDate: 'N/A',
                 type: 'Quick Order',
+                platform: 'iOS',
                 status: 'Order Cancelled',
                 paymentSummary: { total: 'NPR 450.00', advance: 'NPR 450.00', gateway: 'Refund Pending',
                     cod: 'NPR 0.00', invoiceValue: 'INR 115.00', approxWeight: '0.20 KG', gross: 'NPR 470.00',
@@ -5535,12 +5607,13 @@
                 warehouseEta: null,
                 phone: '9867890123'
             }, {
-                id: 'MW2026224456',
+                id: 'MW2026224457',
                 user: 'Maya Devi',
                 dateTime: '29 Apr 2026 13:10',
                 paymentReceivedDateTime: '29 Apr 2026 13:25',
                 etaDeliveryDate: '08 May 2026',
                 type: 'Self Order',
+                platform: 'Android',
                 status: 'Incoming Shipment',
                 paymentSummary: { total: 'NPR 2,200.00', advance: 'NPR 1,000.00', gateway: 'Fonepay(1003281884)',
                     cod: 'NPR 1,200.00', invoiceValue: 'INR 570.00', approxWeight: '1.60 KG',
@@ -5571,6 +5644,7 @@
                 paymentReceivedDateTime: '07 May 2026 10:15',
                 etaDeliveryDate: '18 May 2026',
                 type: 'Seller Order',
+                platform: 'Mac',
                 status: 'Order Approved',
                 paymentSummary: { total: 'NPR 8,200.00', advance: 'NPR 3,000.00', gateway: 'Fonepay(1003281885)',
                     cod: 'NPR 5,200.00', invoiceValue: 'INR 2,100.00', approxWeight: '3.20 KG',
@@ -5601,6 +5675,7 @@
                 paymentReceivedDateTime: '07 May 2026 11:45',
                 etaDeliveryDate: '20 May 2026',
                 type: 'Seller Order',
+                platform: 'Windows',
                 status: 'Payment Received',
                 paymentSummary: { total: 'NPR 3,450.00', advance: 'NPR 3,450.00', gateway: 'Fonepay(1003281886)',
                     cod: 'NPR 0.00', invoiceValue: 'INR 880.00', approxWeight: '1.10 KG',
@@ -5631,6 +5706,7 @@
                 paymentReceivedDateTime: '08 May 2026 09:20',
                 etaDeliveryDate: '22 May 2026',
                 type: 'Manual Order',
+                platform: 'Web',
                 status: 'Order Created',
                 paymentSummary: { total: 'NPR 2,750.00', advance: 'NPR 0.00', gateway: 'Manual Entry',
                     cod: 'NPR 2,750.00', invoiceValue: 'INR 700.00', approxWeight: '1.80 KG',
@@ -5661,6 +5737,7 @@
                 paymentReceivedDateTime: '08 May 2026 14:45',
                 etaDeliveryDate: '25 May 2026',
                 type: 'Manual Order',
+                platform: 'iOS',
                 status: 'Quotation Sent',
                 paymentSummary: { total: 'NPR 1,890.00', advance: 'NPR 0.00', gateway: 'Manual Entry',
                     cod: 'NPR 1,890.00', invoiceValue: 'INR 480.00', approxWeight: '0.75 KG',
@@ -5700,7 +5777,11 @@
             let manualConfirmOrderId = null;
             let orderedModalOrderId = null;
             let currentCostOrderId = null;
-            let selectedUser = null; // for manual order
+            let selectedUser = null;
+
+            // ─── SORT STATE ────────────────────────────────────────────────
+            let sortColumn = 'dateTime';
+            let sortDirection = 'desc';
 
             // ─── PARTNER SETTINGS ──────────────────────────────────────────
             const PARTNER_KEY = 'MeroWish_logistic_partners';
@@ -5816,6 +5897,21 @@
                 if (!days || days < 2 || days > 7) return '';
                 return '<div class="express-truck-mobile" title="Express Delivery: ' + days + ' days"><i class="fas fa-truck truck-icon"></i><sup class="days-sup">' +
                     days + '</sup><span class="label-text">⚡ Express ' + days + 'd</span></div>';
+            }
+
+            // ─── PLATFORM BADGE HELPERS ────────────────────────────────────
+            function getPlatformBadge(platform) {
+                if (!platform) platform = 'Unknown';
+                const map = {
+                    'Android': { class: 'android', icon: 'fab fa-android' },
+                    'iOS': { class: 'ios', icon: 'fab fa-apple' },
+                    'Windows': { class: 'windows', icon: 'fab fa-windows' },
+                    'Mac': { class: 'mac', icon: 'fab fa-apple' },
+                    'Web': { class: 'web', icon: 'fas fa-globe' }
+                };
+                const p = map[platform] || { class: 'unknown', icon: 'fas fa-question-circle' };
+                return '<span class="platform-badge ' + p.class + '"><span class="plat-icon"><i class="' + p.icon +
+                    '"></i></span> ' + platform + '</span>';
             }
 
             // ─── STATS ──────────────────────────────────────────────────────
@@ -6086,6 +6182,94 @@
             }
             window.clearAllSelections = clearAllSelections;
 
+            // ─── SORT HANDLER ──────────────────────────────────────────────
+            function handleSort(column) {
+                if (sortColumn === column) {
+                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+                } else {
+                    sortColumn = column;
+                    sortDirection = 'asc';
+                }
+                updateSortIcons();
+                // Re-apply filters and sort
+                applyAllFilters();
+                currentPage = 1;
+                renderPaginatedOrders();
+                showToast('↕', 'Sorted by ' + column + ' (' + sortDirection + ')');
+            }
+            window.handleSort = handleSort;
+
+            function updateSortIcons() {
+                const columns = ['id', 'qty', 'productName', 'status', 'dateTime', 'user', 'type', 'totalAmount'];
+                columns.forEach(col => {
+                    const icon = document.getElementById('sort-icon-' + col);
+                    if (!icon) return;
+                    if (sortColumn === col) {
+                        icon.textContent = sortDirection === 'asc' ? '↑' : '↓';
+                        icon.className = 'sort-icon active';
+                    } else {
+                        icon.textContent = '↕';
+                        icon.className = 'sort-icon';
+                    }
+                });
+            }
+
+            // ─── SORT FUNCTION ─────────────────────────────────────────────
+            function sortOrders(orders) {
+                const col = sortColumn;
+                const dir = sortDirection;
+                return orders.slice().sort((a, b) => {
+                    let valA, valB;
+                    switch (col) {
+                        case 'id':
+                            valA = a.id;
+                            valB = b.id;
+                            break;
+                        case 'qty':
+                            valA = a.qty;
+                            valB = b.qty;
+                            break;
+                        case 'productName':
+                            valA = a.productName.toLowerCase();
+                            valB = b.productName.toLowerCase();
+                            break;
+                        case 'status':
+                            valA = a.status.toLowerCase();
+                            valB = b.status.toLowerCase();
+                            break;
+                        case 'dateTime':
+                            valA = new Date(a.dateTime);
+                            valB = new Date(b.dateTime);
+                            break;
+                        case 'user':
+                            valA = a.user.toLowerCase();
+                            valB = b.user.toLowerCase();
+                            break;
+                        case 'type':
+                            valA = a.type.toLowerCase();
+                            valB = b.type.toLowerCase();
+                            break;
+                        case 'totalAmount':
+                            valA = parseFloat(a.totalAmount.replace(/[^0-9.]/g, '')) || 0;
+                            valB = parseFloat(b.totalAmount.replace(/[^0-9.]/g, '')) || 0;
+                            break;
+                        default:
+                            valA = a.id;
+                            valB = b.id;
+                    }
+                    if (typeof valA === 'string' && typeof valB === 'string') {
+                        return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    }
+                    if (valA instanceof Date && valB instanceof Date) {
+                        return dir === 'asc' ? valA - valB : valB - valA;
+                    }
+                    if (typeof valA === 'number' && typeof valB === 'number') {
+                        return dir === 'asc' ? valA - valB : valB - valA;
+                    }
+                    return 0;
+                });
+            }
+
             // ─── BULK LABEL / INVOICE ──────────────────────────────────────
             function generateBulkShippingLabel() {
                 if (selectedOrders.size === 0) { showToast('⚠️', 'Please select at least one order'); return; }
@@ -6240,7 +6424,8 @@
                     }
                     return true;
                 });
-                filteredOrders = base;
+                // Apply sorting
+                filteredOrders = sortOrders(base);
             }
 
             function filterOrders() { applyAllFilters();
@@ -6296,7 +6481,7 @@
                     if (dateTo && new Date(dateTo + 'T23:59:59') < new Date(order.dateTime)) return false;
                     return true;
                 });
-                filteredOrders = base;
+                filteredOrders = sortOrders(base);
                 currentPage = 1;
                 renderPaginatedOrders();
                 updateActiveFilters();
@@ -6828,6 +7013,9 @@
                     var mobile = tierData.mobile;
                     var isSelected = selectedOrders.has(order.id);
 
+                    // Platform badge
+                    var platformBadge = getPlatformBadge(order.platform);
+
                     var nepalArrivals = ordersData.filter(function(o) { return o.user === order.user && (o
                             .status === 'Arrived at Nepal Warehouse' || o.status === 'Arrived at Nepal WH'); });
                     var nepalCount = nepalArrivals.length;
@@ -6921,7 +7109,8 @@
                         '<td style="white-space:nowrap;">' + actionHtml + '</td>' +
                         '<td style="white-space:nowrap;"><button onclick="openCostModal(\'' + order.id +
                         '\')" class="action-btn-icon emerald" title="Cost Calculation"><i class="fas fa-calculator"></i><span class="tooltip-text">Cost</span></button></td>' +
-                        '<td><div class="product-img-wrap"><img src="' + order.productImage +
+                        '<td style="white-space:nowrap;"><div class="product-img-wrap"><img src="' + order
+                        .productImage +
                         '" alt="Product" class="thumb" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2236%22 height=%2236%22%3E%3Crect fill=%22%23e2e8f0%22 width=%2236%22 height=%2236%22 rx=%226%22/%3E%3Ctext x=%2218%22 y=%2222%22 text-anchor=%22middle%22 font-size=%2214%22 fill=%22%2394a3b8%22%3E📦%3C/text%3E%3C/svg%3E\'" /><img src="' +
                         order.productImage +
                         '" alt="Zoom" class="zoom" loading="lazy" onerror="this.style.display=\'none\'" /></div><div style="font-size:8px;color:var(--gray500);margin-top:2px;font-weight:600;max-width:50px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' +
@@ -6970,8 +7159,9 @@
                         arrivalBadges +
                         '</div><div style="font-size:7px;color:var(--gray400);margin-top:1px;">ID: ' + order
                         .id + '</div></td>' +
-                        '<td><div style="display:flex;align-items:center;gap:3px;flex-wrap:wrap;"><span class="type-badge ' +
+                        '<td><div style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;"><span class="type-badge ' +
                         typeBadge + '" style="font-size:8px;padding:1px 6px;">' + order.type + '</span>' +
+                        platformBadge +
                         customerImgBtn + '</div></td>' +
                         '<td style="font-size:9px;color:var(--gray600);max-width:150px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 6px;"><span style="font-weight:600;">Total:</span><span>' +
                         order.paymentSummary.total +
@@ -7018,6 +7208,8 @@
                     var mobile = tierData.mobile;
                     var pcts = calcPercentages(order.paymentSummary);
                     var isSelected = selectedOrders.has(order.id);
+
+                    var platformBadge = getPlatformBadge(order.platform);
 
                     var nepalArrivals = ordersData.filter(function(o) { return o.user === order.user && (o
                             .status === 'Arrived at Nepal Warehouse' || o.status === 'Arrived at Nepal WH'); });
@@ -7158,6 +7350,8 @@
                         (order.orderStage || order.status) + '</span></span></div>' +
                         '<div class="item"><span class="lbl">🕐 Last Update</span><span class="val" style="font-size:9px;color:var(--gray500);">' +
                         (order.lastUpdate || '—') + '</span></div>' +
+                        '<div class="item"><span class="lbl">📱 Platform</span><span class="val">' +
+                        platformBadge + '</span></div>' +
                         '</div>' +
                         '<div class="payment-row">' +
                         '<span class="total"><span class="currency">NPR</span> ' + parseFloat(order
@@ -7416,20 +7610,21 @@
                 showToast('📥', 'Exporting to Excel...');
                 setTimeout(function() {
                     var csv =
-                        'Order ID,User,Mobile,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID,Warehouse ETA\n';
+                        'Order ID,User,Mobile,Platform,Type,Status,Product,QTY,Total Amount,Advance,COD,Gateway,Gross,Discount,Invoice Value,Weight,Order Date,Payment Date,ETA,Last Update,Order Stage,Internal Remarks,Express Days,Warehouse ID,Warehouse ETA\n';
                     filteredOrders.forEach(function(o) {
                         var tierData = getUserTier(o.user);
                         var remarks = (o.internalRemarks || '').replace(/,/g, ';').replace(/\n/g, ' ');
-                        csv += o.id + ',"' + o.user + '",' + tierData.mobile + ',"' + o.type + '","' + o
-                            .status + '","' + o.productName + '",' + o.qty + ',"' + o.totalAmount +
-                            '","' + o.paymentSummary.advance + '","' + o.paymentSummary.cod + '","' +
-                            o.paymentSummary.gateway + '","' + o.paymentSummary.gross + '","' + o
-                            .paymentSummary.discount + '","' + o.paymentSummary.invoiceValue + '","' +
-                            o.paymentSummary.approxWeight + '","' + o.dateTime + '","' + (o
-                            .paymentReceivedDateTime || '') + '","' + (o.etaDeliveryDate || '') +
-                            '","' + (o.lastUpdate || '') + '","' + (o.orderStage || o.status) +
-                            '","' + remarks + '",' + (o.expressDays || '') + ',"' + (o.warehouseId ||
-                                '') + '","' + (o.warehouseEta || '') + '"\n';
+                        csv += o.id + ',"' + o.user + '",' + tierData.mobile + ',"' + (o.platform || '') +
+                            '","' + o.type + '","' + o.status + '","' + o.productName + '",' + o.qty +
+                            ',"' + o.totalAmount + '","' + o.paymentSummary.advance + '","' + o
+                            .paymentSummary.cod + '","' + o.paymentSummary.gateway + '","' + o
+                            .paymentSummary.gross + '","' + o.paymentSummary.discount + '","' + o
+                            .paymentSummary.invoiceValue + '","' + o.paymentSummary.approxWeight +
+                            '","' + o.dateTime + '","' + (o.paymentReceivedDateTime || '') + '","' +
+                            (o.etaDeliveryDate || '') + '","' + (o.lastUpdate || '') + '","' + (o
+                                .orderStage || o.status) + '","' + remarks + '",' + (o.expressDays ||
+                                '') + ',"' + (o.warehouseId || '') + '","' + (o.warehouseEta || '') +
+                            '"\n';
                     });
                     var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                     var a = document.createElement('a');
@@ -7448,6 +7643,8 @@
                 document.getElementById('universalSearchInput').value = '';
                 activeStatusTab = 'All';
                 activeTypeTab = 'all';
+                sortColumn = 'dateTime';
+                sortDirection = 'desc';
                 document.querySelectorAll('#statusTabsContainer .status-tab').forEach(function(t) {
                     t.classList.toggle('active', t.dataset.status === 'All');
                 });
@@ -7456,11 +7653,12 @@
                     if (t.dataset.type === 'all') t.classList.add('active-all');
                 });
                 selectedOrders.clear();
-                filteredOrders = [...ordersData];
+                filteredOrders = sortOrders([...ordersData]);
                 currentPage = 1;
                 renderPaginatedOrders();
                 updateActiveFilters();
                 updateStats();
+                updateSortIcons();
                 showToast('🔄', 'Data refreshed');
             }
             window.refreshData = refreshData;
@@ -7732,6 +7930,7 @@
                     paymentReceivedDateTime: '',
                     etaDeliveryDate: eta || '',
                     type: 'Manual Order',
+                    platform: 'Web',
                     status: 'Order Created',
                     paymentSummary: paymentSummary,
                     productLink: document.getElementById('manualProductLink').value.trim() || '#',
@@ -7757,7 +7956,7 @@
                 };
 
                 ordersData.push(newOrder);
-                filteredOrders = [...ordersData];
+                filteredOrders = sortOrders([...ordersData]);
                 updateStats();
                 filterOrders();
                 closeAddManualOrderModal();
@@ -7819,12 +8018,13 @@
                 document.getElementById('sidebar').classList.remove('expanded');
             }
             updateStats();
-            filteredOrders = [...ordersData];
+            filteredOrders = sortOrders([...ordersData]);
             populateStatusTabs();
             renderPaginatedOrders();
             updateActiveFilters();
             handleStatsOnResize();
             updateSettingsDisplay();
+            updateSortIcons();
 
             // ─── EXPOSE ──────────────────────────────────────────────────────
             window.showToast = showToast;
@@ -7838,6 +8038,7 @@
             window.getStatusDotColor = getStatusDotColor;
             window.renderExpressTruck = renderExpressTruck;
             window.renderMobileExpressTruck = renderMobileExpressTruck;
+            window.getPlatformBadge = getPlatformBadge;
 
         })();
     </script>
