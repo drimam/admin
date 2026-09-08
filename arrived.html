@@ -2877,6 +2877,20 @@
                 height: 30px;
             }
         }
+    
+        /* ─── IMAGE HOVER EFFECT ─── */
+        .product-thumb, .comment-product-img {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            cursor: zoom-in;
+        }
+        .product-thumb:hover, .comment-product-img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 20px rgba(15, 23, 42, 0.22);
+            border-color: #4f46e5 !important;
+            position: relative;
+            z-index: 20;
+        }
+        .product-img-wrapper { overflow: visible !important; }
     </style>
 </head>
 <body>
@@ -3080,7 +3094,19 @@
 
                 <!-- ─── TAB: STOCK AT WH INDIA ─── -->
                 <div id="tab-stock" class="tab-content">
-                    <!-- Removed the problematic "Scan Tracking to Dispatch" input and button -->
+                    <!-- ─── STOCK ARRIVAL SCANNER ─── -->
+                    <div style="background:#fff;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.05);border:1px solid #f1f5f9;padding:10px 14px;margin-top:12px;">
+                        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <div class="scan-input-wrapper" style="flex:1;min-width:220px;">
+                                <input type="text" id="stockBarcodeInput" placeholder="Scan Tracking to mark Arrived at India WH..." autocomplete="off" />
+                                <button onclick="processStockScan()" class="scan-btn">📦 Arrive</button>
+                                <button id="stockScanDispatchBtn" onclick="processStockDispatchScan()" class="barcode-btn" style="background:#f97316;color:#fff;border-color:#f97316;">🚚 Scan & Dispatch</button>
+                                <button onclick="openStockBarcodeScanner()" class="barcode-btn">📷 Scanner</button>
+                            </div>
+                            <span id="stockScanStatus" class="text-xs text-green-600 hidden">✅ Arrived!</span>
+                        </div>
+                    </div>
+
                     <!-- Filter section for Stock tab -->
                     <div style="background:#fff;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,0.05);border:1px solid #f1f5f9;padding:10px 14px;margin-top:12px;">
                         <div class="filter-section">
@@ -4068,7 +4094,7 @@
                 renderAll();
                 showToast('✅', `Order ${orderId} marked as RECEIVED and moved to Scan & Received`);
                 playBeep();
-                switchTab('scan');
+                switchTab('pending');
             }
 
             // ─── COMMENT MODAL ─────────────────────────────────────────────
@@ -4187,6 +4213,123 @@
 
             // ─── SCAN FUNCTIONS ─────────────────────────────────────────────
 
+            // Stock tab scan mode: ARRIVE is the default. Clicking Scan & Dispatch switches the same input to dispatch mode.
+            let stockScanMode = 'arrive';
+
+            function handleStockDispatchClick() {
+                return processStockDispatchScan();
+            }
+
+            function activateStockDispatchMode() {
+                stockScanMode = 'dispatch';
+                const input = document.getElementById('stockBarcodeInput');
+                const btn = document.getElementById('stockScanDispatchBtn');
+                if (input) {
+                    input.placeholder = 'Scan or enter Tracking ID / Warehouse ID to dispatch...';
+                    input.focus();
+                }
+                if (btn) {
+                    btn.innerHTML = '🚚 Dispatch Mode';
+                    btn.classList.add('active');
+                }
+                showToast('🚚', 'Dispatch mode active. Scan or enter Tracking ID / Warehouse ID and press Enter.');
+            }
+
+            function activateStockArriveMode() {
+                stockScanMode = 'arrive';
+                const input = document.getElementById('stockBarcodeInput');
+                const btn = document.getElementById('stockScanDispatchBtn');
+                if (input) {
+                    input.placeholder = 'Scan Tracking to mark Arrived at India WH...';
+                    input.focus();
+                }
+                if (btn) {
+                    btn.innerHTML = '🚚 Scan & Dispatch';
+                    btn.classList.remove('active');
+                }
+            }
+
+            async function processStockScan() {
+                const input = document.getElementById('stockBarcodeInput');
+                if (!input) return;
+
+                const tracking = input.value.trim();
+                if (!tracking) {
+                    showToast('⚠️', 'Please enter a tracking number');
+                    input.focus();
+                    return;
+                }
+
+                const idx = shippedItems.findIndex(s =>
+                    s.trackingNumber &&
+                    s.trackingNumber.toLowerCase() === tracking.toLowerCase()
+                );
+
+                if (idx === -1) {
+                    showToast('❌', `No shipment found for tracking: ${tracking}`);
+                    input.value = '';
+                    input.focus();
+                    return;
+                }
+
+                const item = shippedItems[idx];
+
+                try {
+                    const barcode = await showWhBarcodeModal(item);
+
+                    shippedItems.splice(idx, 1);
+
+                    const arrived = {
+                        ...item,
+                        status: 'arrived',
+                        arrivedAt: new Date().toLocaleString('en-GB', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }),
+                        comment: item.comment || '',
+                        warehouseBarcode: barcode,
+                        paymentType: item.paymentType || 'PREPAID',
+                        codAmount: item.codAmount || 0,
+                        expressDays: item.expressDays || null,
+                        orderType: item.orderType || 'Manual Order'
+                    };
+
+                    stockItems.push(arrived);
+                    renderAll();
+
+                    showToast('📦', `Shipment ${tracking} marked as ARRIVED at India WH (Barcode: ${barcode})`);
+                    playBeep();
+
+                    input.value = '';
+                    input.focus();
+
+                    const statusEl = document.getElementById('stockScanStatus');
+                    if (statusEl) {
+                        statusEl.classList.remove('hidden');
+                        statusEl.textContent = `✅ ${tracking} arrived! Barcode: ${barcode}`;
+                        setTimeout(() => statusEl.classList.add('hidden'), 4000);
+                    }
+                } catch (err) {
+                    input.value = '';
+                    input.focus();
+                }
+            }
+
+            function openStockBarcodeScanner() {
+                scannerTabContext = 'stock';
+                isWhBarcodeScan = false;
+
+                const overlay = document.getElementById('mobileScannerOverlay');
+                if (overlay) {
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+                startScanner();
+            }
+
             async function processStockArrive() {
                 // This is for Shipped -> Stock (assign warehouse barcode)
                 const input = document.getElementById('shippedSearch'); // we use the search input from Shipped tab
@@ -4217,33 +4360,116 @@
                     playBeep();
                     input.value = ''; // clear search
                     filterShipped(); // refresh list
+                    activateStockArriveMode();
                 } catch (err) {
                     showToast('⏹️', 'Operation cancelled');
                 }
             }
 
             function dispatchShipment(tracking) {
-                const idx = stockItems.findIndex(s => s.trackingNumber === tracking);
-                if (idx === -1) { showToast('❌', 'Shipment not found in India WH stock'); return; }
+                const code = String(tracking || '').trim();
+                if (!code) {
+                    showToast('⚠️', 'Please enter a Tracking ID, Warehouse ID or Product Name');
+                    return false;
+                }
+
+                const normalized = code.toLowerCase();
+                let idx = stockItems.findIndex(s =>
+                    String(s.trackingNumber || '').trim().toLowerCase() === normalized
+                );
+                let matchType = 'Tracking ID';
+
+                if (idx === -1) {
+                    idx = stockItems.findIndex(s =>
+                        String(s.warehouseBarcode || '').trim().toLowerCase() === normalized
+                    );
+                    matchType = 'Warehouse ID';
+                }
+
+                // Product name: exact match first, then partial match.
+                if (idx === -1) {
+                    idx = stockItems.findIndex(s => {
+                        const name = String(s.productName || s.product || s.title || s.name || '').trim().toLowerCase();
+                        return name === normalized;
+                    });
+                    matchType = 'Product Name';
+                }
+
+                if (idx === -1) {
+                    idx = stockItems.findIndex(s => {
+                        const name = String(s.productName || s.product || s.title || s.name || '').trim().toLowerCase();
+                        return name && name.includes(normalized);
+                    });
+                    matchType = 'Product Name';
+                }
+
+                if (idx === -1) {
+                    showToast('❌', `Shipment not found in India WH stock for: ${code}`);
+                    return false;
+                }
+
                 const item = stockItems[idx];
                 stockItems.splice(idx, 1);
-                const dispatched = {
+
+                dispatchedItems.push({
                     ...item,
                     status: 'dispatched',
-                    dispatchedAt: new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric',
-                        hour: '2-digit', minute: '2-digit' }),
+                    dispatchedAt: new Date().toLocaleString('en-GB', {
+                        day: '2-digit', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    }),
                     comment: item.comment || '',
                     warehouseBarcode: item.warehouseBarcode || '',
                     paymentType: item.paymentType || 'PREPAID',
                     codAmount: item.codAmount || 0,
                     expressDays: item.expressDays || null,
-                    orderType: item.orderType || 'Manual Order',
-                };
-                dispatchedItems.push(dispatched);
+                    orderType: item.orderType || 'Manual Order'
+                });
+
                 renderAll();
-                showToast('🚚', `Shipment ${tracking} DISPATCHED from India WH`);
+                showToast('🚚', `Shipment ${item.trackingNumber || code} DISPATCHED from India WH (${matchType})`);
                 playBeep();
+
+                // Dispatch is complete: show the Dispatched navigation tab.
                 switchTab('dispatched');
+                return true;
+            }
+
+            function processStockDispatchScan() {
+                const input = document.getElementById('stockBarcodeInput');
+                if (!input) return false;
+
+                const code = String(input.value || '').trim();
+
+                // The button always processes whatever is currently in the input.
+                // If nothing is entered, simply switch the input into dispatch mode.
+                if (!code) {
+                    activateStockDispatchMode();
+                    showToast('🚚', 'Enter Tracking ID, Warehouse ID or Product Name, then click Scan & Dispatch.');
+                    return false;
+                }
+
+                // Dispatch by Tracking ID, Warehouse ID / Warehouse Barcode,
+                // or Product Name (exact or partial match).
+                const success = dispatchShipment(code);
+
+                if (success) {
+                    input.value = '';
+                    input.focus();
+                    stockScanMode = 'dispatch';
+
+                    const statusEl = document.getElementById('stockScanStatus');
+                    if (statusEl) {
+                        statusEl.classList.remove('hidden');
+                        statusEl.textContent = '✅ Dispatched!';
+                        setTimeout(() => statusEl.classList.add('hidden'), 3000);
+                    }
+                } else {
+                    input.focus();
+                    input.select();
+                }
+
+                return success;
             }
 
             function processScan() {
@@ -4386,16 +4612,23 @@
                     filterShipped();
                     const idx = shippedItems.findIndex(s => s.trackingNumber.toLowerCase() === result.toLowerCase());
                     if (idx > -1) {
-                        processStockArrive();
+                        const stockInput = document.getElementById('stockBarcodeInput');
+                        if (stockInput) {
+                            stockInput.value = result;
+                            processStockScan();
+                        } else {
+                            processStockArrive();
+                        }
                     } else {
                         showToast('❌', 'No shipped item found for: ' + result);
                     }
                 } else if (context === 'stock') {
-                    const idx = stockItems.findIndex(s => s.trackingNumber.toLowerCase() === result.toLowerCase());
-                    if (idx > -1) {
-                        dispatchShipment(result);
+                    const input = document.getElementById('stockBarcodeInput');
+                    if (input) input.value = result;
+                    if (stockScanMode === 'dispatch') {
+                        processStockDispatchScan();
                     } else {
-                        showToast('❌', 'No stock item found for: ' + result);
+                        processStockScan();
                     }
                 } else if (context === 'dispatched') {
                     document.getElementById('barcodeInput').value = result;
@@ -5251,7 +5484,7 @@
                     filterShipped();
                     setTimeout(() => document.getElementById('shippedSearch')?.focus(), 100); } else if (tab === 'stock') {
                     filterStock();
-                    setTimeout(() => document.getElementById('stockSearch')?.focus(), 100); } else if (tab ===
+                    setTimeout(() => document.getElementById('stockBarcodeInput')?.focus(), 100); } else if (tab ===
                     'dispatched') { filterDispatched(); } else if (tab === 'scan') { filterScan();
                     setTimeout(() => document.getElementById('barcodeInput')?.focus(), 100); }
             }
@@ -5437,6 +5670,15 @@
 
             document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
             document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && document.activeElement === document.getElementById('stockBarcodeInput')) {
+                    e.preventDefault();
+                    if (stockScanMode === 'dispatch') {
+                        processStockDispatchScan();
+                    } else {
+                        processStockScan();
+                    }
+                    return;
+                }
                 if (e.key === 'Enter' && document.activeElement === document.getElementById('barcodeInput')) {
                     e.preventDefault();
                     processScan();
@@ -5462,6 +5704,10 @@
 
             window.processStockArrive = processStockArrive;
             window.processStockArriveFromButton = processStockArriveFromButton;
+            window.processStockScan = processStockScan;
+            window.processStockDispatchScan = processStockDispatchScan;
+            window.handleStockDispatchClick = handleStockDispatchClick;
+            window.openStockBarcodeScanner = openStockBarcodeScanner;
             window.processScan = processScan;
             window.dispatchShipment = dispatchShipment;
             window.manualReceive = manualReceive;
