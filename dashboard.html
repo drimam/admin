@@ -75,8 +75,21 @@
         }
 
         .stat-card {
+            position: relative;
+            overflow: hidden;
             transition: all 0.2s ease;
             cursor: default;
+        }
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.08);
+            right: -25px;
+            bottom: -25px;
+            pointer-events: none;
         }
         .stat-card:hover {
             transform: translateY(-2px);
