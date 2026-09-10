@@ -786,6 +786,8 @@
             }
         }
         .stat-card {
+            position: relative;
+            overflow: hidden;
             background: #fff;
             border-radius: var(--radius);
             padding: 10px 12px;
@@ -793,6 +795,16 @@
             border: 1px solid var(--gray100);
             transition: all 0.15s;
             cursor: pointer;
+        }
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.08);
+            right: -25px;
+            bottom: -25px;
         }
         .stat-card:hover {
             box-shadow: var(--shadowHover);
